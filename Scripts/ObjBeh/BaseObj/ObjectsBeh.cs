@@ -10,6 +10,8 @@ public class ObjectsBeh : MonoBehaviour {
 	public const string Icecream_ResourcePath = "BakeryShopObjects/Icecreams/";
 	public const string Cakes_ResourcePath = "BakeryShopObjects/Cakes/";
 	public const string Sandwich_ResourcePath = "BakeryShopObjects/Sandwichs/";
+    public const string Cookie_ResourcePath = "BakeryShopObjects/Cookies/";    
+    public const string Hotdog_ResourcePath = "BakeryShopObjects/Hotdogs/";
 
 
 	protected Mz_BaseScene baseScene;

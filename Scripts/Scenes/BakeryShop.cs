@@ -74,15 +74,24 @@ public class BakeryShop : Mz_BaseScene {
 	
 	#endregion
 
-    #region <!-- Sandwich data fields group.
+    #region <!-- Sandwich && Cookie data fields group.
 
     public Transform sandwichCookieTray_Transform;
     public SandwichBeh tunaSandwich;
     public SandwichBeh deepFriedChickenSandwich;
-    public SandwichBeh hamSandwich_Obj;
-    public SandwichBeh eggSandwich_Obj;
+    public SandwichBeh hamSandwich;
+    public SandwichBeh eggSandwich;
+    public CookieBeh chocolateChip_cookie;
+    public CookieBeh fruit_cookie;
+    public CookieBeh butter_cookie;
 
     #endregion
+
+    /// <summary>
+    /// Hotdog data fields group.
+    /// </summary>
+    public Transform hotdogTray_transform;
+    public HotdogBeh hotdog;
 
     #region <!-- Customer data group.
 
@@ -124,18 +133,31 @@ public class BakeryShop : Mz_BaseScene {
         StartCoroutine(CreateToastInstance());
         StartCoroutine(CreateCupcakeInstance());
         yield return StartCoroutine(CreateMiniCakeInstance());	
-		yield return StartCoroutine(CreateCakeInstance());			
 		miniCake.gameObject.active = false;
+		yield return StartCoroutine(CreateCakeInstance());			
 		cake.gameObject.active = false;
 		
 		icecreamVanillaTank_obj.SetActiveRecursively(false);
 		icecreamChocolateTank_obj.SetActiveRecursively(false);
 
-        CreateTunaSandwich();
+        yield return StartCoroutine(this.CreateTunaSandwich());
         tunaSandwich.gameObject.SetActiveRecursively(false);
+		this.CreateDeepFriedChickenSandwich();
+		this.CreateHamSanwich();
+		this.CreateEggSandwich();
         deepFriedChickenSandwich.gameObject.SetActiveRecursively(false);
-        hamSandwich_Obj.gameObject.SetActiveRecursively(false);
-        eggSandwich_Obj.gameObject.SetActiveRecursively(false);
+        hamSandwich.gameObject.SetActiveRecursively(false);
+        eggSandwich.gameObject.SetActiveRecursively(false);
+
+        yield return StartCoroutine(this.CreateChocolateChip_Cookie());
+        chocolateChip_cookie.gameObject.SetActiveRecursively(false);
+		this.CreateFruitCookie();
+		this.CreateButterCookie();
+        fruit_cookie.gameObject.SetActiveRecursively(false);
+        butter_cookie.gameObject.SetActiveRecursively(false);
+
+        yield return StartCoroutine(this.CreateHotdog());
+        hotdog.gameObject.SetActiveRecursively(false);
 
         // Debug can sell list.
         InitializeCanSellGoodslist();
@@ -159,20 +181,38 @@ public class BakeryShop : Mz_BaseScene {
         {
             CanSellGoodLists.Add(goodDataStore.Menu_list[id]);
 
-            if (id == 6)
+            if (id == 6) {
                 blueberryJam_instance.active = true;
-            if(id == 10)
+                //break;
+            }
+            if(id == 10) {
                 blueberry_cream_Instance.active = true;
-            if (id == 12 || id == 13)
+                //break;
+            }
+            if (id == 12 || id == 13) {
                 miniCake.gameObject.active = true;
-			if(id == 15 || id == 16) 
+                //break;
+            }
+			if(id == 15 || id == 16) {
 				cake.gameObject.active = true;
+                //break;
+            }
 			if(id == 19) {
 				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_002);
 				icecreamVanillaTank_obj.SetActiveRecursively(true);
+                //break;
 			}	
 			if(id == 21) {
                 tunaSandwich.gameObject.SetActiveRecursively(true);
+                //break;
+            }
+            if (id == 25) {
+                chocolateChip_cookie.gameObject.SetActiveRecursively(true);
+                //break;
+            }
+            if (id == 28) {
+                hotdog.gameObject.SetActiveRecursively(true);
+                //break;
             }
         }
 
@@ -327,11 +367,17 @@ public class BakeryShop : Mz_BaseScene {
 	
 	#region Sandwich Obj behavior.
 	
-	void CreateTunaSandwich() {
+	/// <summary>
+	/// Creates the tuna sandwich.
+	/// </summary>
+	private IEnumerator CreateTunaSandwich() {
+        yield return new WaitForFixedUpdate();
+
 		if(tunaSandwich == null) {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "TunaSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
             sandwich.transform.localPosition = new Vector3(.235f, -.15f, -.1f);
+            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.tuna_sandwich.ToString();
 
             tunaSandwich = sandwich.GetComponent<SandwichBeh>();
             tunaSandwich.putObjectOnTray_Event += new EventHandler(tunaSandwich_putObjectOnTray_Event);
@@ -347,15 +393,279 @@ public class BakeryShop : Mz_BaseScene {
 		ObjectsBeh.ResetData();
 		tunaSandwich = null;
 
-        this.CreateTunaSandwich();
+        StartCoroutine(this.CreateTunaSandwich());
     }
     void tunaSandwich_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
-        this.CreateTunaSandwich();
+        ObjectsBeh.ResetData();      
+		
+        StartCoroutine(this.CreateTunaSandwich());
     }
 	
+	/// <summary>
+	/// Creates the deep fried chicken sandwich.
+	/// </summary>
+	void CreateDeepFriedChickenSandwich() {
+		if(deepFriedChickenSandwich == null) {
+			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "DeepFriedChickenSandwich", typeof(GameObject))) as GameObject;
+			sandwich.transform.parent = sandwichCookieTray_Transform;
+			sandwich.transform.localPosition = new Vector3(0.105f, -.16f, -.2f);
+            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.deep_fried_chicken_sandwich.ToString();
+			
+			deepFriedChickenSandwich = sandwich.GetComponent<SandwichBeh>();
+			deepFriedChickenSandwich.putObjectOnTray_Event += Handle_DeepFriedChickenSandwich_putObjectOnTray_Event;
+			deepFriedChickenSandwich.destroyObj_Event += Handle_DeepFriedChickenSandwich_destroyObj_Event;
+		}
+	}
+	void Handle_DeepFriedChickenSandwich_putObjectOnTray_Event(object sender, EventArgs e)
+	{
+        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
+            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
+		else 
+			return;
+		
+		ObjectsBeh.ResetData();
+		deepFriedChickenSandwich = null;
+
+        this.CreateDeepFriedChickenSandwich();
+	}
+	void Handle_DeepFriedChickenSandwich_destroyObj_Event (object sender, EventArgs e)
+	{
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        ObjectsBeh.ResetData();
+		
+		deepFriedChickenSandwich.putObjectOnTray_Event -= Handle_DeepFriedChickenSandwich_putObjectOnTray_Event;
+		deepFriedChickenSandwich.destroyObj_Event -= Handle_DeepFriedChickenSandwich_destroyObj_Event;
+		
+        this.CreateDeepFriedChickenSandwich();
+	}
+	
+	/// <summary>
+	/// Creates the ham sanwich.
+	/// </summary>
+	void CreateHamSanwich() {
+		if(hamSandwich == null) {
+			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "HamSandwich", typeof(GameObject))) as GameObject;
+            sandwich.transform.parent = sandwichCookieTray_Transform;
+            sandwich.transform.localPosition = new Vector3(-.015f, -.17f, -.3f);
+            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.ham_sandwich.ToString();
+
+            hamSandwich = sandwich.GetComponent<SandwichBeh>();
+            hamSandwich.putObjectOnTray_Event += Handle_HamSandwich_putObjectOnTray_Event;
+            hamSandwich.destroyObj_Event += Handle_HamSandwich_destroyObj_Event;
+		}
+	}
+	void Handle_HamSandwich_putObjectOnTray_Event (object sender, EventArgs e)
+	{
+        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
+            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
+		else 
+			return;
+		
+		ObjectsBeh.ResetData();
+		hamSandwich = null;
+
+        this.CreateHamSanwich();
+	}
+	void Handle_HamSandwich_destroyObj_Event (object sender, EventArgs e)
+	{
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        ObjectsBeh.ResetData();
+		
+		hamSandwich.putObjectOnTray_Event -= Handle_HamSandwich_putObjectOnTray_Event;
+		hamSandwich.destroyObj_Event -= Handle_HamSandwich_destroyObj_Event;
+		
+        this.CreateHamSanwich();
+	}
+	
+	/// <summary>
+	/// Creates the egg sandwich.
+	/// </summary>
+	void CreateEggSandwich() {		
+		if(eggSandwich == null) {
+			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "EggSandwich", typeof(GameObject))) as GameObject;
+            sandwich.transform.parent = sandwichCookieTray_Transform;
+            sandwich.transform.localPosition = new Vector3(-.14f, -.17f, -.4f);
+            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.egg_sandwich.ToString();
+
+            eggSandwich = sandwich.GetComponent<SandwichBeh>();
+            eggSandwich.putObjectOnTray_Event += Handle_EggSandwich_putObjectOnTray_Event;
+            eggSandwich.destroyObj_Event += Handle_EggSandwich_destroyObj_Event;
+		}
+	}
+	void Handle_EggSandwich_putObjectOnTray_Event (object sender, EventArgs e)
+	{
+        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
+            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
+		else 
+			return;
+		
+		ObjectsBeh.ResetData();
+		eggSandwich = null;
+
+        this.CreateEggSandwich();
+	}
+	void Handle_EggSandwich_destroyObj_Event (object sender, EventArgs e)
+	{
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        ObjectsBeh.ResetData();
+		
+		eggSandwich.putObjectOnTray_Event -= Handle_EggSandwich_putObjectOnTray_Event;
+		eggSandwich.destroyObj_Event -= Handle_EggSandwich_destroyObj_Event;
+		
+        this.CreateEggSandwich();
+	}
+	
 	#endregion
+
+    #region Cookie Object Behavior.
+	
+	/// <summary>
+	/// Creates the chocolate chip_ cookie.
+	/// </summary>
+    IEnumerator CreateChocolateChip_Cookie() {
+        yield return new WaitForFixedUpdate();
+
+        if(chocolateChip_cookie == null) {
+            GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "ChocolateChip_Cookie", typeof(GameObject))) as GameObject;
+            cookie.transform.parent = sandwichCookieTray_Transform;
+            cookie.transform.localPosition = new Vector3(-.165f, 0.1f, -.1f);
+            cookie.gameObject.name = GoodDataStore.GoodsOrderList.chocolate_chip_cookie.ToString();
+
+            chocolateChip_cookie = cookie.GetComponent<CookieBeh>();
+            chocolateChip_cookie.putObjectOnTray_Event += new EventHandler(chocolateChip_cookie_putObjectOnTray_Event);
+            chocolateChip_cookie.destroyObj_Event += new EventHandler(chocolateChip_cookie_destroyObj_Event);
+        }
+    }
+    void chocolateChip_cookie_putObjectOnTray_Event(object sender, EventArgs e) {
+        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
+            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
+		else 
+			return;
+		
+		ObjectsBeh.ResetData();
+		chocolateChip_cookie = null;
+
+        StartCoroutine(this.CreateChocolateChip_Cookie());
+    }
+    void chocolateChip_cookie_destroyObj_Event(object sender, EventArgs e) {    
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        ObjectsBeh.ResetData();
+
+        StartCoroutine(this.CreateChocolateChip_Cookie());
+    }
+	
+    /// <summary>
+    /// Create instance of fruit_cookie object and cookie behavior.
+    /// </summary>
+	void CreateFruitCookie() {
+		if(fruit_cookie == null) {			
+            GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "Fruit_Cookie", typeof(GameObject))) as GameObject;
+            cookie.transform.parent = sandwichCookieTray_Transform;
+            cookie.transform.localPosition = new Vector3(0.02f, 0.1f, -.1f);
+            cookie.gameObject.name = GoodDataStore.GoodsOrderList.fruit_cookie.ToString();
+
+            fruit_cookie = cookie.GetComponent<CookieBeh>();
+            fruit_cookie.putObjectOnTray_Event += new EventHandler(Handle_FruitCookie_putObjectOnTray_Event);
+            fruit_cookie.destroyObj_Event += new EventHandler(Handle_FruitCookie_DestroyObj_Event);
+		}
+	}
+	void Handle_FruitCookie_putObjectOnTray_Event(object sender, EventArgs e) {
+        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
+            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
+		else 
+			return;
+		
+		ObjectsBeh.ResetData();
+		fruit_cookie = null;
+
+        this.CreateFruitCookie();
+	}
+	void Handle_FruitCookie_DestroyObj_Event(object sender, EventArgs e) {
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        ObjectsBeh.ResetData();
+
+        fruit_cookie.putObjectOnTray_Event -= Handle_FruitCookie_putObjectOnTray_Event;
+        fruit_cookie.destroyObj_Event -= Handle_FruitCookie_DestroyObj_Event;
+
+        this.CreateFruitCookie();
+	}
+    
+    /// <summary>
+    /// Create instance of ButterCookie object and cookie behavior.
+    /// </summary>
+    private void CreateButterCookie()
+    {
+        if(butter_cookie == null) {
+            GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "Butter_Cookie", typeof(GameObject))) as GameObject;
+            cookie.transform.parent = sandwichCookieTray_Transform;
+            cookie.transform.localPosition = new Vector3(.2f, 0.11f, -.1f);
+            cookie.gameObject.name = GoodDataStore.GoodsOrderList.butter_cookie.ToString();
+
+            butter_cookie = cookie.GetComponent<CookieBeh>();
+            butter_cookie.putObjectOnTray_Event += new EventHandler(butter_cookie_putObjectOnTray_Event);
+            butter_cookie.destroyObj_Event += new EventHandler(butter_cookie_destroyObj_Event);
+        }
+    }
+    void butter_cookie_putObjectOnTray_Event(object sender, EventArgs e) {
+        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
+            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
+		else 
+			return;
+		
+		ObjectsBeh.ResetData();
+		butter_cookie = null;
+
+        this.CreateButterCookie();
+    }
+    void butter_cookie_destroyObj_Event(object sender, EventArgs e) {
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        ObjectsBeh.ResetData();
+
+        butter_cookie.putObjectOnTray_Event -= butter_cookie_putObjectOnTray_Event;
+        butter_cookie.destroyObj_Event -= butter_cookie_destroyObj_Event;
+
+        this.CreateButterCookie();
+    }
+
+    #endregion
+
+    #region Hotdog object behavior.
+
+    private IEnumerator CreateHotdog()
+    {
+        yield return new WaitForFixedUpdate();
+
+        if(hotdog == null) {
+            GameObject hotdog_obj = Instantiate(Resources.Load(ObjectsBeh.Hotdog_ResourcePath + "Hotdog", typeof(GameObject))) as GameObject;
+            hotdog_obj.transform.parent = hotdogTray_transform;
+            hotdog_obj.transform.localPosition = new Vector3(0.07f, 0.1f, -0.1f);
+            hotdog_obj.gameObject.name = GoodDataStore.GoodsOrderList.hotdog.ToString();
+
+            hotdog = hotdog_obj.GetComponent<HotdogBeh>();
+            hotdog.putObjectOnTray_Event += new EventHandler(hotdog_putObjectOnTray_Event);
+            hotdog.destroyObj_Event += new EventHandler(hotdog_destroyObj_Event);
+        }
+    }
+    void hotdog_putObjectOnTray_Event(object sender, EventArgs e) {    
+        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
+            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
+		else 
+			return;
+		
+		ObjectsBeh.ResetData();
+		hotdog = null;
+
+        StartCoroutine(this.CreateHotdog());
+    }
+    void hotdog_destroyObj_Event(object sender, EventArgs e) {
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        ObjectsBeh.ResetData();
+
+        StartCoroutine(this.CreateHotdog());
+    }
+
+    #endregion
 
     #region <!-- Customer section.
 
@@ -476,7 +786,7 @@ public class BakeryShop : Mz_BaseScene {
 		base.Update ();
 	}
 	
-	public override void OnInput (string nameInput)
+	public override void OnInput(string nameInput)
 	{
 		base.OnInput (nameInput);
 		
