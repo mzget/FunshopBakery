@@ -35,8 +35,8 @@ public class CreamBeh : ObjectsBeh {
 			sceneManager.cupcake.WaitForIngredient(this.gameObject.name);
 		}
 		
-		if(sceneManager.minicake != null) {
-			sceneManager.minicake.WaitForIngredient(this.gameObject.name);
+		if(sceneManager.miniCake != null) {
+			sceneManager.miniCake.WaitForIngredient(this.gameObject.name);
 		}
 		
 		if(sceneManager.cake != null) {

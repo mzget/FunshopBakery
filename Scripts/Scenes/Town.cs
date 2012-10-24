@@ -24,7 +24,6 @@ public class Town : Mz_BaseScene {
     Rect drawPlayerMoney_rect = new Rect(150, 90, 250, 50);
     void Awake() {
         GUI_manager.CalculateViewportScreen();
-
     }
 	
 	// Use this for initialization
@@ -76,9 +75,7 @@ public class Town : Mz_BaseScene {
             GUI.Box(drawPlayerName_rect, StorageManage.Username);
             GUI.Box(drawPlayerMoney_rect, StorageManage.Money.ToString());
         }
-        GUI.EndGroup();
-
-        
+        GUI.EndGroup();        
     }
 
 
@@ -91,6 +88,10 @@ public class Town : Mz_BaseScene {
         }
         else if (nameInput == back_button_obj.name) {
             if(Application.isLoadingLevel == false) {
+				//<!-- Clear static NumberOfCanSellItem.
+				BakeryShop.NumberOfCansellItem.Clear();
+				
+				
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
                 Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
             }

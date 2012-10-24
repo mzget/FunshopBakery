@@ -52,7 +52,9 @@ public class GUI_manager : MonoBehaviour {
 		{
             //if(Application.loadedLevelName == Mz_BaseScene.SceneNames.BakeryShop.ToString())
             //    this.DrawPlayButton();
-            GUI.Box(new Rect(0, viewPort_rect.height / 2, 200, viewPort_rect.height / 2), debugText, GUIStyle.none);
+			
+			//<!--- Tracing Debuging data.
+//            GUI.Box(new Rect(0, viewPort_rect.height / 2, 200, viewPort_rect.height / 2), debugText, GUIStyle.none);
 
             GUI.BeginGroup(new Rect(viewPort_rect.width - 280, 0, 280, 160), "Trademark", GUI.skin.window);
             {

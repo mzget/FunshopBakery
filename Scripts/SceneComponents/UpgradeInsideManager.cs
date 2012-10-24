@@ -81,8 +81,10 @@ public class UpgradeInsideManager : MonoBehaviour {
             obj.animation.Play();
         }
 
-        if(pageIndex > 0)             pageIndex -= 1;
-		else			pageIndex = 2;
+        if(pageIndex > 0)             
+			pageIndex -= 1;
+		else
+			pageIndex = 2;
 		
 		CalculateObjectsToDisplay();
 	}
@@ -129,20 +131,85 @@ public class UpgradeInsideManager : MonoBehaviour {
 
     public void BuyingUpgradeMechanism(string upgradeName) {
         if(pageIndex == 0) {
+			
+			#region <!-- page 0, low 0.
+			
             if(upgradeName == "upgrade_00") {
                 if(StorageManage.Money >= firstPage_prices[0,0]) {
                     Debug.Log("buying : blueberry_jam");
-
-                    BakeryShop.CanSellGoodLists.Add(new GoodDataStore().Menu_list[6]);
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(6) == false) {
+						BakeryShop.NumberOfCansellItem.Add(6);	
+					}
                 }
             }
             else if(upgradeName == "upgrade_01") {
                 if(StorageManage.Money >= firstPage_prices[0,1]) {
                     Debug.Log("buying : blueberry_cream");
-
-                    BakeryShop.CanSellGoodLists.Add(new GoodDataStore().Menu_list[10]);
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(10) == false)
+						BakeryShop.NumberOfCansellItem.Add(10);	
                 }
             }
+			else if(upgradeName == "upgrade_02") {
+				if(StorageManage.Money >= firstPage_prices[0,2]) {
+                    Debug.Log("buying : miniCake");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(12) == false)
+						BakeryShop.NumberOfCansellItem.Add(12);	
+					if(BakeryShop.NumberOfCansellItem.Contains(13) == false)
+						BakeryShop.NumberOfCansellItem.Add(13);	
+				}
+			}
+			else if(upgradeName == "upgrade_03") {
+				if(StorageManage.Money >= firstPage_prices[0, 3]) {
+                    Debug.Log("buying : Cake");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(15) == false)
+						BakeryShop.NumberOfCansellItem.Add(15);	
+					if(BakeryShop.NumberOfCansellItem.Contains(16) == false)
+						BakeryShop.NumberOfCansellItem.Add(16);	
+				}
+			}
+			
+			#endregion 
+			
+			#region <!-- page 0, Low 1.
+			
+			else if(upgradeName == "upgrade_10") {
+				if(StorageManage.Money >= firstPage_prices[1, 0]) {
+                    Debug.Log("buying : vanilla_icecream");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(19) == false)
+						BakeryShop.NumberOfCansellItem.Add(19);	
+				}
+			}
+			else if(upgradeName == "upgrade_11") {				
+				if(StorageManage.Money >= firstPage_prices[1, 1]) {
+                    Debug.Log("buying : tuna_sandwich");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(21) == false)
+						BakeryShop.NumberOfCansellItem.Add(21);	
+				}
+			}
+			else if(upgradeName == "upgrade_12") {				
+				if(StorageManage.Money >= firstPage_prices[1, 2]) {
+                    Debug.Log("buying : chocolate_chip_cookie");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(25) == false)
+						BakeryShop.NumberOfCansellItem.Add(25);	
+				}
+			}
+			else if(upgradeName == "upgrade_13") {				
+				if(StorageManage.Money >= firstPage_prices[1, 3]) {
+                    Debug.Log("buying : hotdog");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(28) == false)
+						BakeryShop.NumberOfCansellItem.Add(28);	
+				}
+			}
+			
+			#endregion
         }
     }
 }

@@ -239,6 +239,9 @@ public class MainMenu : Mz_BaseScene {
         PlayerPrefs.SetString(StorageManage.SaveSlot + "shopname", this.shopName);
         PlayerPrefs.SetInt(StorageManage.SaveSlot + "money", 500);
 
+        int[] IdOfCanSellItem = new int[] { 0, 5, 9, 18 };
+        PlayerPrefsX.SetIntArray(StorageManage.SaveSlot + "cansellgoodslist", IdOfCanSellItem);
+
         Debug.Log("Store new player data complete.");		
 
         Mz_StorageData.LoadSaveDataToGameStorage();

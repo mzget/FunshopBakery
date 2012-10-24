@@ -9,6 +9,7 @@ public class ObjectsBeh : MonoBehaviour {
 	public const string ToastAndJam_ResourcePath = "BakeryShopObjects/ToastandJam/";
 	public const string Icecream_ResourcePath = "BakeryShopObjects/Icecreams/";
 	public const string Cakes_ResourcePath = "BakeryShopObjects/Cakes/";
+	public const string Sandwich_ResourcePath = "BakeryShopObjects/Sandwichs/";
 
 
 	protected Mz_BaseScene baseScene;
@@ -44,11 +45,7 @@ public class ObjectsBeh : MonoBehaviour {
 	
     public static void ResetData() {
         //_IsActive = false;
-    }
-	
-	void Awake() {
-        Debug.Log(this.gameObject.name + ":: Isactive => " + _isActive);
-	}
+    }	
 	
 	// Use this for initialization
 	protected virtual void Start () {

@@ -104,21 +104,6 @@ public class GoodsBeh : ObjectsBeh {
 			if(base._isDraggable)
 				_isDropObject = true;
 		}
-        
-        //if(Input.touchCount > 0) {
-        //    Touch touch = Input.GetTouch(0);
-        //    if(touch.tapCount >= 2) {
-        //        if (touch.phase == TouchPhase.Began) {
-        //            if(_canActive && _isActive) {
-        //                _isActive = false;
-
-        //                this.StopActiveAnimation();
-        //                _isWaitFotIngredient = false;
-        //                touch = new Touch();
-        //            }
-        //        }
-        //    }
-        //}
 	}
 
     public override void OnMouseDown()

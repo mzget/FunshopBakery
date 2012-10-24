@@ -12,7 +12,6 @@ public class GlassBeh : GoodsBeh {
 
         _canActive = true;
         _canDragaable = true;
-		originalPosition = this.transform.position;
     }
 	
 	protected override void ImplementDraggableObject ()

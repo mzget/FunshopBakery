@@ -33,6 +33,11 @@ public class Mz_StorageData
         StorageManage.Username = PlayerPrefs.GetString(StorageManage.SaveSlot + "username");
         StorageManage.ShopName = PlayerPrefs.GetString(StorageManage.SaveSlot + "shopname");
         StorageManage.Money = PlayerPrefs.GetInt(StorageManage.SaveSlot + "money");
+		
+		int[] array = PlayerPrefsX.GetIntArray(StorageManage.SaveSlot + "cansellgoodslist");
+		foreach (var item in array) {
+            BakeryShop.NumberOfCansellItem.Add(item);
+		}
 
         Debug.Log("Load storage data to static variable complete.");
     }
@@ -41,5 +46,8 @@ public class Mz_StorageData
         PlayerPrefs.SetString(StorageManage.SaveSlot + "username", StorageManage.Username);
         PlayerPrefs.SetString(StorageManage.SaveSlot + "shopname", StorageManage.ShopName);
         PlayerPrefs.SetInt(StorageManage.SaveSlot + "money", StorageManage.Money);
+		
+		int[] array_temp = BakeryShop.NumberOfCansellItem.ToArray();
+		PlayerPrefsX.SetIntArray(StorageManage.SaveSlot + "cansellgoodslist", array_temp);
     }
 }

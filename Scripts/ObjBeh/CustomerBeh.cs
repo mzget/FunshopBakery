@@ -30,10 +30,8 @@ public class CustomerBeh : MonoBehaviour {
 		sceneManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BakeryShop>();        
 		
 		this.RandomCustomerFace();
-		
-        if(BakeryShop.gameLevel == 0) {
-            yield return StartCoroutine(GenerateGoodOrder());
-        }
+
+        yield return StartCoroutine(GenerateGoodOrder());
 
         _enableGUI = true;
 		
@@ -53,12 +51,12 @@ public class CustomerBeh : MonoBehaviour {
     IEnumerator GenerateGoodOrder()
     {		
         int maxGoodsType = 0;
-        if(BakeryShop.gameLevel == 0)
+//        if(BakeryShop.gameLevel == 0)
             maxGoodsType = 2;
-        else if(BakeryShop.gameLevel == 1)
-            maxGoodsType = 3;
-        else if(BakeryShop.gameLevel == 2)
-            maxGoodsType = 4;
+//        else if(BakeryShop.gameLevel == 1)
+//            maxGoodsType = 3;
+//        else if(BakeryShop.gameLevel == 2)
+//            maxGoodsType = 4;
 
         int r = Random.Range(1, maxGoodsType + 1);
         for (int i = 0; i < r; i++) {

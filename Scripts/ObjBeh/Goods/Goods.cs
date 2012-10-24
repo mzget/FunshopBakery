@@ -2,23 +2,27 @@ using UnityEngine;
 using System.Collections;
 
 
-public class Goods : ScriptableObject {
+public class Goods {
 
-    //public BakeryShop sceneManager;
+    public BakeryShop sceneManager;
 
     private Goods instance;
+	public string name;
 	public int price;
 	
 	public Goods() {
 		Debug.Log("Starting Goods");
 
-        //sceneManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BakeryShop>();        
+        sceneManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BakeryShop>();        
 
-        if(BakeryShop.gameLevel == 0) {
-            int r = Random.Range(0, BakeryShop.CanSellGoodLists.Count);
-            instance = BakeryShop.CanSellGoodLists[r];
+        if(sceneManager.CanSellGoodLists.Count != 0) {
+            int r = Random.Range(0, sceneManager.CanSellGoodLists.Count);
+            instance = sceneManager.CanSellGoodLists[r];
 			this.name = instance.name;
 			this.price = instance.price;
+        }
+        else {
+            Debug.LogWarning("CanSellGoodLists.Count == 0");
         }
 	}
 	

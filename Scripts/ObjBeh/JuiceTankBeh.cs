@@ -37,12 +37,13 @@ public class JuiceTankBeh : ObjectsBeh {
     }
 	
 	// Update is called once per frame
-	void Update () {
-	
+	protected override void Update ()
+	{
+//		base.Update ();
 	}
-
+	
     public override void OnMouseDown()
-    {
+    {		
         //base.OnMouseDown();
 
         if(juice_glass_instance == null) {
