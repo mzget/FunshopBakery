@@ -17,11 +17,17 @@ public class Town : Mz_BaseScene {
     //<!-- Texture2d resources.
     public Texture2D tk_coin_img;
 
+	public enum OnGUIState { none = 0, DrawEditShopname, };
+	public OnGUIState currentGUIState;
+    Rect TK_money_rect = new Rect(0, 0, 200, 140);          //<!-- TopLeft rectangle of screen.
+    Rect drawPlayerName_rect = new Rect(0, 0, 200, 40);
+	Rect drawShopName_rect = new Rect(0, 45, 200, 40);
+    Rect drawPlayerMoney_rect = new Rect(0, 90, 200, 40);
 
-    Rect TK_money_rect = new Rect(0, 0, 400, 150);          //<!-- TopLeft rectangle of screen.
-    Rect drawCoin_rect = new Rect(20, 20, 100, 100);
-    Rect drawPlayerName_rect = new Rect(150, 20, 250, 50);
-    Rect drawPlayerMoney_rect = new Rect(150, 90, 250, 50);
+	string username = "";
+	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
+	Rect editShop_OKButton_rect = new Rect(10, 150, 100, 40);
+	Rect editShop_CancelButton_rect = new Rect(160, 150, 100, 40);
     void Awake() {
         GUI_manager.CalculateViewportScreen();
     }
@@ -71,13 +77,46 @@ public class Town : Mz_BaseScene {
 
         GUI.BeginGroup(TK_money_rect, "", GUI.skin.box);
         {
-            GUI.DrawTexture(drawCoin_rect, tk_coin_img);
             GUI.Box(drawPlayerName_rect, StorageManage.Username);
-            GUI.Box(drawPlayerMoney_rect, StorageManage.Money.ToString());
+			if(GUI.Button(drawShopName_rect, StorageManage.ShopName)) {
+				currentGUIState = OnGUIState.DrawEditShopname;
+				base.UpdateTimeScale(0);
+			}
+            GUI.Box(drawPlayerMoney_rect, new GUIContent(StorageManage.Money.ToString(), tk_coin_img));
         }
-        GUI.EndGroup();        
+        GUI.EndGroup();      
+
+		if(currentGUIState == OnGUIState.DrawEditShopname)
+			this.DrawEditShopnameWindow();
     }
 
+	void DrawEditShopnameWindow ()
+	{
+		GUI.BeginGroup(new Rect (Screen.width / 2 - 150, Main.GAMEHEIGHT / 2 - 100, 300, 200), "Edit shopname !", GUI.skin.window);
+		{
+			username = GUI.TextField(editShop_Textfield_rect, username, 13);
+
+			if(GUI.Button(editShop_OKButton_rect, "OK")) {
+				if(username != "" && username.Length >= 5) {
+					StorageManage.ShopName = username;
+
+					if(username == "rich is daddy") {
+						StorageManage.Money = 1000000;
+					}
+
+					Mz_StorageData.Save();
+
+					currentGUIState = OnGUIState.none;
+					base.UpdateTimeScale(1);
+				}
+			}
+			else if(GUI.Button(editShop_CancelButton_rect, "Cancel")) {
+				currentGUIState = OnGUIState.none;
+				base.UpdateTimeScale(1);
+			}
+		}
+		GUI.EndGroup();
+	}
 
 	public override void OnInput (string nameInput)
 	{

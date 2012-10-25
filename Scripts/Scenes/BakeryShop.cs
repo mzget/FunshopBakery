@@ -21,13 +21,15 @@ public class BakeryShop : Mz_BaseScene {
 	private tk2dSprite cash_sprite;
     private GameObject packaging_Obj;
 
-    #region <!-- JuiceTank_group data fields.
+    #region <!-- SouseMachine data fields group. 
 
-    public GameObject juiceTank_base_Obj;
-	private tk2dSprite juiceTank_base_Sprite;
-	public GameObject pineAppple_tank_Obj;
+//    public GameObject juiceTank_base_Obj;
+	public tk2dSprite juiceTank_base_Sprite;
+//	public GameObject pineAppple_tank_Obj;
 	public GameObject appleTank_Obj;
 	public GameObject orangeTank_Obj;
+	public GameObject cocoaMilkTank_Obj;
+	public GameObject freshMilkTank_Obj;
 
     #endregion
 	
@@ -46,13 +48,12 @@ public class BakeryShop : Mz_BaseScene {
 	
 	#endregion
 
-    #region <!-- Toast Obj group;
+    #region <!-- Toast && Jam Obj group;
 
     public Transform toastObj_transform_group;
 	public ToastBeh[] toasts = new ToastBeh[2]; 
 	private Vector3 toast_1_pos = new Vector3(-0.415f, 0.419f, -1);
 	private Vector3 toast_2_pos = new Vector3(-0.220f, 0.418f, -1);
-    //<!-- Jam Object group;
     public JamBeh strawberryJam_instance;
     public GameObject blueberryJam_instance;
     public GameObject freshButterJam_instance;
@@ -129,6 +130,15 @@ public class BakeryShop : Mz_BaseScene {
 
 		foodTrayBeh = new FoodTrayBeh();
         goodDataStore = new GoodDataStore();
+		
+		appleTank_Obj.SetActiveRecursively(false);
+		orangeTank_Obj.SetActiveRecursively(false);
+		cocoaMilkTank_Obj.SetActiveRecursively(false);
+		freshMilkTank_Obj.SetActiveRecursively(false);
+
+		blueberryJam_instance.SetActiveRecursively(false);
+		freshButterJam_instance.SetActiveRecursively(false);
+		custardJam_instance.SetActiveRecursively(false);
 
         StartCoroutine(CreateToastInstance());
         StartCoroutine(CreateCupcakeInstance());
@@ -180,40 +190,55 @@ public class BakeryShop : Mz_BaseScene {
         foreach (int id in NumberOfCansellItem)
         {
             CanSellGoodLists.Add(goodDataStore.Menu_list[id]);
-
-            if (id == 6) {
+			
+			#region Has page1 upgraded.
+			
+            if (id == 6)
                 blueberryJam_instance.active = true;
-                //break;
-            }
-            if(id == 10) {
+            if(id == 10)
                 blueberry_cream_Instance.active = true;
-                //break;
-            }
-            if (id == 12 || id == 13) {
+            if (id == 12 || id == 13)
                 miniCake.gameObject.active = true;
-                //break;
-            }
-			if(id == 15 || id == 16) {
+			if(id == 15 || id == 16)
 				cake.gameObject.active = true;
-                //break;
-            }
 			if(id == 19) {
 				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_002);
 				icecreamVanillaTank_obj.SetActiveRecursively(true);
                 //break;
 			}	
-			if(id == 21) {
+			if(id == 21)
                 tunaSandwich.gameObject.SetActiveRecursively(true);
-                //break;
-            }
-            if (id == 25) {
+            if (id == 25)
                 chocolateChip_cookie.gameObject.SetActiveRecursively(true);
-                //break;
-            }
-            if (id == 28) {
+            if (id == 28)
                 hotdog.gameObject.SetActiveRecursively(true);
-                //break;
-            }
+			
+			#endregion
+			#region Has page2 upgraded.
+			
+			if(id == 1) {
+				appleTank_Obj.SetActiveRecursively(true);
+				juiceTank_base_Sprite.spriteId = juiceTank_base_Sprite.GetSpriteIdByName("juiceTank_lv_2");
+			}
+            if(id == 2)
+				cocoaMilkTank_Obj.SetActiveRecursively(true);
+			if(id == 7)
+				freshButterJam_instance.SetActiveRecursively(true);
+			if(id == 11 || id == 14 || id == 17) {
+				strawberry_cream_Instance.SetActiveRecursively(true);
+			}
+			if(id == 20) {
+				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_003);
+				icecreamChocolateTank_obj.SetActiveRecursively(true);
+			}
+			if(id == 22)
+				deepFriedChickenSandwich.gameObject.SetActiveRecursively(true);
+			if(id == 26)
+				fruit_cookie.gameObject.SetActiveRecursively(true);
+			if(id == 3)
+				orangeTank_Obj.SetActiveRecursively(true);
+			
+			#endregion
         }
 
         foreach (Goods item in CanSellGoodLists) {

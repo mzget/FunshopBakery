@@ -107,6 +107,10 @@ public class Mz_BaseScene : MonoBehaviour {
             }
 		}
 	}
+	
+	protected void UpdateTimeScale(int delta) {
+		Time.timeScale = delta;
+	}
 
     protected virtual void CheckTouchPostionAndMove() {
 //        Debug.Log("CheckTouchPostionAndMove");

@@ -10,7 +10,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 	private IcecreamBeh icecreamBeh;
 	private Vector3 icecreamPos_0 = new Vector3(-0.014f, -.25f, -.2f);
 	private Vector3 icecreamPos_1 = new Vector3(0, -.25f, -.2f);
-	private Vector3 icecreamPos_2 = new Vector3();
+	private Vector3 icecreamPos_2 = new Vector3(-0.04f, -.25f, -.2f);
 	
 	
 	// Use this for initialization
