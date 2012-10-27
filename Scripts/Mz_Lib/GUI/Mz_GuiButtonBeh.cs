@@ -15,11 +15,29 @@ public class Mz_GuiButtonBeh : MonoBehaviour {
 	{
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<Mz_BaseScene> ();
         originalScale = this.transform.localScale;
+
+		Mz_BaseScene.HasChangeTimeScale_Event += Handle_HasChangeTimeScale_Event;
+	}
+
+    void Handle_HasChangeTimeScale_Event (object sender, System.EventArgs e)
+    {
+		if(Time.timeScale == 0)
+			OnApplicationPause(true);
+		else if(Time.timeScale == 1) 
+			OnApplicationPause(false);
+    }
+
+	void OnDestroy() {
+		Mz_BaseScene.HasChangeTimeScale_Event -= Handle_HasChangeTimeScale_Event;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+	}
+
+	void OnApplicationPause (bool pause) {
+		collider.enabled = !pause;
 	}
 
     private void OnMouseDown ()

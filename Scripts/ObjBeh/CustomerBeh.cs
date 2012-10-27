@@ -133,12 +133,12 @@ public class CustomerBeh : MonoBehaviour {
 	private void OnGUI() {
 		GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height/ Main.GAMEHEIGHT, 1));
 		
-		textbox_DisplayOrder = new Rect(GUI_manager.viewPort_rect.width - 580, 0, 300, 200);
+		textbox_DisplayOrder = new Rect(GUImanager.viewPort_rect.width - 580, 0, 300, 200);
 
         if(_enableGUI) 
         {		
             //GUI.BeginGroup(new Rect(((Screen.width / 2) - (GUI_manager.midcenterGroup_rect.width / 2)), 0, GUI_manager.midcenterGroup_rect.width, Main.FixedGameHeight));
-            GUI.BeginGroup(GUI_manager.viewPort_rect);
+            GUI.BeginGroup(GUImanager.viewPort_rect);
             {
                 if (currentCustomerBeh_State == CustomerBeh_State.ordering)
                 {

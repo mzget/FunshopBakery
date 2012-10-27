@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public class BakeryShop : Mz_BaseScene {
 
 	public GameObject bakeryShop_backgroup_group;
-	public GUI_manager gui_manager;
 	
 	//<!-- in game button.
 	public GameObject close_button;
@@ -19,7 +18,15 @@ public class BakeryShop : Mz_BaseScene {
 	private Mz_CalculatorBeh calculatorBeh;
     private GameObject cash_obj;
 	private tk2dSprite cash_sprite;
+    private tk2dTextMesh coin_Textmesh;
     private GameObject packaging_Obj;
+    //<!-- Core data
+    public enum GamePlayState { none = 0, calculationPrice, receiveMoney, giveTheChange, TradeComplete, };
+    public GamePlayState currentGamePlayState;
+    public GUImanager gui_manager;
+    public GoodDataStore goodDataStore;
+    public static List<int> NumberOfCansellItem = new List<int>();
+    public List<Goods> CanSellGoodLists = new List<Goods>();
 
     #region <!-- SouseMachine data fields group. 
 
@@ -110,26 +117,12 @@ public class BakeryShop : Mz_BaseScene {
     }
 	
 	#endregion	
-	
-	//<!-- Core data
-    public enum GamePlayState { none = 0, hasNewCustomer, calculationPrice, receiveMoney, giveTheChange, TradeComplete, };
-    public GamePlayState currentGamePlayState;
-    public GoodDataStore goodDataStore;
-	public static List<int> NumberOfCansellItem = new List<int>();
-    public List<Goods> CanSellGoodLists = new List<Goods>();
-    
-    //<!-- Cache data session.
 
-	
 	
 	// Use this for initialization
 	IEnumerator Start () {
         base.InitializeAudio();
-
 //		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
-
-		foodTrayBeh = new FoodTrayBeh();
-        goodDataStore = new GoodDataStore();
 		
 		appleTank_Obj.SetActiveRecursively(false);
 		orangeTank_Obj.SetActiveRecursively(false);
@@ -142,16 +135,13 @@ public class BakeryShop : Mz_BaseScene {
 
         StartCoroutine(CreateToastInstance());
         StartCoroutine(CreateCupcakeInstance());
-        yield return StartCoroutine(CreateMiniCakeInstance());	
-		miniCake.gameObject.active = false;
-		yield return StartCoroutine(CreateCakeInstance());			
-		cake.gameObject.active = false;
+        StartCoroutine(InitializeMinicakeInstance());
+        StartCoroutine(InitializeCakeInstance());
+        StartCoroutine(InitializeTunaSandwichInstance());
 		
 		icecreamVanillaTank_obj.SetActiveRecursively(false);
 		icecreamChocolateTank_obj.SetActiveRecursively(false);
 
-        yield return StartCoroutine(this.CreateTunaSandwich());
-        tunaSandwich.gameObject.SetActiveRecursively(false);
 		this.CreateDeepFriedChickenSandwich();
 		this.CreateHamSanwich();
 		this.CreateEggSandwich();
@@ -159,31 +149,62 @@ public class BakeryShop : Mz_BaseScene {
         hamSandwich.gameObject.SetActiveRecursively(false);
         eggSandwich.gameObject.SetActiveRecursively(false);
 
-        yield return StartCoroutine(this.CreateChocolateChip_Cookie());
-        chocolateChip_cookie.gameObject.SetActiveRecursively(false);
+        StartCoroutine(InitializeChocolateChipCookie());
 		this.CreateFruitCookie();
 		this.CreateButterCookie();
         fruit_cookie.gameObject.SetActiveRecursively(false);
         butter_cookie.gameObject.SetActiveRecursively(false);
 
-        yield return StartCoroutine(this.CreateHotdog());
-        hotdog.gameObject.SetActiveRecursively(false);
+        StartCoroutine(InitializeHotdogInstance());
 
+        yield return null;
+
+        calculator_group_instance.SetActiveRecursively(false);
+
+		foodTrayBeh = new FoodTrayBeh();
+        goodDataStore = new GoodDataStore();
         // Debug can sell list.
         InitializeCanSellGoodslist();
 		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count);
 		Debug.Log("NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
-
-        calculator_group_instance.SetActiveRecursively(false);
 		
-		this.gameObject.AddComponent<GUI_manager>();
-		gui_manager = this.gameObject.GetComponent<GUI_manager>();
+		this.gameObject.AddComponent<GUImanager>();
+		gui_manager = this.gameObject.GetComponent<GUImanager>();
+
+        var coinObj = GameObject.Find("Coin");
+        coin_Textmesh = coinObj.GetComponent<tk2dTextMesh>();
+        coin_Textmesh.text = StorageManage.Money.ToString();
+        coin_Textmesh.Commit();
         
         nullCustomer_event += new EventHandler(BakeryShop_nullCustomer_event);
         OnNullCustomer_event(EventArgs.Empty);
-
-        yield return 0;
 	}
+
+    private IEnumerator InitializeMinicakeInstance()
+    {
+        yield return StartCoroutine(CreateMiniCakeInstance());	
+		miniCake.gameObject.active = false;
+    }
+    private IEnumerator InitializeCakeInstance()
+    {
+		yield return StartCoroutine(CreateCakeInstance());			
+		cake.gameObject.active = false;
+    }
+    private IEnumerator InitializeTunaSandwichInstance()
+    {
+        yield return StartCoroutine(this.CreateTunaSandwich());
+        tunaSandwich.gameObject.SetActiveRecursively(false);
+    }
+    private IEnumerator InitializeChocolateChipCookie()
+    {
+        yield return StartCoroutine(this.CreateChocolateChip_Cookie());
+        chocolateChip_cookie.gameObject.SetActiveRecursively(false);
+    }    
+    private IEnumerator InitializeHotdogInstance()
+    {
+        yield return StartCoroutine(this.CreateHotdog());
+        hotdog.gameObject.SetActiveRecursively(false);
+    }
 
     private void InitializeCanSellGoodslist()
     {
@@ -214,6 +235,7 @@ public class BakeryShop : Mz_BaseScene {
                 hotdog.gameObject.SetActiveRecursively(true);
 			
 			#endregion
+			
 			#region Has page2 upgraded.
 			
 			if(id == 1) {
@@ -224,9 +246,8 @@ public class BakeryShop : Mz_BaseScene {
 				cocoaMilkTank_Obj.SetActiveRecursively(true);
 			if(id == 7)
 				freshButterJam_instance.SetActiveRecursively(true);
-			if(id == 11 || id == 14 || id == 17) {
+			if(id == 11 || id == 14 || id == 17)
 				strawberry_cream_Instance.SetActiveRecursively(true);
-			}
 			if(id == 20) {
 				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_003);
 				icecreamChocolateTank_obj.SetActiveRecursively(true);
@@ -238,6 +259,19 @@ public class BakeryShop : Mz_BaseScene {
 			if(id == 3)
 				orangeTank_Obj.SetActiveRecursively(true);
 			
+			#endregion
+			
+			#region Has Page 3 Upgraded.
+
+			if(id == 4)
+				freshMilkTank_Obj.SetActiveRecursively(true);
+			if(id == 8)
+				custardJam_instance.SetActiveRecursively(true);
+			if(id == 23)
+				hamSandwich.gameObject.SetActiveRecursively(true);
+			if(id == 24)
+				eggSandwich.gameObject.SetActiveRecursively(true);
+
 			#endregion
         }
 
@@ -390,7 +424,7 @@ public class BakeryShop : Mz_BaseScene {
 	
 	#endregion
 	
-	#region Sandwich Obj behavior.
+	#region <!-- Sandwich Obj behavior.
 	
 	/// <summary>
 	/// Creates the tuna sandwich.
@@ -543,7 +577,7 @@ public class BakeryShop : Mz_BaseScene {
 	
 	#endregion
 
-    #region Cookie Object Behavior.
+    #region <!-- Cookie Object Behavior.
 	
 	/// <summary>
 	/// Creates the chocolate chip_ cookie.
@@ -655,7 +689,7 @@ public class BakeryShop : Mz_BaseScene {
 
     #endregion
 
-    #region Hotdog object behavior.
+    #region <!-- Hotdog object behavior.
 
     private IEnumerator CreateHotdog()
     {
@@ -798,6 +832,8 @@ public class BakeryShop : Mz_BaseScene {
         yield return new WaitForSeconds(2);
 
         StorageManage.Money += currentCustomer.amount;
+        coin_Textmesh.text = StorageManage.Money.ToString();
+        coin_Textmesh.Commit();
 
         //<!-- Clare resource data.
         currentCustomer.Dispose();

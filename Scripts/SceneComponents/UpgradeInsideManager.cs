@@ -3,7 +3,6 @@ using System.Collections;
 
 public class UpgradeInsideManager : MonoBehaviour {
 	
-	
 	public GameObject[,] upgradeInsideObj2D = new GameObject[2,4];
     private tk2dSprite[,] upgradeInsideSprite2D = new tk2dSprite[2, 4];
     private tk2dTextMesh[,] upgradeInside_PriceTextmesh = new tk2dTextMesh[2, 4];
@@ -289,6 +288,39 @@ public class UpgradeInsideManager : MonoBehaviour {
 		}
 		else if(pageIndex == 2) {
 			#region page2 low 0.
+			
+			if(upgradeName == "upgrade_00") {				
+				if(StorageManage.Money >= thirdPage_prices[0,0]) {
+					Debug.Log("buying : freshMilkTank");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(4) == false)
+						BakeryShop.NumberOfCansellItem.Add(4);	
+				}
+			}
+			else if(upgradeName == "upgrade_01") {		
+				if(StorageManage.Money >= thirdPage_prices[0,1]) {
+					Debug.Log("buying : custard_jam");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(8) == false)
+						BakeryShop.NumberOfCansellItem.Add(8);	
+				}
+			}
+			else if(upgradeName == "upgrade_02") {
+				if(StorageManage.Money >= thirdPage_prices[0,2]) {
+					Debug.Log("buying : ham_sandwich");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(23) == false)
+						BakeryShop.NumberOfCansellItem.Add(23);	
+				}
+			}
+			else if(upgradeName == "upgrade_03") {
+				if(StorageManage.Money >= thirdPage_prices[0,3]) {
+					Debug.Log("buying : egg_sandwich");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(24) == false) 
+						BakeryShop.NumberOfCansellItem.Add(24);	
+				}
+			}
 
 			#endregion
 			#region page2 low 1.

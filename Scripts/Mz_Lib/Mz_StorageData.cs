@@ -49,5 +49,7 @@ public class Mz_StorageData
 		
 		int[] array_temp = BakeryShop.NumberOfCansellItem.ToArray();
 		PlayerPrefsX.SetIntArray(StorageManage.SaveSlot + "cansellgoodslist", array_temp);
+		
+		PlayerPrefs.Save();
     }
 }

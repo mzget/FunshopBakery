@@ -10,32 +10,67 @@ public class Town : Mz_BaseScene {
     public tk2dAnimatedSprite sheepBank_door_animated;
 	
 	//<!--- Game button.
-	public GameObject dressing_button_Obj;
-	public GameObject trophy_button_Obj;
-	public GameObject info_button_Obj;
-	public GameObject back_button_obj;
+//	public GameObject dressing_button_Obj;
+//	public GameObject trophy_button_Obj;
+//	public GameObject info_button_Obj;
+//	public GameObject back_button_obj;
     //<!-- Texture2d resources.
     public Texture2D tk_coin_img;
+	public Texture2D dress_img;
+	public Texture2D trophy_img;
+	public Texture2D info_img;
+	public Texture2D backIcon_img;
 
 	public enum OnGUIState { none = 0, DrawEditShopname, };
 	public OnGUIState currentGUIState;
-    Rect TK_money_rect = new Rect(0, 0, 200, 140);          //<!-- TopLeft rectangle of screen.
-    Rect drawPlayerName_rect = new Rect(0, 0, 200, 40);
-	Rect drawShopName_rect = new Rect(0, 45, 200, 40);
-    Rect drawPlayerMoney_rect = new Rect(0, 90, 200, 40);
+	Rect TopLeft_Anchor_GroupRect;          //<!-- TopLeft rectangle of screen.
+	Rect drawPlayerName_rect;
+	Rect drawShopName_rect;
+	Rect drawPlayerMoney_rect;
+	
+	Rect topRight_Anchor_GroupRect ;
+	Rect drawDress_ButtonRect; 
+	Rect drawTrophy_ButtonRect;
+	Rect drawInfo_ButtonRect;
+	Rect drawBack_ButtonRect;
 
 	string username = "";
 	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
 	Rect editShop_OKButton_rect = new Rect(10, 150, 100, 40);
 	Rect editShop_CancelButton_rect = new Rect(160, 150, 100, 40);
+	
+	
     void Awake() {
-        GUI_manager.CalculateViewportScreen();
+        GUImanager.CalculateViewportScreen();
     }
 	
 	// Use this for initialization
 	void Start () {
 		base.InitializeAudio();
 		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
+
+		this.Initialize_OnGUIDataFields();
+	}
+
+	void Initialize_OnGUIDataFields () {
+		TopLeft_Anchor_GroupRect  = new Rect(0, 0, 200 * GUImanager.extend_heightScale, 150);
+		drawPlayerName_rect  = new Rect(0, 20, 200 * GUImanager.extend_heightScale, 40);
+		drawShopName_rect  = new Rect(0, 65, 200 * GUImanager.extend_heightScale, 40);
+		drawPlayerMoney_rect = new Rect(0, 110, 200 * GUImanager.extend_heightScale, 40);
+		
+		topRight_Anchor_GroupRect = new Rect(Screen.width - 400, 0, 400 * GUImanager.extend_heightScale, 200);
+		drawDress_ButtonRect = new Rect(10, 20, 80 * GUImanager.extend_heightScale, 80);
+		drawTrophy_ButtonRect = new Rect(100, 20, 80 * GUImanager.extend_heightScale, 80);
+		drawInfo_ButtonRect = new Rect(190, 20, 80 * GUImanager.extend_heightScale, 80);
+		drawBack_ButtonRect = new Rect(280, 20, 80 * GUImanager.extend_heightScale, 80);
+
+		if (Screen.height != Main.GAMEHEIGHT) {
+			topRight_Anchor_GroupRect.x = Screen.width - (400 * GUImanager.extend_heightScale);
+			drawDress_ButtonRect.x = drawDress_ButtonRect.x * GUImanager.extend_heightScale;
+			drawTrophy_ButtonRect.x = drawTrophy_ButtonRect.x * GUImanager.extend_heightScale;
+			drawInfo_ButtonRect.x = drawInfo_ButtonRect.x * GUImanager.extend_heightScale;
+			drawBack_ButtonRect.x = drawBack_ButtonRect.x * GUImanager.extend_heightScale;
+		}
 	}
 	
 	// Update is called once per frame
@@ -43,39 +78,42 @@ public class Town : Mz_BaseScene {
 	{
 		base.Update ();
 		
+		base.ImplementTouchPostion();
+		
 		if(Camera.main.transform.position.x > 2.66f) 
 			Camera.main.transform.position = new Vector3(2.66f, Camera.main.transform.position.y, Camera.main.transform.position.z); 	//Vector3.left * Time.deltaTime;
 		else if(Camera.main.transform.position.x < 0) 
 			Camera.main.transform.position = new Vector3(0, Camera.main.transform.position.y, Camera.main.transform.position.z);	 //Vector3.right * Time.deltaTime;
 	}
 
-	protected override void CheckTouchPostionAndMove ()
-	{
-		base.CheckTouchPostionAndMove();
+	protected override void MovingCameraTransform ()
+	{	
+		base.MovingCameraTransform();
 
-        if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
-            float speed = Time.deltaTime;
-            // Get movement of the finger since last frame   
-            Vector2 touchDeltaPosition = touch.deltaPosition;
-            // Move object across XY plane       
-            //transform.Translate(-touchDeltaPosition.x * speed, -touchDeltaPosition.y * speed, 0);
-            Camera.main.transform.Translate(-touchDeltaPosition.x * speed, 0, 0);
-        }
-        else if(Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
-            if(_isDragMove) {
-                float vector = currentPos.x - originalPos.x;
-                if(vector < 0)
-                    Camera.main.transform.position += Vector3.right * Time.deltaTime * 2;
-                else if(vector > 0) 
-                    Camera.main.transform.position += Vector3.left * Time.deltaTime * 2;
-            }
-        }
+		if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+            float speed = Time.deltaTime * 0.2f;
+			// Get movement of the finger since last frame   
+			Vector2 touchDeltaPosition = touch.deltaPosition;
+			// Move object across XY plane       
+			//transform.Translate(-touchDeltaPosition.x * speed, -touchDeltaPosition.y * speed, 0);
+			Camera.main.transform.Translate(-touchDeltaPosition.x * speed, 0, 0);
+		}
+		else if(Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
+			if(_isDragMove) {
+				float vector = currentPos.x - originalPos.x;
+				if(vector < 0)
+					Camera.main.transform.position += Vector3.right * Time.deltaTime * 2;
+				else if(vector > 0) 
+					Camera.main.transform.position += Vector3.left * Time.deltaTime * 2;
+			}
+		}
 	}
 	
     void OnGUI() {
         GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height/ Main.GAMEHEIGHT, 1));
-
-        GUI.BeginGroup(TK_money_rect, "", GUI.skin.box);
+		
+		/// TopLeft_Anchor_GroupRect.
+        GUI.BeginGroup(TopLeft_Anchor_GroupRect, "TopLeft anchor", GUI.skin.window);
         {
             GUI.Box(drawPlayerName_rect, StorageManage.Username);
 			if(GUI.Button(drawShopName_rect, StorageManage.ShopName)) {
@@ -85,7 +123,35 @@ public class Town : Mz_BaseScene {
             GUI.Box(drawPlayerMoney_rect, new GUIContent(StorageManage.Money.ToString(), tk_coin_img));
         }
         GUI.EndGroup();      
+		
+		/// topRight_Anchor_GroupRect
+		GUI.BeginGroup(topRight_Anchor_GroupRect, "TopRight anchor.", GUI.skin.window);
+		{
+			if(GUI.Button(drawDress_ButtonRect, new GUIContent(dress_img))) {
+				if (Application.isLoadingLevel == false) {
+	                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
+	                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+            	}
+			}
+			else if(GUI.Button(drawTrophy_ButtonRect, new GUIContent(trophy_img))) {
+				
+			}
+			else if(GUI.Button(drawInfo_ButtonRect, new GUIContent(info_img))) {
 
+			}
+			else if(GUI.Button(drawBack_ButtonRect, new GUIContent(backIcon_img))) {
+				if(Application.isLoadingLevel == false) {
+					//<!-- Clear static NumberOfCanSellItem.
+					BakeryShop.NumberOfCansellItem.Clear();
+					
+	                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
+	                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+	            }
+			}
+		}
+		GUI.EndGroup();
+		
+		/// OnGUIState.DrawEditShopname.
 		if(currentGUIState == OnGUIState.DrawEditShopname)
 			this.DrawEditShopnameWindow();
     }
@@ -100,7 +166,7 @@ public class Town : Mz_BaseScene {
 				if(username != "" && username.Length >= 5) {
 					StorageManage.ShopName = username;
 
-					if(username == "rich is daddy") {
+					if(username == "Rich is daddy") {
 						StorageManage.Money = 1000000;
 					}
 
@@ -125,22 +191,22 @@ public class Town : Mz_BaseScene {
         if (nameInput == shop_body_sprite.gameObject.name) {
             this.PlayBakeryShopOpenAnimation();
         }
-        else if (nameInput == back_button_obj.name) {
-            if(Application.isLoadingLevel == false) {
-				//<!-- Clear static NumberOfCanSellItem.
-				BakeryShop.NumberOfCansellItem.Clear();
-				
-				
-                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
-                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-            }
-        }
-        else if (nameInput == dressing_button_Obj.name) {
-            if (Application.isLoadingLevel == false) {
-                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
-                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-            }
-        }
+//        else if (nameInput == back_button_obj.name) {
+//            if(Application.isLoadingLevel == false) {
+//				//<!-- Clear static NumberOfCanSellItem.
+//				BakeryShop.NumberOfCansellItem.Clear();
+//				
+//				
+//                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
+//                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+//            }
+//        }
+//        else if (nameInput == dressing_button_Obj.name) {
+//            if (Application.isLoadingLevel == false) {
+//                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
+//                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+//            }
+//        }
         else if(nameInput == sheepBank_body_Obj.name) {
             this.PlaySheepBankOpenAnimation();
         }

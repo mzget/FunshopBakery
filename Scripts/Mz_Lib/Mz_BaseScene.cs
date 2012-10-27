@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -22,6 +23,8 @@ public class Mz_BaseScene : MonoBehaviour {
     public Vector3 mousePos;
     public Vector3 originalPos;
     public Vector3 currentPos;
+	private Vector3[] mainCameraPos = new Vector3[] { new Vector3(0,0,-10), new Vector3(2.66f,0,-10) };
+	private Vector3 currentCameraPos = new Vector3(0, 0, -10);
     public bool _isDragMove = false;
 
 
@@ -66,22 +69,57 @@ public class Mz_BaseScene : MonoBehaviour {
 			Application.Quit(); 
 			return;
 		}
+	}
+
+	#region <!-- HasChangeTimeScale event.
+
+	public static event EventHandler HasChangeTimeScale_Event;
+	private void OnChangeTimeScale (EventArgs e) {
+		if (HasChangeTimeScale_Event != null) 
+				HasChangeTimeScale_Event (this, e);
+	}
+	protected void UpdateTimeScale(int delta) {
+		Time.timeScale = delta;
+		OnChangeTimeScale(EventArgs.Empty);
+	}
+
+	#endregion
+
+    protected void ImplementTouchPostion ()
+	{
+		Debug.Log ("ImplementTouchPostion");			
 		
         if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
             if(Input.touchCount > 0) {				
             	touch = Input.GetTouch(0);
 				
 	            if(touch.phase == TouchPhase.Began) {			
-					Debug.Log(touch.phase);
+					originalPos = touch.position;
+					currentPos = touch.position;
 	            }
 
 	            if(touch.phase == TouchPhase.Moved) {
-					Debug.Log(touch.phase);
-                    this.CheckTouchPostionAndMove();   					
+					currentPos = touch.position;
+                    this.MovingCameraTransform();   					
 	            }
 				
 	            if(touch.phase == TouchPhase.Ended) {
-					Debug.Log(touch.phase);
+					float distance = Vector2.Distance (currentPos, originalPos);
+					float vector = currentPos.x - originalPos.x;
+//					float speed = Time.deltaTime * (distance / touch.deltaTime);
+					if (vector < 0) {
+						if(distance > 200)
+							currentCameraPos = mainCameraPos[1];
+					}
+					else if (vector > 0) {
+						if(distance > 200)
+							currentCameraPos = mainCameraPos[0];
+					}
+						
+					iTween.MoveTo (Camera.main.gameObject, iTween.Hash("position", currentCameraPos, "time", 0.5f, "easetype", iTween.EaseType.linear));
+					
+					currentPos = Vector2.zero;
+					originalPos = Vector2.zero;
 	            }
             }
         }
@@ -96,7 +134,7 @@ public class Mz_BaseScene : MonoBehaviour {
 			if(Input.GetMouseButton(0)) {
 				currentPos = mousePos;
                 _isDragMove = true;
-				this.CheckTouchPostionAndMove();
+				this.MovingCameraTransform();
                 //Debug.Log("currentPos == " + currentPos);
 			}
 
@@ -106,15 +144,11 @@ public class Mz_BaseScene : MonoBehaviour {
                 currentPos = Vector3.zero;
             }
 		}
-	}
-	
-	protected void UpdateTimeScale(int delta) {
-		Time.timeScale = delta;
-	}
-
-    protected virtual void CheckTouchPostionAndMove() {
-//        Debug.Log("CheckTouchPostionAndMove");
     }
+	protected virtual void MovingCameraTransform ()
+	{
+
+	}
 
     public virtual void OnInput(string nameInput) {
 //    	Debug.Log("OnInput :: " + nameInput);
@@ -126,7 +160,6 @@ public class Mz_BaseScene : MonoBehaviour {
 
     void OnApplicationQuit() {
         Mz_StorageData.Save();
-		PlayerPrefs.Save();
 
 #if UNITY_STANDALONE_WIN
         Application.CancelQuit();
