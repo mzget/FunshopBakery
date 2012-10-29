@@ -41,8 +41,8 @@ public class GoodDataStore : ScriptableObject {
         strawberry_cake,            // 28. à€é¡ÊµÃÍàºÍÃÃÕè
         //</ cake >
 
-        hotdog,                     // 2x. ÎÍ·ŽÍ¡
-        hot_dog_with_cheese,        // 2x. ÎÍ·ŽÍ¡ãÊèªÕÊ
+        hotdog_with_sauce,                     // 2x. ÎÍ·ŽÍ¡
+        hotdog_with_cheese,        // 2x. ÎÍ·ŽÍ¡ãÊèªÕÊ
     };
 	
    	public Goods[] Menu_list = new Goods[] {                               
@@ -82,8 +82,8 @@ public class GoodDataStore : ScriptableObject {
         new Goods(GoodsOrderList.fruit_cookie.ToString(), 5),						//26
         new Goods(GoodsOrderList.butter_cookie.ToString(), 5),						//27
 
-        new Goods(GoodsOrderList.hotdog.ToString(), 10),							//28
-        new Goods(GoodsOrderList.hot_dog_with_cheese.ToString(), 15),				//29
+        new Goods(GoodsOrderList.hotdog_with_sauce.ToString(), 10),					//28
+        new Goods(GoodsOrderList.hotdog_with_cheese.ToString(), 15),				//29
     };
 	
     public GoodDataStore() {

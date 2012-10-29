@@ -64,7 +64,7 @@ public class MainMenu : Mz_BaseScene {
 	void Start () {
         Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
-        GUImanager.CalculateViewportScreen();
+        ShopScene_GUIManager.CalculateViewportScreen();
 
         iTween.MoveTo(mainmenu_Group.gameObject, moveDownTransform_Data);
 
@@ -99,30 +99,30 @@ public class MainMenu : Mz_BaseScene {
 
 	void RecalculateOnGUI_DataFields ()
 	{
-		newgame_Textfield_rect = new Rect((GUImanager.viewPort_rect.width / 2) - 150, GUImanager.viewPort_rect.height / 2 + 58, 300, 82);
-		newShopName_rect = new Rect((GUImanager.viewPort_rect.width / 2) - 138, GUImanager.viewPort_rect.height / 2 - 110, 400, 80);
+		newgame_Textfield_rect = new Rect((ShopScene_GUIManager.viewPort_rect.width / 2) - 150, ShopScene_GUIManager.viewPort_rect.height / 2 + 58, 300, 82);
+		newShopName_rect = new Rect((ShopScene_GUIManager.viewPort_rect.width / 2) - 138, ShopScene_GUIManager.viewPort_rect.height / 2 - 110, 400, 80);
 		
-		group_width = 400 * GUImanager.extend_heightScale;
-		showSaveGameSlot_GroupRect = new Rect((GUImanager.viewPort_rect.width/2) - (group_width/2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
+		group_width = 400 * ShopScene_GUIManager.extend_heightScale;
+		showSaveGameSlot_GroupRect = new Rect((ShopScene_GUIManager.viewPort_rect.width/2) - (group_width/2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
 		slot_1Rect = new Rect(35, 12, group_width - 60, 80);
 		slot_2Rect  = new Rect(35, 112, group_width - 60, 80);
 		slot_3Rect = new Rect(35, 212, group_width - 60, 80);
 		
 		if(Screen.height != Main.GAMEHEIGHT) {
-			newgame_Textfield_rect.width = newgame_Textfield_rect.width * GUImanager.extend_heightScale;
-			newgame_Textfield_rect.x = (GUImanager.viewPort_rect.width / 2) - newgame_Textfield_rect.width / 2;
+			newgame_Textfield_rect.width = newgame_Textfield_rect.width * ShopScene_GUIManager.extend_heightScale;
+			newgame_Textfield_rect.x = (ShopScene_GUIManager.viewPort_rect.width / 2) - newgame_Textfield_rect.width / 2;
 			
-			newShopName_rect.width = newShopName_rect.width * GUImanager.extend_heightScale;
-			newShopName_rect.x = (GUImanager.viewPort_rect.width / 2) - 138 * GUImanager.extend_heightScale;
+			newShopName_rect.width = newShopName_rect.width * ShopScene_GUIManager.extend_heightScale;
+			newShopName_rect.x = (ShopScene_GUIManager.viewPort_rect.width / 2) - 138 * ShopScene_GUIManager.extend_heightScale;
 			
-			slot_1Rect.width = group_width - (60 * GUImanager.extend_heightScale);
-			slot_1Rect.x = slot_1Rect.x * GUImanager.extend_heightScale;
+			slot_1Rect.width = group_width - (60 * ShopScene_GUIManager.extend_heightScale);
+			slot_1Rect.x = slot_1Rect.x * ShopScene_GUIManager.extend_heightScale;
 			
-			slot_2Rect.width = group_width - (60 * GUImanager.extend_heightScale);
-			slot_2Rect.x = slot_2Rect.x * GUImanager.extend_heightScale;
+			slot_2Rect.width = group_width - (60 * ShopScene_GUIManager.extend_heightScale);
+			slot_2Rect.x = slot_2Rect.x * ShopScene_GUIManager.extend_heightScale;
 			
-			slot_3Rect.width = group_width - (60 * GUImanager.extend_heightScale);
-			slot_3Rect.x = slot_3Rect.x * GUImanager.extend_heightScale;
+			slot_3Rect.width = group_width - (60 * ShopScene_GUIManager.extend_heightScale);
+			slot_3Rect.x = slot_3Rect.x * ShopScene_GUIManager.extend_heightScale;
 		}
 	}
 	
@@ -146,10 +146,10 @@ public class MainMenu : Mz_BaseScene {
 
 		GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
 		
-		GUI.BeginGroup(GUImanager.viewPort_rect);
+		GUI.BeginGroup(ShopScene_GUIManager.viewPort_rect);
         {
             if(_showSkinLayout) {
-                GUI.Box(new Rect(0, 0, GUImanager.viewPort_rect.width, GUImanager.viewPort_rect.height), "Skin layout", GUI.skin.box);
+                GUI.Box(new Rect(0, 0, ShopScene_GUIManager.viewPort_rect.width, ShopScene_GUIManager.viewPort_rect.height), "Skin layout", GUI.skin.box);
             }
 
             if(sceneState == SceneState.showNewGame) {
@@ -180,7 +180,7 @@ public class MainMenu : Mz_BaseScene {
 			dublicateNoticeText = "This name already exists.";
 
             mainmenu_Skin.textField.normal.textColor = Color.white;
-            Rect notification_Rect = new Rect(GUImanager.viewPort_rect.width / 2 - 200, 0, 400, 64);
+            Rect notification_Rect = new Rect(ShopScene_GUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64);
 
             if (_isNullUsernameNotification)           
                 GUI.Box(notification_Rect, notificationText, mainmenu_Skin.textField);
@@ -303,7 +303,7 @@ public class MainMenu : Mz_BaseScene {
             message = "Select Data Slot To Replace New Data";
 			
             mainmenu_Skin.textField.normal.textColor = Color.white;
-            GUI.Box(new Rect(GUImanager.viewPort_rect.width / 2 - 200, 0, 400, 64), message, mainmenu_Skin.textField);
+            GUI.Box(new Rect(ShopScene_GUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64), message, mainmenu_Skin.textField);
 		}
 
         GUI.BeginGroup(showSaveGameSlot_GroupRect);

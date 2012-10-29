@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class GUImanager : MonoBehaviour {
+public class ShopScene_GUIManager : MonoBehaviour {
 	
 	private Mz_BaseScene baseScene;
 
@@ -42,11 +42,11 @@ public class GUImanager : MonoBehaviour {
         //<!-- initialize data field.
         textbox_DisplayOrder_rect = new Rect(midcenterGroup_rect.width / 2 - 200, 0, 400, 150);
 
-        trademark_Rect = new Rect(viewPort_rect.width - (350 * GUImanager.extend_heightScale), 0, 350 * GUImanager.extend_heightScale, 160);
-        shopName_Rect = new Rect(140, 35, 180 * GUImanager.extend_heightScale, 35);
+        trademark_Rect = new Rect(viewPort_rect.width - (350 * ShopScene_GUIManager.extend_heightScale), 0, 350 * ShopScene_GUIManager.extend_heightScale, 160);
+        shopName_Rect = new Rect(140, 35, 180 * ShopScene_GUIManager.extend_heightScale, 35);
 
         if (Screen.height != Main.GAMEHEIGHT) {
-            shopName_Rect.x = shopName_Rect.x * GUImanager.extend_heightScale;
+            shopName_Rect.x = shopName_Rect.x * ShopScene_GUIManager.extend_heightScale;
         }
     }
 	

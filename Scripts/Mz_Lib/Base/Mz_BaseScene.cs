@@ -63,7 +63,8 @@ public class Mz_BaseScene : MonoBehaviour {
 	// Update is called once per frame
 	protected virtual void Update () 
 	{
-        Mz_SmartDeviceInput.IOS_INPUT();
+        Mz_SmartDeviceInput.ImplementTouchInput();
+        Mz_SmartDeviceInput.ImplementMouseInput();
 		
 		if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Menu)) {
 			Application.Quit(); 

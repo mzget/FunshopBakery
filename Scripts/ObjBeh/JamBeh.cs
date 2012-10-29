@@ -37,14 +37,15 @@ public class JamBeh : ObjectsBeh {
     }
 	
 	// Update is called once per frame
-	void Update () {
-	
+	protected override void Update ()
+	{
+		base.Update ();
 	}
 
-    public override void OnMouseDown()
-    {
-        //base.OnMouseDown();
+    #region <!-- OnInput Events.
 
+    protected override void OnTouchDown()
+    {
         if(base.animationName_001 != "") {
             base.animatedSprite.Play(base.animationName_001);
             base.animatedSprite.animationCompleteDelegate = AnimationComplete;
@@ -53,7 +54,11 @@ public class JamBeh : ObjectsBeh {
 		for (int i = 0; i < sceneManager.toasts.Length; i++) {
 			sceneManager.toasts[i].WaitForIngredient(this.gameObject.name);
 		}
+
+        base.OnTouchDown();
     }
+
+    #endregion
 
     public void AnimationComplete(tk2dAnimatedSprite sprite, int clipId) {
         animatedSprite.StopAndResetFrame();

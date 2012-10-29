@@ -21,22 +21,35 @@ public class BinBeh : ObjectsBeh {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	protected override void Update ()
+	{
+		base.Update ();
 	}
 
-    public override void OnMouseDown()
-    {
-//        base.OnMouseDown();
-		
+	#region <!-- On Mouse Events.
+
+	protected override void OnTouchBegan ()
+	{
+		base.OnTouchBegan ();
+	}
+	protected override void OnTouchDown ()
+	{
 		// <!--- On object active.
-        if(animation) {
+		if(animation) {
 			this.animation.Play();
 		}
 		else if(animatedSprite && animationName_001 != string.Empty) {
 			PlayOpenAnimation();
 		}
 		
-        baseScene.audioEffect.PlayOnecSound(baseScene.audioEffect.buttonDown_Clip);
-    }
+		baseScene.audioEffect.PlayOnecSound(baseScene.audioEffect.buttonDown_Clip);
+
+		base.OnTouchDown ();
+	}
+	protected override void OnTouchEnded ()
+	{
+		base.OnTouchEnded ();
+	}
+
+	#endregion
 }

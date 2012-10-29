@@ -10,7 +10,6 @@ public class GlassBeh : GoodsBeh {
     {
         base.Start();
 
-        _canActive = true;
         _canDragaable = true;
     }
 	
@@ -25,9 +24,12 @@ public class GlassBeh : GoodsBeh {
         base.Update();
     }
 	
-	public override void OnMouseUp ()
-	{
+	
+    protected override void OnTouchEnded()
+    {
+        base.OnTouchEnded();
+		
 		if(base._isDraggable)
 			_isDropObject = true;
-	}
+    }
 }

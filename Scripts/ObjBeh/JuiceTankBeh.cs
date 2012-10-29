@@ -38,13 +38,13 @@ public class JuiceTankBeh : ObjectsBeh {
 	// Update is called once per frame
 	protected override void Update ()
 	{
-//		base.Update ();
+		base.Update ();
 	}
-	
-    public override void OnMouseDown()
-    {		
-        //base.OnMouseDown();
 
+    #region <!-- OnInput.
+
+    protected override void OnTouchDown()
+    {
         if(juice_glass_instance == null)
 		{
 			if(this.gameObject.name == PineappleJuiceTank) 
@@ -58,7 +58,11 @@ public class JuiceTankBeh : ObjectsBeh {
 			else if(this.gameObject.name == FreshMilkTank)
 				this.Create_FreshMilkGlass();
         }
+
+        base.OnTouchDown();
     }
+
+    #endregion
 
     private void Create_PineappleJuiceGlass()
     {

@@ -323,7 +323,24 @@ public class UpgradeInsideManager : MonoBehaviour {
 			}
 
 			#endregion
-			#region page2 low 1.
+			#region page2 low 1.            
+			
+			if(upgradeName == "upgrade_10") {				
+				if(StorageManage.Money >= thirdPage_prices[1,0]) {
+					Debug.Log("buying : butter_cookie");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(27) == false)
+						BakeryShop.NumberOfCansellItem.Add(27);	
+				}
+			}
+			else if(upgradeName == "upgrade_11") {		
+				if(StorageManage.Money >= thirdPage_prices[1,1]) {
+					Debug.Log("buying : hotdog_cheese");
+					
+					if(BakeryShop.NumberOfCansellItem.Contains(29) == false)
+						BakeryShop.NumberOfCansellItem.Add(29);	
+				}
+			}
 
 			#endregion
 		}

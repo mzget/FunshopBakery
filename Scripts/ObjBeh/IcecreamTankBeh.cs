@@ -29,13 +29,12 @@ public class IcecreamTankBeh : ObjectsBeh {
 	{
 		base.Update ();
 	}
-	
-	public override void OnMouseDown ()
-	{
-        //base.OnMouseDown ();
-		Debug.Log("IcecreamTankBeh ::" + this.gameObject.name);
-		
-		if(icecream_Instance == null) {
+
+    #region <!-- Input Events.
+
+    protected override void OnTouchDown()
+    {
+        if(icecream_Instance == null) {
 			icecreamValve.Play();
 			icecreamValve.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
 				if(this.gameObject.name == BakeryShop.icecreamStrawberryTank_name) {
@@ -67,9 +66,13 @@ public class IcecreamTankBeh : ObjectsBeh {
 				}
 			};
 		}
-	}
 
-	void icecreamBeh_putObjectOnTray_Event(object sender, System.EventArgs e)
+        base.OnTouchDown();
+    }
+
+    #endregion
+
+    void icecreamBeh_putObjectOnTray_Event(object sender, System.EventArgs e)
 	{
 		icecreamBeh = null;
 		icecream_Instance = null;

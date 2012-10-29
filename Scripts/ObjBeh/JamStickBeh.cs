@@ -17,8 +17,10 @@ public class JamStickBeh : ObjectsBeh {
     }
 	
 	// Update is called once per frame
-	protected override void Update() {	
-		
+	protected override void Update() {
+
+        base.Update();
+
 		if(base._isDraggable) {			
             Vector3 screenPoint;
             Ray ray;
@@ -46,16 +48,15 @@ public class JamStickBeh : ObjectsBeh {
 		
 	}
 
-    public override void OnMouseDrag()
-    {
-        base.OnMouseDrag();      
-    }
+    #region <!-- Input Events.
 
-    public override void OnMouseUp()
+    protected override void OnTouchEnded()
     {
-        base.OnMouseUp();
+        base.OnTouchEnded();
 
         this.transform.parent = sceneManager.toastObj_transform_group;
         this.transform.localPosition = original_Position;
     }
+
+    #endregion
 }

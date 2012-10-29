@@ -106,7 +106,13 @@ public class GoodsBeh : ObjectsBeh {
 		}
 	}
 
-    public override void OnMouseDown()
+	#region <!-- OnInput Events.
+
+	protected override void OnTouchBegan ()
+	{
+		base.OnTouchBegan ();
+	}
+	protected override void OnTouchDown()
     {		
 		if(_canActive && _isActive == false) {
 			_isActive = true;
@@ -118,12 +124,15 @@ public class GoodsBeh : ObjectsBeh {
 		else 
 			return;
 		
-        base.OnMouseDown();
-    }
-	
-	public override void OnMouseUp ()
+		base.OnTouchDown();
+    }	
+	protected override void OnTouchEnded ()
 	{
+        base.OnTouchEnded();
+
 		if(base._isDraggable)
 			_isDropObject = true;
 	}
+
+	#endregion
 }

@@ -67,11 +67,16 @@ public class IcecreamBeh : GoodsBeh {
 	{
 		base.Update ();
 	}
-	
-	public override void OnMouseUp ()
-	{
-//		base.OnMouseUp (); // Not Implement base.
+
+    #region <!-- OnInput.
+
+    protected override void OnTouchEnded()
+    {
+        base.OnTouchEnded();
+
 		if(base._isDraggable) 
 			base._isDropObject = true;
-	}
+    }
+
+    #endregion
 }

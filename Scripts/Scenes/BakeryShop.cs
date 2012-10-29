@@ -23,7 +23,7 @@ public class BakeryShop : Mz_BaseScene {
     //<!-- Core data
     public enum GamePlayState { none = 0, calculationPrice, receiveMoney, giveTheChange, TradeComplete, };
     public GamePlayState currentGamePlayState;
-    public GUImanager gui_manager;
+    public ShopScene_GUIManager gui_manager;
     public GoodDataStore goodDataStore;
     public static List<int> NumberOfCansellItem = new List<int>();
     public List<Goods> CanSellGoodLists = new List<Goods>();
@@ -168,8 +168,8 @@ public class BakeryShop : Mz_BaseScene {
 		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count);
 		Debug.Log("NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
 		
-		this.gameObject.AddComponent<GUImanager>();
-		gui_manager = this.gameObject.GetComponent<GUImanager>();
+		this.gameObject.AddComponent<ShopScene_GUIManager>();
+		gui_manager = this.gameObject.GetComponent<ShopScene_GUIManager>();
 
         var coinObj = GameObject.Find("Coin");
         coin_Textmesh = coinObj.GetComponent<tk2dTextMesh>();
@@ -223,7 +223,7 @@ public class BakeryShop : Mz_BaseScene {
 			if(id == 15 || id == 16)
 				cake.gameObject.active = true;
 			if(id == 19) {
-				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_002);
+                icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_002);
 				icecreamVanillaTank_obj.SetActiveRecursively(true);
                 //break;
 			}	
@@ -271,6 +271,10 @@ public class BakeryShop : Mz_BaseScene {
 				hamSandwich.gameObject.SetActiveRecursively(true);
 			if(id == 24)
 				eggSandwich.gameObject.SetActiveRecursively(true);
+            if (id == 27)
+                butter_cookie.gameObject.SetActiveRecursively(true);
+            if (id == 29)
+                hotdog.gameObject.SetActiveRecursively(true);
 
 			#endregion
         }
@@ -699,7 +703,7 @@ public class BakeryShop : Mz_BaseScene {
             GameObject hotdog_obj = Instantiate(Resources.Load(ObjectsBeh.Hotdog_ResourcePath + "Hotdog", typeof(GameObject))) as GameObject;
             hotdog_obj.transform.parent = hotdogTray_transform;
             hotdog_obj.transform.localPosition = new Vector3(0.07f, 0.1f, -0.1f);
-            hotdog_obj.gameObject.name = GoodDataStore.GoodsOrderList.hotdog.ToString();
+            hotdog_obj.gameObject.name = "Hotdog";
 
             hotdog = hotdog_obj.GetComponent<HotdogBeh>();
             hotdog.putObjectOnTray_Event += new EventHandler(hotdog_putObjectOnTray_Event);
@@ -826,7 +830,7 @@ public class BakeryShop : Mz_BaseScene {
         if(packaging_Obj == null) {
             packaging_Obj = Instantiate(Resources.Load(ObjectsBeh.Packages_ResourcePath + "Packages_Sprite", typeof(GameObject))) as GameObject;
             packaging_Obj.transform.parent = foodsTray_obj.transform;
-            packaging_Obj.transform.localPosition = new Vector3(0, 0, -.1f);
+            packaging_Obj.transform.localPosition = new Vector3(0, .1f, -.1f);
         }
 
         yield return new WaitForSeconds(2);

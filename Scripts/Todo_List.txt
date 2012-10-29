@@ -1,7 +1,9 @@
 Funshop bakery project.
-//<!-- to do list -->
+////////////////////////////////<!-- to do list -->
 
 //<!--- Customer random good order not unique.
 
 //<!-- upgrade shop mechanism.
 //<!-- Saving can sell item when user upgrade them shop.
+
+////////////

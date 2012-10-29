@@ -41,7 +41,7 @@ public class Town : Mz_BaseScene {
 	
 	
     void Awake() {
-        GUImanager.CalculateViewportScreen();
+        ShopScene_GUIManager.CalculateViewportScreen();
     }
 	
 	// Use this for initialization
@@ -53,23 +53,23 @@ public class Town : Mz_BaseScene {
 	}
 
 	void Initialize_OnGUIDataFields () {
-		TopLeft_Anchor_GroupRect  = new Rect(0, 0, 200 * GUImanager.extend_heightScale, 150);
-		drawPlayerName_rect  = new Rect(0, 20, 200 * GUImanager.extend_heightScale, 40);
-		drawShopName_rect  = new Rect(0, 65, 200 * GUImanager.extend_heightScale, 40);
-		drawPlayerMoney_rect = new Rect(0, 110, 200 * GUImanager.extend_heightScale, 40);
+		TopLeft_Anchor_GroupRect  = new Rect(0, 0, 200 * ShopScene_GUIManager.extend_heightScale, 150);
+		drawPlayerName_rect  = new Rect(0, 20, 200 * ShopScene_GUIManager.extend_heightScale, 40);
+		drawShopName_rect  = new Rect(0, 65, 200 * ShopScene_GUIManager.extend_heightScale, 40);
+		drawPlayerMoney_rect = new Rect(0, 110, 200 * ShopScene_GUIManager.extend_heightScale, 40);
 		
-		topRight_Anchor_GroupRect = new Rect(Screen.width - 400, 0, 400 * GUImanager.extend_heightScale, 200);
-		drawDress_ButtonRect = new Rect(10, 20, 80 * GUImanager.extend_heightScale, 80);
-		drawTrophy_ButtonRect = new Rect(100, 20, 80 * GUImanager.extend_heightScale, 80);
-		drawInfo_ButtonRect = new Rect(190, 20, 80 * GUImanager.extend_heightScale, 80);
-		drawBack_ButtonRect = new Rect(280, 20, 80 * GUImanager.extend_heightScale, 80);
+		topRight_Anchor_GroupRect = new Rect(Screen.width - 400, 0, 400 * ShopScene_GUIManager.extend_heightScale, 200);
+		drawDress_ButtonRect = new Rect(10, 20, 80 * ShopScene_GUIManager.extend_heightScale, 80);
+		drawTrophy_ButtonRect = new Rect(100, 20, 80 * ShopScene_GUIManager.extend_heightScale, 80);
+		drawInfo_ButtonRect = new Rect(190, 20, 80 * ShopScene_GUIManager.extend_heightScale, 80);
+		drawBack_ButtonRect = new Rect(280, 20, 80 * ShopScene_GUIManager.extend_heightScale, 80);
 
 		if (Screen.height != Main.GAMEHEIGHT) {
-			topRight_Anchor_GroupRect.x = Screen.width - (400 * GUImanager.extend_heightScale);
-			drawDress_ButtonRect.x = drawDress_ButtonRect.x * GUImanager.extend_heightScale;
-			drawTrophy_ButtonRect.x = drawTrophy_ButtonRect.x * GUImanager.extend_heightScale;
-			drawInfo_ButtonRect.x = drawInfo_ButtonRect.x * GUImanager.extend_heightScale;
-			drawBack_ButtonRect.x = drawBack_ButtonRect.x * GUImanager.extend_heightScale;
+			topRight_Anchor_GroupRect.x = Screen.width - (400 * ShopScene_GUIManager.extend_heightScale);
+			drawDress_ButtonRect.x = drawDress_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
+			drawTrophy_ButtonRect.x = drawTrophy_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
+			drawInfo_ButtonRect.x = drawInfo_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
+			drawBack_ButtonRect.x = drawBack_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
 		}
 	}
 	

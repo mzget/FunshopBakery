@@ -23,24 +23,34 @@ public class CreamBeh : ObjectsBeh {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
-	
-	public override void OnMouseDown ()
+	protected override void Update ()
 	{
-		base.OnMouseDown ();
+		base.Update ();
+	}
 
+    #region <!-- OnInput.
+
+	protected override void OnTouchDown ()
+	{
+		animatedSprite.Play(animationName_001);				
+		animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
+		
 		if(sceneManager.cupcake != null) {
 			sceneManager.cupcake.WaitForIngredient(this.gameObject.name);
-		}
-		
+		}		
 		if(sceneManager.miniCake != null) {
 			sceneManager.miniCake.WaitForIngredient(this.gameObject.name);
-		}
-		
+		}		
 		if(sceneManager.cake != null) {
 			sceneManager.cake.WaitForIngredient(this.gameObject.name);
 		}
+
+		base.OnTouchDown ();
 	}
+    protected override void OnTouchEnded()
+    {
+        base.OnTouchEnded();
+    }
+
+    #endregion
 }

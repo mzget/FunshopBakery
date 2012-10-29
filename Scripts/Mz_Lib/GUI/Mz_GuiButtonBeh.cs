@@ -1,24 +1,23 @@
 using UnityEngine;
 using System.Collections;
 
-public class Mz_GuiButtonBeh : MonoBehaviour {
+public class Mz_GuiButtonBeh : Base_ObjectBeh {
 
 	private Mz_BaseScene gameController;
-    private Vector3 originalScale = Vector3.one;
-    public bool _ignoreScale;
-	
-	
+    private Vector3 originalScale;
 		
 	
 	// Use this for initialization
     void Start ()
 	{
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<Mz_BaseScene> ();
+		
         originalScale = this.transform.localScale;
-
 		Mz_BaseScene.HasChangeTimeScale_Event += Handle_HasChangeTimeScale_Event;
 	}
-
+	
+	#region <!-- Handle events.
+	
     void Handle_HasChangeTimeScale_Event (object sender, System.EventArgs e)
     {
 		if(Time.timeScale == 0)
@@ -26,48 +25,42 @@ public class Mz_GuiButtonBeh : MonoBehaviour {
 		else if(Time.timeScale == 1) 
 			OnApplicationPause(false);
     }
-
+	
+	#endregion
+	
 	void OnDestroy() {
 		Mz_BaseScene.HasChangeTimeScale_Event -= Handle_HasChangeTimeScale_Event;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
 	}
 
 	void OnApplicationPause (bool pause) {
 		collider.enabled = !pause;
 	}
-
-    private void OnMouseDown ()
+	
+	// Update is called once per frame
+	protected override void Update ()
 	{
-        if(_ignoreScale) {
-            this.OnMouseEnter();
-            this.OnMouseExit();
-        }
-
+		base.Update ();
+	}
+	
+	#region <!-- OnMouse Events.
+	
+	protected override void OnTouchBegan ()
+	{
+		base.OnTouchBegan ();
+	}
+	protected override void OnTouchDown ()
+	{
         gameController.OnInput(this.gameObject.name);
         gameController.audioEffect.PlayOnecSound(gameController.audioEffect.buttonDown_Clip);
-	}
-
-    void OnMouseEnter()
-    {
-        this.transform.localScale = originalScale * 1.1f;
-//        gameController.audioEffect.PlayOnecSound(gameController.audioEffect.buttonHover_Clip);
-    }
-	
-	void OnMouseOver() {
-        this.transform.localScale = originalScale * 1.15f;
-        gameController.OnPointerOverName(this.gameObject.name);
-	}
-
-    void OnMouseExit()
-    {
-        this.transform.localScale = originalScale;
-    }
-	
-	void OnMouseUp() {
 		
+		base.OnTouchDown ();
 	}
+	protected override void OnTouchEnded ()
+	{
+		base.OnTouchEnded ();		
+		
+        this.transform.localScale = originalScale;
+	}
+	
+	#endregion
 }

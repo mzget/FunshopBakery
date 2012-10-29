@@ -22,14 +22,14 @@ public class CakeBeh : GoodsBeh {
 	
 	public override void WaitForIngredient (string ingredientName)
 	{
-//		base.WaitForIngredient (ingredientName);
+		base.WaitForIngredient (ingredientName);
+		
 		if(_isWaitFotIngredient == false)
 			return;
+
+        iTween.Stop(this.gameObject);
+		this.transform.position = base.originalPosition;
 		
-		if(animation.isPlaying) {
-			animation.Stop();
-			this.transform.position = base.originalPosition;
-		}
 		
 		if(ingredientName == CreamBeh.ChocolateCream) {
 			base.animatedSprite.Play(CreamBeh.ChocolateCream);

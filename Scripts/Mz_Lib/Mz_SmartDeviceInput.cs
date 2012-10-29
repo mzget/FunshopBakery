@@ -1,72 +1,82 @@
 using UnityEngine;
 using System.Collections;
 
-public class Mz_SmartDeviceInput {
+public class Mz_SmartDeviceInput : MonoBehaviour {
 	
 	/// <summary>
 	/// SmartDevice input call with Update or FixUpdate function.
 	/// </summary>
-	public static void IOS_INPUT () {
+	public static void ImplementTouchInput () {
 		if(Camera.main == null) {
 			Debug.Log("MainCamera has null");
 			return;		
 		}
-		
-		RaycastHit hit ;
-		if(Input.touchCount >= 1) {
-			Touch touch = Input.GetTouch(0);
-            Ray ray = Camera.main.ScreenPointToRay(touch.position);
-			if(touch.phase == TouchPhase.Began) {
-            	if (Physics.Raycast(ray, out hit)) {
-                	hit.collider.gameObject.SendMessage("OnMouseDown", SendMessageOptions.DontRequireReceiver);
+
+		if(Input.touchCount >= 1)
+        {
+            Touch touch = Input.GetTouch(0);
+            Ray cursorRay = Camera.main.ScreenPointToRay(touch.position);
+            RaycastHit hit;
+
+            if (touch.phase == TouchPhase.Began) {
+                if (Physics.Raycast(cursorRay, out hit)) {
+                    hit.collider.SendMessage("OnTouchBegan", SendMessageOptions.DontRequireReceiver);
+                }
+            }
+
+			if (touch.phase == TouchPhase.Stationary) {
+				if( Physics.Raycast(cursorRay, out hit)) {
+					hit.collider.gameObject.SendMessage("OnMouseOver", SendMessageOptions.DontRequireReceiver);
 				}
 			}
-			
+
 			if(touch.phase == TouchPhase.Moved) {
-				if(Physics.Raycast(ray, out hit)) {
-					hit.collider.SendMessage("OnMouseDrag", SendMessageOptions.DontRequireReceiver);
+				if(Physics.Raycast(cursorRay, out hit)) {
+					hit.collider.SendMessage("OnTouchDrag", SendMessageOptions.DontRequireReceiver);
 				}
 			}
 			
-			if(touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {
-				if(Physics.Raycast(ray, out hit)) {
-					hit.collider.SendMessage("OnMouseUp", SendMessageOptions.DontRequireReceiver);
-				}
+            if(Input.GetTouch(0).phase == TouchPhase.Ended) {
+				if(Physics.Raycast(cursorRay, out hit)) {
+					hit.collider.SendMessage("OnTouchEnded", SendMessageOptions.DontRequireReceiver);
+				}	
 			}
-
-            Debug.DrawRay(ray.origin, ray.direction, Color.red);
+        
+            Debug.DrawRay(cursorRay.origin, cursorRay.direction, Color.red);
 		}
-	}
-	
-	public static void IOS_GUITouch() 
-	{
-        GameObject cameraRaycast;
-//        if (Camera.main) {
-//            cameraRaycast = Camera.main.gameObject;
-//        }
-//        else {
-//            cameraRaycast = GameObject.FindGameObjectWithTag("Camera_UI");
-//        }
-		cameraRaycast = GameObject.FindGameObjectWithTag("Camera_UI");
-		
-		if(Input.touchCount >= 1) 
-		{
-            Ray ray = cameraRaycast.camera.ScreenPointToRay(Input.GetTouch(0).position);
-			RaycastHit hit;
-		
-			Debug.Log(cameraRaycast);
-			Debug.DrawRay(ray.origin, ray.direction);
+	}	
+    
+    public static void ImplementMouseInput () {
+		if(Camera.main == null) {
+			Debug.Log("MainCamera has null");
+			return;		
+		}
 
-			if(Input.GetTouch(0).phase == TouchPhase.Began) 
-			{				
-	            if (Physics.Raycast(ray, out hit))
-					hit.collider.gameObject.SendMessage("OnMouseDown", SendMessageOptions.DontRequireReceiver);
-			}
-			else if (Input.GetTouch(0).phase == TouchPhase.Moved) 
-			{					
-				if(Physics.Raycast(ray, out hit))
-					hit.collider.gameObject.SendMessage("OnMouseEnter", SendMessageOptions.DontRequireReceiver);
+		Ray cursorRay = Camera.main.ScreenPointToRay (Input.mousePosition);
+		RaycastHit hit;
+
+		if (Input.GetMouseButtonDown (0)) {
+			if (Physics.Raycast (cursorRay, out hit)) {
+				hit.collider.SendMessage ("OnTouchBegan", SendMessageOptions.DontRequireReceiver);
 			}
 		}
+
+		if (Input.GetMouseButton (0)) {
+			if(Physics.Raycast(cursorRay, out hit)) {
+				hit.collider.SendMessage("OnTouchDrag", SendMessageOptions.DontRequireReceiver);
+			}		
+		}
+
+        //if (touch.phase == TouchPhase.Stationary) {
+        //    if( Physics.Raycast( cursorRay, out hit)) {
+        //        hit.collider.gameObject.SendMessage("OnMouseOver", SendMessageOptions.DontRequireReceiver);
+        //    }
+        //}
+			
+        if(Input.GetMouseButtonUp(0)) {
+            if(Physics.Raycast(cursorRay, out hit)) {
+                hit.collider.SendMessage("OnTouchEnded", SendMessageOptions.DontRequireReceiver);
+            }	
+        }
 	}
 }

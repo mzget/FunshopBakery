@@ -27,7 +27,7 @@ public class SheepBank : Mz_BaseScene {
 
 
     void Awake() {
-        GUImanager.CalculateViewportScreen();
+        ShopScene_GUIManager.CalculateViewportScreen();
     }
 
 	// Use this for initialization
@@ -84,10 +84,10 @@ public class SheepBank : Mz_BaseScene {
     private void OnGUI() {
         GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
 
-		GUI.BeginGroup(GUImanager.viewPort_rect);
+		GUI.BeginGroup(ShopScene_GUIManager.viewPort_rect);
 		{
             if(_showSkinLayout) {
-                GUI.Box(new Rect(0, 0, GUImanager.viewPort_rect.width, GUImanager.viewPort_rect.height), "Skin layout", GUI.skin.box);
+                GUI.Box(new Rect(0, 0, ShopScene_GUIManager.viewPort_rect.width, ShopScene_GUIManager.viewPort_rect.height), "Skin layout", GUI.skin.box);
             }
 
             if(currentDrawGUIState == DrawGUIState.ShowUpgradeInside) {
@@ -115,7 +115,7 @@ public class SheepBank : Mz_BaseScene {
                 Rect drawCoin_rect = new Rect(25, 10, 100, 100);
                 Rect drawPlayerName_rect = new Rect(150, 5, 250, 50);
                 Rect drawPlayerMoney_rect = new Rect(150, 60, 250, 50);
-                GUI.BeginGroup(new Rect(GUImanager.viewPort_rect.width / 2 - 100, 0, 400, 120), GUIContent.none, GUI.skin.box);
+                GUI.BeginGroup(new Rect(ShopScene_GUIManager.viewPort_rect.width / 2 - 100, 0, 400, 120), GUIContent.none, GUI.skin.box);
                 {
                     GUI.DrawTexture(drawCoin_rect, tk_coin_img);
                     GUI.Box(drawPlayerName_rect, StorageManage.ShopName);

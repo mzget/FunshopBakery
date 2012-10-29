@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ObjectsBeh : MonoBehaviour {
+public class ObjectsBeh : Base_ObjectBeh {
 
     public const string Packages_ResourcePath = "Packages/";
     //<!-- merchandise.
@@ -51,8 +51,10 @@ public class ObjectsBeh : MonoBehaviour {
 	
 	// Use this for initialization
 	protected virtual void Start () {
+		this.originalPosition = this.transform.localPosition;
+		
         baseScene = GameObject.FindGameObjectWithTag("GameController").GetComponent<Mz_BaseScene>();
-
+		
         try {
             animatedSprite = this.gameObject.GetComponent<tk2dAnimatedSprite>();
         }
@@ -71,60 +73,76 @@ public class ObjectsBeh : MonoBehaviour {
 
         this.transform.position = new Vector3(screenPoint.x, screenPoint.y, -4f);
 	}
+
+	public void animationCompleteDelegate(tk2dAnimatedSprite sprite, int clipId) {
+		if(animationName_002 != "") {
+			animatedSprite.Play(animationName_002);
+			animatedSprite.animationCompleteDelegate -= animationCompleteDelegate;
+		}
+	}
 	
 	// Update is called once per frame
-	protected virtual void Update () {
+	protected override void Update ()
+	{
+		base.Update ();
+
 		if(_isDraggable) {
 			this.ImplementDraggableObject();
 		}
 	}
 	
 	#region <!--- On Mouse Events.
-	
-	public virtual void OnMouseEnter() {
-		
+
+	protected override void OnTouchBegan ()
+	{
+		base.OnTouchBegan ();
 	}
-	
-	public virtual void OnMouseDrag() {        
-//        Debug.Log(this.gameObject.name + " :: OnMouseDrag");
-		   
+	protected override void OnTouchDown ()
+	{
+		if(_canActive) {
+			//<!--- On object active.
+			if(animatedSprite && animationName_001 != string.Empty) {
+				animatedSprite.Play(animationName_001);				
+				animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
+			}
+	        else{ 
+	            iTween.PunchPosition(this.gameObject, iTween.Hash("y", 0.2f, "time", 1f, "looptype", iTween.LoopType.loop));
+	        }
+		}
+		
+		baseScene.audioEffect.PlayOnecSound(baseScene.audioEffect.buttonDown_Clip);
+		
+		base.OnTouchDown ();
+	}
+	protected override void OnTouchEnded ()
+	{
+		base.OnTouchEnded ();
+	}
+    protected override void OnTouchDrag()
+    {
+        base.OnTouchDrag();
+        
         if(this._canDragaable) {
 			this._isDraggable = true;
         }
-	}
-	
+    }
+/*	
 	public virtual void OnMouseDown() 
 	{
 //        Debug.Log(this.gameObject.name + " :: OnMouseDown");
-        
-//		if(_canActive && _IsActive == false) {
-//			_IsActive = true;
-//			
-//			if(waitForIngredientEvent != null) {
-//				waitForIngredientEvent(this, System.EventArgs.Empty);
-//			}
-//		}	
-//		else 
-//			return;
-		
+        		
 		//<!--- On object active.
-        if(animation) {
-			this.animation.Play();
-		}
-		else if(animatedSprite && animationName_001 != string.Empty) {
-            animatedSprite.Play(animationName_001);
-		
-			animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
-		}
-		
-        baseScene.audioEffect.PlayOnecSound(baseScene.audioEffect.buttonDown_Clip);
+//        if(animation) {
+//			this.animation.Play();
+//		}
+//		else if(animatedSprite && animationName_001 != string.Empty) {
+//            animatedSprite.Play(animationName_001);
+//		
+//			animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
+//		}
+//		
+//        baseScene.audioEffect.PlayOnecSound(baseScene.audioEffect.buttonDown_Clip);
 	}	
-	public void animationCompleteDelegate(tk2dAnimatedSprite sprite, int clipId) {
-		if(animationName_002 != "") {
-    		animatedSprite.Play(animationName_002);
-			animatedSprite.animationCompleteDelegate -= animationCompleteDelegate;
-		}
-	}
 	
 	public virtual void OnMouseUp() {
 //        Debug.Log(this.gameObject.name + " :: OnMouseUp");
@@ -133,6 +151,6 @@ public class ObjectsBeh : MonoBehaviour {
 	public virtual void OnMouseExit() {
 
 	}
-	
+*/	
 	#endregion.
 }
