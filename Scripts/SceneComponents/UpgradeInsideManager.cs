@@ -3,6 +3,8 @@ using System.Collections;
 
 public class UpgradeInsideManager : MonoBehaviour {
 	
+	public GameObject[,] upgradeButton_Objs = new GameObject[2,4];
+	tk2dSprite[,] upgradeButton_Sprites = new tk2dSprite[2,4];
 	public GameObject[,] upgradeInsideObj2D = new GameObject[2,4];
     private tk2dSprite[,] upgradeInsideSprite2D = new tk2dSprite[2, 4];
     private tk2dTextMesh[,] upgradeInside_PriceTextmesh = new tk2dTextMesh[2, 4];
@@ -28,7 +30,7 @@ public class UpgradeInsideManager : MonoBehaviour {
     };
     private int[,] thirdPage_prices = new int[,] {
         {1800,1900,2000,2100},
-        {2200,2300,2400,2500},
+        {2200,2300,0,0},
     };
 	
 	private int pageIndex = 0;	
@@ -39,28 +41,30 @@ public class UpgradeInsideManager : MonoBehaviour {
 		pageIndex = 0;
 	}
 	
-	private bool _isInitialize = false;
-	void InitailizeDataFields() {
-	    if(upgradeInsideSprite2D[0,0] == null) 
-        {
-            for (int i = 0; i < 2; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    upgradeInsideSprite2D[i, j] = upgradeInsideObj2D[i, j].GetComponent<tk2dSprite>();
-                    upgradeInside_PriceTextmesh[i, j] = upgradeInsideObj2D[i, j].transform.GetComponentInChildren<tk2dTextMesh>();
-                }
-            }
-        }		
-		
-		_isInitialize  = true;
-		CalculateObjectsToDisplay();
-	}
-	
 	// Update is called once per frame
 	void Update () {
 		if(_isInitialize == false)
 			InitailizeDataFields();
+	}
+	
+	private bool _isInitialize = false;
+	void InitailizeDataFields() {
+		if(upgradeInsideSprite2D[0,0] == null) 
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					upgradeInsideSprite2D[i, j] = upgradeInsideObj2D[i, j].GetComponent<tk2dSprite>();
+					upgradeInside_PriceTextmesh[i, j] = upgradeInsideObj2D[i, j].transform.GetComponentInChildren<tk2dTextMesh>();
+					
+					upgradeButton_Sprites[i,j] = upgradeButton_Objs[i,j].GetComponent<tk2dSprite>();
+				}
+			}
+		}	
+		
+		_isInitialize  = true;
+		CalculateObjectsToDisplay();
 	}
 	
 	public void GotoNextPage() {
@@ -99,8 +103,45 @@ public class UpgradeInsideManager : MonoBehaviour {
                     upgradeInsideSprite2D[i, j].spriteId = upgradeInsideSprite2D[i, j].GetSpriteIdByName(nameSpecify);
                     upgradeInside_PriceTextmesh[i, j].text = firstPage_prices[i, j].ToString();
                     upgradeInside_PriceTextmesh[i, j].Commit();
+
+					upgradeButton_Objs[i,j].active = true;
+					upgradeButton_Objs[i,j].collider.enabled = true;
+					upgradeButton_Sprites[i,j].spriteId = 25;
                 }
-            }
+            }			
+			
+			if(BakeryShop.NumberOfCansellItem.Contains(6)) {
+				upgradeButton_Sprites[0,0].spriteId = 28;
+				upgradeButton_Objs[0,0].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(10)) {
+				upgradeButton_Sprites[0,1].spriteId = 28;
+				upgradeButton_Objs[0,1].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13)) {
+				upgradeButton_Sprites[0,2].spriteId = 28;
+				upgradeButton_Objs[0,2].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16)) {
+				upgradeButton_Sprites[0,3].spriteId = 28;
+				upgradeButton_Objs[0,3].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(19)) {
+				upgradeButton_Sprites[1,0].spriteId = 28;
+				upgradeButton_Objs[1,0].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(21)) {
+				upgradeButton_Sprites[1,1].spriteId = 28;
+				upgradeButton_Objs[1,1].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(25)) {
+				upgradeButton_Sprites[1,2].spriteId = 28;
+				upgradeButton_Objs[1,2].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(28))	{
+				upgradeButton_Sprites[1,3].spriteId = 28;
+				upgradeButton_Objs[1,3].collider.enabled = false;
+			}
         }
         else if(pageIndex == 1) {
             for (int i = 0; i < 2; i++)
@@ -111,8 +152,45 @@ public class UpgradeInsideManager : MonoBehaviour {
                     upgradeInsideSprite2D[i, j].spriteId = upgradeInsideSprite2D[i, j].GetSpriteIdByName(nameSpecify);
                     upgradeInside_PriceTextmesh[i, j].text = secondPage_prices[i, j].ToString();
                     upgradeInside_PriceTextmesh[i, j].Commit();
+					
+					upgradeButton_Objs[i,j].active = true;
+					upgradeButton_Objs[i,j].collider.enabled = true;
+					upgradeButton_Sprites[i,j].spriteId = 25;
                 }
             }
+			
+			if(BakeryShop.NumberOfCansellItem.Contains(1)) {
+				upgradeButton_Sprites[0,0].spriteId = 28;
+				upgradeButton_Objs[0,0].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(2)) {
+				upgradeButton_Sprites[0,1].spriteId = 28;
+				upgradeButton_Objs[0,1].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(7)) {
+				upgradeButton_Sprites[0,2].spriteId = 28;
+				upgradeButton_Objs[0,2].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(11) || BakeryShop.NumberOfCansellItem.Contains(14) || BakeryShop.NumberOfCansellItem.Contains(17)) {
+				upgradeButton_Sprites[0,3].spriteId = 28;
+				upgradeButton_Objs[0,3].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(20)) {
+				upgradeButton_Sprites[1,0].spriteId = 28;
+				upgradeButton_Objs[1,0].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(22))	{
+				upgradeButton_Sprites[1,1].spriteId = 28;
+				upgradeButton_Objs[1,1].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(26)) {
+				upgradeButton_Sprites[1,2].spriteId = 28;
+				upgradeButton_Objs[1,2].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(3)) {
+				upgradeButton_Sprites[1,3].spriteId = 28;
+				upgradeButton_Objs[1,3].collider.enabled = false;
+			}
         }
         else if(pageIndex == 2) {
             for (int i = 0; i < 2; i++)
@@ -120,11 +198,52 @@ public class UpgradeInsideManager : MonoBehaviour {
                 for (int j = 0; j < 4; j++)
                 {
                     string nameSpecify = thirdPage_spriteNames[i, j];
-                    upgradeInsideSprite2D[i, j].spriteId = upgradeInsideSprite2D[i, j].GetSpriteIdByName(nameSpecify);
-                    upgradeInside_PriceTextmesh[i, j].text = thirdPage_prices[i, j].ToString();
-                    upgradeInside_PriceTextmesh[i, j].Commit();
+					if(nameSpecify != "") {
+                    	upgradeInsideSprite2D[i, j].spriteId = upgradeInsideSprite2D[i, j].GetSpriteIdByName(nameSpecify);
+                    	upgradeInside_PriceTextmesh[i, j].text = thirdPage_prices[i, j].ToString();
+                    	upgradeInside_PriceTextmesh[i, j].Commit();
+						
+						upgradeButton_Objs[i,j].active = true;
+						upgradeButton_Objs[i,j].collider.enabled = true;
+						upgradeButton_Sprites[i,j].spriteId = 25;
+					}
+					else {
+						tk2dSprite sprite = upgradeInsideSprite2D[i,j];
+						tk2dTextMesh textmesh = upgradeInside_PriceTextmesh[i, j];
+						sprite.spriteId = 27;
+						textmesh.text = "none";
+						textmesh.transform.localPosition = new Vector3(1, textmesh.transform.localPosition.y, textmesh.transform.localPosition.z);
+						textmesh.Commit();
+						
+						upgradeButton_Objs[i,j].active = false;
+					}
                 }
             }
+			
+			if(BakeryShop.NumberOfCansellItem.Contains(4)) {
+				upgradeButton_Sprites[0,0].spriteId = 28;
+				upgradeButton_Objs[0,0].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(8)) {
+				upgradeButton_Sprites[0,1].spriteId = 28;
+				upgradeButton_Objs[0,1].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(23)) {
+				upgradeButton_Sprites[0,2].spriteId = 28;
+				upgradeButton_Objs[0,2].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(24)) {
+				upgradeButton_Sprites[0,3].spriteId = 28;
+				upgradeButton_Objs[0,3].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(27)) {
+				upgradeButton_Sprites[1,0].spriteId = 28;
+				upgradeButton_Objs[1,0].collider.enabled = false;
+			}
+			if(BakeryShop.NumberOfCansellItem.Contains(29)) {
+				upgradeButton_Sprites[1,1].spriteId = 28;
+				upgradeButton_Objs[1,1].collider.enabled = false;
+			}
         }
     }
 

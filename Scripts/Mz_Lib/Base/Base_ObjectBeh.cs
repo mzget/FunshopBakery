@@ -19,14 +19,14 @@ public class Base_ObjectBeh : MonoBehaviour {
             OnTouchDown();
         }
 		        
-        if (Input.touchCount > 0) {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Moved) {
-                _OnTouchBegin = false;
-                _OnTouchRelease = false;
-            }
-        }
+//        if (Input.touchCount > 0) {
+//            Touch touch = Input.GetTouch(0);
+//
+//            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Moved) {
+//                _OnTouchBegin = false;
+//                _OnTouchRelease = false;
+//            }
+//        }
 	}
 	
 	protected IEnumerator WaitForEndUpdate() {
@@ -44,16 +44,12 @@ public class Base_ObjectBeh : MonoBehaviour {
 		
         _OnTouchBegin = false;
         _OnTouchRelease = false;
-		
-//		StartCoroutine(WaitForEndUpdate());
     }
     protected virtual void OnTouchEnded() {
 		_OnTouchRelease = true;
-		
-		StartCoroutine(this.WaitForEndUpdate());
     }
     protected virtual void OnTouchDrag() {
-    
+    	Debug.Log("Class : Base_ObjectBeh." + "OnTouchDrag");
     }
 
     #endregion

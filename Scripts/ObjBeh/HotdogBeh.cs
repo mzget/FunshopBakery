@@ -13,7 +13,6 @@ public class HotdogBeh : GoodsBeh {
         base.Start();
 		
 		base._canActive = true;
-		base._canDragaable = false;
 		
 		if(_canActive) {
 			base.waitForIngredientEvent += base.Handle_waitForIngredientEvent;
@@ -40,8 +39,11 @@ public class HotdogBeh : GoodsBeh {
 				
 				_canDragaable = true;
 			};
+			
+			return;
 		}
-		else if(ingredientName == HotdogBeh.HotdogWithCheese) {
+		
+		if(ingredientName == HotdogBeh.HotdogWithCheese) {
 			base.animatedSprite.Play(HotdogBeh.HotdogWithCheese);
 			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
 			{		
@@ -49,6 +51,8 @@ public class HotdogBeh : GoodsBeh {
 				
 				_canDragaable = true;
 			};
+			
+			return;
 		}
     }
 	

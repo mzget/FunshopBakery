@@ -95,16 +95,14 @@ public class BakeryShop : Mz_BaseScene {
 
     #endregion
 
-    /// <summary>
+
     /// Hotdog data fields group.
-    /// </summary>
     public Transform hotdogTray_transform;
     public HotdogBeh hotdog;
 
     #region <!-- Customer data group.
 
     public GameObject customerMenu_group_Obj;
-//    public GameObject customerSprite_Instance;
     public CustomerBeh currentCustomer;  
 	
     public event EventHandler nullCustomer_event;
@@ -149,11 +147,9 @@ public class BakeryShop : Mz_BaseScene {
         hamSandwich.gameObject.SetActiveRecursively(false);
         eggSandwich.gameObject.SetActiveRecursively(false);
 
-        StartCoroutine(InitializeChocolateChipCookie());
-		this.CreateFruitCookie();
-		this.CreateButterCookie();
-        fruit_cookie.gameObject.SetActiveRecursively(false);
-        butter_cookie.gameObject.SetActiveRecursively(false);
+        StartCoroutine(this.InitializeChocolateChipCookie());
+		StartCoroutine(this.Initializing_FriutCookie());
+		StartCoroutine(this.Initializing_ButterCookie());
 
         StartCoroutine(InitializeHotdogInstance());
 
@@ -582,10 +578,8 @@ public class BakeryShop : Mz_BaseScene {
 	#endregion
 
     #region <!-- Cookie Object Behavior.
-	
-	/// <summary>
+
 	/// Creates the chocolate chip_ cookie.
-	/// </summary>
     IEnumerator CreateChocolateChip_Cookie() {
         yield return new WaitForFixedUpdate();
 
@@ -618,10 +612,15 @@ public class BakeryShop : Mz_BaseScene {
         StartCoroutine(this.CreateChocolateChip_Cookie());
     }
 	
-    /// <summary>
-    /// Create instance of fruit_cookie object and cookie behavior.
-    /// </summary>
-	void CreateFruitCookie() {
+	/// Create instance of fruit_cookie object and cookie behavior.
+	IEnumerator Initializing_FriutCookie ()
+	{
+		yield return StartCoroutine(this.CreateFruitCookie());
+		fruit_cookie.gameObject.SetActiveRecursively(false);
+	}
+	IEnumerator CreateFruitCookie() {
+		yield return new WaitForFixedUpdate();
+
 		if(fruit_cookie == null) {			
             GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "Fruit_Cookie", typeof(GameObject))) as GameObject;
             cookie.transform.parent = sandwichCookieTray_Transform;
@@ -642,23 +641,25 @@ public class BakeryShop : Mz_BaseScene {
 		ObjectsBeh.ResetData();
 		fruit_cookie = null;
 
-        this.CreateFruitCookie();
+        StartCoroutine(this.CreateFruitCookie());
 	}
 	void Handle_FruitCookie_DestroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
         ObjectsBeh.ResetData();
 
-        fruit_cookie.putObjectOnTray_Event -= Handle_FruitCookie_putObjectOnTray_Event;
-        fruit_cookie.destroyObj_Event -= Handle_FruitCookie_DestroyObj_Event;
-
-        this.CreateFruitCookie();
+        StartCoroutine(this.CreateFruitCookie());
 	}
     
-    /// <summary>
     /// Create instance of ButterCookie object and cookie behavior.
-    /// </summary>
-    private void CreateButterCookie()
+	IEnumerator Initializing_ButterCookie ()
+	{
+		yield return StartCoroutine(this.CreateButterCookie());
+		butter_cookie.gameObject.SetActiveRecursively(false);
+	}
+    IEnumerator CreateButterCookie()
     {
+		yield return new WaitForFixedUpdate();
+
         if(butter_cookie == null) {
             GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "Butter_Cookie", typeof(GameObject))) as GameObject;
             cookie.transform.parent = sandwichCookieTray_Transform;
@@ -679,7 +680,7 @@ public class BakeryShop : Mz_BaseScene {
 		ObjectsBeh.ResetData();
 		butter_cookie = null;
 
-        this.CreateButterCookie();
+        StartCoroutine(this.CreateButterCookie());
     }
     void butter_cookie_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
@@ -688,7 +689,7 @@ public class BakeryShop : Mz_BaseScene {
         butter_cookie.putObjectOnTray_Event -= butter_cookie_putObjectOnTray_Event;
         butter_cookie.destroyObj_Event -= butter_cookie_destroyObj_Event;
 
-        this.CreateButterCookie();
+        StartCoroutine(this.CreateButterCookie());
     }
 
     #endregion

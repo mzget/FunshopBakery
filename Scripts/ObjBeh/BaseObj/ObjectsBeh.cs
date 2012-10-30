@@ -14,8 +14,7 @@ public class ObjectsBeh : Base_ObjectBeh {
     public const string Hotdog_ResourcePath = "BakeryShopObjects/Hotdogs/";
 
 
-	protected Mz_BaseScene baseScene;
-    
+	protected Mz_BaseScene baseScene;    
     protected tk2dAnimatedSprite animatedSprite;
 	
 	public string animationName_001;
@@ -24,8 +23,8 @@ public class ObjectsBeh : Base_ObjectBeh {
 	protected bool _isDraggable = false;
     protected bool _isDropObject = false;
 	public bool _canActive = false;	
-    protected Vector3 originalPosition;
 	protected bool _isActive = false;
+    protected Vector3 originalPosition;
 
     /// <summary>
     /// destroyObj_Event.

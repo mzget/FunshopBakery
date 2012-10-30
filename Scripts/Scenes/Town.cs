@@ -4,10 +4,12 @@ using System.Collections;
 public class Town : Mz_BaseScene {
 	
 	public GameObject town_bg_group;
+	public GameObject[] cloudAndFog_Objs = new GameObject[4];
 	public GameObject shop_body_sprite;
     public GameObject sheepBank_body_Obj;
     public tk2dAnimatedSprite bakeryShopDoorOpen_animated;
     public tk2dAnimatedSprite sheepBank_door_animated;
+	public GameObject GUIMidcenter_anchor;
 	
 	//<!--- Game button.
 //	public GameObject dressing_button_Obj;
@@ -50,6 +52,12 @@ public class Town : Mz_BaseScene {
 		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
 
 		this.Initialize_OnGUIDataFields();
+
+		StartCoroutine(this.UnActiveDecorationBar());
+		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", -.1f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", -.1f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
 
 	void Initialize_OnGUIDataFields () {
@@ -72,6 +80,26 @@ public class Town : Mz_BaseScene {
 			drawBack_ButtonRect.x = drawBack_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
 		}
 	}
+
+	#region <!-- Decoration upgrade bar.
+
+	IEnumerator ActiveDecorationBar ()
+	{
+		yield return StartCoroutine(this.SettingGUIMidcenter(true));
+		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 10), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.spring));
+	}
+	IEnumerator UnActiveDecorationBar ()
+	{
+		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, -100, 10), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
+		yield return StartCoroutine(this.SettingGUIMidcenter(false));
+	}
+	IEnumerator SettingGUIMidcenter (bool active)
+	{
+		yield return new WaitForEndOfFrame();
+		GUIMidcenter_anchor.SetActiveRecursively(active);
+	}
+
+	#endregion
 	
 	// Update is called once per frame
 	protected override void Update ()
@@ -108,7 +136,9 @@ public class Town : Mz_BaseScene {
 			}
 		}
 	}
-	
+
+	#region <!-- Gui region.
+
     void OnGUI() {
         GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height/ Main.GAMEHEIGHT, 1));
 		
@@ -148,6 +178,10 @@ public class Town : Mz_BaseScene {
 	                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
 	            }
 			}
+
+			if(GUI.Button(new Rect(10, 130, 100,40), "decoration")) {
+				StartCoroutine(this.ActiveDecorationBar());
+			}
 		}
 		GUI.EndGroup();
 		
@@ -184,13 +218,14 @@ public class Town : Mz_BaseScene {
 		GUI.EndGroup();
 	}
 
+	#endregion
+
 	public override void OnInput (string nameInput)
 	{
-		base.OnInput (nameInput);
-
-        if (nameInput == shop_body_sprite.gameObject.name) {
-            this.PlayBakeryShopOpenAnimation();
-        }
+		if (nameInput == shop_body_sprite.gameObject.name) {
+				this.PlayBakeryShopOpenAnimation ();
+				return;
+		}
 //        else if (nameInput == back_button_obj.name) {
 //            if(Application.isLoadingLevel == false) {
 //				//<!-- Clear static NumberOfCanSellItem.
@@ -207,9 +242,19 @@ public class Town : Mz_BaseScene {
 //                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
 //            }
 //        }
-        else if(nameInput == sheepBank_body_Obj.name) {
-            this.PlaySheepBankOpenAnimation();
-        }
+		if (nameInput == sheepBank_body_Obj.name) {
+				this.PlaySheepBankOpenAnimation ();
+				return;
+		}
+
+		if (GUIMidcenter_anchor.active) {
+			switch (nameInput) {
+			case "Close_button": StartCoroutine(this.UnActiveDecorationBar());
+				break;
+			default:
+			break;
+			}
+		}
 	}
 
     private void PlayBakeryShopOpenAnimation()

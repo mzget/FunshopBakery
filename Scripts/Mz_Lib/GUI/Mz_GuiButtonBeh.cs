@@ -36,13 +36,7 @@ public class Mz_GuiButtonBeh : Base_ObjectBeh {
 		collider.enabled = !pause;
 	}
 	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-	}
-	
-	#region <!-- OnMouse Events.
+	#region <!-- OnInput Events.
 	
 	protected override void OnTouchBegan ()
 	{

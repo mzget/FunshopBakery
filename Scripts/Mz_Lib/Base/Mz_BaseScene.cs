@@ -61,10 +61,15 @@ public class Mz_BaseScene : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	protected virtual void Update () 
+	protected virtual void Update ()
 	{
-        Mz_SmartDeviceInput.ImplementTouchInput();
-        Mz_SmartDeviceInput.ImplementMouseInput();
+		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+				Mz_SmartDeviceInput.ImplementTouchInput ();
+				Mz_SmartDeviceInput.Implement_TouchInputGUICamera ();
+		} else if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
+				Mz_SmartDeviceInput.ImplementMouseInput ();
+				Mz_SmartDeviceInput.Implement_MouseInputGUICamera ();
+		}
 		
 		if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Menu)) {
 			Application.Quit(); 

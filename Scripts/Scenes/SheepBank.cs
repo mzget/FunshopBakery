@@ -59,6 +59,7 @@ public class SheepBank : Mz_BaseScene {
 			for (int j = 0; j < 4; j++) {
 				string temp = i.ToString() + j.ToString();
 				upgradeInsideManager.upgradeInsideObj2D[i,j] = upgradeInside_window_Obj.transform.Find(temp).gameObject;
+				upgradeInsideManager.upgradeButton_Objs[i,j] = upgradeInside_window_Obj.transform.Find("upgrade_" + i+j).gameObject;
 			}
 		}
 		upgradeInside_window_Obj.SetActiveRecursively(false);
