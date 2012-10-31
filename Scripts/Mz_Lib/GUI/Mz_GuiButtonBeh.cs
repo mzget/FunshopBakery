@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[AddComponentMenu("Mz_ScriptLib/GUI/Mz_GuiButtonBeh")]
 public class Mz_GuiButtonBeh : Base_ObjectBeh {
 
 	private Mz_BaseScene gameController;
@@ -41,6 +42,8 @@ public class Mz_GuiButtonBeh : Base_ObjectBeh {
 	protected override void OnTouchBegan ()
 	{
 		base.OnTouchBegan ();
+
+        iTween.ShakeScale(this.gameObject, new Vector3(0.1f, 0.1f, 0), 1f);
 	}
 	protected override void OnTouchDown ()
 	{

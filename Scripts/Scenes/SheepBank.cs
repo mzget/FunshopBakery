@@ -25,9 +25,12 @@ public class SheepBank : Mz_BaseScene {
     public enum DrawGUIState { none = 0, ShowUpgradeInside = 1, };
     public DrawGUIState currentDrawGUIState;
 
+	internal static bool HaveUpgradeOutSide = false;
 
     void Awake() {
         ShopScene_GUIManager.CalculateViewportScreen();
+
+		SheepBank.HaveUpgradeOutSide = false;
     }
 
 	// Use this for initialization
@@ -137,7 +140,11 @@ public class SheepBank : Mz_BaseScene {
             iTween.MoveTo(upgradeInside_window_Obj.gameObject, moveDown_hashdata);
         }
         else if(nameInput == upgradeOutside_button.name) {
-        
+			SheepBank.HaveUpgradeOutSide = true;
+			if(Application.isLoadingLevel == false) {
+				Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString();
+				Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+			}
         }
         else if(nameInput == back_button.name) {
             if(upgradeInside_window_Obj.active) {

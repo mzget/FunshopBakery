@@ -3,6 +3,7 @@ using System.Collections;
 
  
 
+[AddComponentMenu("Mz_ScriptLib/GUI/Mz_GuiTextDebug")]
 public class Mz_GuiTextDebug : MonoBehaviour {
 
  

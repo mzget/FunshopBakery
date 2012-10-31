@@ -10,6 +10,7 @@ public class Town : Mz_BaseScene {
     public tk2dAnimatedSprite bakeryShopDoorOpen_animated;
     public tk2dAnimatedSprite sheepBank_door_animated;
 	public GameObject GUIMidcenter_anchor;
+	public UpgradeOutsideManager upgradeOutsideManager;
 	
 	//<!--- Game button.
 //	public GameObject dressing_button_Obj;
@@ -47,13 +48,20 @@ public class Town : Mz_BaseScene {
     }
 	
 	// Use this for initialization
-	void Start () {
-		base.InitializeAudio();
-		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
+	void Start () 
+	{
+		base.InitializeAudio ();
+		Mz_ResizeScale.ResizingScale (town_bg_group.transform);
 
-		this.Initialize_OnGUIDataFields();
+		this.Initialize_OnGUIDataFields ();
 
-		StartCoroutine(this.UnActiveDecorationBar());
+		if (SheepBank.HaveUpgradeOutSide) {
+			StartCoroutine (this.ActiveDecorationBar ());
+			SheepBank.HaveUpgradeOutSide = false;
+		}
+		else
+			StartCoroutine(this.UnActiveDecorationBar());
+
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", -.1f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", -.1f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
@@ -86,12 +94,18 @@ public class Town : Mz_BaseScene {
 	IEnumerator ActiveDecorationBar ()
 	{
 		yield return StartCoroutine(this.SettingGUIMidcenter(true));
-		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 10), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.spring));
+		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
+		upgradeOutsideManager.ActiveRoof();
 	}
 	IEnumerator UnActiveDecorationBar ()
 	{
-		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, -100, 10), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
-		yield return StartCoroutine(this.SettingGUIMidcenter(false));
+		yield return new WaitForEndOfFrame();
+		iTween.MoveTo(GUIMidcenter_anchor.gameObject,
+			iTween.Hash("position", new Vector3(0, -1, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring,
+			"oncomplete", "TweenDownComplete", "oncompletetarget", this.gameObject));		 
+	}
+	void TweenDownComplete() {
+		StartCoroutine(this.SettingGUIMidcenter(false));
 	}
 	IEnumerator SettingGUIMidcenter (bool active)
 	{
@@ -200,8 +214,8 @@ public class Town : Mz_BaseScene {
 				if(username != "" && username.Length >= 5) {
 					StorageManage.ShopName = username;
 
-					if(username == "Rich is daddy") {
-						StorageManage.Money = 1000000;
+					if(username == "Greed is bad") {
+						StorageManage.Money += 1000000;
 					}
 
 					Mz_StorageData.Save();
@@ -251,6 +265,34 @@ public class Town : Mz_BaseScene {
 			switch (nameInput) {
 			case "Close_button": StartCoroutine(this.UnActiveDecorationBar());
 				break;
+			case UpgradeOutsideManager.Roof_button : upgradeOutsideManager.ActiveRoof();
+				break;
+			case UpgradeOutsideManager.Awning_button : upgradeOutsideManager.ActiveAwning();
+				break;
+			case UpgradeOutsideManager.Table_button: upgradeOutsideManager.ActiveTable();
+				break;
+			case UpgradeOutsideManager.Accessories_button: upgradeOutsideManager.ActiveAccessories();
+				break;
+			case "None_button" : 
+				break;
+			case "Previous_button" : upgradeOutsideManager.HavePreviousPageCommand();
+				break;
+			case "Next_button" : upgradeOutsideManager.HaveNextPageCommand();
+				break;
+            case "Block_00": upgradeOutsideManager.BuyDecoration("Block_00");
+                break;
+            case "Block_01": upgradeOutsideManager.BuyDecoration("Block_01");
+                break;
+            case "Block_02": upgradeOutsideManager.BuyDecoration("Block_02");
+                break;
+            case "Block_03": upgradeOutsideManager.BuyDecoration("Block_03");
+                break;
+            case "Block_04": upgradeOutsideManager.BuyDecoration("Block_04");
+                break;
+            case "Block_05": upgradeOutsideManager.BuyDecoration("Block_05");
+                break;
+            case "Block_06": upgradeOutsideManager.BuyDecoration("Block_06");
+                break;
 			default:
 			break;
 			}

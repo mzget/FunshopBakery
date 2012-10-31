@@ -16,15 +16,11 @@ public class Mz_BaseScene : MonoBehaviour {
 	public List<AudioClip> warning_Clips = new List<AudioClip>();
 	
     public Touch touch;
-
-   /// <summary>
-   /// UNITY_EDITOR
-   /// </summary>
     public Vector3 mousePos;
     public Vector3 originalPos;
     public Vector3 currentPos;
-	private Vector3[] mainCameraPos = new Vector3[] { new Vector3(0,0,-10), new Vector3(2.66f,0,-10) };
-	private Vector3 currentCameraPos = new Vector3(0, 0, -10);
+    private Vector3[] mainCameraPos = new Vector3[] { new Vector3(0, -.13f, -10), new Vector3(2.66f, -.13f, -10) };
+	private Vector3 currentCameraPos = new Vector3(0, -.13f, -10);
     public bool _isDragMove = false;
 
 
@@ -65,10 +61,8 @@ public class Mz_BaseScene : MonoBehaviour {
 	{
 		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
 				Mz_SmartDeviceInput.ImplementTouchInput ();
-				Mz_SmartDeviceInput.Implement_TouchInputGUICamera ();
 		} else if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
 				Mz_SmartDeviceInput.ImplementMouseInput ();
-				Mz_SmartDeviceInput.Implement_MouseInputGUICamera ();
 		}
 		
 		if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Menu)) {

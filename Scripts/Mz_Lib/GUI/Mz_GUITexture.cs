@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+
+[AddComponentMenu("Mz_ScriptLib/GUI/Mz_GUITexture")]
 public class Mz_GUITexture : MonoBehaviour {
 	
 	private GUITexture myGUITexture;

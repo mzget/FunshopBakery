@@ -139,6 +139,8 @@ public class MainMenu : Mz_BaseScene {
         }
 	}
 
+	#region <!-- OnGUI Section.
+
 	private void OnGUI() {
         player_1 = PlayerPrefs.GetString(1 + "username");
         player_2 = PlayerPrefs.GetString(2 + "username");
@@ -214,6 +216,9 @@ public class MainMenu : Mz_BaseScene {
             GUI.FocusControl("Username");
         }
 	}
+
+	#endregion
+
     private void CheckUserNameFormInput()
     {
         username.Trim('\n');
@@ -320,21 +325,24 @@ public class MainMenu : Mz_BaseScene {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
                     StorageManage.SaveSlot = 1;
-                    SaveNewPlayer();
+//                    SaveNewPlayer();
+					StartCoroutine(ShowInitializeNewShop());
                 }
                 else if (GUI.Button(slot_2Rect, new GUIContent(PlayerPrefs.GetString(2 + "username"), "button")))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
                     StorageManage.SaveSlot = 2;
-				    SaveNewPlayer();
+//				    SaveNewPlayer();
+					StartCoroutine(ShowInitializeNewShop());
                 }
                 else if (GUI.Button(slot_3Rect, new GUIContent(PlayerPrefs.GetString(3 + "username"), "button")))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
                     StorageManage.SaveSlot = 3;
-				    SaveNewPlayer();
+//				    SaveNewPlayer();
+					StartCoroutine(ShowInitializeNewShop());
                 }
             }
 
@@ -436,7 +444,9 @@ public class MainMenu : Mz_BaseScene {
                 StartCoroutine(ShowMainMenu());
             }
             else if(nameInput == "OK_button") {
-                this.SaveNewPlayer();
+				if(shopName != "") {
+                	this.SaveNewPlayer();
+				}
             }
         }
     }
@@ -453,7 +463,9 @@ public class MainMenu : Mz_BaseScene {
             iTween.MoveTo(newgame_Group.gameObject, moveUpTransform_Data);
         if (loadgame_Group.gameObject.active)
             iTween.MoveTo(loadgame_Group.gameObject, moveUpTransform_Data);
+
         yield return new WaitForSeconds(1);
+
         iTween.MoveTo(initializeNewGame_Group.gameObject, moveDownTransform_Data);
         mainmenu_Group.gameObject.SetActiveRecursively(false);
         newgame_Group.gameObject.SetActiveRecursively(false);
