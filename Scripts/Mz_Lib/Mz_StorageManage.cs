@@ -14,7 +14,7 @@ public class Mz_StorageManage
     
     public static string ShopName;
     public static int AvailableMoney = 500;
-    public static int InBankMoney = 0;
+    public static int InBankMoney = 500;
 	public static int ShopLogo = 0;
 	public static string ShopLogoColor = "Blue";
 

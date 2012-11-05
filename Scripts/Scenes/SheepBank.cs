@@ -8,9 +8,11 @@ public class SheepBank : Mz_BaseScene {
 	public GameObject depositForm_Obj;
 	public GameObject withdrawalForm_Obj;
 	public GameObject transactionForm_Obj;
+	public GameObject shadowPlane_Obj;
     public Mz_CalculatorBeh calculatorBeh;
     public tk2dTextMesh availableMoney_Textmesh;
     public tk2dTextMesh accountBalance_Textmesh;
+	int resultValue = 0;
 
     //<!-- Button object.
     public GameObject back_button;
@@ -24,7 +26,6 @@ public class SheepBank : Mz_BaseScene {
 	private Hashtable moveDown_Transaction_Hash;
     private Hashtable moveDown_hashdata = new Hashtable();
     private Hashtable moveUp_hashdata = new Hashtable();
-	
 	private UpgradeInsideManager upgradeInsideManager;
     public GameObject[] upgradeButtons = new GameObject[8];
     
@@ -49,6 +50,7 @@ public class SheepBank : Mz_BaseScene {
 
         this.InitializeFields();
         //Mz_ResizeScale.ResizingScale(background_obj.transform);
+		shadowPlane_Obj.gameObject.active = false;
 	}
 
     private void InitializeFields()
@@ -62,13 +64,15 @@ public class SheepBank : Mz_BaseScene {
 
         moveUp_hashdata.Add("position", new Vector3(0, 200, 0));
         moveUp_hashdata.Add("islocal", true);
-        moveUp_hashdata.Add("time", 1f);
+        moveUp_hashdata.Add("time", .5f);
         moveUp_hashdata.Add("easetype", iTween.EaseType.easeOutSine);
         moveUp_hashdata.Add("oncomplete", "OnMoveUpComplete_event");
         moveUp_hashdata.Add("oncompletetarget", this.gameObject);
 		
 		moveDown_Transaction_Hash = moveDown_hashdata;
-		moveDown_Transaction_Hash["position"] = new Vector3(0, 0, 0);
+		moveDown_Transaction_Hash["position"] = new Vector3(0, 0, -20f);
+		moveDown_Transaction_Hash["oncomplete"] = "OnTransactionMoveDownComplete";
+		moveDown_Transaction_Hash["oncompletetarget"] = this.gameObject;
 		
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 4; j++) {
@@ -82,17 +86,21 @@ public class SheepBank : Mz_BaseScene {
 		withdrawalForm_Obj.gameObject.SetActiveRecursively(false);
 		transactionForm_Obj.gameObject.SetActiveRecursively(false);
 
-        this.AvailableMoneyManager();
-        this.AccountBalanceManager();
+		this.AvailableMoneyManager(Mz_StorageManage.AvailableMoney);
+        this.AccountBalanceManager(Mz_StorageManage.InBankMoney);
     }
 
-    void AvailableMoneyManager() {
-        availableMoney_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
+    void AvailableMoneyManager(int r_value) {
+        availableMoney_Textmesh.text = r_value.ToString("N");
         availableMoney_Textmesh.Commit();
+
+		Mz_StorageManage.AvailableMoney = r_value;
     }
-    void AccountBalanceManager() {
-        accountBalance_Textmesh.text = Mz_StorageManage.InBankMoney.ToString();
+    void AccountBalanceManager(int r_value) {
+		accountBalance_Textmesh.text = r_value.ToString("N");
         accountBalance_Textmesh.Commit();
+
+		Mz_StorageManage.InBankMoney = r_value;
     }
 	
 	private void OnMoveDownComplete_event() {
@@ -105,8 +113,12 @@ public class SheepBank : Mz_BaseScene {
 		depositForm_Obj.gameObject.SetActiveRecursively(false);
 		withdrawalForm_Obj.gameObject.SetActiveRecursively(false);
 		transactionForm_Obj.gameObject.SetActiveRecursively(false);
+		shadowPlane_Obj.gameObject.active = false;
         currentDrawGUIState = DrawGUIState.none;
     }
+	void OnTransactionMoveDownComplete() {
+		shadowPlane_Obj.gameObject.active = true;
+	}
 	
 	// Update is called once per frame
     protected override void Update()
@@ -161,6 +173,7 @@ public class SheepBank : Mz_BaseScene {
 			transactionForm_Obj.gameObject.SetActiveRecursively(true);
 			iTween.MoveTo(depositForm_Obj.gameObject, moveDown_Transaction_Hash);
 			iTween.MoveTo(transactionForm_Obj.gameObject, moveDown_Transaction_Hash);
+//			blurEffect_camera.enabled = true;
 			return;
 		}
 		else if(nameInput == withdrawal_button.name) {
@@ -168,6 +181,7 @@ public class SheepBank : Mz_BaseScene {
 			transactionForm_Obj.gameObject.SetActiveRecursively(true);
 			iTween.MoveTo(withdrawalForm_Obj.gameObject, moveDown_Transaction_Hash);
 			iTween.MoveTo(transactionForm_Obj.gameObject, moveDown_Transaction_Hash);
+//			blurEffect_camera.enabled = true;
 			return;
 		}
 		else if (nameInput == back_button.name) {
@@ -210,21 +224,22 @@ public class SheepBank : Mz_BaseScene {
 								}
 						}
 				}
-		
-		if (depositForm_Obj.gameObject.active) {
-                    switch (nameInput)
-                    {
-                        case "OK_button": Debug.Log(nameInput);
-                            break;
-                        default:
-                            break;
-                    }
-				}
+
+        if (depositForm_Obj.gameObject.active)
+        {
+            switch (nameInput)
+            {
+                case "OK_button": CompleteDopositSession();
+                    break;
+                default:
+                    break;
+            }
+        }
 
         if(withdrawalForm_Obj.gameObject.active) {
             switch (nameInput)
             {
-                case "OK_button": Debug.Log(nameInput);
+                case "OK_button": CompleteWithdrawalSesion();
                     break;
                 default:
                     break;
@@ -233,6 +248,42 @@ public class SheepBank : Mz_BaseScene {
 
         if(calculatorBeh.gameObject.active) {
             calculatorBeh.GetInput(nameInput);
+        }
+    }
+
+	void CompleteDopositSession ()
+	{
+		resultValue = calculatorBeh.GetDisplayResultTextToInt();
+        if(resultValue <= Mz_StorageManage.AvailableMoney) {
+		    int sumOfAccountBalance =  Mz_StorageManage.InBankMoney + resultValue;
+		    int availableBalance = Mz_StorageManage.AvailableMoney - resultValue;
+		    AccountBalanceManager(sumOfAccountBalance);
+		    AvailableMoneyManager(availableBalance);
+		    calculatorBeh.ClearCalcMechanism();
+        }
+        else {
+            calculatorBeh.ClearCalcMechanism();
+
+			Debug.LogWarning("result value more than available money");
+        }
+	}
+    
+    private void CompleteWithdrawalSesion()
+    {
+        resultValue = calculatorBeh.GetDisplayResultTextToInt();
+
+        if (resultValue <= Mz_StorageManage.InBankMoney)
+        {
+            int newAvailableBalance = Mz_StorageManage.AvailableMoney + resultValue;
+            int newAccountBalance = Mz_StorageManage.InBankMoney - resultValue;
+            AvailableMoneyManager(newAvailableBalance);
+            AccountBalanceManager(newAccountBalance);
+            calculatorBeh.ClearCalcMechanism();
+        }
+        else {
+            calculatorBeh.ClearCalcMechanism();
+
+			Debug.LogWarning("result value more than account balance");
         }
     }
 }

@@ -16,10 +16,10 @@ public class Mz_CalculatorBeh: MonoBehaviour
 	
 //    public List<GameObject> themeCalcLists = new List<GameObject>(4);
 //    public GUISkin calc_Skin;
-    //private GameObject calc;
+//    private GameObject calc;
 
     private string domainText = "0";
-	private string domainTempValue = "0";
+//	private string domainTempValue = "0";
 	private string recycleDomainText = "";
 
 	private string operanceText = string.Empty;
@@ -27,7 +27,7 @@ public class Mz_CalculatorBeh: MonoBehaviour
 	private string recycleOperation = "";
 
     private string rangeText = string.Empty;
-	private string rangeTempValue = "0";
+//	private string rangeTempValue = "0";
 	private string recycleRangeText = "";
 
     private string resultText = "0";
@@ -56,7 +56,7 @@ public class Mz_CalculatorBeh: MonoBehaviour
     }
 
     public int GetDisplayResultTextToInt() {
-        int temp_value = int.Parse(result_Textmesh.text);
+        int temp_value = int.Parse(resultText);
         return temp_value;
     }
 
@@ -66,15 +66,7 @@ public class Mz_CalculatorBeh: MonoBehaviour
 		
     }
 	
-	void TraceDebugData() {
-        Debug.Log("Domain ::" + domainText);
-        Debug.Log("Operation ::" + operanceText);
-        Debug.Log("Range ::" + rangeText);
-        Debug.Log("Result ::" + resultText);
-        Debug.Log("Display ::" + result_Textmesh.text);
-	}
-	
-	private IEnumerator FindingResultTextmesh ()
+	private IEnumerator FindingResultTextmesh()
 	{	
 		result_Textmesh = display_Textmesh.GetComponent<tk2dTextMesh> () as tk2dTextMesh;
 		
@@ -83,7 +75,7 @@ public class Mz_CalculatorBeh: MonoBehaviour
 
     void ReDrawResult()
     {
-		if(result_Textmesh) 
+/*		if(result_Textmesh) 
 		{
 			if(resultText != string.Empty && resultText != devideby0 && resultText != error)
             {
@@ -373,7 +365,10 @@ public class Mz_CalculatorBeh: MonoBehaviour
 				result_Textmesh.text = resultText;
 			}
 		}
+*/
+        double numericalFormat = double.Parse(resultText);
 
+        result_Textmesh.text = numericalFormat.ToString("N");
         result_Textmesh.Commit();
 		_isEnter = false;
     }
@@ -545,8 +540,6 @@ public class Mz_CalculatorBeh: MonoBehaviour
 					ReDrawResult();
 				}
 			}
-			
-			TraceDebugData();
 			break;
 		default:
 			break;
@@ -593,8 +586,6 @@ public class Mz_CalculatorBeh: MonoBehaviour
 			result_Textmesh.text = resultText;
 			ReDrawResult();
         }
-		
-		TraceDebugData();
     }
 	
 	private void CheckOperance ()
@@ -622,8 +613,6 @@ public class Mz_CalculatorBeh: MonoBehaviour
 				resultText = domainText + operanceText;
 				result_Textmesh.text = resultText;
 				ReDrawResult();
-				
-				TraceDebugData();
 			}			
 			else if(!_isMinus && !resultText.Contains("-") && !resultText.Contains("+") && !resultText.Contains("x") && !resultText.Contains("/"))
 			{
@@ -637,8 +626,6 @@ public class Mz_CalculatorBeh: MonoBehaviour
 				resultText = domainText + operanceText;
 				result_Textmesh.text = resultText;
 				ReDrawResult();
-				
-				TraceDebugData();
 			}
 			else    //<!-- Have operation in job.
 			{ 
@@ -688,12 +675,12 @@ public class Mz_CalculatorBeh: MonoBehaviour
 		recycleRangeText = rangeText;
 		
         domainText = "0";
-        domainTempValue = "0";
+//        domainTempValue = "0";
 		
         operanceText = string.Empty;
 		
         rangeText = string.Empty;
-        rangeTempValue = "0";
+//        rangeTempValue = "0";
     }
 	
 	/// <summary>
