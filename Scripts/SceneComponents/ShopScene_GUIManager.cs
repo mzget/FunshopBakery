@@ -1,28 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class ShopScene_GUIManager : MonoBehaviour {
+public class ShopScene_GUIManager : Mz_GUIManager {
 	
 	private Mz_BaseScene baseScene;
-
-    public static Rect viewPort_rect;
-	public static Rect midcenterGroup_rect = new Rect(0, 0, Main.GAMEWIDTH, Main.GAMEHEIGHT);	
-	//<!--- Equation finding scale == x = screen.height/ main.fixed.
-	public static float extend_heightScale;
-    public static void CalculateViewportScreen() {    
-		// Calculation height of screen.
-		if(Screen.height == Main.FixedGameHeight) {
-			extend_heightScale = 1;
-		}
-		else {
-			extend_heightScale =  Screen.height / Main.FixedGameHeight;
-			
-			midcenterGroup_rect.height = Main.FixedGameHeight * extend_heightScale;
-			midcenterGroup_rect.width = Main.FixedGameWidth * extend_heightScale;
-		}
-		
-        viewPort_rect = new Rect(((Screen.width / 2) - (midcenterGroup_rect.width / 2)), 0, midcenterGroup_rect.width, Main.FixedGameHeight);
-    }
 
 
     void Awake() {
@@ -66,9 +47,9 @@ public class ShopScene_GUIManager : MonoBehaviour {
             //if(Application.loadedLevelName == Mz_BaseScene.SceneNames.BakeryShop.ToString())
             //    this.DrawPlayButton();
 
-            GUI.BeginGroup(trademark_Rect, "Trademark", GUIStyle.none);
+            GUI.BeginGroup(trademark_Rect);
             {
-                GUI.Box(shopName_Rect, StorageManage.ShopName);
+                GUI.Box(shopName_Rect, Mz_StorageManage.ShopName);
             }
             GUI.EndGroup();
 

@@ -159,7 +159,7 @@ public class Mz_BaseScene : MonoBehaviour {
     }
 
     void OnApplicationQuit() {
-        Mz_StorageData.Save();
+        Mz_StorageManage.Save();
 
 #if UNITY_STANDALONE_WIN
         Application.CancelQuit();

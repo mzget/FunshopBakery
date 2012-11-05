@@ -51,12 +51,13 @@ public class Town : Mz_BaseScene {
 	void Start () 
 	{
 		base.InitializeAudio ();
-		Mz_ResizeScale.ResizingScale (town_bg_group.transform);
+        Mz_ResizeScale.ResizingScale(town_bg_group.transform);
 
 		this.Initialize_OnGUIDataFields ();
+        this.upgradeOutsideManager.InitializeDecorationObjects();
 
 		if (SheepBank.HaveUpgradeOutSide) {
-			StartCoroutine (this.ActiveDecorationBar ());
+            StartCoroutine(this.ActiveDecorationBar());
 			SheepBank.HaveUpgradeOutSide = false;
 		}
 		else
@@ -159,12 +160,12 @@ public class Town : Mz_BaseScene {
 		/// TopLeft_Anchor_GroupRect.
         GUI.BeginGroup(TopLeft_Anchor_GroupRect, "TopLeft anchor", GUI.skin.window);
         {
-            GUI.Box(drawPlayerName_rect, StorageManage.Username);
-			if(GUI.Button(drawShopName_rect, StorageManage.ShopName)) {
+            GUI.Box(drawPlayerName_rect, Mz_StorageManage.Username);
+			if(GUI.Button(drawShopName_rect, Mz_StorageManage.ShopName)) {
 				currentGUIState = OnGUIState.DrawEditShopname;
 				base.UpdateTimeScale(0);
 			}
-            GUI.Box(drawPlayerMoney_rect, new GUIContent(StorageManage.Money.ToString(), tk_coin_img));
+            GUI.Box(drawPlayerMoney_rect, new GUIContent(Mz_StorageManage.AvailableMoney.ToString(), tk_coin_img));
         }
         GUI.EndGroup();      
 		
@@ -185,6 +186,7 @@ public class Town : Mz_BaseScene {
 			}
 			else if(GUI.Button(drawBack_ButtonRect, new GUIContent(backIcon_img))) {
 				if(Application.isLoadingLevel == false) {
+                    Mz_StorageManage.Save();
 					//<!-- Clear static NumberOfCanSellItem.
 					BakeryShop.NumberOfCansellItem.Clear();
 					
@@ -212,13 +214,13 @@ public class Town : Mz_BaseScene {
 
 			if(GUI.Button(editShop_OKButton_rect, "OK")) {
 				if(username != "" && username.Length >= 5) {
-					StorageManage.ShopName = username;
+					Mz_StorageManage.ShopName = username;
 
 					if(username == "Greed is bad") {
-						StorageManage.Money += 1000000;
+						Mz_StorageManage.AvailableMoney += 1000000;
 					}
 
-					Mz_StorageData.Save();
+					Mz_StorageManage.Save();
 
 					currentGUIState = OnGUIState.none;
 					base.UpdateTimeScale(1);
@@ -273,7 +275,7 @@ public class Town : Mz_BaseScene {
 				break;
 			case UpgradeOutsideManager.Accessories_button: upgradeOutsideManager.ActiveAccessories();
 				break;
-			case "None_button" : 
+			case "None_button" : upgradeOutsideManager.HaveNoneCommand();
 				break;
 			case "Previous_button" : upgradeOutsideManager.HavePreviousPageCommand();
 				break;
@@ -299,7 +301,7 @@ public class Town : Mz_BaseScene {
 		}
 	}
 
-    private void PlayBakeryShopOpenAnimation()
+    void PlayBakeryShopOpenAnimation()
     {
         bakeryShopDoorOpen_animated.Play();
         bakeryShopDoorOpen_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)

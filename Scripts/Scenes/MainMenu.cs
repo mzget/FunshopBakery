@@ -9,6 +9,7 @@ public class MainMenu : Mz_BaseScene {
     public Transform mainmenu_Group;
     public Transform newgame_Group;
     public Transform initializeNewGame_Group;
+	InitializeNewShop initializeNewShop;
     public Transform loadgame_Group;
     public GameObject back_button;
     //<!--- Main menu group.
@@ -69,6 +70,7 @@ public class MainMenu : Mz_BaseScene {
         iTween.MoveTo(mainmenu_Group.gameObject, moveDownTransform_Data);
 
         newgame_Group.gameObject.SetActiveRecursively(false);
+		initializeNewShop = initializeNewGame_Group.GetComponent<InitializeNewShop>();
         initializeNewGame_Group.gameObject.SetActiveRecursively(false);
         loadgame_Group.gameObject.SetActiveRecursively(false);
         back_button.gameObject.active = false;
@@ -135,16 +137,16 @@ public class MainMenu : Mz_BaseScene {
         {
             PlayerPrefs.DeleteAll();
             username = string.Empty;
-            StorageManage.SaveSlot = 0;
+            Mz_StorageManage.SaveSlot = 0;
         }
 	}
 
 	#region <!-- OnGUI Section.
 
 	private void OnGUI() {
-        player_1 = PlayerPrefs.GetString(1 + "username");
-        player_2 = PlayerPrefs.GetString(2 + "username");
-        player_3 = PlayerPrefs.GetString(3 + "username");
+        player_1 = PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME);
+        player_2 = PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME);
+        player_3 = PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME);
 
 		GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
 		
@@ -175,8 +177,8 @@ public class MainMenu : Mz_BaseScene {
 		    string notificationText = "";
 		    string dublicateNoticeText = "";
 
-            //notificationText = "Please Fill Your Username. \n ¡ÃØ³ÒãÊèª×èÍ¼ÙéàÅè¹";
-            //dublicateNoticeText = "This name already exists. \n «×èÍ¹ÕéÁÕÍÂÙèáÅéÇ";
+            //notificationText = "Please Fill Your Username. \n ï¿½ï¿½Ø³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½";
+            //dublicateNoticeText = "This name already exists. \n ï¿½ï¿½ï¿½Í¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 
 			notificationText = "Please Fill Your Username.";
 			dublicateNoticeText = "This name already exists.";
@@ -249,22 +251,22 @@ public class MainMenu : Mz_BaseScene {
 
         //<!-- Autosave Mechanicism. When have empty game slot.  
         if (player_1 == string.Empty) {
-            StorageManage.SaveSlot = 1;
+            Mz_StorageManage.SaveSlot = 1;
             //this.SaveNewPlayer();
             StartCoroutine(ShowInitializeNewShop());
         }
         else if (player_2 == string.Empty) {
-            StorageManage.SaveSlot = 2;
+			Mz_StorageManage.SaveSlot = 2;
             //this.SaveNewPlayer();
             StartCoroutine(ShowInitializeNewShop());
         }
         else if (player_3 == string.Empty) {
-            StorageManage.SaveSlot = 3;
+			Mz_StorageManage.SaveSlot = 3;
             //this.SaveNewPlayer();
             StartCoroutine(ShowInitializeNewShop());
         }
         else {
-            StorageManage.SaveSlot = 0;
+			Mz_StorageManage.SaveSlot = 0;
             _isFullSaveGameSlot = true;
             StartCoroutine(ShowLoadShop());
 
@@ -277,16 +279,23 @@ public class MainMenu : Mz_BaseScene {
     /// </summary>
     private void SaveNewPlayer()
     {
-        PlayerPrefs.SetString(StorageManage.SaveSlot + "username", this.username);
-        PlayerPrefs.SetString(StorageManage.SaveSlot + "shopname", this.shopName);
-        PlayerPrefs.SetInt(StorageManage.SaveSlot + "money", 500);
+		PlayerPrefs.SetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_USERNAME, this.username);
+		PlayerPrefs.SetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_NAME, this.shopName);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_MONEY, 500);
+		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot +  Mz_StorageManage.KEY_SHOP_LOGO, initializeNewShop.currentLogoID);
+		PlayerPrefs.SetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_LOGO_COLOR , initializeNewShop.currentLogoColor);
 
         int[] IdOfCanSellItem = new int[] { 0, 5, 9, 18 };
-        PlayerPrefsX.SetIntArray(StorageManage.SaveSlot + "cansellgoodslist", IdOfCanSellItem);
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist", IdOfCanSellItem);
+
+		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ROOF_ID, 255);
+		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AWNING_ID, 255);
+		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TABLE_ID, 0);
+		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ACCESSORY_ID, 0);
 
         Debug.Log("Store new player data complete.");		
 
-        Mz_StorageData.LoadSaveDataToGameStorage();
+        Mz_StorageManage.LoadSaveDataToGameStorage();
 
         this.LoadSceneTarget();
     }
@@ -304,7 +313,7 @@ public class MainMenu : Mz_BaseScene {
 		{   
             //<!-- Full save game slot. Show notice message.
             string message = string.Empty;			
-            //message = "àÅ×Í¡ªèÍ§·ÕèµéÍ§¡ÒÃ à¾×èÍÅº¢éÍÁÙÅà¡èÒ áÅÐ·Ñº´éÇÂ¢éÍÁÙÅãËÁè";
+            //message = "ï¿½ï¿½ï¿½Í¡ï¿½ï¿½Í§ï¿½ï¿½ï¿½ï¿½Í§ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ð·Ñºï¿½ï¿½ï¿½Â¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
             message = "Select Data Slot To Replace New Data";
 			
             mainmenu_Skin.textField.normal.textColor = Color.white;
@@ -313,47 +322,39 @@ public class MainMenu : Mz_BaseScene {
 
         GUI.BeginGroup(showSaveGameSlot_GroupRect);
         {
-            #region <!-- To Save game.
-
             if (_toSaveGame)			
             {
                 /// Display To Save Username.
 //                GUI.Box(textbox_header_rect, username, mainmenu_Skin.textField);
                 /// Choose SaveGame Slot for replace new data.
-                if (GUI.Button(slot_1Rect, new GUIContent(PlayerPrefs.GetString(1 + "username"), "button")))
+                if (GUI.Button(slot_1Rect, new GUIContent(PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME), "button")))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
-                    StorageManage.SaveSlot = 1;
+                    Mz_StorageManage.SaveSlot = 1;
 //                    SaveNewPlayer();
 					StartCoroutine(ShowInitializeNewShop());
                 }
-                else if (GUI.Button(slot_2Rect, new GUIContent(PlayerPrefs.GetString(2 + "username"), "button")))
+                else if (GUI.Button(slot_2Rect, new GUIContent(PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME), "button")))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
-                    StorageManage.SaveSlot = 2;
+                    Mz_StorageManage.SaveSlot = 2;
 //				    SaveNewPlayer();
 					StartCoroutine(ShowInitializeNewShop());
                 }
-                else if (GUI.Button(slot_3Rect, new GUIContent(PlayerPrefs.GetString(3 + "username"), "button")))
+                else if (GUI.Button(slot_3Rect, new GUIContent(PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME), "button")))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
-                    StorageManage.SaveSlot = 3;
-//				    SaveNewPlayer();
+                    Mz_StorageManage.SaveSlot = 3;
+                    //  SaveNewPlayer();
 					StartCoroutine(ShowInitializeNewShop());
                 }
             }
-
-            #endregion
-
-            #region <!-- To Load Game.
-
-            else
-            {
+            else {
 //                string headerText = "";
-//                headerText = "àÅ×Í¡ªèÍ§·ÕèµéÍ§¡ÒÃãÊè¢éÍÁÙÅä´éàÅÂ¤ÃÑº";
+//                headerText = "ï¿½ï¿½ï¿½Í¡ï¿½ï¿½Í§ï¿½ï¿½ï¿½ï¿½Í§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¤ï¿½Ñº";
 //				headerText = "Select Data Slot";
 //                GUI.Box(textbox_header_rect, headerText, mainmenu_Skin.textField);
                 /// Choose SaveGame Slot for Load Save Data.
@@ -375,8 +376,8 @@ public class MainMenu : Mz_BaseScene {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
                     if(player_1 != string.Empty) {
-                        StorageManage.SaveSlot = 1;
-                        Mz_StorageData.LoadSaveDataToGameStorage();
+                        Mz_StorageManage.SaveSlot = 1;
+                        Mz_StorageManage.LoadSaveDataToGameStorage();
                         this.LoadSceneTarget();
                     }
                 }
@@ -385,8 +386,8 @@ public class MainMenu : Mz_BaseScene {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
                     if(player_2 != string.Empty) {
-                        StorageManage.SaveSlot = 2;
-                        Mz_StorageData.LoadSaveDataToGameStorage();
+                        Mz_StorageManage.SaveSlot =2;
+                        Mz_StorageManage.LoadSaveDataToGameStorage();
                         this.LoadSceneTarget();
                     }
                 }
@@ -395,17 +396,14 @@ public class MainMenu : Mz_BaseScene {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
                     if(player_3 != string.Empty) {
-                        StorageManage.SaveSlot = 3;
-                        Mz_StorageData.LoadSaveDataToGameStorage();
+                        Mz_StorageManage.SaveSlot = 3;
+                        Mz_StorageManage.LoadSaveDataToGameStorage();
                         this.LoadSceneTarget();
                     }
                 }
 
                 #endregion
-            }
-
-            #endregion            
-
+            } 
         }
         GUI.EndGroup();
     }
@@ -448,6 +446,27 @@ public class MainMenu : Mz_BaseScene {
                 	this.SaveNewPlayer();
 				}
             }
+			else if(nameInput == "Previous_button") {
+				initializeNewShop.HavePreviousCommand();
+			}
+			else if(nameInput == "Next_button") {
+				initializeNewShop.HaveNextCommand();
+			}
+			else if(nameInput == "Blue") {
+				initializeNewShop.HaveChangeLogoColor("Blue");
+			}
+			else if(nameInput == "Green") {
+				initializeNewShop.HaveChangeLogoColor("Green");
+			}
+			else if(nameInput == "Pink") {
+				initializeNewShop.HaveChangeLogoColor("Pink");
+			}
+			else if(nameInput == "Red") {
+				initializeNewShop.HaveChangeLogoColor("Red");
+			}
+			else if(nameInput == "Yellow") {
+				initializeNewShop.HaveChangeLogoColor("Yellow");
+			}
         }
     }
 

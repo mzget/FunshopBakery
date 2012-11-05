@@ -23,6 +23,7 @@ public class BakeryShop : Mz_BaseScene {
     //<!-- Core data
     public enum GamePlayState { none = 0, calculationPrice, receiveMoney, giveTheChange, TradeComplete, };
     public GamePlayState currentGamePlayState;
+	public tk2dSprite shopLogo_sprite;
     public ShopScene_GUIManager gui_manager;
     public GoodDataStore goodDataStore;
     public static List<int> NumberOfCansellItem = new List<int>();
@@ -55,7 +56,7 @@ public class BakeryShop : Mz_BaseScene {
 	
 	#endregion
 
-    #region <!-- Toast && Jam Obj group;
+	#region <!-- Toast && Jam Obj group;
 
     public Transform toastObj_transform_group;
 	public ToastBeh[] toasts = new ToastBeh[2]; 
@@ -65,7 +66,7 @@ public class BakeryShop : Mz_BaseScene {
     public GameObject blueberryJam_instance;
     public GameObject freshButterJam_instance;
     public GameObject custardJam_instance;
-	
+
 	#endregion
 	
 	#region <!-- Cakes object data. 
@@ -95,16 +96,15 @@ public class BakeryShop : Mz_BaseScene {
 
     #endregion
 
-
     /// Hotdog data fields group.
     public Transform hotdogTray_transform;
     public HotdogBeh hotdog;
 
-    #region <!-- Customer data group.
+	#region <!-- Customer data group.
 
     public GameObject customerMenu_group_Obj;
-    public CustomerBeh currentCustomer;  
-	
+    public CustomerBeh currentCustomer;
+
     public event EventHandler nullCustomer_event;
     private void OnNullCustomer_event(EventArgs e) {
         if(nullCustomer_event != null) {
@@ -121,7 +121,9 @@ public class BakeryShop : Mz_BaseScene {
 	IEnumerator Start () {
         base.InitializeAudio();
 //		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
-		
+
+		StartCoroutine(this.ChangeShopLogoIcon());
+
 		appleTank_Obj.SetActiveRecursively(false);
 		orangeTank_Obj.SetActiveRecursively(false);
 		cocoaMilkTank_Obj.SetActiveRecursively(false);
@@ -169,11 +171,19 @@ public class BakeryShop : Mz_BaseScene {
 
         var coinObj = GameObject.Find("Coin");
         coin_Textmesh = coinObj.GetComponent<tk2dTextMesh>();
-        coin_Textmesh.text = StorageManage.Money.ToString();
+        coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
         coin_Textmesh.Commit();
         
         nullCustomer_event += new EventHandler(BakeryShop_nullCustomer_event);
         OnNullCustomer_event(EventArgs.Empty);
+	}
+
+	IEnumerator ChangeShopLogoIcon ()
+	{
+		shopLogo_sprite.spriteId = shopLogo_sprite.GetSpriteIdByName(InitializeNewShop.shopLogo_NameSpecify[Mz_StorageManage.ShopLogo]);
+		shopLogo_sprite.color = InitializeNewShop.shopLogos_Color[Mz_StorageManage.ShopLogoColor];
+
+		yield return 0;
 	}
 
     private IEnumerator InitializeMinicakeInstance()
@@ -836,8 +846,8 @@ public class BakeryShop : Mz_BaseScene {
 
         yield return new WaitForSeconds(2);
 
-        StorageManage.Money += currentCustomer.amount;
-        coin_Textmesh.text = StorageManage.Money.ToString();
+        Mz_StorageManage.AvailableMoney += currentCustomer.amount;
+        coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
         coin_Textmesh.Commit();
 
         //<!-- Clare resource data.
@@ -846,12 +856,6 @@ public class BakeryShop : Mz_BaseScene {
         Destroy(packaging_Obj);
     }
 	
-    // Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-	}
-	
 	public override void OnInput(string nameInput)
 	{
 		base.OnInput (nameInput);
@@ -859,7 +863,7 @@ public class BakeryShop : Mz_BaseScene {
         //<!-- Close shop button.
 		if(nameInput == close_button.name) {
 			if(Application.isLoadingLevel == false) {
-                Mz_StorageData.Save();
+                Mz_StorageManage.Save();
                 ObjectsBeh.ResetData();
 				
 				Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
