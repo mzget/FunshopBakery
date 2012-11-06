@@ -6,9 +6,7 @@ public class Dressing : Mz_BaseScene {
     public Transform background_transform;
 	public GameObject back_button_Obj;
 	public CharacterAnimationManager TK_animationManager;
-
-    public GameObject shirt_button;
-    public GameObject hat_button;
+    public CostumeManager costomeManager;
 	
 	
 	
@@ -30,18 +28,34 @@ public class Dressing : Mz_BaseScene {
             case "shirt_button":
                 TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.talk);
                 TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_active);
+                costomeManager.ShowTab(CostumeManager.TabMenuState.shirt);
                 break;
             case "hat_button": 
                 TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.talk);
                 TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_active);
+                costomeManager.ShowTab(CostumeManager.TabMenuState.hat);
                 break;
             case "Previous_button":
                 TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.good1);
                 TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_good1);
+			costomeManager.BackToPreviousPage();
                 break;
             case "Next_button":
                 TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.good1);
                 TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_good1);
+			costomeManager.GotoNextPage();
+                break;
+            case "Low0_1": costomeManager.HaveChooseClotheCommand(nameInput);
+                break;
+            case "Low0_2": costomeManager.HaveChooseClotheCommand(nameInput);
+                break;
+            case "Low0_3": costomeManager.HaveChooseClotheCommand(nameInput);
+                break;
+            case "Low1_1": costomeManager.HaveChooseClotheCommand(nameInput);
+                break;
+            case "Low1_2": costomeManager.HaveChooseClotheCommand(nameInput);
+                break;
+            case "Low1_3": costomeManager.HaveChooseClotheCommand(nameInput);
                 break;
             default:
                 break;
