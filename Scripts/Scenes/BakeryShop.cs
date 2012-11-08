@@ -138,16 +138,12 @@ public class BakeryShop : Mz_BaseScene {
         StartCoroutine(InitializeMinicakeInstance());
         StartCoroutine(InitializeCakeInstance());
         StartCoroutine(InitializeTunaSandwichInstance());
-		
+		StartCoroutine(this.Initialize_deepFriedChickenSandwich());
+		StartCoroutine(this.Initailize_HamSandwich());
+		StartCoroutine(this.Initialize_EggSandwich());
+
 		icecreamVanillaTank_obj.SetActiveRecursively(false);
 		icecreamChocolateTank_obj.SetActiveRecursively(false);
-
-		this.CreateDeepFriedChickenSandwich();
-		this.CreateHamSanwich();
-		this.CreateEggSandwich();
-        deepFriedChickenSandwich.gameObject.SetActiveRecursively(false);
-        hamSandwich.gameObject.SetActiveRecursively(false);
-        eggSandwich.gameObject.SetActiveRecursively(false);
 
         StartCoroutine(this.InitializeChocolateChipCookie());
 		StartCoroutine(this.Initializing_FriutCookie());
@@ -191,21 +187,19 @@ public class BakeryShop : Mz_BaseScene {
         yield return StartCoroutine(CreateMiniCakeInstance());	
 		miniCake.gameObject.active = false;
     }
+
     private IEnumerator InitializeCakeInstance()
     {
 		yield return StartCoroutine(CreateCakeInstance());			
 		cake.gameObject.active = false;
     }
-    private IEnumerator InitializeTunaSandwichInstance()
-    {
-        yield return StartCoroutine(this.CreateTunaSandwich());
-        tunaSandwich.gameObject.SetActiveRecursively(false);
-    }
+
     private IEnumerator InitializeChocolateChipCookie()
     {
         yield return StartCoroutine(this.CreateChocolateChip_Cookie());
         chocolateChip_cookie.gameObject.SetActiveRecursively(false);
-    }    
+    }  
+
     private IEnumerator InitializeHotdogInstance()
     {
         yield return StartCoroutine(this.CreateHotdog());
@@ -301,14 +295,14 @@ public class BakeryShop : Mz_BaseScene {
 			temp_cupcake.transform.localPosition = new Vector3(0, -.02f, -.1f);
 			temp_cupcake.name = CakeBeh.Cupcake;
 			cupcake = temp_cupcake.GetComponent<CakeBeh>();
-			cupcake.destroyObj_Event += HandleCupcakedestroyObj_Event;
+			cupcake.destroyObj_Event += Handle_CupcakedestroyObj_Event;
 			cupcake.putObjectOnTray_Event += Handle_CupcakeputObjectOnTray_Event;
 		}
 	}
-    void HandleCupcakedestroyObj_Event (object sender, System.EventArgs e)
+    void Handle_CupcakedestroyObj_Event (object sender, System.EventArgs e)
 	{
 		foodTrayBeh.goodsOnTray_List.Remove((GoodsBeh)sender);
-		ObjectsBeh.ResetData();
+
 		StartCoroutine(CreateCupcakeInstance());
 	}
 	void Handle_CupcakeputObjectOnTray_Event (object sender, System.EventArgs e)
@@ -317,8 +311,7 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		cupcake = null;
 		
 		StartCoroutine(CreateCupcakeInstance());
@@ -340,7 +333,7 @@ public class BakeryShop : Mz_BaseScene {
     }
     void miniCake_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
+
         StartCoroutine(CreateMiniCakeInstance());
     }
     void miniCake_putObjectOnTray_Event(object sender, EventArgs e) {
@@ -348,8 +341,7 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		miniCake = null;
 		
 		StartCoroutine(CreateMiniCakeInstance());
@@ -371,7 +363,7 @@ public class BakeryShop : Mz_BaseScene {
     }
     void Cake_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
+
         StartCoroutine(CreateCakeInstance());
     }
     void Cake_putObjectOnTray_Event(object sender, EventArgs e) {
@@ -379,8 +371,7 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+	
 		cake = null;
 		
 		StartCoroutine(CreateCakeInstance());
@@ -415,8 +406,7 @@ public class BakeryShop : Mz_BaseScene {
 	
 	public void DestroyToastEvent(object sender, System.EventArgs e) {
         Debug.Log("DestroyToastEvent");
-		
-		ObjectsBeh.ResetData();		
+			
         StartCoroutine(CreateToastInstance());
 		
 		foodTrayBeh.goodsOnTray_List.Remove((GoodsBeh)sender);
@@ -425,7 +415,6 @@ public class BakeryShop : Mz_BaseScene {
     public void PutToastOnTrayEvent(object sender, System.EventArgs e) {
         Debug.Log("PutToastOnTrayEvent");
 
-        ObjectsBeh.ResetData();
 		StartCoroutine(CreateToastInstance());
 		
         if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
@@ -435,11 +424,35 @@ public class BakeryShop : Mz_BaseScene {
 	#endregion
 	
 	#region <!-- Sandwich Obj behavior.
+
+	private IEnumerator InitializeTunaSandwichInstance()
+	{
+		yield return StartCoroutine(this.CreateTunaSandwich());
+		tunaSandwich.gameObject.SetActiveRecursively(false);
+	}
+	
+	private IEnumerator Initialize_deepFriedChickenSandwich()
+	{
+		yield return StartCoroutine(this.CreateDeepFriedChickenSandwich());
+		deepFriedChickenSandwich.gameObject.SetActiveRecursively(false);
+	}
+	
+	IEnumerator Initailize_HamSandwich ()
+	{
+		yield return StartCoroutine(this.CreateHamSanwich());
+		hamSandwich.gameObject.SetActiveRecursively(false);
+	}
+	
+	IEnumerator Initialize_EggSandwich ()
+	{
+		yield return StartCoroutine(this.CreateEggSandwich());
+		eggSandwich.gameObject.SetActiveRecursively(false);
+	}
 	
 	/// <summary>
 	/// Creates the tuna sandwich.
 	/// </summary>
-	private IEnumerator CreateTunaSandwich() {
+	IEnumerator CreateTunaSandwich() {
         yield return new WaitForFixedUpdate();
 
 		if(tunaSandwich == null) {
@@ -458,15 +471,13 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		tunaSandwich = null;
 
         StartCoroutine(this.CreateTunaSandwich());
     }
     void tunaSandwich_destroyObj_Event(object sender, EventArgs e) {
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();      
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);    
 		
         StartCoroutine(this.CreateTunaSandwich());
     }
@@ -474,7 +485,9 @@ public class BakeryShop : Mz_BaseScene {
 	/// <summary>
 	/// Creates the deep fried chicken sandwich.
 	/// </summary>
-	void CreateDeepFriedChickenSandwich() {
+	IEnumerator CreateDeepFriedChickenSandwich() {
+        yield return new WaitForFixedUpdate();
+
 		if(deepFriedChickenSandwich == null) {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "DeepFriedChickenSandwich", typeof(GameObject))) as GameObject;
 			sandwich.transform.parent = sandwichCookieTray_Transform;
@@ -492,28 +505,25 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		deepFriedChickenSandwich = null;
 
-        this.CreateDeepFriedChickenSandwich();
+        StartCoroutine(this.CreateDeepFriedChickenSandwich());
 	}
 	void Handle_DeepFriedChickenSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
 		
-		deepFriedChickenSandwich.putObjectOnTray_Event -= Handle_DeepFriedChickenSandwich_putObjectOnTray_Event;
-		deepFriedChickenSandwich.destroyObj_Event -= Handle_DeepFriedChickenSandwich_destroyObj_Event;
-		
-        this.CreateDeepFriedChickenSandwich();
+        StartCoroutine(this.CreateDeepFriedChickenSandwich());
 	}
 	
 	/// <summary>
 	/// Creates the ham sanwich.
 	/// </summary>
-	void CreateHamSanwich() {
-		if(hamSandwich == null) {
+	IEnumerator CreateHamSanwich() {
+        yield return new WaitForFixedUpdate();
+        
+        if (hamSandwich == null) {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "HamSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
             sandwich.transform.localPosition = new Vector3(-.015f, -.17f, -.3f);
@@ -530,27 +540,24 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		hamSandwich = null;
 
-        this.CreateHamSanwich();
+        StartCoroutine(this.CreateHamSanwich());
 	}
 	void Handle_HamSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
 		
-		hamSandwich.putObjectOnTray_Event -= Handle_HamSandwich_putObjectOnTray_Event;
-		hamSandwich.destroyObj_Event -= Handle_HamSandwich_destroyObj_Event;
-		
-        this.CreateHamSanwich();
+        StartCoroutine(this.CreateHamSanwich());
 	}
 	
 	/// <summary>
 	/// Creates the egg sandwich.
 	/// </summary>
-	void CreateEggSandwich() {		
+	IEnumerator CreateEggSandwich() {
+        yield return new WaitForFixedUpdate();
+
 		if(eggSandwich == null) {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "EggSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
@@ -568,21 +575,16 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		eggSandwich = null;
 
-        this.CreateEggSandwich();
+        StartCoroutine(this.CreateEggSandwich());
 	}
 	void Handle_EggSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
 		
-		eggSandwich.putObjectOnTray_Event -= Handle_EggSandwich_putObjectOnTray_Event;
-		eggSandwich.destroyObj_Event -= Handle_EggSandwich_destroyObj_Event;
-		
-        this.CreateEggSandwich();
+        StartCoroutine(this.CreateEggSandwich());
 	}
 	
 	#endregion
@@ -609,15 +611,13 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		chocolateChip_cookie = null;
 
         StartCoroutine(this.CreateChocolateChip_Cookie());
     }
     void chocolateChip_cookie_destroyObj_Event(object sender, EventArgs e) {    
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
 
         StartCoroutine(this.CreateChocolateChip_Cookie());
     }
@@ -647,15 +647,13 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		fruit_cookie = null;
 
         StartCoroutine(this.CreateFruitCookie());
 	}
 	void Handle_FruitCookie_DestroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
 
         StartCoroutine(this.CreateFruitCookie());
 	}
@@ -686,15 +684,13 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+	
 		butter_cookie = null;
 
         StartCoroutine(this.CreateButterCookie());
     }
     void butter_cookie_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
 
         butter_cookie.putObjectOnTray_Event -= butter_cookie_putObjectOnTray_Event;
         butter_cookie.destroyObj_Event -= butter_cookie_destroyObj_Event;
@@ -726,15 +722,13 @@ public class BakeryShop : Mz_BaseScene {
             foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
 		else 
 			return;
-		
-		ObjectsBeh.ResetData();
+
 		hotdog = null;
 
         StartCoroutine(this.CreateHotdog());
     }
     void hotdog_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        ObjectsBeh.ResetData();
 
         StartCoroutine(this.CreateHotdog());
     }
@@ -831,7 +825,6 @@ public class BakeryShop : Mz_BaseScene {
         }
 
         foodTrayBeh.goodsOnTray_List.Clear();
-        ObjectsBeh.ResetData();
 
         StartCoroutine(this.PackagingGoods());
     }
@@ -864,7 +857,6 @@ public class BakeryShop : Mz_BaseScene {
 		if(nameInput == close_button.name) {
 			if(Application.isLoadingLevel == false) {
                 Mz_StorageManage.Save();
-                ObjectsBeh.ResetData();
 				
 				Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
 				Application.LoadLevelAsync(SceneNames.LoadingScene.ToString());			

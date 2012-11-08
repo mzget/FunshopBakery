@@ -366,9 +366,10 @@ public class Mz_CalculatorBeh: MonoBehaviour
 			}
 		}
 */
+
         double numericalFormat = double.Parse(resultText);
 
-        result_Textmesh.text = numericalFormat.ToString("N");
+        result_Textmesh.text = numericalFormat.ToString("N0");
         result_Textmesh.Commit();
 		_isEnter = false;
     }

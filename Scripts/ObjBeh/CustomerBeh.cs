@@ -52,7 +52,7 @@ public class CustomerBeh : MonoBehaviour {
     {		
         int maxGoodsType = 0;
 //        if(BakeryShop.gameLevel == 0)
-            maxGoodsType = 2;
+            maxGoodsType = 3;
 //        else if(BakeryShop.gameLevel == 1)
 //            maxGoodsType = 3;
 //        else if(BakeryShop.gameLevel == 2)
@@ -61,7 +61,8 @@ public class CustomerBeh : MonoBehaviour {
         int r = Random.Range(1, maxGoodsType + 1);
         for (int i = 0; i < r; i++) {
 			customerOrderRequire.Add(new CustomerOrderRequire() { 
-				goods = new Goods(), number = Random.Range(1, 4)
+				goods = new Goods(),
+				number = 1,	// Random.Range(1, 4),
 			});
         }
 
@@ -108,7 +109,10 @@ public class CustomerBeh : MonoBehaviour {
 				}
 			}
 
-            goods_temp.Add(new CustomerOrderRequire() { goods = temp_goods, number = temp_counter });
+            goods_temp.Add(new CustomerOrderRequire() { 
+				goods = temp_goods, 
+				number = temp_counter,
+			});
 
             if (customerOrderRequire[i].number == goods_temp[i].number) {
                 Debug.Log(goods_temp[i].goods.name + " : " + goods_temp[i].number);    

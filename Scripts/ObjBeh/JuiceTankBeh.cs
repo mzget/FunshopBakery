@@ -43,7 +43,7 @@ public class JuiceTankBeh : ObjectsBeh {
 
     #region <!-- OnInput.
 
-    protected override void OnTouchDown()
+	protected override void OnTouchDown()
     {
         if(juice_glass_instance == null)
 		{
@@ -124,7 +124,6 @@ public class JuiceTankBeh : ObjectsBeh {
 
     void Handle_JuiceGlassBeh_destroyObj_Event (object sender, System.EventArgs e)
     {
-        ObjectsBeh.ResetData();
     	sceneManager.foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
     }
 	
@@ -133,7 +132,6 @@ public class JuiceTankBeh : ObjectsBeh {
 		
 		juice_glass_instance = null;
 		juiceGlassBeh = null;
-        ObjectsBeh.ResetData();
 
         if(sceneManager.foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
             sceneManager.foodTrayBeh.goodsOnTray_List.Add((GoodsBeh)sender);

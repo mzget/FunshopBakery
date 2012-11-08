@@ -8,6 +8,8 @@ public class Startup : Mz_BaseScene {
 	void Start () {
 		//<!-- Set startup quality to "fast", --> full resolution texture.
 		QualitySettings.SetQualityLevel(1);
+
+		Application.targetFrameRate = 60;
 	}
 	
 	// Update is called once per frame

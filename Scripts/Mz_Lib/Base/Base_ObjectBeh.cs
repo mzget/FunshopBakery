@@ -4,6 +4,7 @@ using System.Collections;
 public class Base_ObjectBeh : MonoBehaviour {
     
     protected bool _OnTouchBegin = false;
+	protected bool _OnTouchMove = false;
 	protected bool _OnTouchRelease = false;
 
 
@@ -18,15 +19,6 @@ public class Base_ObjectBeh : MonoBehaviour {
         if (_OnTouchBegin && _OnTouchRelease) {
             OnTouchDown();
         }
-		        
-//        if (Input.touchCount > 0) {
-//            Touch touch = Input.GetTouch(0);
-//
-//            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Moved) {
-//                _OnTouchBegin = false;
-//                _OnTouchRelease = false;
-//            }
-//        }
 	}
 	
 	protected IEnumerator WaitForEndUpdate() {
@@ -36,20 +28,35 @@ public class Base_ObjectBeh : MonoBehaviour {
 	#region <!-- On Mouse Events.
 
 	protected virtual void OnTouchBegan() {
-        _OnTouchBegin = true;
+		Debug.Log("Class : Base_ObjectBeh." + "OnTouchBegan");
+
+        if(_OnTouchBegin == false)
+			_OnTouchBegin = true;
+	}
+	protected virtual void OnTouchDrag() {
+		Debug.Log("Class : Base_ObjectBeh." + "OnTouchDrag");
+
+		_OnTouchMove = true;
 	}
     protected virtual void OnTouchDown()
     {
+		Debug.Log("Class : Base_ObjectBeh." + "OnTouchDown");
+
         /// do something.
 		
         _OnTouchBegin = false;
         _OnTouchRelease = false;
+		_OnTouchMove = false;
     }
-    protected virtual void OnTouchEnded() {
-		_OnTouchRelease = true;
-    }
-    protected virtual void OnTouchDrag() {
-    	Debug.Log("Class : Base_ObjectBeh." + "OnTouchDrag");
+    protected virtual void OnTouchEnded ()
+	{
+		Debug.Log ("Class : Base_ObjectBeh." + "OnTouchEnded");
+
+		if (_OnTouchBegin && _OnTouchMove == false) {
+			_OnTouchRelease = true;
+		}
+		
+		_OnTouchMove = false;
     }
 
     #endregion

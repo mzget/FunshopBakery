@@ -47,7 +47,7 @@ public class CreamBeh : ObjectsBeh {
 
 		base.OnTouchDown ();
 	}
-    protected override void OnTouchEnded()
+	protected override void OnTouchEnded()
     {
         base.OnTouchEnded();
     }

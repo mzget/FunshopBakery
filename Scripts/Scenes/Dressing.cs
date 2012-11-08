@@ -4,6 +4,7 @@ using System.Collections;
 public class Dressing : Mz_BaseScene {
 
     public Transform background_transform;
+	public GameObject[] cloudAndFog_Objs = new GameObject[4];
 	public GameObject back_button_Obj;
 	public CharacterAnimationManager TK_animationManager;
     public CostumeManager costomeManager;
@@ -17,6 +18,11 @@ public class Dressing : Mz_BaseScene {
         Mz_ResizeScale.ResizingScale(background_transform);
 
 		TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.idle);
+		
+		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0.2f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", 0.4f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.6f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
 
 	public override void OnInput (string nameInput)

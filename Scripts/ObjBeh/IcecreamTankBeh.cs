@@ -67,7 +67,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 			};
 		}
 
-        base.OnTouchDown();
+		base.OnTouchDown();
     }
 
     #endregion

@@ -22,11 +22,16 @@ public class Mz_BaseScene : MonoBehaviour {
     private Vector3[] mainCameraPos = new Vector3[] { new Vector3(0, -.13f, -10), new Vector3(2.66f, -.13f, -10) };
 	private Vector3 currentCameraPos = new Vector3(0, -.13f, -10);
     public bool _isDragMove = false;
+	internal Mz_SmartDeviceInput smartDeviceInput;
 
+
+	void Awake() {
+		this.gameObject.AddComponent<HUDFPS>();
+	}
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	protected void InitializeAudio()
@@ -59,10 +64,16 @@ public class Mz_BaseScene : MonoBehaviour {
 	// Update is called once per frame
 	protected virtual void Update ()
 	{
+		if (smartDeviceInput == null) {
+			this.gameObject.AddComponent<Mz_SmartDeviceInput>();
+			smartDeviceInput = this.gameObject.GetComponent<Mz_SmartDeviceInput>();
+		}
+
 		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
-				Mz_SmartDeviceInput.ImplementTouchInput ();
-		} else if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
-				Mz_SmartDeviceInput.ImplementMouseInput ();
+				smartDeviceInput.ImplementTouchInput ();
+		} 
+		else if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
+				smartDeviceInput.ImplementMouseInput ();
 		}
 		
 		if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Menu)) {

@@ -6,13 +6,13 @@ public class CostumeManager : MonoBehaviour {
     private string[] nameClothesSpecify = new string[] {
         "clothe_001", "clothe_002", "clothe_003", "clothe_004", "clothe_005", "clothe_006",
          "clothe_007", "clothe_008", "clothe_009", "clothe_010", "clothe_011", "clothe_012",
-          "clothe_013", "clothe_014", "clothe_015",
+          "clothe_013", "clothe_014", "clothe_015", "none", "none", "none",
     };
 	private string[] nameHatSpecifyIndex = new string[] {
 		"Hat_0001", "Hat_0002", "Hat_0003", "Hat_0004", "Hat_0005", "Hat_0006",
 		"Hat_0007", "Hat_0008", "Hat_0009", "Hat_0010", "Hat_0011", "Hat_0012", 
 		"Hat_0013", "Hat_0014", "Hat_0015", "Hat_0016", "Hat_0017", "Hat_0018",  
-		"Hat_0019", "Hat_0020", "Hat_0021", "Hat_0022", "Hat_0023",
+		"Hat_0019", "Hat_0020", "Hat_0021", "Hat_0022", "Hat_0023", "none",
 	};
 
     public GameObject[] low0_Obj;
@@ -67,13 +67,13 @@ public class CostumeManager : MonoBehaviour {
     internal void ShowTab(TabMenuState tabMenuState)
     {
         if (tabMenuState == TabMenuState.shirt) {
-            maxPage = 2;
+            maxPage = 3;
             currentTabMenuState = tabMenuState;
             shirt_button.spriteId = shirt_button.GetSpriteIdByName("shirt_button_down");
             hat_button.spriteId = hat_button.GetSpriteIdByName("hat_button_up");
         }
         else if (tabMenuState == TabMenuState.hat) {
-            maxPage = 3;
+            maxPage = 4;
             currentTabMenuState = tabMenuState;
             shirt_button.spriteId = shirt_button.GetSpriteIdByName("shirt_button_up");
             hat_button.spriteId = hat_button.GetSpriteIdByName("hat_button_down");
@@ -115,6 +115,10 @@ public class CostumeManager : MonoBehaviour {
                 {
                     low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameClothesSpecify[i + 12]);
                 }
+                for (int j = 0; j < low1_Sprite.Length; j++)
+                {
+                    low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameClothesSpecify[j + 15]);
+                }
             }
         }
         else if (currentTabMenuState == TabMenuState.hat) {
@@ -155,10 +159,10 @@ public class CostumeManager : MonoBehaviour {
                     {
                         low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 18]);
                     }
-                    //for (int j = 0; j < low1_Sprite.Length; j++)
-                    //{
-                    //    low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 21]);
-                    //}
+                    for (int j = 0; j < low1_Sprite.Length; j++)
+                    {
+                        low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 21]);
+                    }
                     break;
                 default:
                     break;

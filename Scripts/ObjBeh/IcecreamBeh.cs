@@ -70,7 +70,7 @@ public class IcecreamBeh : GoodsBeh {
 
     #region <!-- OnInput.
 
-    protected override void OnTouchEnded()
+	protected override void OnTouchEnded()
     {
         base.OnTouchEnded();
 

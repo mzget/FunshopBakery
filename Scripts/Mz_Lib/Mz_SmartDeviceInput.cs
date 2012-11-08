@@ -6,7 +6,7 @@ public class Mz_SmartDeviceInput : MonoBehaviour {
 	/// <summary>
 	/// SmartDevice input call with Update or FixUpdate function.
 	/// </summary>
-	public static void ImplementTouchInput () {
+	public void ImplementTouchInput () {
 		if(Camera.main == null) {
 			Debug.Log("MainCamera has null");
 			return;		
@@ -36,7 +36,7 @@ public class Mz_SmartDeviceInput : MonoBehaviour {
 				}
 			}
 			
-            if(Input.GetTouch(0).phase == TouchPhase.Ended) {
+            if(touch.phase == TouchPhase.Ended) {
 				if(Physics.Raycast(cursorRay, out hit)) {
 					hit.collider.SendMessage("OnTouchEnded", SendMessageOptions.DontRequireReceiver);
 				}	
@@ -46,25 +46,45 @@ public class Mz_SmartDeviceInput : MonoBehaviour {
 		}
 	}	
     
-    public static void ImplementMouseInput () {
+	public Vector3 mousePos;
+	public Vector3 originalPos;
+	public Vector3 currentPos;   
+    public void ImplementMouseInput () {
 		if(Camera.main == null) {
 			Debug.Log("MainCamera has null");
 			return;		
 		}
 
+		mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
 		Ray cursorRay = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
-
-		if (Input.GetMouseButtonDown (0)) {
+		
+		if(Input.GetMouseButtonDown(0)) {
+			//Debug.Log("originalPos == " + originalPos);
+			originalPos = mousePos;
+			currentPos = mousePos;
 			if (Physics.Raycast (cursorRay, out hit)) {
 				hit.collider.SendMessage ("OnTouchBegan", SendMessageOptions.DontRequireReceiver);
 			}
 		}
+		
+		if(Input.GetMouseButton(0)) {
+			//Debug.Log("currentPos == " + currentPos);
+			currentPos = mousePos;
+			if(currentPos != originalPos) {
+				if(Physics.Raycast(cursorRay, out hit)) {
+					hit.collider.SendMessage("OnTouchDrag", SendMessageOptions.DontRequireReceiver);
+				}	
+			}
+		}
+		
+		if (Input.GetMouseButtonUp(0)) {
+			originalPos = Vector3.zero;
+			currentPos = Vector3.zero;
 
-		if (Input.GetMouseButton (0)) {
 			if(Physics.Raycast(cursorRay, out hit)) {
-				hit.collider.SendMessage("OnTouchDrag", SendMessageOptions.DontRequireReceiver);
-			}		
+				hit.collider.SendMessage("OnTouchEnded", SendMessageOptions.DontRequireReceiver);
+			}	
 		}
 
         //if (touch.phase == TouchPhase.Stationary) {
@@ -72,11 +92,5 @@ public class Mz_SmartDeviceInput : MonoBehaviour {
         //        hit.collider.gameObject.SendMessage("OnMouseOver", SendMessageOptions.DontRequireReceiver);
         //    }
         //}
-			
-        if(Input.GetMouseButtonUp(0)) {
-            if(Physics.Raycast(cursorRay, out hit)) {
-                hit.collider.SendMessage("OnTouchEnded", SendMessageOptions.DontRequireReceiver);
-            }	
-        }
 	}
 }

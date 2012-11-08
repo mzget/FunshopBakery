@@ -83,7 +83,7 @@ public class PlayLogoMovie : MonoBehaviour {
 #endif
 		
 #if UNITY_IPHONE || UNITY_ANDROID
-		Mz_SmartDeviceInput.ImplementTouchInput();
+//		Mz_SmartDeviceInput.ImplementTouchInput();
 		
 		if(showLanguageSelect && !introScene_Instance) {
 			introScene_Instance = Instantiate(introScene_Prefab) as GameObject;

@@ -44,7 +44,7 @@ public class JamBeh : ObjectsBeh {
 
     #region <!-- OnInput Events.
 
-    protected override void OnTouchDown()
+	protected override void OnTouchDown()
     {
         if(base.animationName_001 != "") {
             base.animatedSprite.Play(base.animationName_001);

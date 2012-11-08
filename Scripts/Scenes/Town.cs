@@ -41,17 +41,15 @@ public class Town : Mz_BaseScene {
 	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
 	Rect editShop_OKButton_rect = new Rect(10, 150, 100, 40);
 	Rect editShop_CancelButton_rect = new Rect(160, 150, 100, 40);
-	
-	
-    void Awake() {
-        ShopScene_GUIManager.CalculateViewportScreen();
-    }
+
 	
 	// Use this for initialization
 	void Start () 
 	{
 		base.InitializeAudio ();
-        Mz_ResizeScale.ResizingScale(town_bg_group.transform);
+		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
+
+		ShopScene_GUIManager.CalculateViewportScreen();
 
 		this.Initialize_OnGUIDataFields ();
         this.upgradeOutsideManager.InitializeDecorationObjects();
@@ -134,7 +132,7 @@ public class Town : Mz_BaseScene {
 		base.MovingCameraTransform();
 
 		if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
-            float speed = Time.deltaTime * 0.2f;
+			float speed = Time.fixedDeltaTime * 0.2f;
 			// Get movement of the finger since last frame   
 			Vector2 touchDeltaPosition = touch.deltaPosition;
 			// Move object across XY plane       

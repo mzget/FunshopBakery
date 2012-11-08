@@ -20,6 +20,33 @@ public class CharacterCustomization : MonoBehaviour {
         "Hat_0019", "Hat_0020", "Hat_0021", 
         "Hat_0022", "Hat_0023", "Hat_0024", 
     };
+	private Vector3[] arr_hatLocalPos = new Vector3[24] {
+		new Vector3(0, -.095f, -.4f),		
+		new Vector3(0, -.095f, -.4f),	
+		new Vector3(0, -.095f, -.4f),
+		new Vector3(0, -.095f, -.4f),	
+		new Vector3(0, -.095f, -.4f),	
+		new Vector3(0, -.095f, -.4f),   // 5.
+		new Vector3(0, -.095f, -.4f),	
+		new Vector3(0, -.095f, -.4f),	
+		new Vector3(0, -.095f, -.4f),
+		new Vector3(0.025f, -0.095f, -0.4f),	
+        //new Vector3(0.003f, -0.08f, -0.4f),	    // 10.        
+		new Vector3(0.008f, -0.095f, -0.4f),	
+		new Vector3(0.01f, -0.04f, -0.4f),
+		new Vector3(0.01f, -0.04f, -0.4f),	
+		new Vector3(0.01f, -0.04f, -0.4f),
+		new Vector3(-0.03f, -0.028f, -0.4f),
+		new Vector3(0, -0.22f, -0.4f),	        // 15.
+		new Vector3(0.002f, 0f, -0.4f),	 
+		new Vector3(-0.003f, 0f, -0.4f),
+		new Vector3(-0.003f, 0f, -0.4f),
+		new Vector3(-0.003f, 0f, -0.4f),	
+		new Vector3(0.033f, -0.04f, -0.4f),  // 20.
+		new Vector3(-0.003f, 0f, -0.4f),
+		new Vector3(-0.003f, 0f, -0.4f),
+		new Vector3(-0.003f, 0f, -0.4f),
+	};
 
     public tk2dSprite TK_clothe;
     public tk2dSprite TK_hat;
@@ -27,7 +54,14 @@ public class CharacterCustomization : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	    
+	    if(Mz_StorageManage.TK_clothe_id == 255)
+			TK_clothe.gameObject.active = false;
+		else 
+			this.ChangeClotheAtRuntime(Mz_StorageManage.TK_clothe_id);
+		if(Mz_StorageManage.TK_hat_id == 255)
+			TK_hat.gameObject.active = false;
+		else
+			this.ChangeHatAtRuntime(Mz_StorageManage.TK_hat_id);
 	}
 	
 	// Update is called once per frame
@@ -36,30 +70,40 @@ public class CharacterCustomization : MonoBehaviour {
 	}
 
     public void ChangeClotheAtRuntime(int arr_index) {
+        if (arr_index >= 15)
+        {
+            TK_clothe.gameObject.active = false;
+			Mz_StorageManage.TK_clothe_id = 255;
+            return;
+        }
+        else {
+            TK_clothe.gameObject.active = true;
+        }
+
         TK_clothe.spriteId = TK_clothe.GetSpriteIdByName(arr_clothesNameSpec[arr_index]);
+		Mz_StorageManage.TK_clothe_id = arr_index;
     }
 
     public void ChangeHatAtRuntime(int arr_index) {
+        if (arr_index == 23)
+        {
+            TK_hat.gameObject.active = false;
+			Mz_StorageManage.TK_hat_id = 255;
+            return;
+        }
+        else {
+            TK_hat.gameObject.active = true;
+        }
+
         TK_hat.spriteId = TK_hat.GetSpriteIdByName(arrHatNameSpec[arr_index]);
-		
-		if(arr_index <= 10) {
-			TK_hat.transform.localPosition = new Vector3(0, -.095f, -.4f);
-			if(arr_index == 8 || arr_index == 9 || arr_index == 10) {
-				TK_hair.gameObject.active = false;	
-			}
-			else {
-				TK_hair.gameObject.active = true;
-			}
-		}
-		else if(arr_index > 10) {
-			TK_hat.transform.localPosition = new Vector3(0.01f, -0.04f, -0.4f);
-			
-			if(arr_index == 11) {
-				TK_hair.gameObject.active = false;
-			}
-			else{
-				TK_hair.gameObject.active = true;
-			}
+		TK_hat.transform.localPosition = arr_hatLocalPos[arr_index];
+		Mz_StorageManage.TK_hat_id = arr_index;
+
+		if(arr_index == 8 || arr_index == 9 || arr_index == 10 || arr_index == 11) {
+			TK_hair.gameObject.active = false;	
+		}		
+		else {
+			TK_hair.gameObject.active = true;
 		}
     }
 }

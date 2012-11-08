@@ -108,10 +108,6 @@ public class GoodsBeh : ObjectsBeh {
 
 	#region <!-- OnInput Events.
 
-	protected override void OnTouchBegan ()
-	{
-		base.OnTouchBegan ();
-	}
 	protected override void OnTouchDown()
     {		
 		if(_canActive && _isActive == false) {

@@ -42,11 +42,7 @@ public class ObjectsBeh : Base_ObjectBeh {
         if (putObjectOnTray_Event != null)
             putObjectOnTray_Event(this, eventArgs);
     }
-	
-	
-    public static void ResetData() {
-        //_IsActive = false;
-    }	
+
 	
 	// Use this for initialization
 	protected virtual void Start () {

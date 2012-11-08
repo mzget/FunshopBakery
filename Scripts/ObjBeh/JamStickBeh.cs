@@ -50,7 +50,7 @@ public class JamStickBeh : ObjectsBeh {
 
     #region <!-- Input Events.
 
-    protected override void OnTouchEnded()
+    protected override void OnTouchEnded ()
     {
         base.OnTouchEnded();
 

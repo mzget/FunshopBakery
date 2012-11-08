@@ -4,6 +4,7 @@ using System.Collections;
 public class MainMenu : Mz_BaseScene {
 
     public GameObject cloud_Obj;
+	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject baseBuilding_Obj;
 
     public Transform mainmenu_Group;
@@ -47,22 +48,20 @@ public class MainMenu : Mz_BaseScene {
 	Rect slot_2Rect;
 	Rect slot_3Rect;
 
-
-
-    void Awake() {
-        moveDownTransform_Data.Add("position", new Vector3(0, 0, -2));
-        moveDownTransform_Data.Add("time", 1f);
-        moveDownTransform_Data.Add("easetype", iTween.EaseType.spring);
-
-        moveUpTransform_Data.Add("position", new Vector3(0, 2, -2));
-        moveUpTransform_Data.Add("time", 1f);
-        moveUpTransform_Data.Add("easetype", iTween.EaseType.linear);
-		
-		base.InitializeAudio();
-    }
+	
 
 	// Use this for initialization
 	void Start () {
+		moveDownTransform_Data.Add("position", new Vector3(0, 0, -2));
+		moveDownTransform_Data.Add("time", 1f);
+		moveDownTransform_Data.Add("easetype", iTween.EaseType.spring);
+		
+		moveUpTransform_Data.Add("position", new Vector3(0, 2, -2));
+		moveUpTransform_Data.Add("time", 1f);
+		moveUpTransform_Data.Add("easetype", iTween.EaseType.linear);
+		
+		base.InitializeAudio();
+
         Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
         ShopScene_GUIManager.CalculateViewportScreen();
@@ -80,6 +79,11 @@ public class MainMenu : Mz_BaseScene {
 		StartCoroutine(this.AutomaticSetup_QualitySetting());
 		
 		this.RecalculateOnGUI_DataFields();
+		
+		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", 0.2f, "time", 3.5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.5f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
 	
 	private IEnumerator AutomaticSetup_QualitySetting() {
@@ -292,6 +296,9 @@ public class MainMenu : Mz_BaseScene {
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AWNING_ID, 255);
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TABLE_ID, 0);
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ACCESSORY_ID, 0);
+		
+		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_CLOTHE_ID, 255);
+		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_HAT_ID, 255);
 
         Debug.Log("Store new player data complete.");		
 

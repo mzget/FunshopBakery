@@ -27,7 +27,7 @@ public class GlassBeh : GoodsBeh {
 	
     protected override void OnTouchEnded()
     {
-        base.OnTouchEnded();
+		base.OnTouchEnded();
 		
 		if(base._isDraggable)
 			_isDropObject = true;
