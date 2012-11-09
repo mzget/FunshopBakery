@@ -15,13 +15,22 @@ public class BakeryShop : Mz_BaseScene {
 	public GameObject foodsTray_obj;
 	public FoodTrayBeh foodTrayBeh;
     public GameObject calculator_group_instance;
+	public GameObject[] arr_addNotations = new GameObject[2];
+	public GameObject[] arr_equalNotations = new GameObject[3];
+	public tk2dSprite[] arr_GoodsTag = new tk2dSprite[3];
 	private Mz_CalculatorBeh calculatorBeh;
     private GameObject cash_obj;
 	private tk2dSprite cash_sprite;
     private tk2dTextMesh coin_Textmesh;
     private GameObject packaging_Obj;
     //<!-- Core data
-    public enum GamePlayState { none = 0, calculationPrice, receiveMoney, giveTheChange, TradeComplete, };
+    public enum GamePlayState { 
+		none = 0,
+		calculationPrice,
+		receiveMoney,
+		giveTheChange, 
+		TradeComplete,
+	};
     public GamePlayState currentGamePlayState;
 	public tk2dSprite shopLogo_sprite;
     public ShopScene_GUIManager gui_manager;
@@ -292,7 +301,7 @@ public class BakeryShop : Mz_BaseScene {
 		if(cupcake == null) {
 			GameObject temp_cupcake = Instantiate(Resources.Load(ObjectsBeh.Cakes_ResourcePath + CakeBeh.Cupcake, typeof(GameObject))) as GameObject;
 			temp_cupcake.transform.parent = cupcakeBase_transform;
-			temp_cupcake.transform.localPosition = new Vector3(0, -.02f, -.1f);
+			temp_cupcake.transform.localPosition = new Vector3(0, 0.13f, -.2f);
 			temp_cupcake.name = CakeBeh.Cupcake;
 			cupcake = temp_cupcake.GetComponent<CakeBeh>();
 			cupcake.destroyObj_Event += Handle_CupcakedestroyObj_Event;
@@ -459,7 +468,7 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "TunaSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
             sandwich.transform.localPosition = new Vector3(.235f, -.15f, -.1f);
-            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.tuna_sandwich.ToString();
+            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.Tuna_sandwich.ToString();
 
             tunaSandwich = sandwich.GetComponent<SandwichBeh>();
             tunaSandwich.putObjectOnTray_Event += new EventHandler(tunaSandwich_putObjectOnTray_Event);
@@ -492,7 +501,7 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "DeepFriedChickenSandwich", typeof(GameObject))) as GameObject;
 			sandwich.transform.parent = sandwichCookieTray_Transform;
 			sandwich.transform.localPosition = new Vector3(0.105f, -.16f, -.2f);
-            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.deep_fried_chicken_sandwich.ToString();
+            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.DeepFriedChicken_sandwich.ToString();
 			
 			deepFriedChickenSandwich = sandwich.GetComponent<SandwichBeh>();
 			deepFriedChickenSandwich.putObjectOnTray_Event += Handle_DeepFriedChickenSandwich_putObjectOnTray_Event;
@@ -527,7 +536,7 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "HamSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
             sandwich.transform.localPosition = new Vector3(-.015f, -.17f, -.3f);
-            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.ham_sandwich.ToString();
+            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.Ham_sandwich.ToString();
 
             hamSandwich = sandwich.GetComponent<SandwichBeh>();
             hamSandwich.putObjectOnTray_Event += Handle_HamSandwich_putObjectOnTray_Event;
@@ -562,7 +571,7 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "EggSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
             sandwich.transform.localPosition = new Vector3(-.14f, -.17f, -.4f);
-            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.egg_sandwich.ToString();
+            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.Egg_sandwich.ToString();
 
             eggSandwich = sandwich.GetComponent<SandwichBeh>();
             eggSandwich.putObjectOnTray_Event += Handle_EggSandwich_putObjectOnTray_Event;
@@ -599,7 +608,7 @@ public class BakeryShop : Mz_BaseScene {
             GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "ChocolateChip_Cookie", typeof(GameObject))) as GameObject;
             cookie.transform.parent = sandwichCookieTray_Transform;
             cookie.transform.localPosition = new Vector3(-.165f, 0.1f, -.1f);
-            cookie.gameObject.name = GoodDataStore.GoodsOrderList.chocolate_chip_cookie.ToString();
+            cookie.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_cookie.ToString();
 
             chocolateChip_cookie = cookie.GetComponent<CookieBeh>();
             chocolateChip_cookie.putObjectOnTray_Event += new EventHandler(chocolateChip_cookie_putObjectOnTray_Event);
@@ -635,7 +644,7 @@ public class BakeryShop : Mz_BaseScene {
             GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "Fruit_Cookie", typeof(GameObject))) as GameObject;
             cookie.transform.parent = sandwichCookieTray_Transform;
             cookie.transform.localPosition = new Vector3(0.02f, 0.1f, -.1f);
-            cookie.gameObject.name = GoodDataStore.GoodsOrderList.fruit_cookie.ToString();
+            cookie.gameObject.name = GoodDataStore.GoodsOrderList.Fruit_cookie.ToString();
 
             fruit_cookie = cookie.GetComponent<CookieBeh>();
             fruit_cookie.putObjectOnTray_Event += new EventHandler(Handle_FruitCookie_putObjectOnTray_Event);
@@ -672,7 +681,7 @@ public class BakeryShop : Mz_BaseScene {
             GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "Butter_Cookie", typeof(GameObject))) as GameObject;
             cookie.transform.parent = sandwichCookieTray_Transform;
             cookie.transform.localPosition = new Vector3(.2f, 0.11f, -.1f);
-            cookie.gameObject.name = GoodDataStore.GoodsOrderList.butter_cookie.ToString();
+            cookie.gameObject.name = GoodDataStore.GoodsOrderList.Butter_cookie.ToString();
 
             butter_cookie = cookie.GetComponent<CookieBeh>();
             butter_cookie.putObjectOnTray_Event += new EventHandler(butter_cookie_putObjectOnTray_Event);
@@ -767,12 +776,37 @@ public class BakeryShop : Mz_BaseScene {
 		OnNullCustomer_event(EventArgs.Empty);
     }
 
-    public void currentCustomer_manageGoodsComplete_event(object sender, System.EventArgs eventArgs) {
-        currentGamePlayState = GamePlayState.calculationPrice;
-        currentCustomer.currentCustomerBeh_State = CustomerBeh.CustomerBeh_State.none;
+    public void currentCustomer_manageGoodsComplete_event (object sender, System.EventArgs eventArgs)
+	{
+		currentGamePlayState = GamePlayState.calculationPrice;
+		currentCustomer.currentCustomerBeh_State = CustomerBeh.CustomerBeh_State.none;
 
-        this.CreateTKCalculator();
+		this.CreateTKCalculator ();
+		this.DeActiveCalculationPriceGUI();
+		this.ManageCalculationPriceGUI();
     }
+
+	void DeActiveCalculationPriceGUI ()
+	{
+		for (int i = 0; i < arr_addNotations.Length; i++) {
+			arr_addNotations[i].active = false;
+		}
+		for (int i = 0; i < arr_equalNotations.Length; i++) {
+			arr_equalNotations[i].active = false;
+			arr_GoodsTag[i].gameObject.active = false;
+		}
+	}
+
+	void ManageCalculationPriceGUI ()
+	{		
+		for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++) {
+			arr_equalNotations[i].active = true;
+			arr_GoodsTag[i].gameObject.active = true;
+			arr_GoodsTag[i].spriteId = arr_GoodsTag[i].GetSpriteIdByName(currentCustomer.customerOrderRequire[i].goods.name);
+			if(i != 0)
+				arr_addNotations[i - 1].active = true;
+		}
+	}
     
     #endregion
     
@@ -813,6 +847,7 @@ public class BakeryShop : Mz_BaseScene {
 		
 		Destroy(cash_obj.gameObject);
 		calculator_group_instance.SetActiveRecursively(true);
+		this.DeActiveCalculationPriceGUI();
 		
 		currentGamePlayState = GamePlayState.giveTheChange;
     }
@@ -839,6 +874,8 @@ public class BakeryShop : Mz_BaseScene {
 
         yield return new WaitForSeconds(2);
 
+        this.CreateGameEffect();
+
         Mz_StorageManage.AvailableMoney += currentCustomer.amount;
         coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
         coin_Textmesh.Commit();
@@ -847,6 +884,17 @@ public class BakeryShop : Mz_BaseScene {
         currentCustomer.Dispose();
         OnNullCustomer_event(EventArgs.Empty);
         Destroy(packaging_Obj);
+    }
+
+    private void CreateGameEffect()
+    {
+        GameObject effect = Instantiate(Resources.Load(ResourceManager.GameEffect_ResourcePath + "BloomStar", typeof(GameObject))) as GameObject;
+        effect.transform.parent = foodsTray_obj.transform;
+        effect.transform.localPosition = new Vector3(0, 0, -0.2f);
+        effect.GetComponent<tk2dAnimatedSprite>().animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
+        {
+            Destroy(effect);
+        };
     }
 	
 	public override void OnInput(string nameInput)
@@ -887,7 +935,7 @@ public class BakeryShop : Mz_BaseScene {
             StartCoroutine(this.ReceiveMoneyFromCustomer());
         }
         else {
-            Debug.Log("Wrong answer !. Please recalculate");
+            Debug.LogWarning("Wrong answer !. Please recalculate");
         }
     }	
 	

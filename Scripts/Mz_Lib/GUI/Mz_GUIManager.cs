@@ -6,7 +6,7 @@ public class Mz_GUIManager : MonoBehaviour {
 	public static Rect viewPort_rect;
 	public static Rect midcenterGroup_rect = new Rect(0, 0, Main.GAMEWIDTH, Main.GAMEHEIGHT);	
 	//<!--- Equation finding scale == x = screen.height/ main.fixed.
-	public static float extend_heightScale;
+	public static float extend_heightScale = 1;
 	public static void CalculateViewportScreen() {    
 		// Calculation height of screen.
 		if(Screen.height == Main.FixedGameHeight) {

@@ -35,31 +35,31 @@ public class CakeBeh : GoodsBeh {
 			base.animatedSprite.Play(CreamBeh.ChocolateCream);
 			
 			if(this.gameObject.name == Cupcake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.chocolate_cupcake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_cupcake.ToString();
 			else if(this.gameObject.name == MiniCake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.chocolate_minicake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_minicake.ToString();
 			else if(this.gameObject.name == Cake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.chocolate_cake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_cake.ToString();
 		}
 		else if(ingredientName == CreamBeh.BlueberryCream) {
 			base.animatedSprite.Play(CreamBeh.BlueberryCream);
 			
 			if(this.gameObject.name == Cupcake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.blueberry_cupcake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Blueberry_cupcake.ToString();
 			else if(this.gameObject.name == MiniCake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.blueberry_minicake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Blueberry_minicake.ToString();
 			else if(this.gameObject.name == Cake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.blueberry_cake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Blueberry_cake.ToString();
 		}
 		else if(ingredientName == CreamBeh.StrawberryCream) {
 			base.animatedSprite.Play(CreamBeh.StrawberryCream);
 			
 			if(this.gameObject.name == Cupcake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.strawberry_cupcake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Strawberry_cupcake.ToString();
 			else if(this.gameObject.name == MiniCake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.strawberry_minicake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Strawberry_minicake.ToString();
 			else if(this.gameObject.name == Cake)
-				this.gameObject.name = GoodDataStore.GoodsOrderList.strawberry_cake.ToString();
+				this.gameObject.name = GoodDataStore.GoodsOrderList.Strawberry_cake.ToString();
 		}
 		
 		base._canDragaable = true;

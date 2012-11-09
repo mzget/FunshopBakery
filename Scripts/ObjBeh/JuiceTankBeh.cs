@@ -69,7 +69,7 @@ public class JuiceTankBeh : ObjectsBeh {
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + PineappleJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
         juice_glass_instance.transform.localPosition = new Vector3(0.01f, -0.325f, 0);
-		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.pineapple_juice.ToString();
+		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.Pineapple_juice.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
@@ -80,7 +80,7 @@ public class JuiceTankBeh : ObjectsBeh {
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + AppleJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
         juice_glass_instance.transform.localPosition = new Vector3(0.01f, -0.325f, 0);
-		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.apple_juice.ToString();
+		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.Apple_juice.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
@@ -91,7 +91,7 @@ public class JuiceTankBeh : ObjectsBeh {
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + OrangeJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
         juice_glass_instance.transform.localPosition = new Vector3(0.01f, -0.325f, 0);
-		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.orange_juice.ToString();
+		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.Orange_juice.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
@@ -103,7 +103,7 @@ public class JuiceTankBeh : ObjectsBeh {
 		juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + CocoaMilk, typeof(GameObject))) as GameObject;
 		juice_glass_instance.transform.parent = this.transform;
 		juice_glass_instance.transform.localPosition = new Vector3(-0.133f, -0.177f, -.1f);
-		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.cocoa_milk.ToString();
+		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.Cocoa_milk.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
@@ -115,7 +115,7 @@ public class JuiceTankBeh : ObjectsBeh {
 		juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + FreshMilk, typeof(GameObject))) as GameObject;
 		juice_glass_instance.transform.parent = this.transform;
 		juice_glass_instance.transform.localPosition = new Vector3(-0.124f, -0.145f, -.1f);
-		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.fresh_milk.ToString();
+		juice_glass_instance.gameObject.name = GoodDataStore.GoodsOrderList.Freshmilk.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);

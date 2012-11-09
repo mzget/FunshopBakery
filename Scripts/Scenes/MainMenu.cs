@@ -49,7 +49,6 @@ public class MainMenu : Mz_BaseScene {
 	Rect slot_3Rect;
 
 	
-
 	// Use this for initialization
 	void Start () {
 		moveDownTransform_Data.Add("position", new Vector3(0, 0, -2));
@@ -74,33 +73,12 @@ public class MainMenu : Mz_BaseScene {
         loadgame_Group.gameObject.SetActiveRecursively(false);
         back_button.gameObject.active = false;
 		
-		//<!-- get name quality.
-//		qualities_list = QualitySettings.names;
-		StartCoroutine(this.AutomaticSetup_QualitySetting());
-		
 		this.RecalculateOnGUI_DataFields();
 		
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", 0.2f, "time", 3.5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.5f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
-	}
-	
-	private IEnumerator AutomaticSetup_QualitySetting() {
-#if UNITY_IPHONE
-		if(iPhone.generation == iPhoneGeneration.iPad1Gen || 
-			iPhone.generation == iPhoneGeneration.iPhone3G || 
-			iPhone.generation == iPhoneGeneration.iPhone3GS) {
-			QualitySettings.SetQualityLevel(0);	
-		}
-		else {
-			QualitySettings.SetQualityLevel(3);
-		}
-#elif UNITY_ANDROID
-        QualitySettings.SetQualityLevel(3);
-#endif
-
-		yield return null;
 	}
 
 	void RecalculateOnGUI_DataFields ()
@@ -110,9 +88,9 @@ public class MainMenu : Mz_BaseScene {
 		
 		group_width = 400 * ShopScene_GUIManager.extend_heightScale;
 		showSaveGameSlot_GroupRect = new Rect((ShopScene_GUIManager.viewPort_rect.width/2) - (group_width/2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
-		slot_1Rect = new Rect(35, 12, group_width - 60, 80);
-		slot_2Rect  = new Rect(35, 112, group_width - 60, 80);
-		slot_3Rect = new Rect(35, 212, group_width - 60, 80);
+		slot_1Rect = new Rect(32, 12, group_width - 60, 80);
+		slot_2Rect  = new Rect(32, 112, group_width - 60, 80);
+		slot_3Rect = new Rect(32, 212, group_width - 60, 80);
 		
 		if(Screen.height != Main.GAMEHEIGHT) {
 			newgame_Textfield_rect.width = newgame_Textfield_rect.width * ShopScene_GUIManager.extend_heightScale;

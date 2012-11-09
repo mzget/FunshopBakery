@@ -21,7 +21,7 @@ public class ShopScene_GUIManager : Mz_GUIManager {
     private void Initialize_OnGUIDataField()
     {
         //<!-- initialize data field.
-        textbox_DisplayOrder_rect = new Rect(midcenterGroup_rect.width / 2 - 200, 0, 400, 150);
+        textbox_DisplayOrder_rect = new Rect(midcenterGroup_rect.x + 20 * Mz_GUIManager.extend_heightScale, 220, 500 * Mz_GUIManager.extend_heightScale, 400);
 
         trademark_Rect = new Rect(viewPort_rect.width - (350 * ShopScene_GUIManager.extend_heightScale), 0, 350 * ShopScene_GUIManager.extend_heightScale, 160);
         shopName_Rect = new Rect(140, 35, 180 * ShopScene_GUIManager.extend_heightScale, 35);
@@ -64,32 +64,32 @@ public class ShopScene_GUIManager : Mz_GUIManager {
 	}
 
     Rect textbox_DisplayOrder_rect;
-    Rect showPriceEquation_rect = new Rect(10, 25, 380, 30);
+    Rect showPriceEquation_rect = new Rect(280 * Mz_GUIManager.extend_heightScale, 150, 170 * Mz_GUIManager.extend_heightScale, 60);
     private void DrawCalculationPrice()
     {
-        GUI.BeginGroup(textbox_DisplayOrder_rect, "Calculation Price.", GUI.skin.window);
+        GUI.BeginGroup(textbox_DisplayOrder_rect, "Calculation Price.");
         {
             string[] goodsTypes = new string[3];
             int[] goodsPrice = new int[3];
             int[] amountGoods = new int[3];
             for (int i = 0; i < bakeryShop_scene.currentCustomer.customerOrderRequire.Count; i++) {
-                goodsTypes[i] = bakeryShop_scene.currentCustomer.customerOrderRequire[i].goods.name;
+//                goodsTypes[i] = bakeryShop_scene.currentCustomer.customerOrderRequire[i].goods.name;
                 goodsPrice[i] = bakeryShop_scene.currentCustomer.customerOrderRequire[i].goods.price;
-                amountGoods[i] = bakeryShop_scene.currentCustomer.customerOrderRequire[i].number;
+//                amountGoods[i] = bakeryShop_scene.currentCustomer.customerOrderRequire[i].number;
                 
-                GUI.Box(new Rect(showPriceEquation_rect.x, ((showPriceEquation_rect.height + 10) * i) + 25, showPriceEquation_rect.width, showPriceEquation_rect.height),
-                    goodsTypes[i] + " : Price : " + goodsPrice[i] + " * " + amountGoods[i]);
+                GUI.Box(new Rect(showPriceEquation_rect.x, ((showPriceEquation_rect.height + 15) * i) + 58, showPriceEquation_rect.width, showPriceEquation_rect.height), 
+					goodsPrice[i].ToString());
             }
         }
         GUI.EndGroup();
     }
 	
 	private void DrawEquationOfGiveTheChange() {
-		GUI.BeginGroup(textbox_DisplayOrder_rect, "Give the change.", GUI.skin.window);
+		GUI.BeginGroup(textbox_DisplayOrder_rect, "Give the change.");
         {
-			GUI.Box(new Rect(showPriceEquation_rect.x, 25, showPriceEquation_rect.width, showPriceEquation_rect.height), "Total : " + bakeryShop_scene.currentCustomer.amount);
-			GUI.Box(new Rect(showPriceEquation_rect.x, (25 + 5) * 2, showPriceEquation_rect.width, showPriceEquation_rect.height), "Receive : " + bakeryShop_scene.currentCustomer.payMoney);
-			GUI.Box(new Rect(showPriceEquation_rect.x, (25 + 5) * 3, showPriceEquation_rect.width, showPriceEquation_rect.height), "Give the change = ?");
+			GUI.Box(new Rect(showPriceEquation_rect.x, 58, showPriceEquation_rect.width, showPriceEquation_rect.height), "Total : " + bakeryShop_scene.currentCustomer.amount);
+			GUI.Box(new Rect(showPriceEquation_rect.x, (58 + 15) * 2, showPriceEquation_rect.width, showPriceEquation_rect.height), "Receive : " + bakeryShop_scene.currentCustomer.payMoney);
+			GUI.Box(new Rect(showPriceEquation_rect.x, (58 + 15) * 3, showPriceEquation_rect.width, showPriceEquation_rect.height), "Give the change = ?");
         }
         GUI.EndGroup();
 	}

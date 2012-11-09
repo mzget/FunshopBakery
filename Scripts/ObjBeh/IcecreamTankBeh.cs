@@ -41,7 +41,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 					icecream_Instance = Instantiate(Resources.Load(ObjectsBeh.Icecream_ResourcePath + "StrawberryIcecream", typeof(GameObject))) as GameObject;
 					icecream_Instance.transform.parent = this.transform;
 					icecream_Instance.transform.localPosition = icecreamPos_0;
-					icecream_Instance.gameObject.name = GoodDataStore.GoodsOrderList.strawberry_icecream.ToString();
+					icecream_Instance.gameObject.name = GoodDataStore.GoodsOrderList.Strawberry_icecream.ToString();
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
@@ -50,7 +50,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 					icecream_Instance = Instantiate(Resources.Load(ObjectsBeh.Icecream_ResourcePath + "VanillaIcecream", typeof(GameObject))) as GameObject;
 					icecream_Instance.transform.parent = this.transform;
 					icecream_Instance.transform.localPosition = icecreamPos_1;
-					icecream_Instance.gameObject.name = GoodDataStore.GoodsOrderList.vanlla_icecream.ToString();
+					icecream_Instance.gameObject.name = GoodDataStore.GoodsOrderList.Vanilla_icecream.ToString();
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
@@ -59,7 +59,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 					icecream_Instance = Instantiate(Resources.Load(ObjectsBeh.Icecream_ResourcePath + "ChocolateIcecream", typeof(GameObject))) as GameObject;
 					icecream_Instance.transform.parent = this.transform;
 					icecream_Instance.transform.localPosition = icecreamPos_2;
-					icecream_Instance.gameObject.name = GoodDataStore.GoodsOrderList.chocolate_icecream.ToString();
+					icecream_Instance.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_icecream.ToString();
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
