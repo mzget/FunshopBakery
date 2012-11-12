@@ -34,8 +34,7 @@ public class Mz_CalculatorBeh: MonoBehaviour
 	private bool _isMinus = false; 
 	private bool _isEnter = false;
 
-    public GameObject display_Textmesh;
-	private tk2dTextMesh result_Textmesh;
+	public tk2dTextMesh result_Textmesh;
 	
     private float keyValue;
 	
@@ -48,7 +47,6 @@ public class Mz_CalculatorBeh: MonoBehaviour
         //calc.transform.parent = middleCenter;
         //calc.transform.localPosition = Vector3.zero;
 		
-		StartCoroutine(FindingResultTextmesh());
 //		Mz_ResizeScale.CalculationScale(calc.transform);
 		
 		//<!-- Store Audio Ebj.
@@ -65,13 +63,6 @@ public class Mz_CalculatorBeh: MonoBehaviour
     {
 		
     }
-	
-	private IEnumerator FindingResultTextmesh()
-	{	
-		result_Textmesh = display_Textmesh.GetComponent<tk2dTextMesh> () as tk2dTextMesh;
-		
-		yield return null;
-	}
 
     void ReDrawResult()
     {

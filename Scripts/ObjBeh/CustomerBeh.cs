@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public class CustomerBeh : MonoBehaviour {
 	
 	private BakeryShop sceneManager;	
-	public enum CustomerBeh_State { none = 1, ordering = 0, }
-	public CustomerBeh_State currentCustomerBeh_State;
 
     public string[] animationClip_name = new string[] {
         "boy_001", "boy_002", "boy_003", "boy_004",
@@ -16,10 +14,12 @@ public class CustomerBeh : MonoBehaviour {
     tk2dAnimatedSprite animatedSprite;
 
     public GameObject customerSprite_Obj;
+	public GameObject customerOrderingIcon_Obj;
     public List<CustomerOrderRequire> customerOrderRequire = new List<CustomerOrderRequire>();
     public int amount = 0;
-	public int payMoney = 0;
+	public int payMoney = 0;    
 
+    private Rect textbox_DisplayOrder;
 	
 
 	
@@ -33,9 +33,7 @@ public class CustomerBeh : MonoBehaviour {
 
         yield return StartCoroutine(GenerateGoodOrder());
 
-        _enableGUI = true;
-		
-		yield return null;
+        sceneManager.GenerateOrderGUI();
 	}
 	
 	void RandomCustomerFace() {
@@ -96,8 +94,9 @@ public class CustomerBeh : MonoBehaviour {
 			manageGoodsComplete_event(this, e);
 		}
 	}
-	private void CheckGoodsObjInTray() {
-		List<CustomerOrderRequire> goods_temp = new List<CustomerOrderRequire>();
+
+	internal void CheckGoodsObjInTray() {
+		List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
 		Goods temp_goods = null;
 		int temp_counter = 0;
 		
@@ -109,17 +108,17 @@ public class CustomerBeh : MonoBehaviour {
 				}
 			}
 
-            goods_temp.Add(new CustomerOrderRequire() { 
+            list_goodsTemp.Add(new CustomerOrderRequire() { 
 				goods = temp_goods, 
 				number = temp_counter,
 			});
 
-            if (customerOrderRequire[i].number == goods_temp[i].number) {
-                Debug.Log(goods_temp[i].goods.name + " : " + goods_temp[i].number);    
+            if (customerOrderRequire[i].number == list_goodsTemp[i].number) {
+                Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);    
 				
 				temp_counter = 0;
 				
-				if(goods_temp.Count == customerOrderRequire.Count) {
+				if(list_goodsTemp.Count == customerOrderRequire.Count) {
                     OnManageGoodComplete(System.EventArgs.Empty);
 				}					
             }
@@ -131,48 +130,10 @@ public class CustomerBeh : MonoBehaviour {
 	
 	}
 
-    private bool _enableGUI = false;
-    private Rect textbox_DisplayOrder;
-	private float init_heightOfTextDisplay = 24;
-	private void OnGUI() {
-		GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height/ Main.GAMEHEIGHT, 1));
-
-        textbox_DisplayOrder = new Rect(ShopScene_GUIManager.viewPort_rect.width / 2 - (300 / 2), 0, 300, 200);
-
-        if(_enableGUI) 
-        {		
-            //GUI.BeginGroup(new Rect(((Screen.width / 2) - (GUI_manager.midcenterGroup_rect.width / 2)), 0, GUI_manager.midcenterGroup_rect.width, Main.FixedGameHeight));
-            GUI.BeginGroup(ShopScene_GUIManager.viewPort_rect);
-            {
-                if (currentCustomerBeh_State == CustomerBeh_State.ordering)
-                {
-                    GUI.BeginGroup(textbox_DisplayOrder, "Order", GUI.skin.window);
-                    {
-                        for (int i = 0; i < customerOrderRequire.Count; i++)
-                        {
-                            GUI.Label(new Rect(10, init_heightOfTextDisplay * (i + 1), textbox_DisplayOrder.width - 20, 24), customerOrderRequire[i].goods.name + " : " + customerOrderRequire[i].number, GUI.skin.textField);
-                        }
-
-
-                        if (GUI.Button(new Rect(textbox_DisplayOrder.width - 100, textbox_DisplayOrder.height - 50, 100, 50), "Done"))
-                        {
-                            CheckGoodsObjInTray();
-                        }
-                        else if (GUI.Button(new Rect(textbox_DisplayOrder.width - 220, textbox_DisplayOrder.height - 50, 100, 50), "Go away !"))
-                        {
-                            StartCoroutine(sceneManager.ExpelCustomer());
-                        }
-                    }
-                    GUI.EndGroup();
-                }
-            }
-			GUI.EndGroup();
-        }
-	}
-
     public void Dispose() {
         manageGoodsComplete_event -= sceneManager.currentCustomer_manageGoodsComplete_event;
-        Destroy(customerSprite_Obj.gameObject);
+        Destroy(customerSprite_Obj);
+		Destroy(customerOrderingIcon_Obj);
         Destroy(this.gameObject);
     }
 }

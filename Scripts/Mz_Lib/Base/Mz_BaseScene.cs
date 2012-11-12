@@ -162,7 +162,7 @@ public class Mz_BaseScene : MonoBehaviour {
 	}
 
     public virtual void OnInput(string nameInput) {
-//    	Debug.Log("OnInput :: " + nameInput);
+    	Debug.Log("OnInput :: " + nameInput);
     }
 
     public virtual void OnPointerOverName(string nameInput) {
