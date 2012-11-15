@@ -3,7 +3,9 @@ using System.Collections;
 
 [AddComponentMenu("Mz_ScriptLib/GUI/Mz_GuiButtonBeh")]
 public class Mz_GuiButtonBeh : Base_ObjectBeh {
-
+	
+	public bool enablePlayAudio = true;
+	
 	private Mz_BaseScene gameController;
     private Vector3 originalScale;
 		
@@ -45,14 +47,12 @@ public class Mz_GuiButtonBeh : Base_ObjectBeh {
 
         iTween.ShakeScale(this.gameObject, new Vector3(0.1f, 0.1f, 0), 0.3f);
 	}
-	protected override void OnTouchDrag ()
-	{
-		base.OnTouchDrag ();
-	}
 	protected override void OnTouchDown ()
 	{
         gameController.OnInput(this.gameObject.name);
-        gameController.audioEffect.PlayOnecSound(gameController.audioEffect.buttonDown_Clip);
+		
+		if(this.enablePlayAudio)
+			gameController.audioEffect.PlayOnecSound(gameController.audioEffect.buttonDown_Clip);
 		
 		base.OnTouchDown ();
 	}

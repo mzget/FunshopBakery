@@ -21,8 +21,7 @@ public class CharacterAnimationManager : MonoBehaviour {
         lefthand_active,
         lefthand_good1,
         //<!-- right hand.
-        righthand_sad,
-        righthand_good,
+        righthand,
 	};
 
     double timer;
@@ -57,4 +56,8 @@ public class CharacterAnimationManager : MonoBehaviour {
     public void PlayLeftHandAnimation(NameAnimationsList nameAnimated) {
         lefthand_anim.Play(nameAnimated.ToString());
     }
+
+	public void PlayRightHandAnimation(CharacterAnimationManager.NameAnimationsList nameAnimated) {
+		righthand_anim.Play(nameAnimated.ToString());
+	}
 }

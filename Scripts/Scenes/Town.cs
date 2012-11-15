@@ -2,9 +2,13 @@ using UnityEngine;
 using System.Collections;
 
 public class Town : Mz_BaseScene {
-	
+	//<!-- Dont destroy obj.
+    private GameObject bankBeh_obj;
+
+
 	public GameObject town_bg_group;
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
+    public GameObject flyingBird_group;
 	public GameObject shop_body_sprite;
     public GameObject sheepBank_body_Obj;
     public tk2dAnimatedSprite bakeryShopDoorOpen_animated;
@@ -47,9 +51,15 @@ public class Town : Mz_BaseScene {
 	void Start () 
 	{
 		base.InitializeAudio ();
-		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
+
+ 		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
 
 		ShopScene_GUIManager.CalculateViewportScreen();
+
+        //StartCoroutine(InitializeBankBeh());
 
 		this.Initialize_OnGUIDataFields ();
         this.upgradeOutsideManager.InitializeDecorationObjects();
@@ -61,10 +71,24 @@ public class Town : Mz_BaseScene {
 		else
 			StartCoroutine(this.UnActiveDecorationBar());
 
+        iTween.MoveTo(flyingBird_group, iTween.Hash("x", 5f, "time", 20f, "easetype", iTween.EaseType.easeInOutSine, "looptype", iTween.LoopType.loop));
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", -.1f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", -.1f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+	}
+
+	private IEnumerator InitializeBankBeh ()
+	{		
+		bankBeh_obj = GameObject.Find("BankBeh");
+
+		if (bankBeh_obj == null) {
+			bankBeh_obj = new GameObject ("BankBeh", typeof(BankBeh));
+		}
+		/// Add event. Get interest from bank.
+		BankBeh.GiveInterest_event += base.Handle_GiveInterest_event;
+
+		yield return 0;
 	}
 
 	void Initialize_OnGUIDataFields () {

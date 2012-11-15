@@ -3,20 +3,25 @@ using System.Collections;
 
 public class AudioEffectManager : MonoBehaviour {
 	
-	public AudioSource alternativeEffect_source;
+    public AudioSource alternativeEffect_source;
 	
     public AudioClip buttonDown_Clip;
 	public AudioClip buttonUp_Clip;
 	public AudioClip buttonHover_Clip;
 	public AudioClip correct_Clip;
 	public AudioClip wrong_Clip;
+	public AudioClip tick_Clip;
+    //<!-- Bakery scene.
+    public AudioClip dingdong_clip;
+    public AudioClip receiptCash_clip;
+	public AudioClip giveTheChange_clip;
+	public AudioClip longBring_clip;
+	public AudioClip mutter_clip;
 	
 	
 	void Awake() {
-		GameObject source = Instantiate(new GameObject()) as GameObject;
-		source.name = "alternativeEffect";
+		GameObject source = new GameObject("alternativeEffect", typeof(AudioSource));
 		source.transform.parent = this.gameObject.transform;
-		source.gameObject.AddComponent<AudioSource>();
 		
 		if(alternativeEffect_source == null)
 			alternativeEffect_source = source.gameObject.GetComponent<AudioSource>();
@@ -39,6 +44,6 @@ public class AudioEffectManager : MonoBehaviour {
 	}
 	
 	public void PlayOnecWithOutStop(AudioClip sound) {
-        this.audio.PlayOneShot(sound);
+        this.alternativeEffect_source.PlayOneShot(sound);
 	}
 }

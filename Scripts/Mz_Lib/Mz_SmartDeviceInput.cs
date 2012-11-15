@@ -29,17 +29,19 @@ public class Mz_SmartDeviceInput : MonoBehaviour {
 					hit.collider.gameObject.SendMessage("OnMouseOver", SendMessageOptions.DontRequireReceiver);
 				}
 			}
-
-			if(touch.phase == TouchPhase.Moved) {
-				if(Physics.Raycast(cursorRay, out hit)) {
-					hit.collider.SendMessage("OnTouchDrag", SendMessageOptions.DontRequireReceiver);
-				}
-			}
 			
             if(touch.phase == TouchPhase.Ended) {
 				if(Physics.Raycast(cursorRay, out hit)) {
 					hit.collider.SendMessage("OnTouchEnded", SendMessageOptions.DontRequireReceiver);
 				}	
+
+				return;
+			}
+			
+			if(touch.phase == TouchPhase.Moved) {
+				if(Physics.Raycast(cursorRay, out hit)) {
+					hit.collider.SendMessage("OnTouchDrag", SendMessageOptions.DontRequireReceiver);
+				}
 			}
         
             Debug.DrawRay(cursorRay.origin, cursorRay.direction, Color.red);

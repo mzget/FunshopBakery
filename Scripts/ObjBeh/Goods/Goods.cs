@@ -5,24 +5,27 @@ using System.Collections;
 public class Goods {
 
     public BakeryShop sceneManager;
-
     private Goods instance;
 	public string name;
 	public int price;
 	
-	public Goods() {
-		Debug.Log("Starting Goods");
+	public Goods ()
+	{
+		Debug.Log ("Starting Goods");
 
         sceneManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BakeryShop>();        
 
-        if(sceneManager.CanSellGoodLists.Count != 0) {
-            int r = Random.Range(0, sceneManager.CanSellGoodLists.Count);
-            instance = sceneManager.CanSellGoodLists[r];
+		if (sceneManager.currentCustomer.list_goodsBag.Count > 0) {
+			int r = Random.Range(0, sceneManager.currentCustomer.list_goodsBag.Count);
+
+			instance = sceneManager.currentCustomer.list_goodsBag[r];
 			this.name = instance.name;
-			this.price = instance.price;
-        }
+			this.price = instance.price;	
+
+			sceneManager.currentCustomer.list_goodsBag.Remove(instance);	
+		}
         else {
-            Debug.LogWarning("CanSellGoodLists.Count == 0");
+			Debug.LogWarning("CustomerInstance.arr_goodsBag.Length == 0");
         }
 	}
 	

@@ -7,7 +7,7 @@ public class FoodTrayBeh : ScriptableObject {
 	public List<GoodsBeh> goodsOnTray_List = new List<GoodsBeh>();	
 	
 	// Use this for initialization
-	public FoodTrayBeh() {
+	public void OnEnable() {
 		Debug.Log("Starting : FoodTrayBeh");
 	}
 }

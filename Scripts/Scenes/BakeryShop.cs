@@ -145,12 +145,12 @@ public class BakeryShop : Mz_BaseScene {
 //		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
 
 		StartCoroutine(this.ChangeShopLogoIcon());
-
+		///<!-- Souse Tank 
 		appleTank_Obj.SetActiveRecursively(false);
 		orangeTank_Obj.SetActiveRecursively(false);
 		cocoaMilkTank_Obj.SetActiveRecursively(false);
 		freshMilkTank_Obj.SetActiveRecursively(false);
-
+		///<!-- Manage Jam Instance.
 		blueberryJam_instance.SetActiveRecursively(false);
 		freshButterJam_instance.SetActiveRecursively(false);
 		custardJam_instance.SetActiveRecursively(false);
@@ -770,6 +770,8 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject customer = Instantiate(Resources.Load("Customers/CustomerBeh_obj", typeof(GameObject))) as GameObject;
             currentCustomer = customer.GetComponent<CustomerBeh>();
             currentCustomer.manageGoodsComplete_event += new System.EventHandler(currentCustomer_manageGoodsComplete_event);
+
+            audioEffect.PlayOnecSound(audioEffect.dingdong_clip);
         }
 		
         if(currentCustomer.customerSprite_Obj == null) {
@@ -787,11 +789,14 @@ public class BakeryShop : Mz_BaseScene {
     }
 
     private IEnumerator ExpelCustomer() {
-		yield return new WaitForEndOfFrame();	
-		
+        yield return new WaitForSeconds(1f);
+
 	    if(currentCustomer != null) {
 	        currentCustomer.Dispose();
+            Destroy(currentCustomer.gameObject);
 	    }
+		
+		yield return new WaitForFixedUpdate();	
 		
 		OnNullCustomer_event(EventArgs.Empty);
     }
@@ -799,18 +804,25 @@ public class BakeryShop : Mz_BaseScene {
     public void currentCustomer_manageGoodsComplete_event (object sender, System.EventArgs eventArgs)
 	{
 		currentGamePlayState = GamePlayState.calculationPrice;
+
         currentCustomer.customerOrderingIcon_Obj.active = false;
 
-		this.CreateTKCalculator();
-        this.ShowReceiptGUIForm();
-		this.DeActiveCalculationPriceGUI();
-		this.ManageCalculationPriceGUI();
+        StartCoroutine(this.ShowReceiptGUIForm());
     }
 
-    private void ShowReceiptGUIForm()
+    private IEnumerator ShowReceiptGUIForm()
     {
-        receiptGUIForm_groupObj.SetActiveRecursively(true);
-        calculatorBeh.result_Textmesh = displayAnswer_textmesh;
+		yield return new WaitForSeconds(0.5f);
+
+		darkShadowPlane.active = true;
+        
+        audioEffect.PlayOnecSound(audioEffect.receiptCash_clip);
+		
+		this.CreateTKCalculator();
+		calculatorBeh.result_Textmesh = displayAnswer_textmesh;
+		receiptGUIForm_groupObj.SetActiveRecursively(true);
+		this.DeActiveCalculationPriceGUI();
+		this.ManageCalculationPriceGUI();
     }
 
 	void DeActiveCalculationPriceGUI ()
@@ -869,7 +881,7 @@ public class BakeryShop : Mz_BaseScene {
 		                     iTween.Hash("x", .1f, "y", .1f, "delay", 1f, "time", .5f, "looptype", iTween.LoopType.pingPong));
 		
 		currentCustomer.customerOrderingIcon_Obj.active = true;
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(0.5f);
 		darkShadowPlane.active = false;
 	}
     
@@ -924,6 +936,9 @@ public class BakeryShop : Mz_BaseScene {
 	void ShowGiveTheChangeForm ()
 	{
         giveTheChangeGUIForm_groupObj.SetActiveRecursively(true);
+		darkShadowPlane.active = true;
+		
+		audioEffect.PlayOnecSound(audioEffect.giveTheChange_clip);
 
         totalPrice_textmesh.text = currentCustomer.amount.ToString();
         totalPrice_textmesh.Commit();
@@ -953,10 +968,17 @@ public class BakeryShop : Mz_BaseScene {
             packaging_Obj.transform.localPosition = new Vector3(0, .1f, -.1f);
         }
 
+		int i = UnityEngine.Random.Range(2, 5);		/// Random TK_good animation.
+		TK_animationManager.PlayEyeAnimation((CharacterAnimationManager.NameAnimationsList)i);
+		TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_good1);
+		TK_animationManager.PlayRightHandAnimation(CharacterAnimationManager.NameAnimationsList.righthand);
+
         yield return new WaitForSeconds(2);
         
+		audioEffect.PlayOnecSound(audioEffect.longBring_clip);
         StartCoroutine(this.CreateGameEffect());
-        int r = UnityEngine.Random.Range(2, 5);
+
+        int r = UnityEngine.Random.Range(2, 5);		/// Random TK_good animation.
         TK_animationManager.PlayEyeAnimation((CharacterAnimationManager.NameAnimationsList)r);
         
         Mz_StorageManage.AvailableMoney += currentCustomer.amount;
@@ -964,9 +986,8 @@ public class BakeryShop : Mz_BaseScene {
         coin_Textmesh.Commit();
 
         //<!-- Clare resource data.
-        currentCustomer.Dispose();
-        OnNullCustomer_event(EventArgs.Empty);
-        Destroy(packaging_Obj);
+		Destroy(packaging_Obj);
+		StartCoroutine(ExpelCustomer());
     }
 
     private IEnumerator CreateGameEffect()
@@ -991,23 +1012,27 @@ public class BakeryShop : Mz_BaseScene {
 				
 				Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
 				Application.LoadLevelAsync(SceneNames.LoadingScene.ToString());			
+				
+				return;
 			}
 		}
 		
 		if (calculator_group_instance.active) 
         {
-			calculatorBeh.GetInput(nameInput);
-			
 			if(currentGamePlayState == GamePlayState.calculationPrice) {
 				if(nameInput == "ok_button") {
 					this.CallCheckAnswerOfTotalPrice();
+					return;
 				}
 			}
 			else if(currentGamePlayState == GamePlayState.giveTheChange) {
 				if(nameInput == "ok_button") {
 					this.CallCheckAnswerOfGiveTheChange();
+					return;
 				}
 			}
+			
+			calculatorBeh.GetInput(nameInput);
 		}
 
 
@@ -1019,7 +1044,9 @@ public class BakeryShop : Mz_BaseScene {
 				StartCoroutine(this.CollapseOrderingGUI());
 				currentCustomer.CheckGoodsObjInTray();
                     break;
-			case "Goaway_button": StartCoroutine(this.ExpelCustomer());
+            case "Goaway_button":
+                    audioEffect.PlayOnecSound(audioEffect.mutter_clip);
+                    StartCoroutine(this.ExpelCustomer());
                     break;
 			case "OrderingIcon" : StartCoroutine(this.ShowOrderingGUI());
 					break;
@@ -1031,13 +1058,18 @@ public class BakeryShop : Mz_BaseScene {
 
     private void CallCheckAnswerOfTotalPrice() {
         if(currentCustomer.amount == calculatorBeh.GetDisplayResultTextToInt()) {
+			audioEffect.PlayOnecSound(audioEffect.correct_Clip);
+		
 			calculatorBeh.ClearCalcMechanism();
             calculator_group_instance.SetActiveRecursively(false);
             receiptGUIForm_groupObj.SetActiveRecursively(false);
+            darkShadowPlane.active = false;
 
             StartCoroutine(this.ReceiveMoneyFromCustomer());
         }
         else {
+			audioEffect.PlayOnecSound(audioEffect.wrong_Clip);
+			
             Debug.LogWarning("Wrong answer !. Please recalculate");
         }
     }	
@@ -1048,12 +1080,17 @@ public class BakeryShop : Mz_BaseScene {
 			calculatorBeh.ClearCalcMechanism();
 			calculator_group_instance.SetActiveRecursively(false);
             giveTheChangeGUIForm_groupObj.SetActiveRecursively(false);
+            darkShadowPlane.active = false;
+			
+			audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
 			
 			Debug.Log("give the change :: correct");
 
             this.TradingComplete();
 		}
-        else {
+        else {			
+			audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
+			
             Debug.Log("Wrong answer !. Please recalculate");
         }
 	}

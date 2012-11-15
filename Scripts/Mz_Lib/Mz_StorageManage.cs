@@ -14,7 +14,7 @@ public class Mz_StorageManage
     
     public static string ShopName;
     public static int AvailableMoney = 500;
-    public static int InBankMoney = 500;
+    public static int AccountBalance = 0;
 	public static int ShopLogo = 0;
 	public static string ShopLogoColor = "Blue";
 
@@ -32,6 +32,7 @@ public class Mz_StorageManage
 	public const string KEY_USERNAME = "USERNAME";
 	public const string KEY_SHOP_NAME = "SHOP_NAME";
 	public const string KEY_MONEY = "MONEY";
+	public const string KEY_ACCOUNTBALANCE = "ACCOUNTBALANCE";
 	public const string KEY_SHOP_LOGO = "SHOP_LOGO";
 	public const string KEY_SHOP_LOGO_COLOR = "SHOP_LOGO_COLOR";
 
@@ -49,6 +50,7 @@ public class Mz_StorageManage
         Mz_StorageManage.Username = PlayerPrefs.GetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_USERNAME);
         Mz_StorageManage.ShopName = PlayerPrefs.GetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_NAME);
         Mz_StorageManage.AvailableMoney = PlayerPrefs.GetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_MONEY);
+		Mz_StorageManage.AccountBalance = PlayerPrefs.GetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ACCOUNTBALANCE);
 		Mz_StorageManage.ShopLogo = PlayerPrefs.GetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_LOGO);
 		Mz_StorageManage.ShopLogoColor = PlayerPrefs.GetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_LOGO_COLOR);
 		
@@ -73,6 +75,7 @@ public class Mz_StorageManage
         PlayerPrefs.SetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_USERNAME, Mz_StorageManage.Username);
         PlayerPrefs.SetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_NAME, Mz_StorageManage.ShopName);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_MONEY, Mz_StorageManage.AvailableMoney);
+		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ACCOUNTBALANCE, Mz_StorageManage.AccountBalance);
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_LOGO, Mz_StorageManage.ShopLogo);
 		PlayerPrefs.SetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_LOGO_COLOR, Mz_StorageManage.ShopLogoColor);
 		

@@ -12,6 +12,7 @@ public class Mz_BaseScene : MonoBehaviour {
     public AudioEffectManager audioEffect;
 	public AudioDescribeManager audioDescribe;
     public GameObject audioBackground_Obj;
+    public AudioClip background_clip;
     public List<AudioClip> appreciate_Clips = new List<AudioClip>();
 	public List<AudioClip> warning_Clips = new List<AudioClip>();
 	
@@ -54,9 +55,19 @@ public class Mz_BaseScene : MonoBehaviour {
                 audioDescribe = GameObject.FindGameObjectWithTag("AudioDescribe").GetComponent<AudioDescribeManager>();
 				audioDescribe.audio.mute = !ToggleAudioActive;
         }
+        
+        /// <! Manage audio background.
+		audioBackground_Obj = GameObject.FindGameObjectWithTag("AudioBackground");
+        if (audioBackground_Obj == null)
+        {
+            audioBackground_Obj = new GameObject("AudioBackground", typeof(AudioSource));
+            audioBackground_Obj.tag = "AudioBackground";
+            audioBackground_Obj.audio.playOnAwake = true;
+            audioBackground_Obj.audio.mute = !ToggleAudioActive;
 
-        if (audioBackground_Obj == null) {
-			audioBackground_Obj = GameObject.FindGameObjectWithTag("AudioBackground");
+            DontDestroyOnLoad(audioBackground_Obj);
+        }
+        else { 
             audioBackground_Obj.audio.mute = !ToggleAudioActive;
         }
     }
@@ -80,6 +91,20 @@ public class Mz_BaseScene : MonoBehaviour {
 			Application.Quit(); 
 			return;
 		}
+	}
+	
+	/// <summary>
+	/// Handle_s the give interest_event.
+	/// </summary>
+	/// <param name='sender'>
+	/// Sender.
+	/// </param>
+	/// <param name='e'>
+	/// E.
+	/// </param>
+	protected void Handle_GiveInterest_event (object sender, System.EventArgs e)
+	{
+		
 	}
 
 	#region <!-- HasChangeTimeScale event.
@@ -166,7 +191,7 @@ public class Mz_BaseScene : MonoBehaviour {
     }
 
     public virtual void OnPointerOverName(string nameInput) {
-//    	Debug.Log("OnPointerOverName :: " + nameInput);
+    	Debug.Log("OnPointerOverName :: " + nameInput);
     }
 
     void OnApplicationQuit() {
