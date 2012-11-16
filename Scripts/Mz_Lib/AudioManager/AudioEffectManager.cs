@@ -13,6 +13,7 @@ public class AudioEffectManager : MonoBehaviour {
 	public AudioClip tick_Clip;
     //<!-- Bakery scene.
     public AudioClip dingdong_clip;
+	public AudioClip calc_clip;
     public AudioClip receiptCash_clip;
 	public AudioClip giveTheChange_clip;
 	public AudioClip longBring_clip;

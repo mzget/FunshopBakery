@@ -6,12 +6,19 @@ public class CustomerBeh : MonoBehaviour {
 	
 	private BakeryShop sceneManager;	
     private tk2dAnimatedSprite animatedSprite;
+//	public tk2dAnimatedSprite AnimatedSprite { get {return animatedSprite;}}
+	private int currentPlayAnimatedID = 0;
 
     public string[] animationClip_name = new string[] {
         "boy_001", "boy_002", "boy_003", "boy_004",
         "boy_005", "boy_006", "boy_007", "boy_008",
         "boy_009", "boy_010", "boy_011",
     };
+	public string[] arr_mutterAnimationClip_name = new string[] {
+		"boy001_mutter", "boy002_mutter", "boy003_mutter", "boy004_mutter", 
+		"boy005_mutter", "boy006_mutter", "boy007_mutter", "boy008_mutter", 
+		"boy009_mutter", "boy010_mutter", "boy011_mutter", 
+	};
 	
 	public List<Goods> list_goodsBag;		// Use for shuffle bag goods obj.
     public GameObject customerSprite_Obj;
@@ -39,11 +46,18 @@ public class CustomerBeh : MonoBehaviour {
 			animatedSprite = customerSprite_Obj.GetComponent<tk2dAnimatedSprite>();
 			
         	int r = Random.Range(0, animationClip_name.Length);
-			int id = animatedSprite.GetClipIdByName(animationClip_name[r]);
-        	animatedSprite.Play(id);
+			currentPlayAnimatedID = animatedSprite.GetClipIdByName(animationClip_name[r]);
+        	animatedSprite.Play(currentPlayAnimatedID);
 		}
 
         yield return 0;
+	}
+	
+	public void PlayRampage_animation ()
+	{
+		if (animatedSprite != null) {
+			animatedSprite.Play(arr_mutterAnimationClip_name[currentPlayAnimatedID]);			
+		}
 	}
 
     private void GenerateGoodOrder()

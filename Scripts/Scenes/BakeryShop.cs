@@ -9,8 +9,12 @@ public class BakeryShop : Mz_BaseScene {
 	
 	//<!-- in game button.
 	public GameObject close_button;
+	public GameObject billingMachine;
+    private tk2dAnimatedSprite billingAnimatedSprite;
+	private AnimationState billingMachine_animState;
 	
 	//<!-- Miscellaneous game objects.
+	
 	public BinBeh bin_behavior_obj;
 	public GameObject foodsTray_obj;
 	public FoodTrayBeh foodTrayBeh;
@@ -21,12 +25,15 @@ public class BakeryShop : Mz_BaseScene {
     public tk2dTextMesh receiveMoney_textmesh;
     public tk2dTextMesh change_textmesh;
     public tk2dTextMesh displayAnswer_textmesh;
+    public GameObject baseOrderUI_Obj;
+	public GameObject darkShadowPlane;
+	public GameObject rollingDoor_Obj;
+	private tk2dAnimatedSprite rollingDoor_animated;
+	
 	public GameObject[] arr_addNotations = new GameObject[2];
 	public GameObject[] arr_goodsLabel = new GameObject[3];
 	public tk2dSprite[] arr_GoodsTag = new tk2dSprite[3];
 	public tk2dTextMesh[] arr_GoodsPrice_textmesh = new tk2dTextMesh[3];
-    public GameObject baseOrderUI_Obj;
-	public GameObject darkShadowPlane;
     public GameObject[] arr_orderingBaseItems = new GameObject[3];
 	public tk2dSprite[] arr_orderingItems = new tk2dSprite[3];
 	private Mz_CalculatorBeh calculatorBeh;
@@ -145,6 +152,7 @@ public class BakeryShop : Mz_BaseScene {
 //		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
 
 		StartCoroutine(this.ChangeShopLogoIcon());
+		StartCoroutine(this.InitializeObjectAnimation());
 		///<!-- Souse Tank 
 		appleTank_Obj.SetActiveRecursively(false);
 		orangeTank_Obj.SetActiveRecursively(false);
@@ -173,16 +181,10 @@ public class BakeryShop : Mz_BaseScene {
 
         StartCoroutine(InitializeHotdogInstance());
 
-        yield return null;
-
         calculator_group_instance.SetActiveRecursively(false);
 
 		foodTrayBeh = new FoodTrayBeh();
         goodDataStore = new GoodDataStore();
-        // Debug can sell list.
-        InitializeCanSellGoodslist();
-		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count);
-		Debug.Log("NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
 		
 		this.gameObject.AddComponent<ShopScene_GUIManager>();
 		gui_manager = this.gameObject.GetComponent<ShopScene_GUIManager>();
@@ -192,6 +194,18 @@ public class BakeryShop : Mz_BaseScene {
         coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
         coin_Textmesh.Commit();
         
+		yield return null;
+		
+        // Debug can sell list.
+        InitializeCanSellGoodslist();
+		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count);
+		Debug.Log("NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
+		
+		rollingDoor_animated.Play("open");
+        rollingDoor_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
+            rollingDoor_Obj.SetActiveRecursively(false);
+        };
+		
         nullCustomer_event += new EventHandler(BakeryShop_nullCustomer_event);
         OnNullCustomer_event(EventArgs.Empty);
 	}
@@ -200,6 +214,17 @@ public class BakeryShop : Mz_BaseScene {
 	{
 		shopLogo_sprite.spriteId = shopLogo_sprite.GetSpriteIdByName(InitializeNewShop.shopLogo_NameSpecify[Mz_StorageManage.ShopLogo]);
 		shopLogo_sprite.color = InitializeNewShop.shopLogos_Color[Mz_StorageManage.ShopLogoColor];
+
+		yield return 0;
+	}
+
+	IEnumerator InitializeObjectAnimation ()
+	{
+        billingMachine_animState = billingMachine.animation["billingMachine_anim"];
+        billingMachine_animState.wrapMode = WrapMode.Once;
+        billingAnimatedSprite = billingMachine.GetComponent<tk2dAnimatedSprite>();
+		
+		rollingDoor_animated = rollingDoor_Obj.GetComponent<tk2dAnimatedSprite>();
 
 		yield return 0;
 	}
@@ -765,6 +790,7 @@ public class BakeryShop : Mz_BaseScene {
 
     private IEnumerator CreateCustomer() { 
 		yield return new WaitForFixedUpdate();
+		yield return new WaitForSeconds(1f);
 		
         if(currentCustomer == null) {
 			GameObject customer = Instantiate(Resources.Load("Customers/CustomerBeh_obj", typeof(GameObject))) as GameObject;
@@ -980,6 +1006,11 @@ public class BakeryShop : Mz_BaseScene {
 
         int r = UnityEngine.Random.Range(2, 5);		/// Random TK_good animation.
         TK_animationManager.PlayEyeAnimation((CharacterAnimationManager.NameAnimationsList)r);
+
+        billingAnimatedSprite.Play("Thanks");
+        billingAnimatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
+			billingAnimatedSprite.Play("Billing");
+		};
         
         Mz_StorageManage.AvailableMoney += currentCustomer.amount;
         coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
@@ -1009,9 +1040,7 @@ public class BakeryShop : Mz_BaseScene {
 		if(nameInput == close_button.name) {
 			if(Application.isLoadingLevel == false) {
                 Mz_StorageManage.Save();
-				
-				Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
-				Application.LoadLevelAsync(SceneNames.LoadingScene.ToString());			
+                this.PreparingToCloseShop();		
 				
 				return;
 			}
@@ -1042,14 +1071,20 @@ public class BakeryShop : Mz_BaseScene {
             {
 			case "OK_button": 
 				StartCoroutine(this.CollapseOrderingGUI());
-				currentCustomer.CheckGoodsObjInTray();
+//				currentCustomer.CheckGoodsObjInTray();
                     break;
             case "Goaway_button":
-                    audioEffect.PlayOnecSound(audioEffect.mutter_clip);
-                    StartCoroutine(this.ExpelCustomer());
-                    break;
+				currentCustomer.PlayRampage_animation();
+				audioEffect.PlayOnecSound(audioEffect.mutter_clip);
+				StartCoroutine(this.ExpelCustomer());
+				break;
 			case "OrderingIcon" : StartCoroutine(this.ShowOrderingGUI());
 					break;
+			case "Billing_machine": 
+				audioEffect.PlayOnecSound(audioEffect.calc_clip);
+				billingMachine.animation.Play(billingMachine_animState.name);
+				StartCoroutine(this.CheckingAnimationComplete(billingMachine.animation, billingMachine_animState.name));
+				break;
                 default:
                     break;
             }
@@ -1094,4 +1129,27 @@ public class BakeryShop : Mz_BaseScene {
             Debug.Log("Wrong answer !. Please recalculate");
         }
 	}
+
+    private IEnumerator CheckingAnimationComplete(Animation targetAnimation, string targetAnimatedName)
+    {
+        do
+        {
+            yield return null;
+        } while (targetAnimation.IsPlaying(targetAnimatedName));
+
+		Debug.LogWarning(targetAnimatedName + " finish !");
+
+        currentCustomer.CheckGoodsObjInTray();
+    }
+    
+    private void PreparingToCloseShop()
+    {
+        rollingDoor_Obj.SetActiveRecursively(true);
+        rollingDoor_animated.Play("close");
+        rollingDoor_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
+			Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
+			Application.LoadLevelAsync(SceneNames.LoadingScene.ToString());	
+		};
+				
+    }
 }
