@@ -46,6 +46,10 @@ public class SheepBank : Mz_BaseScene {
 	// Use this for initialization
 	void Start () {
         base.InitializeAudio();
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
+		
 		upgradeInsideManager = upgradeInside_window_Obj.GetComponent<UpgradeInsideManager>();
 
         this.InitializeFields();

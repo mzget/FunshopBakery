@@ -9,16 +9,6 @@ public class SandwichBeh : GoodsBeh {
 		base.Start ();
 		
 		base._canDragaable = true;
-	}
-	
-	protected override void ImplementDraggableObject ()
-	{
-		base.ImplementDraggableObject ();
-	}
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
+        base.offsetPos = Vector3.up * -0.1f;
 	}
 }

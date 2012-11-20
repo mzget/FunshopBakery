@@ -13,6 +13,7 @@ public class HotdogBeh : GoodsBeh {
         base.Start();
 		
 		base._canActive = true;
+        base.offsetPos = Vector3.up * -0.1f;
 		
 		if(_canActive) {
 			base.waitForIngredientEvent += base.Handle_waitForIngredientEvent;
@@ -55,6 +56,4 @@ public class HotdogBeh : GoodsBeh {
 			return;
 		}
     }
-	
-	// Update is called once per frame
 }

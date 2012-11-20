@@ -19,19 +19,9 @@ public class BinBeh : ObjectsBeh {
         animatedSprite.Play(animationName_001);	
 		animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
 	}
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-	}
 
 	#region <!-- On Mouse Events.
 
-	protected override void OnTouchBegan ()
-	{
-		base.OnTouchBegan ();
-	}
 	protected override void OnTouchDown ()
 	{
 		// <!--- On object active.
@@ -41,14 +31,10 @@ public class BinBeh : ObjectsBeh {
 		else if(animatedSprite && animationName_001 != string.Empty) {
 			PlayOpenAnimation();
 		}
-		
-		baseScene.audioEffect.PlayOnecSound(baseScene.audioEffect.buttonDown_Clip);
+
+        baseScene.audioEffect.PlayOnecWithOutStop(baseScene.soundEffect_clips[1]);
 
 		base.OnTouchDown ();
-	}
-	protected override void OnTouchEnded ()
-	{
-		base.OnTouchEnded ();
 	}
 
 	#endregion

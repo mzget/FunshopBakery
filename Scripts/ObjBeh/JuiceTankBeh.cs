@@ -122,18 +122,27 @@ public class JuiceTankBeh : ObjectsBeh {
 		juiceGlassBeh.destroyObj_Event += Handle_JuiceGlassBeh_destroyObj_Event;
 	}
 
-    void Handle_JuiceGlassBeh_destroyObj_Event (object sender, System.EventArgs e)
+	
+	private void PutGlassOnFoodTray(object sender, System.EventArgs e) {		
+		GoodsBeh obj = sender as GoodsBeh;
+		if (sceneManager.foodTrayBeh.goodsOnTray_List.Contains (obj) == false && sceneManager.foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			sceneManager.foodTrayBeh.goodsOnTray_List.Add (obj);
+			sceneManager.foodTrayBeh.ReCalculatatePositionOfGoods();
+
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			juice_glass_instance = null;
+			juiceGlassBeh = null;
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
+	}
+    private void Handle_JuiceGlassBeh_destroyObj_Event (object sender, System.EventArgs e)
     {
     	sceneManager.foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        sceneManager.foodTrayBeh.ReCalculatatePositionOfGoods();
     }
-	
-	private void PutGlassOnFoodTray(object sender, System.EventArgs e) {
-		Debug.Log("PutGlassOnFoodTray");
-		
-		juice_glass_instance = null;
-		juiceGlassBeh = null;
-
-        if(sceneManager.foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            sceneManager.foodTrayBeh.goodsOnTray_List.Add((GoodsBeh)sender);
-	}
 }

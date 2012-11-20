@@ -24,7 +24,7 @@ public class ObjectsBeh : Base_ObjectBeh {
     protected bool _isDropObject = false;
 	public bool _canActive = false;	
 	protected bool _isActive = false;
-    protected Vector3 originalPosition;
+    internal Vector3 originalPosition;
 
     /// <summary>
     /// destroyObj_Event.
@@ -32,15 +32,10 @@ public class ObjectsBeh : Base_ObjectBeh {
 	public event System.EventHandler destroyObj_Event;
     protected void OnDestroyObject_event(System.EventArgs e) {
         if (destroyObj_Event != null)
+        {
             destroyObj_Event(this, e);
-    }
-    /// <summary>
-    /// Put goods objects intance on food tray.
-    /// </summary>
-    public event System.EventHandler putObjectOnTray_Event;
-    protected void OnPutOnTray_event(System.EventArgs eventArgs) {
-        if (putObjectOnTray_Event != null)
-            putObjectOnTray_Event(this, eventArgs);
+            Debug.Log(destroyObj_Event + ": destroyObj_Event : " + this.name);
+        }
     }
 
 	
@@ -66,7 +61,7 @@ public class ObjectsBeh : Base_ObjectBeh {
             screenPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
 
-        this.transform.position = new Vector3(screenPoint.x, screenPoint.y, -4f);
+        this.transform.position = new Vector3(screenPoint.x, screenPoint.y, -3f);
 	}
 
 	public void animationCompleteDelegate(tk2dAnimatedSprite sprite, int clipId) {
@@ -88,10 +83,6 @@ public class ObjectsBeh : Base_ObjectBeh {
 	
 	#region <!--- On Mouse Events.
 
-	protected override void OnTouchBegan ()
-	{
-		base.OnTouchBegan ();
-	}
 	protected override void OnTouchDown ()
 	{
 		if(_canActive) {
@@ -105,13 +96,7 @@ public class ObjectsBeh : Base_ObjectBeh {
 	        }
 		}
 		
-		baseScene.audioEffect.PlayOnecSound(baseScene.audioEffect.buttonDown_Clip);
-		
 		base.OnTouchDown ();
-	}
-	protected override void OnTouchEnded ()
-	{
-		base.OnTouchEnded ();
 	}
     protected override void OnTouchDrag()
     {

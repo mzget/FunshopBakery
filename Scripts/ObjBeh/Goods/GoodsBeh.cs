@@ -4,7 +4,7 @@ using System.Collections;
 public class GoodsBeh : ObjectsBeh {
     
 	protected BakeryShop sceneManager;
-	
+    public Vector3 offsetPos;
 	
 	/// <summary>
 	/// WaitForIngredientEvent.
@@ -17,7 +17,21 @@ public class GoodsBeh : ObjectsBeh {
 	}
 	public virtual void WaitForIngredient(string ingredientName) {			
 		Debug.Log("WaitForIngredient :: " + ingredientName);
-	}	
+	}
+	
+	/// <summary>
+	/// Put goods objects intance on food tray.
+	/// </summary>
+	public event System.EventHandler putObjectOnTray_Event;
+	protected void OnPutOnTray_event (System.EventArgs eventArgs) {
+		if (putObjectOnTray_Event != null) {
+			putObjectOnTray_Event (this, eventArgs);
+			Debug.Log (putObjectOnTray_Event + " : " + this.name);
+		}
+	}
+	protected virtual void Handle_putObjectOnTray_Event (object sender, System.EventArgs e) {
+
+	}
 	
 	// Use this for initialization
 	protected override void  Start()
@@ -28,7 +42,7 @@ public class GoodsBeh : ObjectsBeh {
 		
 		base.originalPosition = this.transform.position;
     }
-	
+
 	protected override void ImplementDraggableObject ()
 	{
 		base.ImplementDraggableObject ();
@@ -53,8 +67,7 @@ public class GoodsBeh : ObjectsBeh {
 					base._canActive = false;
 					this._isWaitFotIngredient = false;
 					this.waitForIngredientEvent -= this.Handle_waitForIngredientEvent;
-					originalPosition = this.transform.position;
-					
+
                     OnPutOnTray_event(System.EventArgs.Empty);
 					
 					if(sceneManager.toasts[0] == this) {

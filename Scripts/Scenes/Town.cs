@@ -77,7 +77,8 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
-
+	
+	//<@-- Not implement.
 	private IEnumerator InitializeBankBeh ()
 	{		
 		bankBeh_obj = GameObject.Find("BankBeh");

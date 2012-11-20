@@ -61,6 +61,9 @@ public class MainMenu : Mz_BaseScene {
 		moveUpTransform_Data.Add("easetype", iTween.EaseType.linear);
 		
 		base.InitializeAudio();
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
 
         Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);

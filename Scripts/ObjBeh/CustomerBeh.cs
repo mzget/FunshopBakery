@@ -56,7 +56,12 @@ public class CustomerBeh : MonoBehaviour {
 	public void PlayRampage_animation ()
 	{
 		if (animatedSprite != null) {
-			animatedSprite.Play(arr_mutterAnimationClip_name[currentPlayAnimatedID]);			
+			animatedSprite.Play(arr_mutterAnimationClip_name[currentPlayAnimatedID]);	
+            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.audioEffect.mutter_clip);
+
+            animatedSprite.animationCompleteDelegate += new tk2dAnimatedSprite.AnimationCompleteDelegate(delegate(tk2dAnimatedSprite sprite, int id) {
+                animatedSprite.Play(currentPlayAnimatedID);
+            });
 		}
 	}
 
@@ -113,10 +118,14 @@ public class CustomerBeh : MonoBehaviour {
 	}
 
 	internal void CheckGoodsObjInTray() {
-		if(sceneManager.foodTrayBeh.goodsOnTray_List.Count == 0)
+		if(sceneManager.foodTrayBeh.goodsOnTray_List.Count == 0) {
+			sceneManager.TK_animationManager.PlayRampageAnimation();
 			return;
-		if(sceneManager.foodTrayBeh.goodsOnTray_List.Count != customerOrderRequire.Count)
+		}
+		if(sceneManager.foodTrayBeh.goodsOnTray_List.Count != customerOrderRequire.Count) {
+			sceneManager.TK_animationManager.PlayRampageAnimation();
 			return;
+		}
 		
 		List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
 		Goods temp_goods = null;

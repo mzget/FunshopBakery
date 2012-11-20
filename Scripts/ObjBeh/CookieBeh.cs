@@ -7,18 +7,13 @@ public class CookieBeh : GoodsBeh {
     protected override void Start()
     {
         base.Start();
-
+        base.offsetPos = Vector3.up * -0.05f;
+        
         base._canDragaable = true;
     }
 
     protected override void ImplementDraggableObject()
     {
         base.ImplementDraggableObject();
-    }
-	
-	// Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
     }
 }

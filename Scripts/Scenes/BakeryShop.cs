@@ -148,6 +148,10 @@ public class BakeryShop : Mz_BaseScene {
 	// Use this for initialization
 	IEnumerator Start () {
         base.InitializeAudio();
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
+		
 		darkShadowPlane.active = false;
 //		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
 
@@ -185,11 +189,11 @@ public class BakeryShop : Mz_BaseScene {
 
 		foodTrayBeh = new FoodTrayBeh();
         goodDataStore = new GoodDataStore();
-		
+		//<!-- Not important will be remove in future;
 		this.gameObject.AddComponent<ShopScene_GUIManager>();
 		gui_manager = this.gameObject.GetComponent<ShopScene_GUIManager>();
 
-        var coinObj = GameObject.Find("Coin");
+        GameObject coinObj = GameObject.Find("Coin");
         coin_Textmesh = coinObj.GetComponent<tk2dTextMesh>();
         coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
         coin_Textmesh.Commit();
@@ -202,6 +206,7 @@ public class BakeryShop : Mz_BaseScene {
 		Debug.Log("NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
 		
 		rollingDoor_animated.Play("open");
+        audioEffect.PlayOnecSound(base.soundEffect_clips[0]);
         rollingDoor_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
             rollingDoor_Obj.SetActiveRecursively(false);
         };
@@ -240,12 +245,6 @@ public class BakeryShop : Mz_BaseScene {
 		yield return StartCoroutine(CreateCakeInstance());			
 		cake.gameObject.active = false;
     }
-
-    private IEnumerator InitializeChocolateChipCookie()
-    {
-        yield return StartCoroutine(this.CreateChocolateChip_Cookie());
-        chocolateChip_cookie.gameObject.SetActiveRecursively(false);
-    }  
 
     private IEnumerator InitializeHotdogInstance()
     {
@@ -346,22 +345,30 @@ public class BakeryShop : Mz_BaseScene {
 			cupcake.putObjectOnTray_Event += Handle_CupcakeputObjectOnTray_Event;
 		}
 	}
-    void Handle_CupcakedestroyObj_Event (object sender, System.EventArgs e)
-	{
+    void Handle_CupcakedestroyObj_Event (object sender, System.EventArgs e) {
 		foodTrayBeh.goodsOnTray_List.Remove((GoodsBeh)sender);
+        foodTrayBeh.ReCalculatatePositionOfGoods();
 
 		StartCoroutine(CreateCupcakeInstance());
 	}
 	void Handle_CupcakeputObjectOnTray_Event (object sender, System.EventArgs e)
-	{
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+	{	
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		cupcake = null;
-		
-		StartCoroutine(CreateCupcakeInstance());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			cupcake = null;			
+			StartCoroutine(CreateCupcakeInstance());
+
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
 	}
 
     IEnumerator CreateMiniCakeInstance() {
@@ -374,24 +381,33 @@ public class BakeryShop : Mz_BaseScene {
 			temp_Minicake.name = CakeBeh.MiniCake;
 
 			miniCake = temp_Minicake.GetComponent<CakeBeh>();
+            miniCake.offsetPos = Vector3.up * -0.05f;
 			miniCake.destroyObj_Event += new EventHandler(miniCake_destroyObj_Event);
             miniCake.putObjectOnTray_Event += new EventHandler(miniCake_putObjectOnTray_Event);
 		}
     }
     void miniCake_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(CreateMiniCakeInstance());
     }
     void miniCake_putObjectOnTray_Event(object sender, EventArgs e) {
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		miniCake = null;
-		
-		StartCoroutine(CreateMiniCakeInstance());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			miniCake = null;			
+			StartCoroutine(CreateMiniCakeInstance());			
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
     }
 	
     IEnumerator CreateCakeInstance() {
@@ -410,18 +426,27 @@ public class BakeryShop : Mz_BaseScene {
     }
     void Cake_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(CreateCakeInstance());
     }
     void Cake_putObjectOnTray_Event(object sender, EventArgs e) {
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
-	
-		cake = null;
-		
-		StartCoroutine(CreateCakeInstance());
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
+
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+						
+			cake = null;
+			StartCoroutine(CreateCakeInstance());
+			
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
     }
 	
 	#endregion
@@ -437,8 +462,8 @@ public class BakeryShop : Mz_BaseScene {
 		    toasts[0] = temp_0.GetComponent<ToastBeh>();
 		    toasts[0].transform.parent = toastObj_transform_group;
 		    toasts[0].transform.localPosition = toast_1_pos;
-            toasts[0].destroyObj_Event += new System.EventHandler(DestroyToastEvent);
             toasts[0].putObjectOnTray_Event += new System.EventHandler(PutToastOnTrayEvent);
+            toasts[0].destroyObj_Event += new System.EventHandler(DestroyToastEvent);
         }
 		
         if(toasts[1] == null) {
@@ -446,39 +471,50 @@ public class BakeryShop : Mz_BaseScene {
 		    toasts[1] = temp_1.GetComponent<ToastBeh>();
 		    toasts[1].transform.parent = toastObj_transform_group;
 		    toasts[1].transform.localPosition = toast_2_pos;
-            toasts[1].destroyObj_Event += new System.EventHandler(DestroyToastEvent);
             toasts[1].putObjectOnTray_Event += new System.EventHandler(PutToastOnTrayEvent);
+            toasts[1].destroyObj_Event += new System.EventHandler(DestroyToastEvent);
         }
     }
 	
 	public void DestroyToastEvent(object sender, System.EventArgs e) {
         Debug.Log("DestroyToastEvent");
-			
-        StartCoroutine(CreateToastInstance());
 		
 		foodTrayBeh.goodsOnTray_List.Remove((GoodsBeh)sender);
+        foodTrayBeh.ReCalculatatePositionOfGoods();
+
+		StartCoroutine(CreateToastInstance());
 	}
 
     public void PutToastOnTrayEvent(object sender, System.EventArgs e) {
         Debug.Log("PutToastOnTrayEvent");
 
-		StartCoroutine(CreateToastInstance());
-		
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add((GoodsBeh)sender);
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
+
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			StartCoroutine(CreateToastInstance());			
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
     }
 	
 	#endregion
 	
 	#region <!-- Sandwich Obj behavior.
 
-	private IEnumerator InitializeTunaSandwichInstance()
+	IEnumerator InitializeTunaSandwichInstance()
 	{
 		yield return StartCoroutine(this.CreateTunaSandwich());
 		tunaSandwich.gameObject.SetActiveRecursively(false);
 	}
 	
-	private IEnumerator Initialize_deepFriedChickenSandwich()
+	IEnumerator Initialize_deepFriedChickenSandwich()
 	{
 		yield return StartCoroutine(this.CreateDeepFriedChickenSandwich());
 		deepFriedChickenSandwich.gameObject.SetActiveRecursively(false);
@@ -514,18 +550,27 @@ public class BakeryShop : Mz_BaseScene {
 		}
 	}
     void tunaSandwich_putObjectOnTray_Event(object sender, EventArgs e) {
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		tunaSandwich = null;
-
-        StartCoroutine(this.CreateTunaSandwich());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			tunaSandwich = null;
+			StartCoroutine(this.CreateTunaSandwich());
+			
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
     }
     void tunaSandwich_destroyObj_Event(object sender, EventArgs e) {
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);    
-		
+        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        foodTrayBeh.ReCalculatatePositionOfGoods();
+
         StartCoroutine(this.CreateTunaSandwich());
     }
 	
@@ -548,19 +593,27 @@ public class BakeryShop : Mz_BaseScene {
 	}
 	void Handle_DeepFriedChickenSandwich_putObjectOnTray_Event(object sender, EventArgs e)
 	{
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		deepFriedChickenSandwich = null;
-
-        StartCoroutine(this.CreateDeepFriedChickenSandwich());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			deepFriedChickenSandwich = null;
+			StartCoroutine(this.CreateDeepFriedChickenSandwich());			
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
 	}
 	void Handle_DeepFriedChickenSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-		
+        foodTrayBeh.ReCalculatatePositionOfGoods();
+
         StartCoroutine(this.CreateDeepFriedChickenSandwich());
 	}
 	
@@ -583,19 +636,27 @@ public class BakeryShop : Mz_BaseScene {
 	}
 	void Handle_HamSandwich_putObjectOnTray_Event (object sender, EventArgs e)
 	{
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		hamSandwich = null;
-
-        StartCoroutine(this.CreateHamSanwich());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			hamSandwich = null;
+			StartCoroutine(this.CreateHamSanwich());
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
 	}
 	void Handle_HamSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-		
+        foodTrayBeh.ReCalculatatePositionOfGoods();
+
         StartCoroutine(this.CreateHamSanwich());
 	}
 	
@@ -618,19 +679,27 @@ public class BakeryShop : Mz_BaseScene {
 	}
 	void Handle_EggSandwich_putObjectOnTray_Event (object sender, EventArgs e)
 	{
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		eggSandwich = null;
-
-        StartCoroutine(this.CreateEggSandwich());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			eggSandwich = null;
+			StartCoroutine(this.CreateEggSandwich());	
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
 	}
 	void Handle_EggSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-		
+        foodTrayBeh.ReCalculatatePositionOfGoods();
+
         StartCoroutine(this.CreateEggSandwich());
 	}
 	
@@ -639,6 +708,12 @@ public class BakeryShop : Mz_BaseScene {
     #region <!-- Cookie Object Behavior.
 
 	/// Creates the chocolate chip_ cookie.
+
+    IEnumerator InitializeChocolateChipCookie()
+    {
+        yield return StartCoroutine(this.CreateChocolateChip_Cookie());
+        chocolateChip_cookie.gameObject.SetActiveRecursively(false);
+    }  
     IEnumerator CreateChocolateChip_Cookie() {
         yield return new WaitForFixedUpdate();
 
@@ -654,17 +729,25 @@ public class BakeryShop : Mz_BaseScene {
         }
     }
     void chocolateChip_cookie_putObjectOnTray_Event(object sender, EventArgs e) {
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		chocolateChip_cookie = null;
-
-        StartCoroutine(this.CreateChocolateChip_Cookie());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+						
+			chocolateChip_cookie = null;
+			StartCoroutine(this.CreateChocolateChip_Cookie());	
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
     }
     void chocolateChip_cookie_destroyObj_Event(object sender, EventArgs e) {    
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateChocolateChip_Cookie());
     }
@@ -690,17 +773,25 @@ public class BakeryShop : Mz_BaseScene {
 		}
 	}
 	void Handle_FruitCookie_putObjectOnTray_Event(object sender, EventArgs e) {
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		fruit_cookie = null;
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
 
-        StartCoroutine(this.CreateFruitCookie());
+			fruit_cookie = null;
+			StartCoroutine(this.CreateFruitCookie());		
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
 	}
 	void Handle_FruitCookie_DestroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateFruitCookie());
 	}
@@ -726,21 +817,27 @@ public class BakeryShop : Mz_BaseScene {
             butter_cookie.destroyObj_Event += new EventHandler(butter_cookie_destroyObj_Event);
         }
     }
-    void butter_cookie_putObjectOnTray_Event(object sender, EventArgs e) {
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
-	
-		butter_cookie = null;
+    void butter_cookie_putObjectOnTray_Event(object sender, EventArgs e) 
+	{
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-        StartCoroutine(this.CreateButterCookie());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+
+			butter_cookie = null;
+			StartCoroutine(this.CreateButterCookie());	
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
     }
     void butter_cookie_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-
-        butter_cookie.putObjectOnTray_Event -= butter_cookie_putObjectOnTray_Event;
-        butter_cookie.destroyObj_Event -= butter_cookie_destroyObj_Event;
+        foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateButterCookie());
     }
@@ -765,17 +862,25 @@ public class BakeryShop : Mz_BaseScene {
         }
     }
     void hotdog_putObjectOnTray_Event(object sender, EventArgs e) {    
-        if(foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            foodTrayBeh.goodsOnTray_List.Add(sender as GoodsBeh);
-		else 
-			return;
+		GoodsBeh obj = sender as GoodsBeh;
+		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			foodTrayBeh.goodsOnTray_List.Add (obj);
+			foodTrayBeh.ReCalculatatePositionOfGoods();
 
-		hotdog = null;
-
-        StartCoroutine(this.CreateHotdog());
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+						
+			hotdog = null;
+			StartCoroutine(this.CreateHotdog());	
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+			
+			obj.transform.position = obj.originalPosition;
+		}
     }
     void hotdog_destroyObj_Event(object sender, EventArgs e) {
         foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+        foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateHotdog());
     }
@@ -901,13 +1006,13 @@ public class BakeryShop : Mz_BaseScene {
 	IEnumerator CollapseOrderingGUI ()
 	{
 		iTween.MoveTo(baseOrderUI_Obj.gameObject, 
-		              iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutSine));
+		              iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.linear));
 
-		iTween.PunchPosition(currentCustomer.customerOrderingIcon_Obj.gameObject, 
-		                     iTween.Hash("x", .1f, "y", .1f, "delay", 1f, "time", .5f, "looptype", iTween.LoopType.pingPong));
+		yield return new WaitForSeconds(0.5f);
 		
 		currentCustomer.customerOrderingIcon_Obj.active = true;
-		yield return new WaitForSeconds(0.5f);
+        iTween.PunchPosition(currentCustomer.customerOrderingIcon_Obj, 
+            iTween.Hash("x", .1f, "y", .1f, "delay", 1f, "time", .5f, "looptype", iTween.LoopType.pingPong));
 		darkShadowPlane.active = false;
 	}
     
@@ -1069,22 +1174,21 @@ public class BakeryShop : Mz_BaseScene {
         {
             switch (nameInput)
             {
-			case "OK_button": 
-				StartCoroutine(this.CollapseOrderingGUI());
-//				currentCustomer.CheckGoodsObjInTray();
+                case "OK_button":
+                    StartCoroutine(this.CollapseOrderingGUI());
+                    //				currentCustomer.CheckGoodsObjInTray();
                     break;
-            case "Goaway_button":
-				currentCustomer.PlayRampage_animation();
-				audioEffect.PlayOnecSound(audioEffect.mutter_clip);
-				StartCoroutine(this.ExpelCustomer());
-				break;
-			case "OrderingIcon" : StartCoroutine(this.ShowOrderingGUI());
-					break;
-			case "Billing_machine": 
-				audioEffect.PlayOnecSound(audioEffect.calc_clip);
-				billingMachine.animation.Play(billingMachine_animState.name);
-				StartCoroutine(this.CheckingAnimationComplete(billingMachine.animation, billingMachine_animState.name));
-				break;
+                case "Goaway_button":
+                    currentCustomer.PlayRampage_animation();
+                    StartCoroutine(this.ExpelCustomer());
+                    break;
+                case "OrderingIcon": StartCoroutine(this.ShowOrderingGUI());
+                    break;
+                case "Billing_machine":
+                    audioEffect.PlayOnecSound(audioEffect.calc_clip);
+                    billingMachine.animation.Play(billingMachine_animState.name);
+                    StartCoroutine(this.CheckingUNITYAnimationComplete(billingMachine.animation, billingMachine_animState.name));
+                    break;
                 default:
                     break;
             }
@@ -1104,6 +1208,7 @@ public class BakeryShop : Mz_BaseScene {
         }
         else {
 			audioEffect.PlayOnecSound(audioEffect.wrong_Clip);
+            calculatorBeh.ClearCalcMechanism();
 			
             Debug.LogWarning("Wrong answer !. Please recalculate");
         }
@@ -1125,12 +1230,14 @@ public class BakeryShop : Mz_BaseScene {
 		}
         else {			
 			audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
+			calculatorBeh.ClearCalcMechanism();
+            currentCustomer.PlayRampage_animation();
 			
             Debug.Log("Wrong answer !. Please recalculate");
         }
 	}
 
-    private IEnumerator CheckingAnimationComplete(Animation targetAnimation, string targetAnimatedName)
+    private IEnumerator CheckingUNITYAnimationComplete(Animation targetAnimation, string targetAnimatedName)
     {
         do
         {
@@ -1144,6 +1251,7 @@ public class BakeryShop : Mz_BaseScene {
     
     private void PreparingToCloseShop()
     {
+		audioEffect.PlayOnecWithOutStop(base.soundEffect_clips[0]);
         rollingDoor_Obj.SetActiveRecursively(true);
         rollingDoor_animated.Play("close");
         rollingDoor_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {

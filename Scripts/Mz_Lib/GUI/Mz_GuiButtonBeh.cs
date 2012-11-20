@@ -44,15 +44,15 @@ public class Mz_GuiButtonBeh : Base_ObjectBeh {
 	protected override void OnTouchBegan ()
 	{
 		base.OnTouchBegan ();
+		
+		if(this.enablePlayAudio)
+			gameController.audioEffect.PlayOnecSound(gameController.audioEffect.buttonDown_Clip);
 
         iTween.ShakeScale(this.gameObject, new Vector3(0.1f, 0.1f, 0), 0.3f);
 	}
 	protected override void OnTouchDown ()
 	{
         gameController.OnInput(this.gameObject.name);
-		
-		if(this.enablePlayAudio)
-			gameController.audioEffect.PlayOnecSound(gameController.audioEffect.buttonDown_Clip);
 		
 		base.OnTouchDown ();
 	}

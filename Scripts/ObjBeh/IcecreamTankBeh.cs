@@ -23,14 +23,6 @@ public class IcecreamTankBeh : ObjectsBeh {
 		
 		base._canDragaable = false;
 	}
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-	}
-
-    #region <!-- Input Events.
 
     protected override void OnTouchDown()
     {
@@ -45,6 +37,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
+                    icecreamBeh.destroyObj_Event += new System.EventHandler(icecreamBeh_destroyObj_Event);
 				}
 				else if(this.gameObject.name == BakeryShop.icecreamVanillaTank_name) {
 					icecream_Instance = Instantiate(Resources.Load(ObjectsBeh.Icecream_ResourcePath + "VanillaIcecream", typeof(GameObject))) as GameObject;
@@ -54,6 +47,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
+                    icecreamBeh.destroyObj_Event += new System.EventHandler(icecreamBeh_destroyObj_Event);
 				}
 				else if(this.gameObject.name == BakeryShop.icecreamChocolateTank_name) {
 					icecream_Instance = Instantiate(Resources.Load(ObjectsBeh.Icecream_ResourcePath + "ChocolateIcecream", typeof(GameObject))) as GameObject;
@@ -63,6 +57,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
+                    icecreamBeh.destroyObj_Event += new System.EventHandler(icecreamBeh_destroyObj_Event);
 				}
 			};
 		}
@@ -70,14 +65,26 @@ public class IcecreamTankBeh : ObjectsBeh {
 		base.OnTouchDown();
     }
 
-    #endregion
+	void icecreamBeh_putObjectOnTray_Event (object sender, System.EventArgs e)
+	{		
+		GoodsBeh obj = sender as GoodsBeh;
+		if (sceneManager.foodTrayBeh.goodsOnTray_List.Contains (obj) == false && sceneManager.foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			sceneManager.foodTrayBeh.goodsOnTray_List.Add (obj);			
+			sceneManager.foodTrayBeh.ReCalculatatePositionOfGoods();
 
-    void icecreamBeh_putObjectOnTray_Event(object sender, System.EventArgs e)
-	{
-		icecreamBeh = null;
-		icecream_Instance = null;
-		
-        if(sceneManager.foodTrayBeh.goodsOnTray_List.Contains(sender as GoodsBeh) == false)
-            sceneManager.foodTrayBeh.goodsOnTray_List.Add((GoodsBeh)sender);
+			//<!-- Setting original position.
+			obj.originalPosition = obj.transform.position;
+			
+			icecreamBeh = null;
+			icecream_Instance = null;
+		} else {
+			Debug.LogWarning("Goods on tray have to max capacity.");
+
+			obj.transform.position = obj.originalPosition;
+		}
 	}
+    private void icecreamBeh_destroyObj_Event(object sender, System.EventArgs e) {
+        sceneManager.foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
+		sceneManager.foodTrayBeh.ReCalculatatePositionOfGoods();
+    }
 }
