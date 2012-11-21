@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Main : MonoBehaviour {
+public class Main {
 	
 	public const float GAMEWIDTH = 1024;
     public const float GAMEHEIGHT = 768;
@@ -12,14 +12,4 @@ public class Main : MonoBehaviour {
 
 	public const float FixedGameWidth = 1024f;
 	public const float FixedGameHeight = 768f;
-	
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

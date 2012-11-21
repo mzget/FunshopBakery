@@ -8,9 +8,9 @@ public class IcecreamTankBeh : ObjectsBeh {
 	public tk2dAnimatedSprite icecreamValve;
 	private GameObject icecream_Instance;
 	private IcecreamBeh icecreamBeh;
-	private Vector3 icecreamPos_0 = new Vector3(-0.014f, -.25f, -.2f);
-	private Vector3 icecreamPos_1 = new Vector3(0, -.25f, -.2f);
-	private Vector3 icecreamPos_2 = new Vector3(-0.04f, -.25f, -.2f);
+	private Vector3 icecreamPos_0 = new Vector3(-0.014f, -.25f, -3f);
+	private Vector3 icecreamPos_1 = new Vector3(0, -.25f, -3f);
+	private Vector3 icecreamPos_2 = new Vector3(-0.04f, -.25f, -3f);
 	
 	
 	// Use this for initialization

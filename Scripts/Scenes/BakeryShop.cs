@@ -936,6 +936,7 @@ public class BakeryShop : Mz_BaseScene {
 	{
 		currentGamePlayState = GamePlayState.calculationPrice;
 
+        TK_animationManager.PlayGoodAnimation();
         currentCustomer.customerOrderingIcon_Obj.active = false;
 
         StartCoroutine(this.ShowReceiptGUIForm());
@@ -1098,19 +1099,15 @@ public class BakeryShop : Mz_BaseScene {
             packaging_Obj.transform.parent = foodsTray_obj.transform;
             packaging_Obj.transform.localPosition = new Vector3(0, .1f, -.1f);
         }
-
-		int i = UnityEngine.Random.Range(2, 5);		/// Random TK_good animation.
-		TK_animationManager.PlayEyeAnimation((CharacterAnimationManager.NameAnimationsList)i);
-		TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_good1);
-		TK_animationManager.PlayRightHandAnimation(CharacterAnimationManager.NameAnimationsList.righthand);
+		
+		TK_animationManager.RandomPlayGoodAnimation();
 
         yield return new WaitForSeconds(2);
         
 		audioEffect.PlayOnecSound(audioEffect.longBring_clip);
         StartCoroutine(this.CreateGameEffect());
 
-        int r = UnityEngine.Random.Range(2, 5);		/// Random TK_good animation.
-        TK_animationManager.PlayEyeAnimation((CharacterAnimationManager.NameAnimationsList)r);
+		TK_animationManager.RandomPlayGoodAnimation();
 
         billingAnimatedSprite.Play("Thanks");
         billingAnimatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {

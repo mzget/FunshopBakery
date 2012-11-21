@@ -8,16 +8,21 @@ public class Dressing : Mz_BaseScene {
 	public GameObject back_button_Obj;
 	public CharacterAnimationManager TK_animationManager;
     public CostumeManager costomeManager;
-	
-	
+
+    private Vector3 effect_Position = new Vector3(-0.9f, 0, 8); 
 	
 	
 	// Use this for initialization
 	void Start () {
         base.InitializeAudio();
-        Mz_ResizeScale.ResizingScale(background_transform);
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
 
-		TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.idle);
+        this.gameObject.AddComponent<GameEffectManager>();
+        effectManager = this.gameObject.GetComponent<GameEffectManager>();
+
+        Mz_ResizeScale.ResizingScale(background_transform);
 		
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0.2f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", 0.4f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
@@ -32,36 +37,48 @@ public class Dressing : Mz_BaseScene {
         switch (nameInput)
         {
             case "shirt_button":
-                TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.talk);
-                TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_active);
+                TK_animationManager.PlayTalkingAnimation();
                 costomeManager.ShowTab(CostumeManager.TabMenuState.shirt);
                 break;
-            case "hat_button": 
-                TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.talk);
-                TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_active);
+            case "hat_button":
+                TK_animationManager.PlayTalkingAnimation();
                 costomeManager.ShowTab(CostumeManager.TabMenuState.hat);
                 break;
             case "Previous_button":
-                TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.good1);
-                TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_good1);
-			costomeManager.BackToPreviousPage();
+                costomeManager.BackToPreviousPage();
                 break;
             case "Next_button":
-                TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.good1);
-                TK_animationManager.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_good1);
-			costomeManager.GotoNextPage();
+                costomeManager.GotoNextPage();
                 break;
             case "Low0_1": costomeManager.HaveChooseClotheCommand(nameInput);
+                TK_animationManager.PlayGoodAnimation();
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low0_2": costomeManager.HaveChooseClotheCommand(nameInput);
+                TK_animationManager.PlayGoodAnimation();
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low0_3": costomeManager.HaveChooseClotheCommand(nameInput);
+                TK_animationManager.PlayGoodAnimation();
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_1": costomeManager.HaveChooseClotheCommand(nameInput);
+                TK_animationManager.PlayGoodAnimation();
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_2": costomeManager.HaveChooseClotheCommand(nameInput);
+                TK_animationManager.PlayGoodAnimation();
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_3": costomeManager.HaveChooseClotheCommand(nameInput);
+                TK_animationManager.PlayGoodAnimation();
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             default:
                 break;
@@ -74,11 +91,5 @@ public class Dressing : Mz_BaseScene {
 			}
 		}
 
-	}
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
 	}
 }

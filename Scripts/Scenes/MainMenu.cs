@@ -7,23 +7,20 @@ public class MainMenu : Mz_BaseScene {
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject baseBuilding_Obj;
     public GameObject flyingBird_group;
-
+    public CharacterAnimationManager characterAnimationManager;
     public Transform mainmenu_Group;
     public Transform newgame_Group;
     public Transform initializeNewGame_Group;
 	InitializeNewShop initializeNewShop;
+    
     public Transform loadgame_Group;
     public GameObject back_button;
     //<!--- Main menu group.
     public GameObject createNewShop_button;
     public GameObject loadShop_button;
-    //<!--- Newgame && Loadgame.
 
     private Hashtable moveDownTransform_Data = new Hashtable();
     private Hashtable moveUpTransform_Data = new Hashtable();
-
-	//<!-- Quality setting.
-//	string[] qualities_list;
     
     public GUISkin mainmenu_Skin;
     public enum SceneState { none = 0, showOption, showNewGame, showNewShop, showLoadGame, };
@@ -216,17 +213,23 @@ public class MainMenu : Mz_BaseScene {
             Debug.LogWarning("Username == null");
 	        _isNullUsernameNotification = true;
             _isDuplicateUsername = false;
+
+            this.characterAnimationManager.PlayRampageAnimation();
 	    }
         else if (username == player_1 || username == player_2 || username == player_3) {
             Debug.LogWarning("Duplicate Username");
 	        _isDuplicateUsername = true;
             _isNullUsernameNotification = false;
             username = string.Empty;
+
+            this.characterAnimationManager.PlayRampageAnimation();
 	    }
         else
         {
             _isDuplicateUsername = false;
             _isNullUsernameNotification = false;
+
+            this.characterAnimationManager.PlayGoodAnimation();
 
             this.EnterUsername();
 	    }
@@ -406,10 +409,12 @@ public class MainMenu : Mz_BaseScene {
             if (nameInput == createNewShop_button.name) {
                 //<!-- SceneState.showNewShop -->
                 StartCoroutine(ShowCreateNewShop());
+				this.characterAnimationManager.PlayGoodAnimation();
             }
             else if (nameInput == loadShop_button.name)  {
                 //<!-- SceneState.showLoadGame -->
                 StartCoroutine(ShowLoadShop());
+                this.characterAnimationManager.RandomPlayGoodAnimation();
             }
         }
         else if(newgame_Group.gameObject.active) {
@@ -433,14 +438,17 @@ public class MainMenu : Mz_BaseScene {
             }
             else if(nameInput == "OK_button") {
 				if(shopName != "") {
+                    this.characterAnimationManager.RandomPlayGoodAnimation();
                 	this.SaveNewPlayer();
 				}
             }
 			else if(nameInput == "Previous_button") {
 				initializeNewShop.HavePreviousCommand();
+                this.characterAnimationManager.RandomPlayGoodAnimation();
 			}
 			else if(nameInput == "Next_button") {
 				initializeNewShop.HaveNextCommand();
+                this.characterAnimationManager.RandomPlayGoodAnimation();
 			}
 			else if(nameInput == "Blue") {
 				initializeNewShop.HaveChangeLogoColor("Blue");

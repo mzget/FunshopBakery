@@ -26,6 +26,16 @@ public class CustomerBeh : MonoBehaviour {
     public List<CustomerOrderRequire> customerOrderRequire = new List<CustomerOrderRequire>();
     public int amount = 0;
 	public int payMoney = 0;
+    
+    /// <summary>
+    /// Manage goods complete Event handle.
+    /// </summary>
+    public event System.EventHandler manageGoodsComplete_event;
+	private void OnManageGoodComplete(System.EventArgs e) {
+		if(manageGoodsComplete_event != null) {
+			manageGoodsComplete_event(this, e);
+		}
+	}
 
 	
 	// Use this for initialization
@@ -106,24 +116,16 @@ public class CustomerBeh : MonoBehaviour {
 
         Debug.Log("CalculationPrice => amount : " + amount);
     }
-    
-    /// <summary>
-    /// Manage goods complete Event handle.
-    /// </summary>
-    public event System.EventHandler manageGoodsComplete_event;
-	private void OnManageGoodComplete(System.EventArgs e) {
-		if(manageGoodsComplete_event != null) {
-			manageGoodsComplete_event(this, e);
-		}
-	}
 
 	internal void CheckGoodsObjInTray() {
 		if(sceneManager.foodTrayBeh.goodsOnTray_List.Count == 0) {
 			sceneManager.TK_animationManager.PlayRampageAnimation();
+            this.PlayRampage_animation();
 			return;
 		}
 		if(sceneManager.foodTrayBeh.goodsOnTray_List.Count != customerOrderRequire.Count) {
 			sceneManager.TK_animationManager.PlayRampageAnimation();
+            this.PlayRampage_animation();
 			return;
 		}
 		

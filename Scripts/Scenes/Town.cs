@@ -5,7 +5,6 @@ public class Town : Mz_BaseScene {
 	//<!-- Dont destroy obj.
     private GameObject bankBeh_obj;
 
-
 	public GameObject town_bg_group;
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject flyingBird_group;
@@ -15,6 +14,7 @@ public class Town : Mz_BaseScene {
     public tk2dAnimatedSprite sheepBank_door_animated;
 	public GameObject GUIMidcenter_anchor;
 	public UpgradeOutsideManager upgradeOutsideManager;
+    public CharacterAnimationManager characterAnimatedManage;
 	
 	//<!--- Game button.
 //	public GameObject dressing_button_Obj;
@@ -23,10 +23,6 @@ public class Town : Mz_BaseScene {
 //	public GameObject back_button_obj;
     //<!-- Texture2d resources.
     public Texture2D tk_coin_img;
-	public Texture2D dress_img;
-	public Texture2D trophy_img;
-	public Texture2D info_img;
-	public Texture2D backIcon_img;
 
 	public enum OnGUIState { none = 0, DrawEditShopname, };
 	public OnGUIState currentGUIState;
@@ -34,12 +30,6 @@ public class Town : Mz_BaseScene {
 	Rect drawPlayerName_rect;
 	Rect drawShopName_rect;
 	Rect drawPlayerMoney_rect;
-	
-	Rect topRight_Anchor_GroupRect ;
-	Rect drawDress_ButtonRect; 
-	Rect drawTrophy_ButtonRect;
-	Rect drawInfo_ButtonRect;
-	Rect drawBack_ButtonRect;
 
 	string username = "";
 	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
@@ -97,20 +87,6 @@ public class Town : Mz_BaseScene {
 		drawPlayerName_rect  = new Rect(0, 20, 200 * ShopScene_GUIManager.extend_heightScale, 40);
 		drawShopName_rect  = new Rect(0, 65, 200 * ShopScene_GUIManager.extend_heightScale, 40);
 		drawPlayerMoney_rect = new Rect(0, 110, 200 * ShopScene_GUIManager.extend_heightScale, 40);
-		
-		topRight_Anchor_GroupRect = new Rect(Screen.width - 400, 0, 400 * ShopScene_GUIManager.extend_heightScale, 200);
-		drawDress_ButtonRect = new Rect(10, 20, 80 * ShopScene_GUIManager.extend_heightScale, 80);
-		drawTrophy_ButtonRect = new Rect(100, 20, 80 * ShopScene_GUIManager.extend_heightScale, 80);
-		drawInfo_ButtonRect = new Rect(190, 20, 80 * ShopScene_GUIManager.extend_heightScale, 80);
-		drawBack_ButtonRect = new Rect(280, 20, 80 * ShopScene_GUIManager.extend_heightScale, 80);
-
-		if (Screen.height != Main.GAMEHEIGHT) {
-			topRight_Anchor_GroupRect.x = Screen.width - (400 * ShopScene_GUIManager.extend_heightScale);
-			drawDress_ButtonRect.x = drawDress_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
-			drawTrophy_ButtonRect.x = drawTrophy_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
-			drawInfo_ButtonRect.x = drawInfo_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
-			drawBack_ButtonRect.x = drawBack_ButtonRect.x * ShopScene_GUIManager.extend_heightScale;
-		}
 	}
 
 	#region <!-- Decoration upgrade bar.
@@ -192,38 +168,6 @@ public class Town : Mz_BaseScene {
         }
         GUI.EndGroup();      
 		
-		/// topRight_Anchor_GroupRect
-		GUI.BeginGroup(topRight_Anchor_GroupRect, "TopRight anchor.", GUI.skin.window);
-		{
-			if(GUI.Button(drawDress_ButtonRect, new GUIContent(dress_img))) {
-				if (Application.isLoadingLevel == false) {
-	                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
-	                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-            	}
-			}
-			else if(GUI.Button(drawTrophy_ButtonRect, new GUIContent(trophy_img))) {
-				
-			}
-			else if(GUI.Button(drawInfo_ButtonRect, new GUIContent(info_img))) {
-
-			}
-			else if(GUI.Button(drawBack_ButtonRect, new GUIContent(backIcon_img))) {
-				if(Application.isLoadingLevel == false) {
-                    Mz_StorageManage.Save();
-					//<!-- Clear static NumberOfCanSellItem.
-					BakeryShop.NumberOfCansellItem.Clear();
-					
-	                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
-	                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-	            }
-			}
-
-			if(GUI.Button(new Rect(10, 130, 100,40), "decoration")) {
-				StartCoroutine(this.ActiveDecorationBar());
-			}
-		}
-		GUI.EndGroup();
-		
 		/// OnGUIState.DrawEditShopname.
 		if(currentGUIState == OnGUIState.DrawEditShopname)
 			this.DrawEditShopnameWindow();
@@ -261,29 +205,35 @@ public class Town : Mz_BaseScene {
 
 	public override void OnInput (string nameInput)
 	{
-		if (nameInput == shop_body_sprite.gameObject.name) {
-				this.PlayBakeryShopOpenAnimation ();
-				return;
-		}
-//        else if (nameInput == back_button_obj.name) {
-//            if(Application.isLoadingLevel == false) {
-//				//<!-- Clear static NumberOfCanSellItem.
-//				BakeryShop.NumberOfCansellItem.Clear();
-//				
-//				
-//                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
-//                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-//            }
-//        }
-//        else if (nameInput == dressing_button_Obj.name) {
-//            if (Application.isLoadingLevel == false) {
-//                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
-//                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-//            }
-//        }
-		if (nameInput == sheepBank_body_Obj.name) {
-				this.PlaySheepBankOpenAnimation ();
-				return;
+		switch (nameInput) {
+		case "Shop_body" : this.PlayBakeryShopOpenAnimation ();
+			break;
+		case "SheepBank_body" : this.PlaySheepBankOpenAnimation ();
+			break;
+		case "Back_button" :  
+			if(Application.isLoadingLevel == false) {
+                Mz_StorageManage.Save();
+				//<!-- Clear static NumberOfCanSellItem.
+				BakeryShop.NumberOfCansellItem.Clear();
+				
+                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
+                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+            }
+			break;
+		case "Dress_button" : 
+			if (Application.isLoadingLevel == false) {
+                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
+                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+			}
+			break;
+        case "Info_button":
+            this.characterAnimatedManage.RandomPlayGoodAnimation();
+            StartCoroutine(ActiveDecorationBar());
+			break;
+		case "Trophy_button" : 
+			break;
+		default:
+			break;
 		}
 
 		if (GUIMidcenter_anchor.active) {

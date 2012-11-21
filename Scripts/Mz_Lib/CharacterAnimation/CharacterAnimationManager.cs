@@ -41,11 +41,23 @@ public class CharacterAnimationManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         timer += Time.deltaTime;
-        if (timer >= 2) {
+        if (timer >= 3) {
             timer = 0;
 
             PlayEyeAnimation(NameAnimationsList.idle);
         }
+	}
+
+    private void PlayLeftHandAnimation(NameAnimationsList nameAnimated) {
+        lefthand_anim.Play(nameAnimated.ToString());
+    }
+
+	private void PlayRightHandAnimation(CharacterAnimationManager.NameAnimationsList nameAnimated) {
+		righthand_anim.Play(nameAnimated.ToString());
+	}
+
+	private void PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList nameAnimated) {
+		eye_anim.Play(nameAnimated.ToString());
 	}
 
 	public void PlayAnimationByName(NameAnimationsList nameAnimation) {
@@ -53,26 +65,33 @@ public class CharacterAnimationManager : MonoBehaviour {
 		lefthand_anim.Play(nameAnimation.ToString());
 		righthand_anim.Play(nameAnimation.ToString());
 	}
-
-	public void PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList nameAnimated) {
-		eye_anim.Play(nameAnimated.ToString());
-	}
-
-    public void PlayLeftHandAnimation(NameAnimationsList nameAnimated) {
-        lefthand_anim.Play(nameAnimated.ToString());
-    }
-
-	public void PlayRightHandAnimation(CharacterAnimationManager.NameAnimationsList nameAnimated) {
-		righthand_anim.Play(nameAnimated.ToString());
-	}
 	
 	public void PlayRampageAnimation() {
+        timer = 0;
         int r = Random.Range(8, 10);
         NameAnimationsList nameList = (NameAnimationsList)r;
         eye_anim.Play(nameList.ToString());
 	}
 	
+    public void PlayGoodAnimation() {
+        eye_anim.Play(NameAnimationsList.good1.ToString());
+        lefthand_anim.Play(NameAnimationsList.lefthand_good1.ToString());
+    }
+	
+	public void RandomPlayGoodAnimation() {
+		int i = UnityEngine.Random.Range(2, 5);		/// Random TK_good animation.
+		this.PlayEyeAnimation((CharacterAnimationManager.NameAnimationsList)i);
+		this.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_active);
+		this.PlayRightHandAnimation(CharacterAnimationManager.NameAnimationsList.righthand);
+	} 
+
 	public void PlaySad2Animation() {
         eye_anim.Play(NameAnimationsList.sad2.ToString());
 	}
+
+    internal void PlayTalkingAnimation()
+    {
+        this.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.talk);
+        this.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_active);
+    }
 }

@@ -9,6 +9,7 @@ public class Mz_BaseScene : MonoBehaviour {
 	
     //<!-- Audio Manage.
     protected static bool ToggleAudioActive = true;
+    public GameEffectManager effectManager;
     public AudioEffectManager audioEffect;
 	public AudioDescribeManager audioDescribe;
     public GameObject audioBackground_Obj;
