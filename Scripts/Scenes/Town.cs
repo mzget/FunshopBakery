@@ -77,7 +77,7 @@ public class Town : Mz_BaseScene {
 			bankBeh_obj = new GameObject ("BankBeh", typeof(BankBeh));
 		}
 		/// Add event. Get interest from bank.
-		BankBeh.GiveInterest_event += base.Handle_GiveInterest_event;
+        //BankBeh.GiveInterest_event += base.Handle_GiveInterest_event;
 
 		yield return 0;
 	}
@@ -226,7 +226,7 @@ public class Town : Mz_BaseScene {
                 Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
 			}
 			break;
-        case "Info_button":
+        case "Decoration_button":
             this.characterAnimatedManage.RandomPlayGoodAnimation();
             StartCoroutine(ActiveDecorationBar());
 			break;

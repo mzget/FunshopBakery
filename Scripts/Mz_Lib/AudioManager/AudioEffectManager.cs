@@ -34,11 +34,6 @@ public class AudioEffectManager : MonoBehaviour {
 		alternativeEffect_source.volume = 1;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-	
 	public void PlayOnecSound(AudioClip sound) {
         this.audio.Stop();
 		this.audio.PlayOneShot(sound);

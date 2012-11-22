@@ -15,8 +15,8 @@ public class Mz_BaseScene : MonoBehaviour {
     public GameObject audioBackground_Obj;
     public AudioClip background_clip;
     public List<AudioClip> soundEffect_clips = new List<AudioClip>();
-    public List<AudioClip> appreciate_Clips = new List<AudioClip>();
-	public List<AudioClip> warning_Clips = new List<AudioClip>();
+//    public List<AudioClip> appreciate_Clips = new List<AudioClip>();
+//	public List<AudioClip> warning_Clips = new List<AudioClip>();
 	
     public Touch touch;
     public Vector3 mousePos;
@@ -37,7 +37,7 @@ public class Mz_BaseScene : MonoBehaviour {
 
 	}
 	
-	protected void InitializeAudio()
+	protected virtual void InitializeAudio()
     {
 		Debug.Log("Scene :: InitializeAudio");
 
@@ -93,20 +93,6 @@ public class Mz_BaseScene : MonoBehaviour {
 			Application.Quit(); 
 			return;
 		}
-	}
-	
-	/// <summary>
-	/// Handle_s the give interest_event.
-	/// </summary>
-	/// <param name='sender'>
-	/// Sender.
-	/// </param>
-	/// <param name='e'>
-	/// E.
-	/// </param>
-	protected void Handle_GiveInterest_event (object sender, System.EventArgs e)
-	{
-		
 	}
 
 	#region <!-- HasChangeTimeScale event.
@@ -213,18 +199,20 @@ public class Mz_BaseScene : MonoBehaviour {
 #endif
     }
 
-    
+	#region <@-- Unity Log Callback.
 
-    public string output = "";
-    public string stack = "";
-    void OnEnable() {
-        Application.RegisterLogCallback(HandleLog);
-    }
-    void OnDisable() {
-        Application.RegisterLogCallback(null);
-    }
-    public void HandleLog(string logString, string stackTrace, LogType type) {
-        output = logString;
-        stack = stackTrace;
-    }
+//    public string output = "";
+//    public string stack = "";
+//    void OnEnable() {
+//        Application.RegisterLogCallback(HandleLog);
+//    }
+//    void OnDisable() {
+//        Application.RegisterLogCallback(null);
+//    }
+//    public void HandleLog(string logString, string stackTrace, LogType type) {
+//        output = logString;
+//        stack = stackTrace;
+//    }
+
+	#endregion
 }

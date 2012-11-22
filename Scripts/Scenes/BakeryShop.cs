@@ -28,7 +28,6 @@ public class BakeryShop : Mz_BaseScene {
     public GameObject baseOrderUI_Obj;
 	public GameObject darkShadowPlane;
 	public GameObject rollingDoor_Obj;
-	private tk2dAnimatedSprite rollingDoor_animated;
 	
 	public GameObject[] arr_addNotations = new GameObject[2];
 	public GameObject[] arr_goodsLabel = new GameObject[3];
@@ -146,15 +145,10 @@ public class BakeryShop : Mz_BaseScene {
 	#endregion	
 
 	// Use this for initialization
-	IEnumerator Start () {
-        base.InitializeAudio();
-        audioBackground_Obj.audio.clip = base.background_clip;
-        audioBackground_Obj.audio.loop = true;
-        audioBackground_Obj.audio.Play();
-		
+	IEnumerator Start () {		
 		darkShadowPlane.active = false;
 //		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
-
+        StartCoroutine(this.SceneInitializeAudio());
 		StartCoroutine(this.ChangeShopLogoIcon());
 		StartCoroutine(this.InitializeObjectAnimation());
 		///<!-- Souse Tank 
@@ -199,20 +193,27 @@ public class BakeryShop : Mz_BaseScene {
         coin_Textmesh.Commit();
         
 		yield return null;
-		
+
+        iTween.MoveTo(rollingDoor_Obj, iTween.Hash("position", new Vector3(0, 2.2f, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeInSine));
+        audioEffect.PlayOnecSound(base.soundEffect_clips[0]);
+
         // Debug can sell list.
         InitializeCanSellGoodslist();
 		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count);
 		Debug.Log("NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
-		
-		rollingDoor_animated.Play("open");
-        audioEffect.PlayOnecSound(base.soundEffect_clips[0]);
-        rollingDoor_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
-            rollingDoor_Obj.SetActiveRecursively(false);
-        };
-		
+				
         nullCustomer_event += new EventHandler(BakeryShop_nullCustomer_event);
         OnNullCustomer_event(EventArgs.Empty);
+	}
+   
+	private IEnumerator SceneInitializeAudio ()
+	{
+        base.InitializeAudio();
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
+
+		yield return 0;
 	}
 
 	IEnumerator ChangeShopLogoIcon ()
@@ -228,8 +229,6 @@ public class BakeryShop : Mz_BaseScene {
         billingMachine_animState = billingMachine.animation["billingMachine_anim"];
         billingMachine_animState.wrapMode = WrapMode.Once;
         billingAnimatedSprite = billingMachine.GetComponent<tk2dAnimatedSprite>();
-		
-		rollingDoor_animated = rollingDoor_Obj.GetComponent<tk2dAnimatedSprite>();
 
 		yield return 0;
 	}
@@ -1248,13 +1247,13 @@ public class BakeryShop : Mz_BaseScene {
     
     private void PreparingToCloseShop()
     {
+        iTween.MoveTo(rollingDoor_Obj, iTween.Hash("position", new Vector3(0, 0, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutSine,
+            "oncomplete", "RollingDoor_close", "oncompletetarget", this.gameObject));
 		audioEffect.PlayOnecWithOutStop(base.soundEffect_clips[0]);
-        rollingDoor_Obj.SetActiveRecursively(true);
-        rollingDoor_animated.Play("close");
-        rollingDoor_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
-			Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
-			Application.LoadLevelAsync(SceneNames.LoadingScene.ToString());	
-		};
-				
+        rollingDoor_Obj.SetActiveRecursively(true);			
+    }
+    private void RollingDoor_close() {
+        Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
+        Application.LoadLevel(SceneNames.LoadingScene.ToString());	
     }
 }

@@ -15,6 +15,7 @@ public class ObjectsBeh : Base_ObjectBeh {
 
 
 	protected Mz_BaseScene baseScene;    
+	protected BakeryShop sceneManager;
     protected tk2dAnimatedSprite animatedSprite;
 	
 	public string animationName_001;
@@ -41,9 +42,10 @@ public class ObjectsBeh : Base_ObjectBeh {
 	
 	// Use this for initialization
 	protected virtual void Start () {
-		this.originalPosition = this.transform.localPosition;
+		this.originalPosition = this.transform.position;
 		
         baseScene = GameObject.FindGameObjectWithTag("GameController").GetComponent<Mz_BaseScene>();
+        sceneManager = baseScene as BakeryShop;
 		
         try {
             animatedSprite = this.gameObject.GetComponent<tk2dAnimatedSprite>();
@@ -79,9 +81,12 @@ public class ObjectsBeh : Base_ObjectBeh {
 		if(_isDraggable) {
 			this.ImplementDraggableObject();
 		}
+		
+		if(sceneManager.touch.phase == TouchPhase.Ended || sceneManager.touch.phase == TouchPhase.Canceled) {			
+			if(this._isDraggable)
+				_isDropObject = true;
+		}
 	}
-	
-	#region <!--- On Mouse Events.
 
 	protected override void OnTouchDown ()
 	{
@@ -106,31 +111,4 @@ public class ObjectsBeh : Base_ObjectBeh {
 			this._isDraggable = true;
         }
     }
-/*	
-	public virtual void OnMouseDown() 
-	{
-//        Debug.Log(this.gameObject.name + " :: OnMouseDown");
-        		
-		//<!--- On object active.
-//        if(animation) {
-//			this.animation.Play();
-//		}
-//		else if(animatedSprite && animationName_001 != string.Empty) {
-//            animatedSprite.Play(animationName_001);
-//		
-//			animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
-//		}
-//		
-//        baseScene.audioEffect.PlayOnecSound(baseScene.audioEffect.buttonDown_Clip);
-	}	
-	
-	public virtual void OnMouseUp() {
-//        Debug.Log(this.gameObject.name + " :: OnMouseUp");
-	}
-	
-	public virtual void OnMouseExit() {
-
-	}
-*/	
-	#endregion.
 }

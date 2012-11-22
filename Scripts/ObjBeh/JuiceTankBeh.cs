@@ -34,12 +34,6 @@ public class JuiceTankBeh : ObjectsBeh {
 		
 		sceneManager = base.baseScene.GetComponent<BakeryShop>();			
     }
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-	}
 
     #region <!-- OnInput.
 

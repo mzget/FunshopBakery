@@ -3,7 +3,6 @@ using System.Collections;
 
 public class GoodsBeh : ObjectsBeh {
     
-	protected BakeryShop sceneManager;
     public Vector3 offsetPos;
 	
 	/// <summary>
@@ -33,15 +32,6 @@ public class GoodsBeh : ObjectsBeh {
 
 	}
 	
-	// Use this for initialization
-	protected override void  Start()
-    {
-        base.Start();
-		
-		sceneManager = base.baseScene.GetComponent<BakeryShop>();
-		
-		base.originalPosition = this.transform.position;
-    }
 
 	protected override void ImplementDraggableObject ()
 	{
@@ -108,17 +98,6 @@ public class GoodsBeh : ObjectsBeh {
 		}
     }
 	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-		
-		if(sceneManager.touch.phase == TouchPhase.Ended || sceneManager.touch.phase == TouchPhase.Canceled) {			
-			if(base._isDraggable)
-				_isDropObject = true;
-		}
-	}
-
 	#region <!-- OnInput Events.
 
 	protected override void OnTouchDown()

@@ -1,6 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
+[System.Serializable]	
+public class BankOfficer {
+	public const string WOMAN_IDLE = "woman_idle"; 	
+	public const string WOMAN_TALK = "woman_talk";
+	public const string MAN_TALK = "man_talk";
+	public const string MAN_IDLE = "man_idle";
+
+
+	public tk2dAnimatedSprite woman_animated;
+	public tk2dAnimatedSprite man_animated;
+};
+
 public class SheepBank : Mz_BaseScene {
 
     public GameObject background_obj;
@@ -34,7 +46,8 @@ public class SheepBank : Mz_BaseScene {
 
     public enum DrawGUIState { none = 0, ShowUpgradeInside = 1, };
     public DrawGUIState currentDrawGUIState;
-
+	public BankOfficer offecer = new BankOfficer();
+	
 	internal static bool HaveUpgradeOutSide = false;
 
     void Awake() {
@@ -45,10 +58,8 @@ public class SheepBank : Mz_BaseScene {
 
 	// Use this for initialization
 	void Start () {
-        base.InitializeAudio();
-        audioBackground_Obj.audio.clip = base.background_clip;
-        audioBackground_Obj.audio.loop = true;
-        audioBackground_Obj.audio.Play();
+		StartCoroutine(this.SceneInitializeAudio());
+		StartCoroutine(this.InitializeBankOfficer());
 		
 		upgradeInsideManager = upgradeInside_window_Obj.GetComponent<UpgradeInsideManager>();
 
@@ -56,6 +67,68 @@ public class SheepBank : Mz_BaseScene {
         //Mz_ResizeScale.ResizingScale(background_obj.transform);
 		shadowPlane_Obj.gameObject.active = false;
 	}
+
+	private IEnumerator SceneInitializeAudio ()
+	{
+		this.InitializeAudio();
+		yield return 0;
+	}
+	protected override void InitializeAudio ()
+	{
+		base.InitializeAudio ();
+		audioBackground_Obj.audio.clip = base.background_clip;
+		audioBackground_Obj.audio.loop = true;
+		audioBackground_Obj.audio.Play();
+	}
+
+	private IEnumerator InitializeBankOfficer ()
+	{		
+		offecer.woman_animated.Play(BankOfficer.WOMAN_TALK);
+		offecer.woman_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
+			offecer.woman_animated.Play(BankOfficer.WOMAN_IDLE);
+		};
+
+		offecer.man_animated.Play(BankOfficer.MAN_TALK);
+		offecer.man_animated.animationCompleteDelegate = delegate {			
+			offecer.man_animated.Play(BankOfficer.MAN_IDLE);
+		};
+
+		yield return 0;
+	}
+	private IEnumerator PlayWomanOfficerAnimation (string onCompleteFuctionName = "")
+	{
+		offecer.woman_animated.Play(BankOfficer.WOMAN_TALK);
+		offecer.woman_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
+			offecer.woman_animated.Play(BankOfficer.WOMAN_IDLE);
+		};
+
+		do{
+			yield return 0;
+		}
+		while(offecer.woman_animated.CurrentClip.name == BankOfficer.WOMAN_TALK);
+
+        if (onCompleteFuctionName != "")
+            this.SendMessage(onCompleteFuctionName, null, SendMessageOptions.RequireReceiver);
+        else
+            Debug.LogWarning("PlayWomanOfficerAnimation : " + onCompleteFuctionName);
+	}
+    private IEnumerator PlayManOfficerAnimation(string oncompleteFunctionName = "")
+    {
+		offecer.man_animated.Play(BankOfficer.MAN_TALK);
+		offecer.man_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
+			offecer.man_animated.Play(BankOfficer.MAN_IDLE);
+		};
+
+		do{
+			yield return 0;
+		}
+		while(offecer.man_animated.CurrentClip.name == BankOfficer.MAN_TALK);
+
+        if (oncompleteFunctionName != "")
+            this.SendMessage(oncompleteFunctionName, null, SendMessageOptions.RequireReceiver);
+        else
+            Debug.LogWarning("PlayManOfficerAnimation : " + oncompleteFunctionName);
+    }
 
     private void InitializeFields()
     {
@@ -126,13 +199,8 @@ public class SheepBank : Mz_BaseScene {
         
         this.AccountBalanceManager(Mz_StorageManage.AccountBalance);
 	}
-	
-	// Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();        
-    } 
     
+
     public bool _showSkinLayout;
     private void OnGUI() {
         GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
@@ -162,35 +230,23 @@ public class SheepBank : Mz_BaseScene {
     public override void OnInput (string nameInput)	
 	{        
         if (nameInput == upgradeInside_button.name) {
-			upgradeInside_window_Obj.SetActiveRecursively (true);
-			iTween.MoveTo (upgradeInside_window_Obj.gameObject, moveDown_hashdata);
+            StartCoroutine(this.PlayManOfficerAnimation("ActiveUpgradeInsideForm"));
+            return;
 		} 
 		else if (nameInput == upgradeOutside_button.name) {
-			SheepBank.HaveUpgradeOutSide = true;
-			if (Application.isLoadingLevel == false) {
-				Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString ();
-				Application.LoadLevelAsync (Mz_BaseScene.SceneNames.LoadingScene.ToString ());
-			}
-
+            StartCoroutine(PlayManOfficerAnimation("ActiveUpgradeOutside"));
 			return;
 		} 
 		else if(nameInput == deposit_button.name) {
-			depositForm_Obj.gameObject.SetActiveRecursively(true);
-			transactionForm_Obj.gameObject.SetActiveRecursively(true);
-			iTween.MoveTo(depositForm_Obj.gameObject, moveDown_Transaction_Hash);
-			iTween.MoveTo(transactionForm_Obj.gameObject, moveDown_Transaction_Hash);
-//			blurEffect_camera.enabled = true;
-			return;
+			StartCoroutine(this.PlayWomanOfficerAnimation("ActiveDepositForm"));
+            return;
 		}
 		else if(nameInput == withdrawal_button.name) {
-			withdrawalForm_Obj.gameObject.SetActiveRecursively(true);
-			transactionForm_Obj.gameObject.SetActiveRecursively(true);
-			iTween.MoveTo(withdrawalForm_Obj.gameObject, moveDown_Transaction_Hash);
-			iTween.MoveTo(transactionForm_Obj.gameObject, moveDown_Transaction_Hash);
-//			blurEffect_camera.enabled = true;
-			return;
+            StartCoroutine(this.PlayWomanOfficerAnimation("ActiveWithdrawalForm"));
+            return;
 		}
-		else if (nameInput == back_button.name) {
+		else if (nameInput == back_button.name) 
+        {
 			if (upgradeInside_window_Obj.active) {
 				iTween.MoveTo (upgradeInside_window_Obj.gameObject, moveUp_hashdata);
 				return;
@@ -258,7 +314,32 @@ public class SheepBank : Mz_BaseScene {
         }
     }
 
-	void CompleteDopositSession ()
+    
+    private void ActiveUpgradeInsideForm()
+    {
+		upgradeInside_window_Obj.SetActiveRecursively (true);
+		iTween.MoveTo (upgradeInside_window_Obj.gameObject, moveDown_hashdata);
+
+        audioEffect.PlayOnecWithOutStop(audioEffect.calc_clip);
+    }  
+    private void ActiveUpgradeOutside()
+    {
+			SheepBank.HaveUpgradeOutSide = true;
+			if (Application.isLoadingLevel == false) {
+				Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString ();
+				Application.LoadLevelAsync (Mz_BaseScene.SceneNames.LoadingScene.ToString ());
+			}
+    }
+
+    private void ActiveDepositForm() {
+        depositForm_Obj.gameObject.SetActiveRecursively(true);
+        transactionForm_Obj.gameObject.SetActiveRecursively(true);
+        iTween.MoveTo(depositForm_Obj.gameObject, moveDown_Transaction_Hash);
+        iTween.MoveTo(transactionForm_Obj.gameObject, moveDown_Transaction_Hash);
+        
+        audioEffect.PlayOnecWithOutStop(audioEffect.calc_clip);
+    }
+	private void CompleteDopositSession ()
 	{
 		resultValue = calculatorBeh.GetDisplayResultTextToInt();
         if(resultValue <= Mz_StorageManage.AvailableMoney) {
@@ -274,7 +355,15 @@ public class SheepBank : Mz_BaseScene {
 			Debug.LogWarning("result value more than available money");
         }
 	}
+
+    private void ActiveWithdrawalForm() { 
+		withdrawalForm_Obj.gameObject.SetActiveRecursively(true);
+		transactionForm_Obj.gameObject.SetActiveRecursively(true);
+		iTween.MoveTo(withdrawalForm_Obj.gameObject, moveDown_Transaction_Hash);
+		iTween.MoveTo(transactionForm_Obj.gameObject, moveDown_Transaction_Hash);
     
+        audioEffect.PlayOnecWithOutStop(audioEffect.calc_clip);
+    }
     private void CompleteWithdrawalSesion()
     {
         resultValue = calculatorBeh.GetDisplayResultTextToInt();

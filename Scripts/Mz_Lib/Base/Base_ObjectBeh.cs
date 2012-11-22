@@ -14,15 +14,9 @@ public class Base_ObjectBeh : MonoBehaviour {
 	}
 	
 	protected virtual void Update() {       
-        //Debug.Log(this.name + " : update");
-
         if (_OnTouchBegin && _OnTouchRelease) {
             OnTouchDown();
         }
-	}
-	
-	protected IEnumerator WaitForEndUpdate() {
-		yield return new WaitForFixedUpdate();
 	}
 
 	#region <!-- On Mouse Events.

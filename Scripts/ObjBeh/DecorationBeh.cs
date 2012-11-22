@@ -6,22 +6,6 @@ public class DecorationBeh : ObjectsBeh {
 	public const string Sauce = "Sauce";
 	public const string Cheese = "Cheese";
 
-	BakeryShop sceneManager;
-
-	// Use this for initialization
-	protected override void Start ()
-	{
-		base.Start ();
-		
-		this.sceneManager = base.baseScene.GetComponent<BakeryShop>();
-	}
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-	}
-
 	protected override void OnTouchDown ()
 	{
 		base.animatedSprite.Play();

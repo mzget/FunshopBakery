@@ -35,12 +35,6 @@ public class JamBeh : ObjectsBeh {
 			base.animationName_002 = "custard_active";
 		}
     }
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-	}
 
     #region <!-- OnInput Events.
 

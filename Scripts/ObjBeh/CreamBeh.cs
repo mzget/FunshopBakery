@@ -21,14 +21,6 @@ public class CreamBeh : ObjectsBeh {
 		
 		base._canDragaable = false;
 	}
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
-	}
-
-    #region <!-- OnInput.
 
 	protected override void OnTouchDown ()
 	{
@@ -47,10 +39,4 @@ public class CreamBeh : ObjectsBeh {
 
 		base.OnTouchDown ();
 	}
-	protected override void OnTouchEnded()
-    {
-        base.OnTouchEnded();
-    }
-
-    #endregion
 }
