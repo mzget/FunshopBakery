@@ -72,11 +72,6 @@ public class Mz_LoadingScreen : MonoBehaviour
 #endif	
     }
 
-    void Update()
-    {
-
-    }
-
     void OnGUI()
     {
         GUI.depth = 0;

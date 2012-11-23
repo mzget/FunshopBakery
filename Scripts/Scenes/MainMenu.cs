@@ -4,21 +4,22 @@ using System.Collections;
 public class MainMenu : Mz_BaseScene {
 
     public GameObject cloud_Obj;
-	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject baseBuilding_Obj;
+    public GameObject movingCloud_Objs;
     public GameObject flyingBird_group;
     public CharacterAnimationManager characterAnimationManager;
     public Transform mainmenu_Group;
     public Transform newgame_Group;
     public Transform initializeNewGame_Group;
-	InitializeNewShop initializeNewShop;
-    
+	private InitializeNewShop initializeNewShop;
+        
     public Transform loadgame_Group;
     public GameObject back_button;
     //<!--- Main menu group.
     public GameObject createNewShop_button;
     public GameObject loadShop_button;
-
+    private GameObject OK_button_Obj;
+ 
     private Hashtable moveDownTransform_Data = new Hashtable();
     private Hashtable moveUpTransform_Data = new Hashtable();
     
@@ -49,18 +50,17 @@ public class MainMenu : Mz_BaseScene {
 	
 	// Use this for initialization
 	void Start () {
-		moveDownTransform_Data.Add("position", new Vector3(0, 0, -2));
+		moveDownTransform_Data.Add("position", new Vector3(0.2f, 0, -2));
 		moveDownTransform_Data.Add("time", 1f);
 		moveDownTransform_Data.Add("easetype", iTween.EaseType.spring);
 		
-		moveUpTransform_Data.Add("position", new Vector3(0, 2, -2));
+		moveUpTransform_Data.Add("position", new Vector3(0.2f, 2, -2));
 		moveUpTransform_Data.Add("time", 1f);
 		moveUpTransform_Data.Add("easetype", iTween.EaseType.linear);
-		
-		base.InitializeAudio();
-        audioBackground_Obj.audio.clip = base.background_clip;
-        audioBackground_Obj.audio.loop = true;
-        audioBackground_Obj.audio.Play();
+
+        StartCoroutine(this.InitializeAudio());
+        this.gameObject.AddComponent<GameEffectManager>();
+        base.effectManager = this.gameObject.GetComponent<GameEffectManager>();
 
         Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
@@ -77,12 +77,19 @@ public class MainMenu : Mz_BaseScene {
 		this.RecalculateOnGUI_DataFields();
 		
         iTween.MoveTo(flyingBird_group, iTween.Hash("x", 1.8f, "time", 16f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.loop));
-		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
-		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", 0.2f, "time", 3.5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
-		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.5f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
-		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+        //iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+        //iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", 0.2f, "time", 3.5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+        //iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.5f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(movingCloud_Objs, iTween.Hash("x", -1f, "time", 16f, "easetype", iTween.EaseType.easeInOutSine, "looptype", iTween.LoopType.pingPong)); 
 	}
-
+    protected override IEnumerator InitializeAudio()
+    {
+        yield return StartCoroutine(base.InitializeAudio());
+        
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
+    }
 	void RecalculateOnGUI_DataFields ()
 	{
 		newgame_Textfield_rect = new Rect((ShopScene_GUIManager.viewPort_rect.width / 2) - 150, ShopScene_GUIManager.viewPort_rect.height / 2 + 58, 300, 82);
@@ -123,6 +130,9 @@ public class MainMenu : Mz_BaseScene {
             username = string.Empty;
             Mz_StorageManage.SaveSlot = 0;
         }
+        
+        if(OK_button_Obj != null && OK_button_Obj.active)
+            iTween.ShakeScale(OK_button_Obj, iTween.Hash("amount", new Vector3(.1f, 0.1f, 0), "time", 2f, "looptype", iTween.LoopType.loop));
 	}
 
 	#region <!-- OnGUI Section.
@@ -215,6 +225,7 @@ public class MainMenu : Mz_BaseScene {
             _isDuplicateUsername = false;
 
             this.characterAnimationManager.PlayRampageAnimation();
+            audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
 	    }
         else if (username == player_1 || username == player_2 || username == player_3) {
             Debug.LogWarning("Duplicate Username");
@@ -223,13 +234,16 @@ public class MainMenu : Mz_BaseScene {
             username = string.Empty;
 
             this.characterAnimationManager.PlayRampageAnimation();
+            audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
 	    }
         else
         {
             _isDuplicateUsername = false;
             _isNullUsernameNotification = false;
 
+            base.effectManager.Create2DSpriteAnimationEffect("BloomStar", OK_button_Obj.transform.position);
             this.characterAnimationManager.PlayGoodAnimation();
+            audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
 
             this.EnterUsername();
 	    }
@@ -296,7 +310,7 @@ public class MainMenu : Mz_BaseScene {
     private void LoadSceneTarget() {
         if(Application.isLoadingLevel == false) {
 			Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString();
-			Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());					
+			Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());					
 		}
     }
 
@@ -411,11 +425,15 @@ public class MainMenu : Mz_BaseScene {
                 //<!-- SceneState.showNewShop -->
                 StartCoroutine(ShowCreateNewShop());
 				this.characterAnimationManager.PlayGoodAnimation();
+
+                return;
             }
-            else if (nameInput == loadShop_button.name)  {
+            else if (nameInput == loadShop_button.name) {
                 //<!-- SceneState.showLoadGame -->
                 StartCoroutine(ShowLoadShop());
                 this.characterAnimationManager.RandomPlayGoodAnimation();
+
+                return;
             }
         }
         else if(newgame_Group.gameObject.active) {
@@ -440,8 +458,13 @@ public class MainMenu : Mz_BaseScene {
             else if(nameInput == "OK_button") {
 				if(shopName != "") {
                     this.characterAnimationManager.RandomPlayGoodAnimation();
+                    audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
                 	this.SaveNewPlayer();
 				}
+                else{
+                    this.characterAnimationManager.PlayRampageAnimation();
+                    base.audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
+                }
             }
 			else if(nameInput == "Previous_button") {
 				initializeNewShop.HavePreviousCommand();
@@ -474,6 +497,7 @@ public class MainMenu : Mz_BaseScene {
         sceneState = SceneState.showNewShop;
 
         initializeNewGame_Group.gameObject.SetActiveRecursively(true);
+        OK_button_Obj = initializeNewGame_Group.transform.Find("OK_button").gameObject;        
 
         if(mainmenu_Group.gameObject.active)
             iTween.MoveTo(mainmenu_Group.gameObject, moveUpTransform_Data);
@@ -512,10 +536,12 @@ public class MainMenu : Mz_BaseScene {
         back_button.gameObject.SetActiveRecursively(false);
     }
 
-    private IEnumerator ShowCreateNewShop() {
+    private IEnumerator ShowCreateNewShop()
+    {
         iTween.MoveTo(mainmenu_Group.gameObject, moveUpTransform_Data);
         newgame_Group.gameObject.SetActiveRecursively(true);
         back_button.gameObject.SetActiveRecursively(true);
+        OK_button_Obj = newgame_Group.transform.Find("OK_button").gameObject; 
 
         yield return new WaitForSeconds(1);
 

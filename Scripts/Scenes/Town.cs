@@ -40,10 +40,7 @@ public class Town : Mz_BaseScene {
 	// Use this for initialization
 	void Start () 
 	{
-		base.InitializeAudio ();
-        audioBackground_Obj.audio.clip = base.background_clip;
-        audioBackground_Obj.audio.loop = true;
-        audioBackground_Obj.audio.Play();
+		StartCoroutine(this.InitializeAudio());
 
  		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
 
@@ -65,7 +62,15 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", -.1f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", -.1f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
-		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+	}
+	protected override IEnumerator InitializeAudio ()
+	{
+    	yield return StartCoroutine(base.InitializeAudio());
+		
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
 	}
 	
 	//<@-- Not implement.
@@ -217,13 +222,13 @@ public class Town : Mz_BaseScene {
 				BakeryShop.NumberOfCansellItem.Clear();
 				
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
-                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
             }
 			break;
 		case "Dress_button" : 
 			if (Application.isLoadingLevel == false) {
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
-                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
 			}
 			break;
         case "Decoration_button":
@@ -282,7 +287,7 @@ public class Town : Mz_BaseScene {
             if (Application.isLoadingLevel == false)
             {
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.BakeryShop.ToString();
-                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
             }
         };
     }
@@ -293,7 +298,7 @@ public class Town : Mz_BaseScene {
         {
             if(Application.isLoadingLevel == false) {
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Sheepbank.ToString();
-                Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
             }
         };
     }

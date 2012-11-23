@@ -58,7 +58,7 @@ public class SheepBank : Mz_BaseScene {
 
 	// Use this for initialization
 	void Start () {
-		StartCoroutine(this.SceneInitializeAudio());
+		StartCoroutine(this.InitializeAudio());
 		StartCoroutine(this.InitializeBankOfficer());
 		
 		upgradeInsideManager = upgradeInside_window_Obj.GetComponent<UpgradeInsideManager>();
@@ -67,19 +67,14 @@ public class SheepBank : Mz_BaseScene {
         //Mz_ResizeScale.ResizingScale(background_obj.transform);
 		shadowPlane_Obj.gameObject.active = false;
 	}
+    protected override IEnumerator InitializeAudio()
+    {
+        yield return StartCoroutine(base.InitializeAudio());
 
-	private IEnumerator SceneInitializeAudio ()
-	{
-		this.InitializeAudio();
-		yield return 0;
-	}
-	protected override void InitializeAudio ()
-	{
-		base.InitializeAudio ();
-		audioBackground_Obj.audio.clip = base.background_clip;
-		audioBackground_Obj.audio.loop = true;
-		audioBackground_Obj.audio.Play();
-	}
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
+    }
 
 	private IEnumerator InitializeBankOfficer ()
 	{		

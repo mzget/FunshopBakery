@@ -37,7 +37,7 @@ public class Mz_BaseScene : MonoBehaviour {
 
 	}
 	
-	protected virtual void InitializeAudio()
+	protected virtual IEnumerator InitializeAudio()
     {
 		Debug.Log("Scene :: InitializeAudio");
 
@@ -72,6 +72,8 @@ public class Mz_BaseScene : MonoBehaviour {
         else { 
             audioBackground_Obj.audio.mute = !ToggleAudioActive;
         }
+
+        yield return 0;
     }
 	
 	// Update is called once per frame

@@ -14,10 +14,7 @@ public class Dressing : Mz_BaseScene {
 	
 	// Use this for initialization
 	void Start () {
-        base.InitializeAudio();
-        audioBackground_Obj.audio.clip = base.background_clip;
-        audioBackground_Obj.audio.loop = true;
-        audioBackground_Obj.audio.Play();
+        StartCoroutine(this.InitializeAudio());
 
         this.gameObject.AddComponent<GameEffectManager>();
         effectManager = this.gameObject.GetComponent<GameEffectManager>();
@@ -29,6 +26,14 @@ public class Dressing : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.6f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
+    protected override IEnumerator InitializeAudio()
+    {
+        yield return StartCoroutine(base.InitializeAudio());
+        
+        audioBackground_Obj.audio.clip = base.background_clip;
+        audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.Play();
+    }
 
 	public override void OnInput (string nameInput)
 	{
