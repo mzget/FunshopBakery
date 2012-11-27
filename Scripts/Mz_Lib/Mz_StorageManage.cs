@@ -3,14 +3,13 @@ using System.Collections;
 
 public class Mz_StorageManage
 {
-    #region Standard storage game data.
-
+    /// <summary>
+    /// Standard storage game data.
+    /// </summary>
     //<!-- Save Game Slot.
     public static int SaveSlot = 0;
     //<!-- User Name.
     public static string Username = "";
-
-    #endregion
     
     public static string ShopName;
     public static int AvailableMoney = 500;
@@ -43,6 +42,14 @@ public class Mz_StorageManage
 
     public const string KEY_TK_CLOTHE_ID = "CLOTHE_ID";
     public const string KEY_TK_HAT_ID = "HAT_ID";
+    /// <summary>
+    /// Donation key involve.
+    /// </summary>
+    public const string KEY_CONSERVATION_ANIMAL_LV = "CONSERVATION_ANIMAL_LV";
+    public const string KEY_AIDSFOUNDATION_LV = "AIDSFOUNDATION_LV";
+    public const string KEY_LOVEDOGFOUNDATION_LV = "LOVEDOGFOUNDATION_LV";
+    public const string KEY_LOVEKIDFOUNDATION_LV = "LOVEKIDFOUNDATION_LV";
+    public const string KEY_ECOFOUNDATION_LV = "ECOFOUNDATION_LV";
 
     
     public static void LoadSaveDataToGameStorage()
@@ -67,6 +74,13 @@ public class Mz_StorageManage
         Mz_StorageManage.TK_clothe_id = PlayerPrefs.GetInt(SaveSlot + KEY_TK_CLOTHE_ID);
         Mz_StorageManage.TK_hat_id = PlayerPrefs.GetInt(SaveSlot + KEY_TK_HAT_ID);
 
+        //@!-- Load Donation data.
+        ConservationAnimals.Level = PlayerPrefs.GetInt(SaveSlot + KEY_CONSERVATION_ANIMAL_LV, 0);
+        AIDSFoundation.Level = PlayerPrefs.GetInt(SaveSlot + KEY_AIDSFOUNDATION_LV, 0);
+        LoveDogConsortium.Level = PlayerPrefs.GetInt(SaveSlot + KEY_LOVEDOGFOUNDATION_LV, 0);
+        LoveKidsFoundation.Level = PlayerPrefs.GetInt(SaveSlot + KEY_LOVEKIDFOUNDATION_LV, 0);
+        EcoFoundation.Level = PlayerPrefs.GetInt(SaveSlot + KEY_ECOFOUNDATION_LV, 0);
+
         Debug.Log("Load storage data to static variable complete.");
     }
 
@@ -89,6 +103,13 @@ public class Mz_StorageManage
 
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_CLOTHE_ID, Mz_StorageManage.TK_clothe_id);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_HAT_ID, Mz_StorageManage.TK_hat_id);
+
+        //@!-- Donation data.
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CONSERVATION_ANIMAL_LV, ConservationAnimals.Level);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AIDSFOUNDATION_LV, AIDSFoundation.Level);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_LOVEDOGFOUNDATION_LV, LoveDogConsortium.Level);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_LOVEKIDFOUNDATION_LV, LoveKidsFoundation.Level);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ECOFOUNDATION_LV, EcoFoundation.Level);
 		
 		PlayerPrefs.Save();
     }

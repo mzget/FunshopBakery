@@ -9,7 +9,7 @@ public class Dressing : Mz_BaseScene {
 	public CharacterAnimationManager TK_animationManager;
     public CostumeManager costomeManager;
 
-    private Vector3 effect_Position = new Vector3(-0.9f, 0, 8); 
+    private Transform gameEffect_transform;
 	
 	
 	// Use this for initialization
@@ -18,7 +18,7 @@ public class Dressing : Mz_BaseScene {
 
         this.gameObject.AddComponent<GameEffectManager>();
         effectManager = this.gameObject.GetComponent<GameEffectManager>();
-
+        gameEffect_transform.position =  new Vector3(-0.9f, 0, 8);
         Mz_ResizeScale.ResizingScale(background_transform);
 		
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0.2f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
@@ -57,32 +57,32 @@ public class Dressing : Mz_BaseScene {
                 break;
             case "Low0_1": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low0_2": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low0_3": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_1": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_2": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_3": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-                effectManager.Create2DSpriteAnimationEffect("Iridescent", effect_Position);
+                effectManager.Create2DSpriteAnimationEffect("Iridescent", gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             default:

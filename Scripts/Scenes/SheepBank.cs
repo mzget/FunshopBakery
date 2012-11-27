@@ -70,6 +70,8 @@ public class SheepBank : Mz_BaseScene {
 	// Use this for initialization
 	void Start () {
 		StartCoroutine(this.InitializeAudio());
+        this.gameObject.AddComponent<GameEffectManager>();
+        base.effectManager = this.gameObject.GetComponent<GameEffectManager>();
 		StartCoroutine(this.InitializeBankOfficer());
 		
 		upgradeInsideManager = upgradeInside_window_Obj.GetComponent<UpgradeInsideManager>();

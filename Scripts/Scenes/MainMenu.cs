@@ -241,7 +241,7 @@ public class MainMenu : Mz_BaseScene {
             _isDuplicateUsername = false;
             _isNullUsernameNotification = false;
 
-            base.effectManager.Create2DSpriteAnimationEffect("BloomStar", OK_button_Obj.transform.position);
+            base.effectManager.Create2DSpriteAnimationEffect("BloomStar", OK_button_Obj.transform);
             this.characterAnimationManager.PlayGoodAnimation();
             audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
 

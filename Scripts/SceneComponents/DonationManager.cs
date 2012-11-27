@@ -5,73 +5,140 @@ using System.Text;
 using UnityEngine;
 
 
-        public class ConservationAnimals {
-            public static int Level = 3;
-            public int[] DonationPrices = new int[5] { 
-                500, 1000, 1500, 2000, 2500,
-            }; 
-        };
-        public class EcoDonation {
-            public static int Level = 0;
-        };
+public class ConservationAnimals {
+    public static int Level = 0;
+    public int[] DonationPrices = new int[5] { 
+        500, 1000, 1500, 2000, 2500,
+    }; 
+};
+public class EcoFoundation {
+    public static int Level = 0;
+    public int[] donationPrice = new int[5] {
+        500, 1000, 1500, 2000, 2500,
+    };
+};
+public class AIDSFoundation {
+    public static int Level = 0;
+    public int[] donationPrice = new int[5] {
+        500, 1000, 1500, 2000, 2500,
+    };
+};
+public class LoveDogConsortium { 
+    public static int Level = 0;
+    public int[] donationPrice = new int[5] {
+        500, 1000, 1500, 2000, 2500,
+    };
+};
+public class LoveKidsFoundation { 
+    public static int Level = 0;
+    public int[] donationPrice = new int[5] {
+        500, 1000, 1500, 2000, 2500,
+    };
+};
 
-	public class DonationManager : MonoBehaviour
-	{
-        private string[] arr_nameOfDonationTopic = new string[] {
-            "ConservationAnimals_plate", "Eco_plate", "GlobalAIDFund_plate", "LoveDog_plate", "LoveKids_plate",
-        };
-        public const string TOP_RED = "Top_red";
-        public const string TOP_ORANGE = "Top_orange";
-        public const string TOP_YELLOW = "Top_yellow";
-        public const string TOP_LIGHTGREEN = "Top_lightGreen";
-        public const string TOP_DARKGREEN = "Top_darkGreen";
-        public const string DOWN_RED = "Down_red";
-        public const string DOWN_ORANGE = "Down_orange";
-        public const string DOWN_YELLOW = "Down_yellow";
-        public const string DOWN_LIGHTGREEN = "Down_lightGreen";
-        public const string DOWN_DARKGREEN = "Down_darkGreen";
+public class DonationManager : MonoBehaviour
+{
+    private string[] arr_nameOfDonationTopic = new string[] {
+        "ConservationAnimals_plate", "GlobalAIDFund_plate", "LoveDog_plate", "LoveKids_plate", "Eco_plate",
+    };
+    public const string TOP_RED = "Top_red";
+    public const string TOP_ORANGE = "Top_orange";
+    public const string TOP_YELLOW = "Top_yellow";
+    public const string TOP_LIGHTGREEN = "Top_lightGreen";
+    public const string TOP_DARKGREEN = "Top_darkGreen";
+    public const string DOWN_RED = "Down_red";
+    public const string DOWN_ORANGE = "Down_orange";
+    public const string DOWN_YELLOW = "Down_yellow";
+    public const string DOWN_LIGHTGREEN = "Down_lightGreen";
+    public const string DOWN_DARKGREEN = "Down_darkGreen";
+    public const string TOP_DONATEBUTTONNAME = "TopDonate_button";
+    public const string DOWN_DONATEBUTTONNAME = "DownDonate_button";
 
-        ConservationAnimals conservationAnimal = new ConservationAnimals();
-        public tk2dSprite topicIcon_0;
-        public tk2dSprite topicIcon_1;
-        public tk2dTextMesh topDonationPrice;
-        public tk2dTextMesh downDonationPrice;
-        public GameObject[] arr_topBarColor = new GameObject[5];
-        public GameObject[] arr_downBarColor = new GameObject[5];
+    Mz_BaseScene sceneController;
+    ConservationAnimals conservationAnimal = new ConservationAnimals();
+    EcoFoundation ecoDonation = new EcoFoundation();
+    AIDSFoundation aidsFoundation = new AIDSFoundation();
+    LoveDogConsortium loveDogFound = new LoveDogConsortium();
+    LoveKidsFoundation loveKidsFound = new LoveKidsFoundation();
+    public tk2dSprite topicIcon_0;
+    public tk2dSprite topicIcon_1;
+    public tk2dTextMesh topDonationPrice;
+    public tk2dTextMesh downDonationPrice;
+    public GameObject[] arr_topBarColor = new GameObject[5];
+    public GameObject[] arr_downBarColor = new GameObject[5];
+    public Transform topDonateButtonPos;
+    public Transform downDonateButtonPos;
 
-        const int MAX_PageNumber = 3;
-        private int currentPageId = 0;
+    const int MAX_PageNumber = 3;
+    private int currentPageId = 0;
+    Hashtable MoveToDonationTopic_hash = new Hashtable();
+	
+	
+	
+	void Awake() {		
+        sceneController = GameObject.FindGameObjectWithTag("GameController").GetComponent<Mz_BaseScene>();
+}
+	
+    void Start() {
+        currentPageId = 0;
+        this.ResetDatafields();
+		this.ChangeTopicIcon();
+    }
 
-        void Start() {
-            this.ResetDatafields();
-            this.Initialize();
+    private void ReInitializeData() {         
+        this.ResetDatafields();
+        this.ReActiveColorBarPicker();
+    }
+
+    private void ResetDatafields()
+    {			
+		for (int i = 0; i < arr_topBarColor.Length; i++) {
+			arr_topBarColor[i].active = false;
+		}
+        for (int i = 0; i < arr_downBarColor.Length; i++) {
+            arr_downBarColor[i].active = false;
         }
+    }
 
-        private void ResetDatafields()
-        {
-            currentPageId = 0;
+    private void ReActiveColorBarPicker()
+    {
+        //<@-- Active color bar button.
+
+        int temp_topLv = 0;
+        int temp_downLv = 0;
+        if (currentPageId == 0) {
+            temp_topLv = ConservationAnimals.Level;
+            temp_downLv = AIDSFoundation.Level;
+
+	        topDonationPrice.text = conservationAnimal.DonationPrices[ConservationAnimals.Level].ToString();
+	        topDonationPrice.Commit();
+	        downDonationPrice.text = aidsFoundation.donationPrice[AIDSFoundation.Level].ToString();
+	        downDonationPrice.Commit();
+        }
+        else if (currentPageId == 1) {
+            temp_topLv = LoveDogConsortium.Level;
+            temp_downLv = LoveKidsFoundation.Level;
 			
-			for (int i = 0; i < arr_topBarColor.Length; i++) {
-				arr_topBarColor[i].active = false;
-			}
-            for (int i = 0; i < arr_downBarColor.Length; i++) {
-                arr_downBarColor[i].active = false;
-            }
+	        topDonationPrice.text = loveDogFound.donationPrice[LoveDogConsortium.Level].ToString();
+	        topDonationPrice.Commit();
+	        downDonationPrice.text = loveKidsFound.donationPrice[LoveKidsFoundation.Level].ToString();
+	        downDonationPrice.Commit();
+        }
+        else if (currentPageId == 2) {
+            temp_topLv = EcoFoundation.Level;
+			
+	        topDonationPrice.text = ecoDonation.donationPrice[EcoFoundation.Level].ToString();
+	        topDonationPrice.Commit();
+//	            downDonationPrice.text = AIDSFoundation.donationPrice[AIDSFoundation.Level].ToString();
+//	            downDonationPrice.Commit();
         }
 
-        private void Initialize()
-        {
-            topDonationPrice.text = conservationAnimal.DonationPrices[ConservationAnimals.Level].ToString();
-            topDonationPrice.Commit();
-
-            #region <@-- Active color bar button.
-
-            switch (ConservationAnimals.Level)
+        switch (temp_topLv)
             {
                 case 0:
                     arr_topBarColor[0].active = true;
                     break;
-                case 1: 
+                case 1:
                     arr_topBarColor[0].active = true;
                     arr_topBarColor[1].active = true;
                     break;
@@ -91,11 +158,12 @@ using UnityEngine;
                     break;
             }
 
-            switch (EcoDonation.Level) {                     
+            switch (temp_downLv)
+            {
                 case 0:
                     arr_downBarColor[0].active = true;
                     break;
-                case 1: 
+                case 1:
                     arr_downBarColor[0].active = true;
                     arr_downBarColor[1].active = true;
                     break;
@@ -114,62 +182,233 @@ using UnityEngine;
                 default:
                     break;
             }
+    }
 
-            #endregion
+    public void PreviousDonationPage() {
+        if (currentPageId > 0)
+            currentPageId--;
+        else
+            currentPageId = MAX_PageNumber - 1;
+
+        // Do something.
+        this.ChangeTopicIcon();
+    }
+    public void NextDonationPage() {
+        if (currentPageId < MAX_PageNumber - 1)
+            currentPageId++;
+        else
+            currentPageId = 0;
+
+        // Do something.
+        this.ChangeTopicIcon();
+    }
+
+    private void ChangeTopicIcon()
+    {
+        if (currentPageId == 0) {
+            topicIcon_0.spriteId = topicIcon_0.GetSpriteIdByName(arr_nameOfDonationTopic[0]);
+            topicIcon_1.spriteId = topicIcon_1.GetSpriteIdByName(arr_nameOfDonationTopic[1]);
+        }
+        else if (currentPageId == 1) {
+            topicIcon_0.spriteId = topicIcon_0.GetSpriteIdByName(arr_nameOfDonationTopic[2]);
+            topicIcon_1.spriteId = topicIcon_1.GetSpriteIdByName(arr_nameOfDonationTopic[3]);
+        }
+        else if (currentPageId == 2) {
+            topicIcon_0.spriteId = topicIcon_0.GetSpriteIdByName(arr_nameOfDonationTopic[4]);
+            //topicIcon_1.spriteId = topicIcon_1.GetSpriteIdByName(arr_nameOfDonationTopic[3]);
         }
 
-        Hashtable MoveToDonationTopic_hash = new Hashtable();
-        public void PreviousDonationPage() {
-            if (currentPageId > 0)
-                currentPageId--;
-            else
-                currentPageId = MAX_PageNumber - 1;
+        this.ReInitializeData();
+        print("DonationManager.ChangeTopicIcon");
+    }
 
-            // Do something.
-            ChangeTopicIcon();
-        }
-
-        public void NextDonationPage() {
-            if (currentPageId < MAX_PageNumber - 1)
-                currentPageId++;
-            else
-                currentPageId = 0;
-
-            // Do something.
-            this.ChangeTopicIcon();
-        }
-
-        private void ChangeTopicIcon()
+    internal void GetInput(string inputName)
+    {
+        switch (inputName)
         {
-            if (currentPageId == 0) {
-                topicIcon_0.spriteId = topicIcon_0.GetSpriteIdByName(arr_nameOfDonationTopic[0]);
-                topicIcon_1.spriteId = topicIcon_1.GetSpriteIdByName(arr_nameOfDonationTopic[1]);
+            case TOP_RED:
+                if (currentPageId == 0) {
+                    topDonationPrice.text = conservationAnimal.DonationPrices[0].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    topDonationPrice.text = loveDogFound.donationPrice[0].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    topDonationPrice.text = ecoDonation.donationPrice[0].ToString();
+                    topDonationPrice.Commit();
+                }
+                break;
+            case TOP_ORANGE:
+                if (currentPageId == 0) {
+                    topDonationPrice.text = conservationAnimal.DonationPrices[1].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    topDonationPrice.text = loveDogFound.donationPrice[1].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    topDonationPrice.text = ecoDonation.donationPrice[1].ToString();
+                    topDonationPrice.Commit();
+                }
+                break;
+            case TOP_YELLOW:
+                if (currentPageId == 0) {
+                    topDonationPrice.text = conservationAnimal.DonationPrices[2].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    topDonationPrice.text = loveDogFound.donationPrice[2].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    topDonationPrice.text = ecoDonation.donationPrice[2].ToString();
+                    topDonationPrice.Commit();
+                }
+                break;
+            case TOP_LIGHTGREEN:
+                if (currentPageId == 0) {
+                    topDonationPrice.text = conservationAnimal.DonationPrices[3].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    topDonationPrice.text = loveDogFound.donationPrice[3].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    topDonationPrice.text = ecoDonation.donationPrice[3].ToString();
+                    topDonationPrice.Commit();
+                }
+                break;
+            case TOP_DARKGREEN:
+                if (currentPageId == 0) {
+                    topDonationPrice.text = conservationAnimal.DonationPrices[4].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    topDonationPrice.text = loveDogFound.donationPrice[4].ToString();
+                    topDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    topDonationPrice.text = ecoDonation.donationPrice[4].ToString();
+                    topDonationPrice.Commit();
+                }
+                break;
+            case DOWN_RED:
+                if (currentPageId == 0) {
+                    downDonationPrice.text = aidsFoundation.donationPrice[0].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    downDonationPrice.text = loveKidsFound.donationPrice[0].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    print("Not Implement !");
+                }
+                break;
+            case DOWN_ORANGE:
+                if (currentPageId == 0) {
+                    downDonationPrice.text = aidsFoundation.donationPrice[1].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    downDonationPrice.text = loveKidsFound.donationPrice[1].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    print("Not Implement !");
+                }
+                break;
+            case DOWN_YELLOW:
+                if (currentPageId == 0) {
+                    downDonationPrice.text = aidsFoundation.donationPrice[2].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    downDonationPrice.text = loveKidsFound.donationPrice[2].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    print("Not Implement !");
+                }
+                break;
+            case DOWN_LIGHTGREEN:
+                if (currentPageId == 0) {
+                    downDonationPrice.text = aidsFoundation.donationPrice[3].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    downDonationPrice.text = loveKidsFound.donationPrice[3].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    print("Not Implement !");
+                }
+                break;
+            case DOWN_DARKGREEN:
+                if (currentPageId == 0) {
+                    downDonationPrice.text = aidsFoundation.donationPrice[4].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 1) {
+                    downDonationPrice.text = loveKidsFound.donationPrice[4].ToString();
+                    downDonationPrice.Commit();
+                }
+                else if (currentPageId == 2) {
+                    print("Not Implement !");
+                }
+                break;
+            case TOP_DONATEBUTTONNAME:
+                if (currentPageId == 0)
+                    this.DonationProcessing(conservationAnimal);
+                else if (currentPageId == 1)
+                    this.DonationProcessing(loveDogFound);
+                else if (currentPageId == 2)
+                    this.DonationProcessing(ecoDonation);
+                break;
+            case DOWN_DONATEBUTTONNAME:
+                if (currentPageId == 0)
+                    this.DonationProcessing(aidsFoundation);
+                else if (currentPageId == 1)
+                    this.DonationProcessing(loveKidsFound);
+                //else if (currentPageId == 2)
+                //    this.DonationProcessing();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void DonationProcessing(object targetDonation)
+    {
+        int currentPriceToDonate = 0;
+        if (targetDonation == conservationAnimal) {
+            currentPriceToDonate = conservationAnimal.DonationPrices[ConservationAnimals.Level];
+            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance) {
+                //@! Can donation.
+                Mz_StorageManage.AccountBalance -= currentPriceToDonate;
+                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", topDonateButtonPos);
+
+                print("DonationProcessing... complete !");
             }
-            else if (currentPageId == 1) {
-                topicIcon_0.spriteId = topicIcon_0.GetSpriteIdByName(arr_nameOfDonationTopic[2]);
-                topicIcon_1.spriteId = topicIcon_1.GetSpriteIdByName(arr_nameOfDonationTopic[3]);
-            }
-            else if (currentPageId == 2) {
-                topicIcon_0.spriteId = topicIcon_0.GetSpriteIdByName(arr_nameOfDonationTopic[4]);
-                //topicIcon_1.spriteId = topicIcon_1.GetSpriteIdByName(arr_nameOfDonationTopic[3]);
+            else {
+                print("Cannot donation !, Your account balance are less than requirement.");
             }
         }
-
-        internal void GetInput(string inputName)
-        {
-            switch (inputName)
-            {
-                case TOP_RED:
-                    if (currentPageId == 0) {
-                        topDonationPrice.text = conservationAnimal.DonationPrices[0].ToString();
-                        topDonationPrice.Commit();
-                    }
-                    break;
-                case TOP_ORANGE:
-                    if (currentPageId == 1) { }
-                    break;
-                default:
-                    break;
+        else if (targetDonation == aidsFoundation) {
+            currentPriceToDonate = aidsFoundation.donationPrice[AIDSFoundation.Level];
+            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance) {
+                Mz_StorageManage.AccountBalance -= currentPriceToDonate;
+                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", downDonateButtonPos);
+                    
+                print("DonationProcessing... complete !");
+            }
+            else {
+                print("Cannot donation !, Your account balance are less than requirement.");
             }
         }
     }
+}
