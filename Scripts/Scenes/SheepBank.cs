@@ -21,24 +21,26 @@ public class SheepBank : Mz_BaseScene {
 	public GameObject withdrawalForm_Obj;
 	public GameObject transactionForm_Obj;
     public GameObject donationForm_group;
+	public GameObject passbook_group;
 	public GameObject shadowPlane_Obj;
+	public tk2dTextMesh availableMoney_Textmesh;
+	public tk2dTextMesh accountBalance_Textmesh;
+	public tk2dTextMesh passbookAccountBalance_textmesh;
     public Mz_CalculatorBeh calculatorBeh;
-    public tk2dTextMesh availableMoney_Textmesh;
-    public tk2dTextMesh accountBalance_Textmesh;
 	int resultValue = 0;
 
     //<!-- Button object.
-    public GameObject back_button;
-	public GameObject next_button;
-	public GameObject previous_button;
     public GameObject upgradeOutside_button;
     public GameObject upgradeInside_button;
 	public GameObject withdrawal_button;
 	public GameObject deposit_button;
+
     const string DonateButtonName = "Donate_button";
 	const string PreviousButtonName = "Previous_button";
 	const string NextButtonName = "Next_button";
     const string OKButtonName = "OK_button";
+	const string BACK_BUTTON_NAME = "Back_button";
+	const string PASSBOOKBUTTONNAME = "Passbook_button";
 	
 	const string ActiveDonationForm_function = "ActiveDonationForm";
     const string ActiveDepositForm_function = "ActiveDepositForm";
@@ -55,7 +57,7 @@ public class SheepBank : Mz_BaseScene {
     //<!-- Texture resources.
     public Texture2D tk_coin_img;
 
-    public enum GameSceneStatus { none = 0, ShowUpgradeInside = 1, ShowDonationForm, ShowDepositForm, ShowWithdrawalForm, };
+    public enum GameSceneStatus { none = 0, ShowUpgradeInside = 1, ShowDonationForm, ShowDepositForm, ShowWithdrawalForm, ShowPassbook, };
     public GameSceneStatus currentGameStatus;
 	public BankOfficer offecer = new BankOfficer();
 	
@@ -70,8 +72,7 @@ public class SheepBank : Mz_BaseScene {
 	// Use this for initialization
 	void Start () {
 		StartCoroutine(this.InitializeAudio());
-        this.gameObject.AddComponent<GameEffectManager>();
-        base.effectManager = this.gameObject.GetComponent<GameEffectManager>();
+		this.InitializeGameEffectGenerator();
 		StartCoroutine(this.InitializeBankOfficer());
 		
 		upgradeInsideManager = upgradeInside_window_Obj.GetComponent<UpgradeInsideManager>();
@@ -81,14 +82,23 @@ public class SheepBank : Mz_BaseScene {
         //Mz_ResizeScale.ResizingScale(background_obj.transform);
 		shadowPlane_Obj.gameObject.active = false;
 	}
-    protected override IEnumerator InitializeAudio()
+    protected new IEnumerator InitializeAudio()
     {
-        yield return StartCoroutine(base.InitializeAudio());
+        base.InitializeAudio();
 
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
         audioBackground_Obj.audio.Play();
+		
+		yield return 0;
     }
+	protected override void InitializeGameEffectGenerator ()
+	{
+//		base.InitializeGameEffectGenerator ();
+
+		this.gameObject.AddComponent<GameEffectManager>();
+		base.effectManager = this.gameObject.GetComponent<GameEffectManager>();
+	}
 
 	private IEnumerator InitializeBankOfficer ()
 	{		
@@ -104,7 +114,7 @@ public class SheepBank : Mz_BaseScene {
 
 		yield return 0;
 	}
-	private IEnumerator PlayWomanOfficerAnimation (string onCompleteFuctionName = "")
+	private IEnumerator PlayWomanOfficerAnimation (string onCompleteFuctionName)
 	{
 		offecer.woman_animated.Play(BankOfficer.WOMAN_TALK);
 		offecer.woman_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
@@ -121,7 +131,7 @@ public class SheepBank : Mz_BaseScene {
         else
             Debug.LogWarning("PlayWomanOfficerAnimation : " + onCompleteFuctionName);
 	}
-    private IEnumerator PlayManOfficerAnimation(string oncompleteFunctionName = "")
+    private IEnumerator PlayManOfficerAnimation(string oncompleteFunctionName)
     {
 		offecer.man_animated.Play(BankOfficer.MAN_TALK);
 		offecer.man_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
@@ -141,14 +151,14 @@ public class SheepBank : Mz_BaseScene {
 
     private void InitializeFields()
     {
-        moveDownUpgradeInside.Add("position", new Vector3(0, -10f, 0));
+        moveDownUpgradeInside.Add("position", new Vector3(0, -10f, -20f));
         moveDownUpgradeInside.Add("islocal", true);
         moveDownUpgradeInside.Add("time", .5f);
         moveDownUpgradeInside.Add("easetype", iTween.EaseType.spring);
 		moveDownUpgradeInside.Add("oncomplete", "OnMoveDownComplete_event");
 		moveDownUpgradeInside.Add("oncompletetarget", this.gameObject);
 
-        moveUp_hashdata.Add("position", new Vector3(0, 200, 0));
+        moveUp_hashdata.Add("position", new Vector3(0, 200, -20f));
         moveUp_hashdata.Add("islocal", true);
         moveUp_hashdata.Add("time", .5f);
         moveUp_hashdata.Add("easetype", iTween.EaseType.easeOutSine);
@@ -172,6 +182,7 @@ public class SheepBank : Mz_BaseScene {
 		withdrawalForm_Obj.gameObject.SetActiveRecursively(false);
 		transactionForm_Obj.gameObject.SetActiveRecursively(false);
         donationForm_group.SetActiveRecursively(false);
+		passbook_group.SetActiveRecursively(false);
 
 		this.AvailableMoneyManager(Mz_StorageManage.AvailableMoney);
         this.AccountBalanceManager(Mz_StorageManage.AccountBalance);
@@ -191,6 +202,7 @@ public class SheepBank : Mz_BaseScene {
     }
 	
 	private void OnMoveDownComplete_event() {
+        shadowPlane_Obj.active = true;
 		if(upgradeInside_window_Obj.active) {        
             currentGameStatus = GameSceneStatus.ShowUpgradeInside;
 			upgradeInsideManager.ReInitializeData();
@@ -202,8 +214,10 @@ public class SheepBank : Mz_BaseScene {
 		withdrawalForm_Obj.gameObject.SetActiveRecursively(false);
 		transactionForm_Obj.gameObject.SetActiveRecursively(false);
         donationForm_group.SetActiveRecursively(false);
+		passbook_group.SetActiveRecursively(false);
 		shadowPlane_Obj.gameObject.active = false;
-        currentGameStatus = GameSceneStatus.none;
+
+        currentGameStatus = GameSceneStatus.none;        
     }
 	void OnTransactionMoveDownComplete() {
 		shadowPlane_Obj.gameObject.active = true;
@@ -238,30 +252,27 @@ public class SheepBank : Mz_BaseScene {
         GUI.EndGroup();
     }
         
-    public override void OnInput (string nameInput)	
-	{        
-        if (nameInput == upgradeInside_button.name) {
-            StartCoroutine(this.PlayManOfficerAnimation("ActiveUpgradeInsideForm"));
-            return;
-		} 
-		else if (nameInput == upgradeOutside_button.name) {
-            StartCoroutine(PlayManOfficerAnimation("ActiveUpgradeOutside"));
+    public override void OnInput (string nameInput)	{        
+		if (nameInput == upgradeInside_button.name) {
+				StartCoroutine (this.PlayManOfficerAnimation ("ActiveUpgradeInsideForm"));
+				return;
+		} else if (nameInput == upgradeOutside_button.name) {
+				StartCoroutine (PlayManOfficerAnimation ("ActiveUpgradeOutside"));
+				return;
+		} else if (nameInput == deposit_button.name) {
+				StartCoroutine (this.PlayWomanOfficerAnimation (ActiveDepositForm_function));
+				return;
+		} else if (nameInput == withdrawal_button.name) {
+				StartCoroutine (this.PlayWomanOfficerAnimation (ActiveWithdrawalForm_function));
+				return;
+		} else if (nameInput == DonateButtonName) {
+				StartCoroutine (this.PlayWomanOfficerAnimation (ActiveDonationForm_function));
+				return;
+		} else if (nameInput == PASSBOOKBUTTONNAME) {
+			this.ActivePassbookForm();
 			return;
-		} 
-		else if(nameInput == deposit_button.name) {
-			StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDepositForm_function));
-            return;
 		}
-		else if(nameInput == withdrawal_button.name) {
-            StartCoroutine(this.PlayWomanOfficerAnimation(ActiveWithdrawalForm_function));
-            return;
-		}
-            else if(nameInput == DonateButtonName) {
-                StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDonationForm_function));
-                return;
-        }
-		else if (nameInput == back_button.name) 
-        {
+		else if (nameInput == BACK_BUTTON_NAME) {
 			if (upgradeInside_window_Obj.active) {
 				iTween.MoveTo (upgradeInside_window_Obj.gameObject, moveUp_hashdata);
 				return;
@@ -280,6 +291,10 @@ public class SheepBank : Mz_BaseScene {
                 iTween.MoveTo(donationForm_group, moveUp_hashdata);
                 return;
             }
+			else if(currentGameStatus == GameSceneStatus.ShowPassbook){
+				iTween.MoveTo(passbook_group, moveUp_hashdata);
+				return;
+			}
             
 			if (upgradeInside_window_Obj.active == false) {
 				if (Application.isLoadingLevel == false) {
@@ -413,11 +428,24 @@ public class SheepBank : Mz_BaseScene {
 
     private void ActiveDonationForm() {				
         donationForm_group.SetActiveRecursively(true);
+		donationManager.ReInitializeData();
         iTween.MoveTo(donationForm_group, moveDown_Transaction_Hash);
 
         audioEffect.PlayOnecWithOutStop(audioEffect.calc_clip);
 		
 		currentGameStatus = GameSceneStatus.ShowDonationForm;
     }
+
+	private void ActivePassbookForm() {
+		passbook_group.SetActiveRecursively(true);
+		iTween.MoveTo(passbook_group, moveDown_Transaction_Hash);
+
+		audioEffect.PlayOnecWithOutStop(audioEffect.calc_clip);
+
+		currentGameStatus = GameSceneStatus.ShowPassbook;
+
+		passbookAccountBalance_textmesh.text = Mz_StorageManage.AccountBalance.ToString();
+		passbookAccountBalance_textmesh.Commit();
+	}
 }
 

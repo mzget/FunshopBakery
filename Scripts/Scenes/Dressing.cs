@@ -9,16 +9,16 @@ public class Dressing : Mz_BaseScene {
 	public CharacterAnimationManager TK_animationManager;
     public CostumeManager costomeManager;
 
-    private Transform gameEffect_transform;
+    public Transform gameEffect_transform;
 	
 	
 	// Use this for initialization
 	void Start () {
-        StartCoroutine(this.InitializeAudio());
+        StartCoroutine(InitializeAudio());
 
         this.gameObject.AddComponent<GameEffectManager>();
         effectManager = this.gameObject.GetComponent<GameEffectManager>();
-        gameEffect_transform.position =  new Vector3(-0.9f, 0, 8);
+		
         Mz_ResizeScale.ResizingScale(background_transform);
 		
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0.2f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
@@ -26,13 +26,15 @@ public class Dressing : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.6f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
-    protected override IEnumerator InitializeAudio()
+    protected new IEnumerator InitializeAudio()
     {
-        yield return StartCoroutine(base.InitializeAudio());
+        base.InitializeAudio();
         
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
         audioBackground_Obj.audio.Play();
+		 
+		yield return null; 
     }
 
 	public override void OnInput (string nameInput)

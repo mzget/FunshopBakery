@@ -16,8 +16,6 @@ public class JuiceTankBeh : ObjectsBeh {
     public const string FreshMilk = "FreshMilk";
 	
 	
-	private BakeryShop sceneManager;
-	
     //<!--- pineapple glass local position == vector3(-1.12f, -.48f, -.2f).
     //<!--- apple glass local pos == (-.815f, -.48f, -.2f).
     //<!--- orange glass local pos == (-.53f, -.48f, -.2f).	

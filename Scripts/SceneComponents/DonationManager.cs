@@ -66,8 +66,8 @@ public class DonationManager : MonoBehaviour
     public tk2dTextMesh downDonationPrice;
     public GameObject[] arr_topBarColor = new GameObject[5];
     public GameObject[] arr_downBarColor = new GameObject[5];
-    public Transform topDonateButtonPos;
-    public Transform downDonateButtonPos;
+    public Transform topDonateButtonTransform;
+    public Transform downDonateButton_Transform;
 
     const int MAX_PageNumber = 3;
     private int currentPageId = 0;
@@ -76,16 +76,20 @@ public class DonationManager : MonoBehaviour
 	
 	
 	void Awake() {		
+		print("DonationManager.Awake");
+		
         sceneController = GameObject.FindGameObjectWithTag("GameController").GetComponent<Mz_BaseScene>();
-}
+	}
 	
     void Start() {
+		print("DonationManager.Start");
+		
         currentPageId = 0;
         this.ResetDatafields();
 		this.ChangeTopicIcon();
     }
 
-    private void ReInitializeData() {         
+    public void ReInitializeData() {         
         this.ResetDatafields();
         this.ReActiveColorBarPicker();
     }
@@ -363,17 +367,17 @@ public class DonationManager : MonoBehaviour
                 break;
             case TOP_DONATEBUTTONNAME:
                 if (currentPageId == 0)
-                    this.DonationProcessing(conservationAnimal);
+                    this.DonationProcessing(arr_nameOfDonationTopic[0]);
                 else if (currentPageId == 1)
-                    this.DonationProcessing(loveDogFound);
+                    this.DonationProcessing(arr_nameOfDonationTopic[2]);
                 else if (currentPageId == 2)
-                    this.DonationProcessing(ecoDonation);
+                    this.DonationProcessing(arr_nameOfDonationTopic[4]);
                 break;
             case DOWN_DONATEBUTTONNAME:
                 if (currentPageId == 0)
-                    this.DonationProcessing(aidsFoundation);
+                    this.DonationProcessing(arr_nameOfDonationTopic[1]);
                 else if (currentPageId == 1)
-                    this.DonationProcessing(loveKidsFound);
+                    this.DonationProcessing(arr_nameOfDonationTopic[3]);
                 //else if (currentPageId == 2)
                 //    this.DonationProcessing();
                 break;
@@ -382,31 +386,86 @@ public class DonationManager : MonoBehaviour
         }
     }
 
-    private void DonationProcessing(object targetDonation)
+    private void DonationProcessing(string targetDonation)
     {
         int currentPriceToDonate = 0;
-        if (targetDonation == conservationAnimal) {
+        if (targetDonation == arr_nameOfDonationTopic[0])
+        {
             currentPriceToDonate = conservationAnimal.DonationPrices[ConservationAnimals.Level];
-            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance) {
+            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
+            {
                 //@! Can donation.
                 Mz_StorageManage.AccountBalance -= currentPriceToDonate;
-                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", topDonateButtonPos);
+                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", topDonateButtonTransform);
+                sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
                 print("DonationProcessing... complete !");
             }
-            else {
+            else
+            {
                 print("Cannot donation !, Your account balance are less than requirement.");
             }
         }
-        else if (targetDonation == aidsFoundation) {
+        else if (targetDonation == arr_nameOfDonationTopic[1])
+        {
             currentPriceToDonate = aidsFoundation.donationPrice[AIDSFoundation.Level];
-            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance) {
+            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
+            {
                 Mz_StorageManage.AccountBalance -= currentPriceToDonate;
-                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", downDonateButtonPos);
-                    
+                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", downDonateButton_Transform);
+                sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
+
                 print("DonationProcessing... complete !");
             }
-            else {
+            else
+            {
+                print("Cannot donation !, Your account balance are less than requirement.");
+            }
+        }
+        else if (targetDonation == arr_nameOfDonationTopic[2])
+        {
+            currentPriceToDonate = loveDogFound.donationPrice[LoveDogConsortium.Level];
+            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
+            {
+                Mz_StorageManage.AccountBalance -= currentPriceToDonate;
+                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", topDonateButtonTransform);
+                sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
+
+                print("DonationProcessing... complete !");
+            }
+            else
+            {
+                print("Cannot donation !, Your account balance are less than requirement.");
+            }
+        }
+        else if (targetDonation == arr_nameOfDonationTopic[3]) {
+            currentPriceToDonate = loveKidsFound.donationPrice[LoveKidsFoundation.Level];
+            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
+            {
+                Mz_StorageManage.AccountBalance -= currentPriceToDonate;
+                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", downDonateButton_Transform);
+                sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
+
+                print("DonationProcessing... complete !");
+            }
+            else
+            {
+                print("Cannot donation !, Your account balance are less than requirement.");
+            }
+        }
+        else if (targetDonation == arr_nameOfDonationTopic[4])
+        {
+            currentPriceToDonate = ecoDonation.donationPrice[LoveDogConsortium.Level];
+            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
+            {
+                Mz_StorageManage.AccountBalance -= currentPriceToDonate;
+                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", topDonateButtonTransform);
+                sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
+
+                print("DonationProcessing... complete !");
+            }
+            else
+            {
                 print("Cannot donation !, Your account balance are less than requirement.");
             }
         }

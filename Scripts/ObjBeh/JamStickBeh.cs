@@ -2,10 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class JamStickBeh : ObjectsBeh {
-
-
-    BakeryShop sceneManager;
-
+    
     private Vector3 original_Position = new Vector3(-0.35f, 0.11f, -1); 
 
 	// Use this for initialization

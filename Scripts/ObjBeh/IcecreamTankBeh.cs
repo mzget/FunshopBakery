@@ -3,9 +3,7 @@ using System.Collections;
 
 public class IcecreamTankBeh : ObjectsBeh {
 	
-	private BakeryShop sceneManager;
-	
-	public tk2dAnimatedSprite icecreamValve;
+    public tk2dAnimatedSprite icecreamValve;
 	private GameObject icecream_Instance;
 	private IcecreamBeh icecreamBeh;
 	private Vector3 icecreamPos_0 = new Vector3(-0.014f, -.25f, -3f);

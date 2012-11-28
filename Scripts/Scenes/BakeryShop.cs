@@ -208,10 +208,13 @@ public class BakeryShop : Mz_BaseScene {
    
 	private IEnumerator SceneInitializeAudio ()
 	{
-        yield return StartCoroutine(base.InitializeAudio());
+        base.InitializeAudio();
+		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
         audioBackground_Obj.audio.Play();
+		
+		yield return null;
 	}
 
 	IEnumerator ChangeShopLogoIcon ()

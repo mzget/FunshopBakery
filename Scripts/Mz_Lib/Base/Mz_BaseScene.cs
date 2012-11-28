@@ -37,7 +37,7 @@ public class Mz_BaseScene : MonoBehaviour {
 
 	}
 	
-	protected virtual IEnumerator InitializeAudio()
+	protected void InitializeAudio()
     {
 		Debug.Log("Scene :: InitializeAudio");
 
@@ -72,9 +72,8 @@ public class Mz_BaseScene : MonoBehaviour {
         else { 
             audioBackground_Obj.audio.mute = !ToggleAudioActive;
         }
-
-        yield return 0;
     }
+	protected virtual void InitializeGameEffectGenerator() {}
 	
 	// Update is called once per frame
 	protected virtual void Update ()
@@ -87,7 +86,7 @@ public class Mz_BaseScene : MonoBehaviour {
 		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
 				smartDeviceInput.ImplementTouchInput ();
 		} 
-		else if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
+		else if (Application.isEditor || Application.isWebPlayer) {
 				smartDeviceInput.ImplementMouseInput ();
 		}
 		
@@ -149,7 +148,7 @@ public class Mz_BaseScene : MonoBehaviour {
 	            }
             }
         }
-		else if(Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
+		else if(Application.isWebPlayer || Application.isEditor) {
 			mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
 				
 			if(Input.GetMouseButtonDown(0)) {

@@ -36,15 +36,13 @@ public class Town : Mz_BaseScene {
 	Rect editShop_OKButton_rect = new Rect(10, 150, 100, 40);
 	Rect editShop_CancelButton_rect = new Rect(160, 150, 100, 40);
 
-	
+    
 	// Use this for initialization
 	void Start () 
 	{
 		StartCoroutine(this.InitializeAudio());
 
  		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
-
-		ShopScene_GUIManager.CalculateViewportScreen();
 
         //StartCoroutine(InitializeBankBeh());
 
@@ -64,13 +62,15 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
-	protected override IEnumerator InitializeAudio ()
+	protected new IEnumerator InitializeAudio ()
 	{
-    	yield return StartCoroutine(base.InitializeAudio());
+    	base.InitializeAudio();
 		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
         audioBackground_Obj.audio.Play();
+
+        yield return null;
 	}
 	
 	//<@-- Not implement.
@@ -145,7 +145,7 @@ public class Town : Mz_BaseScene {
 			//transform.Translate(-touchDeltaPosition.x * speed, -touchDeltaPosition.y * speed, 0);
 			Camera.main.transform.Translate(-touchDeltaPosition.x * speed, 0, 0);
 		}
-		else if(Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor) {
+		else if(Application.isWebPlayer || Application.isEditor) {
 			if(_isDragMove) {
 				float vector = currentPos.x - originalPos.x;
 				if(vector < 0)

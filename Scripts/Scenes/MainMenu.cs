@@ -58,9 +58,7 @@ public class MainMenu : Mz_BaseScene {
 		moveUpTransform_Data.Add("time", 1f);
 		moveUpTransform_Data.Add("easetype", iTween.EaseType.linear);
 
-        StartCoroutine(this.InitializeAudio());
-        this.gameObject.AddComponent<GameEffectManager>();
-        base.effectManager = this.gameObject.GetComponent<GameEffectManager>();
+        StartCoroutine(PreparingAudio());
 
         Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
@@ -82,14 +80,26 @@ public class MainMenu : Mz_BaseScene {
         //iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.5f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(movingCloud_Objs, iTween.Hash("x", -1f, "time", 16f, "easetype", iTween.EaseType.easeInOutSine, "looptype", iTween.LoopType.pingPong)); 
 	}
-    protected override IEnumerator InitializeAudio()
-    {
-        yield return StartCoroutine(base.InitializeAudio());
-        
+	protected IEnumerator PreparingAudio ()
+	{
+		base.InitializeAudio ();
+		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
         audioBackground_Obj.audio.Play();
-    }
+		
+		yield return 0;
+	}
+//    protected override IEnumerator InitializeAudio()
+//    {
+//        yield return StartCoroutine(base.InitializeAudio());
+//        
+//        audioBackground_Obj.audio.clip = base.background_clip;
+//        audioBackground_Obj.audio.loop = true;
+//        audioBackground_Obj.audio.Play();
+//		
+//		yield return null;
+//    }
 	void RecalculateOnGUI_DataFields ()
 	{
 		newgame_Textfield_rect = new Rect((ShopScene_GUIManager.viewPort_rect.width / 2) - 150, ShopScene_GUIManager.viewPort_rect.height / 2 + 58, 300, 82);
@@ -241,7 +251,6 @@ public class MainMenu : Mz_BaseScene {
             _isDuplicateUsername = false;
             _isNullUsernameNotification = false;
 
-            base.effectManager.Create2DSpriteAnimationEffect("BloomStar", OK_button_Obj.transform);
             this.characterAnimationManager.PlayGoodAnimation();
             audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
 
@@ -300,6 +309,13 @@ public class MainMenu : Mz_BaseScene {
 		
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_CLOTHE_ID, 255);
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_HAT_ID, 255);
+
+        //@!-- Donation data.
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CONSERVATION_ANIMAL_LV, 0);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AIDSFOUNDATION_LV, 0);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_LOVEDOGFOUNDATION_LV, 0);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_LOVEKIDFOUNDATION_LV, 0);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ECOFOUNDATION_LV, 0);
 
         Debug.Log("Store new player data complete.");		
 

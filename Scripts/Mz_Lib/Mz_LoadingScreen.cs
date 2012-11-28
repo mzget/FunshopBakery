@@ -47,20 +47,7 @@ public class Mz_LoadingScreen : MonoBehaviour
                 }
             }
 
-#endif
-		
-#if UNITY_FLASH || UNITY_WEBPLAYER
-        async =  Application.LoadLevelAsync(sceneName);
-
-        if (Application.isLoadingLevel) {
-            while (!async.isDone)
-            {
-                yield return 0;
-            }
-        }
-#endif
-		
-#if UNITY_IPHONE || UNITY_ANDROID
+#elif UNITY_IPHONE || UNITY_ANDROID || UNITY_FLASH || UNITY_WEBPLAYER
 	
         async = Application.LoadLevelAsync(LoadSceneName);
 		if(Application.isLoadingLevel) {

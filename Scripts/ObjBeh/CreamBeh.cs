@@ -5,11 +5,7 @@ public class CreamBeh : ObjectsBeh {
 	
 	public const string ChocolateCream = "ChocolateCream";
 	public const string StrawberryCream = "StrawberryCream";
-	public const string BlueberryCream = "BlueberryCream";
-	
-	
-	private BakeryShop sceneManager;
-	
+	public const string BlueberryCream = "BlueberryCream";	
 	
 	
 	// Use this for initialization

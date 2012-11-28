@@ -9,8 +9,6 @@ public class JamBeh : ObjectsBeh {
 	public const string CustardJam = "CustardJam";
 	
 	
-	private BakeryShop sceneManager;
-	
 	// Use this for initialization
 	protected override void  Start()
     {
