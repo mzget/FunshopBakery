@@ -68,6 +68,8 @@ public class DonationManager : MonoBehaviour
     public GameObject[] arr_downBarColor = new GameObject[5];
     public Transform topDonateButtonTransform;
     public Transform downDonateButton_Transform;
+    public tk2dAnimatedSprite topAnimSprite;
+    public tk2dAnimatedSprite downAnimSprite;
 
     const int MAX_PageNumber = 3;
     private int currentPageId = 0;
@@ -87,6 +89,9 @@ public class DonationManager : MonoBehaviour
         currentPageId = 0;
         this.ResetDatafields();
 		this.ChangeTopicIcon();
+
+        topAnimSprite.CurrentClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.Loop;
+        downAnimSprite.CurrentClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.Loop;
     }
 
     public void ReInitializeData() {         

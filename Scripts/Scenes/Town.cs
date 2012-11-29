@@ -236,6 +236,10 @@ public class Town : Mz_BaseScene {
             StartCoroutine(ActiveDecorationBar());
 			break;
 		case "Trophy_button" : 
+			if (!Application.isLoadingLevel) {
+                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.DisplayReward.ToString();
+                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+			}
 			break;
 		default:
 			break;

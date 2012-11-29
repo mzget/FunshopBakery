@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class Mz_BaseScene : MonoBehaviour {
     
-    public enum SceneNames { none = 0, LoadingScene = 1, MainMenu, WaitForStart, Town, BakeryShop, Sheepbank, Dressing, };
+    public enum SceneNames { none = 0, LoadingScene = 1, MainMenu, WaitForStart, Town, BakeryShop, Sheepbank, Dressing, DisplayReward, };
 	
     //<!-- Audio Manage.
     protected static bool ToggleAudioActive = true;
@@ -33,9 +33,7 @@ public class Mz_BaseScene : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
-
-	}
+//	void Start () {	}
 	
 	protected void InitializeAudio()
     {

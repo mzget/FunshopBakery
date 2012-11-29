@@ -63,14 +63,11 @@ public class SheepBank : Mz_BaseScene {
 	
 	internal static bool HaveUpgradeOutSide = false;
 
-    void Awake() {
-        ShopScene_GUIManager.CalculateViewportScreen();
-
-		SheepBank.HaveUpgradeOutSide = false;
-    }
 
 	// Use this for initialization
 	void Start () {
+		SheepBank.HaveUpgradeOutSide = false;
+
 		StartCoroutine(this.InitializeAudio());
 		this.InitializeGameEffectGenerator();
 		StartCoroutine(this.InitializeBankOfficer());

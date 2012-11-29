@@ -61,6 +61,7 @@ public class UpgradeOutsideManager : MonoBehaviour
             roofDecoration_Sprite.gameObject.active = false;
         }
         else {
+			roofDecoration_Sprite.gameObject.active = true;
             roofDecoration_Sprite.spriteId = roofDecoration_Sprite.GetSpriteIdByName(roofsNameSpecify[Mz_StorageManage.Roof_id]);
         }
         
@@ -68,6 +69,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 			awningDecoration_Sprite.spriteId = awningDecoration_Sprite.GetSpriteIdByName("DefaultShop_Awning");		
         }
         else {
+			awningDecoration_Sprite.gameObject.active = true;
             awningDecoration_Sprite.spriteId = awningDecoration_Sprite.GetSpriteIdByName(awningNameSpecify[Mz_StorageManage.Awning_id]);
         }
 
@@ -75,6 +77,7 @@ public class UpgradeOutsideManager : MonoBehaviour
             tableDecoration_Sprite.gameObject.active = false;
         }
         else {
+			tableDecoration_Sprite.gameObject.active = true;
             tableDecoration_Sprite.spriteId = tableDecoration_Sprite.GetSpriteIdByName(tablesNameSpecify[Mz_StorageManage.Table_id]);
         }
 
@@ -82,6 +85,7 @@ public class UpgradeOutsideManager : MonoBehaviour
             accessories_Sprite.gameObject.active = false;
         }
         else {
+			accessories_Sprite.gameObject.active = true;
             accessories_Sprite.spriteId = accessories_Sprite.GetSpriteIdByName(accessoriesNameSpeccify[Mz_StorageManage.Accessory_id]);
         }
     }
