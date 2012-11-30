@@ -25,6 +25,9 @@ public class Startup : Mz_BaseScene {
 #elif UNITY_ANDROID
         QualitySettings.SetQualityLevel(1);
 		Application.targetFrameRate = 60;
+#else 
+		QualitySettings.SetQualityLevel(3);
+		Application.targetFrameRate = 60;
 #endif
 
 		yield return null;

@@ -49,10 +49,10 @@ public class SheepBank : Mz_BaseScene {
 	private Hashtable moveDown_Transaction_Hash;
     private Hashtable moveDownUpgradeInside = new Hashtable();
     private Hashtable moveUp_hashdata = new Hashtable();
-
+	
+	private DonationManager donationManager;
 	private UpgradeInsideManager upgradeInsideManager;
     public GameObject[] upgradeButtons = new GameObject[8];
-    DonationManager donationManager;
 
     //<!-- Texture resources.
     public Texture2D tk_coin_img;
