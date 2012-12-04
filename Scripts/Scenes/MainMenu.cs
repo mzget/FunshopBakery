@@ -105,27 +105,27 @@ public class MainMenu : Mz_BaseScene {
 		newgame_Textfield_rect = new Rect((ShopScene_GUIManager.viewPort_rect.width / 2) - 150, ShopScene_GUIManager.viewPort_rect.height / 2 + 58, 300, 82);
 		newShopName_rect = new Rect((ShopScene_GUIManager.viewPort_rect.width / 2) - 138, ShopScene_GUIManager.viewPort_rect.height / 2 - 110, 400, 80);
 		
-		group_width = 400 * ShopScene_GUIManager.extend_heightScale;
+		group_width = 400 * ShopScene_GUIManager.Extend_heightScale;
 		showSaveGameSlot_GroupRect = new Rect((ShopScene_GUIManager.viewPort_rect.width/2) - (group_width/2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
 		slot_1Rect = new Rect(32, 12, group_width - 60, 80);
 		slot_2Rect  = new Rect(32, 112, group_width - 60, 80);
 		slot_3Rect = new Rect(32, 212, group_width - 60, 80);
 		
 		if(Screen.height != Main.GAMEHEIGHT) {
-			newgame_Textfield_rect.width = newgame_Textfield_rect.width * ShopScene_GUIManager.extend_heightScale;
+			newgame_Textfield_rect.width = newgame_Textfield_rect.width * ShopScene_GUIManager.Extend_heightScale;
 			newgame_Textfield_rect.x = (ShopScene_GUIManager.viewPort_rect.width / 2) - newgame_Textfield_rect.width / 2;
 			
-			newShopName_rect.width = newShopName_rect.width * ShopScene_GUIManager.extend_heightScale;
-			newShopName_rect.x = (ShopScene_GUIManager.viewPort_rect.width / 2) - 138 * ShopScene_GUIManager.extend_heightScale;
+			newShopName_rect.width = newShopName_rect.width * ShopScene_GUIManager.Extend_heightScale;
+			newShopName_rect.x = (ShopScene_GUIManager.viewPort_rect.width / 2) - 138 * ShopScene_GUIManager.Extend_heightScale;
 			
-			slot_1Rect.width = group_width - (60 * ShopScene_GUIManager.extend_heightScale);
-			slot_1Rect.x = slot_1Rect.x * ShopScene_GUIManager.extend_heightScale;
+			slot_1Rect.width = group_width - (60 * ShopScene_GUIManager.Extend_heightScale);
+			slot_1Rect.x = slot_1Rect.x * ShopScene_GUIManager.Extend_heightScale;
 			
-			slot_2Rect.width = group_width - (60 * ShopScene_GUIManager.extend_heightScale);
-			slot_2Rect.x = slot_2Rect.x * ShopScene_GUIManager.extend_heightScale;
+			slot_2Rect.width = group_width - (60 * ShopScene_GUIManager.Extend_heightScale);
+			slot_2Rect.x = slot_2Rect.x * ShopScene_GUIManager.Extend_heightScale;
 			
-			slot_3Rect.width = group_width - (60 * ShopScene_GUIManager.extend_heightScale);
-			slot_3Rect.x = slot_3Rect.x * ShopScene_GUIManager.extend_heightScale;
+			slot_3Rect.width = group_width - (60 * ShopScene_GUIManager.Extend_heightScale);
+			slot_3Rect.x = slot_3Rect.x * ShopScene_GUIManager.Extend_heightScale;
 		}
 	}
 	
@@ -145,9 +145,9 @@ public class MainMenu : Mz_BaseScene {
             iTween.ShakeScale(OK_button_Obj, iTween.Hash("amount", new Vector3(.1f, 0.1f, 0), "time", 2f, "looptype", iTween.LoopType.loop));
 	}
 
-	#region <!-- OnGUI Section.
+	protected override void OnGUI() {
+        base.OnGUI();
 
-	private void OnGUI() {
         player_1 = PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME);
         player_2 = PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME);
         player_3 = PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME);
@@ -222,8 +222,6 @@ public class MainMenu : Mz_BaseScene {
             GUI.FocusControl("Username");
         }
 	}
-
-	#endregion
 
     private void CheckUserNameFormInput()
     {
@@ -317,9 +315,9 @@ public class MainMenu : Mz_BaseScene {
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_LOVEKIDFOUNDATION_LV, 0);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ECOFOUNDATION_LV, 0);
 
-        Debug.Log("Store new player data complete.");		
+        Debug.Log("Store new player data complete.");
 
-        Mz_StorageManage.LoadSaveDataToGameStorage();
+        base.extendsStorageManager.LoadSaveDataToGameStorage();
 
         this.LoadSceneTarget();
     }
@@ -401,7 +399,7 @@ public class MainMenu : Mz_BaseScene {
 
                     if(player_1 != string.Empty) {
                         Mz_StorageManage.SaveSlot = 1;
-                        Mz_StorageManage.LoadSaveDataToGameStorage();
+                        base.extendsStorageManager.LoadSaveDataToGameStorage();
                         this.LoadSceneTarget();
                     }
                 }
@@ -411,7 +409,7 @@ public class MainMenu : Mz_BaseScene {
 
                     if(player_2 != string.Empty) {
                         Mz_StorageManage.SaveSlot =2;
-                        Mz_StorageManage.LoadSaveDataToGameStorage();
+                        base.extendsStorageManager.LoadSaveDataToGameStorage();
                         this.LoadSceneTarget();
                     }
                 }
@@ -421,7 +419,7 @@ public class MainMenu : Mz_BaseScene {
 
                     if(player_3 != string.Empty) {
                         Mz_StorageManage.SaveSlot = 3;
-                        Mz_StorageManage.LoadSaveDataToGameStorage();
+                        base.extendsStorageManager.LoadSaveDataToGameStorage();
                         this.LoadSceneTarget();
                     }
                 }

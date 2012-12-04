@@ -43,9 +43,9 @@ public class CustomerBeh : MonoBehaviour {
 	{
 		Debug.Log ("Instancing Customer");
 
-		sceneManager = GameObject.FindGameObjectWithTag ("GameController").GetComponent<BakeryShop> ();        
+		sceneManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BakeryShop> ();
 
-		StartCoroutine (RandomCustomerFace ());
+        StartCoroutine(RandomCustomerFace());
 
 		list_goodsBag = new List<Goods> (sceneManager.CanSellGoodLists);
 		this.GenerateGoodOrder ();
@@ -94,7 +94,7 @@ public class CustomerBeh : MonoBehaviour {
 			});
         }
 
-        print("GenerateGoodOrder complete! " + "Type : " + customerOrderRequire.Count);
+        Debug.Log("GenerateGoodOrder complete! " + "Type : " + customerOrderRequire.Count);
 
         this.CalculationPrice();
         sceneManager.GenerateOrderGUI();
@@ -117,54 +117,86 @@ public class CustomerBeh : MonoBehaviour {
         Debug.Log("CalculationPrice => amount : " + amount);
     }
 
-	internal void CheckGoodsObjInTray() {
-		if(sceneManager.foodTrayBeh.goodsOnTray_List.Count == 0) {
-			sceneManager.TK_animationManager.PlayRampageAnimation();
-            this.PlayRampage_animation();
-			return;
-		}
-		if(sceneManager.foodTrayBeh.goodsOnTray_List.Count != customerOrderRequire.Count) {
-			sceneManager.TK_animationManager.PlayRampageAnimation();
-            this.PlayRampage_animation();
-			return;
-		}
+	internal void CheckGoodsObjInTray(string callFrom = "") {
+        if (callFrom == GoodsBeh.ClassName) {        
+		    List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
+		    Goods temp_goods = null;
+		    int temp_counter = 0;
 		
-		List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
-		Goods temp_goods = null;
-		int temp_counter = 0;
-		
-		for (int i = 0; i < customerOrderRequire.Count; i++) 
-        {				
-			foreach(GoodsBeh item in sceneManager.foodTrayBeh.goodsOnTray_List) 
-			{
-				if(item.name == customerOrderRequire[i].goods.name) { 		
-					temp_goods = customerOrderRequire[i].goods;
-					temp_counter += 1;
-				}
-			}
+		    for (int i = 0; i < customerOrderRequire.Count; i++) 
+            {				
+			    foreach(GoodsBeh item in sceneManager.foodTrayBeh.goodsOnTray_List) 
+			    {
+				    if(item.name == customerOrderRequire[i].goods.name) { 		
+					    temp_goods = customerOrderRequire[i].goods;
+					    temp_counter += 1;
+				    }
+			    }
 
-            list_goodsTemp.Add(new CustomerOrderRequire() { 
-				goods = temp_goods, 
-				number = temp_counter,
-			});
+                list_goodsTemp.Add(new CustomerOrderRequire() { 
+				    goods = temp_goods, 
+				    number = temp_counter,
+			    });
 
-            if (customerOrderRequire[i].number == list_goodsTemp[i].number) {
-                Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);    
+                if (customerOrderRequire[i].number == list_goodsTemp[i].number) {
+                    Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);    
 								
-				if(list_goodsTemp.Count == customerOrderRequire.Count) {
-                    OnManageGoodComplete(System.EventArgs.Empty);
-				}					
-            }
+				    if(list_goodsTemp.Count == customerOrderRequire.Count) {
+                        sceneManager.billingMachine.animation.Play();
+				    }					
+                }
 			
-			temp_goods = null;
-			temp_counter = 0;
-		}
+			    temp_goods = null;
+			    temp_counter = 0;
+		    }
+        }
+        else {
+		    if(sceneManager.foodTrayBeh.goodsOnTray_List.Count == 0) {
+			    sceneManager.TK_animationManager.PlayRampageAnimation();
+                this.PlayRampage_animation();
+			    return;
+		    }
+		    if(sceneManager.foodTrayBeh.goodsOnTray_List.Count != customerOrderRequire.Count) {
+			    sceneManager.TK_animationManager.PlayRampageAnimation();
+                this.PlayRampage_animation();
+			    return;
+		    }
+		
+		    List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
+		    Goods temp_goods = null;
+		    int temp_counter = 0;
+		
+		    for (int i = 0; i < customerOrderRequire.Count; i++) 
+            {				
+			    foreach(GoodsBeh item in sceneManager.foodTrayBeh.goodsOnTray_List) 
+			    {
+				    if(item.name == customerOrderRequire[i].goods.name) { 		
+					    temp_goods = customerOrderRequire[i].goods;
+					    temp_counter += 1;
+				    }
+			    }
+
+                list_goodsTemp.Add(new CustomerOrderRequire() { 
+				    goods = temp_goods, 
+				    number = temp_counter,
+			    });
+
+                if (customerOrderRequire[i].number == list_goodsTemp[i].number) {
+                    Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);    
+								
+				    if(list_goodsTemp.Count == customerOrderRequire.Count) {
+                        OnManageGoodComplete(System.EventArgs.Empty);
+				    }					
+                }
+			
+			    temp_goods = null;
+			    temp_counter = 0;
+		    }
+        }
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
+	void Update () { }
 
     public void Dispose() {
         manageGoodsComplete_event -= sceneManager.currentCustomer_manageGoodsComplete_event;

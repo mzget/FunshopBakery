@@ -26,10 +26,14 @@ public class Mz_BaseScene : MonoBehaviour {
 	private Vector3 currentCameraPos = new Vector3(0, -.13f, -10);
     public bool _isDragMove = false;
 	internal Mz_SmartDeviceInput smartDeviceInput;
+	public ExtendsStorageManager extendsStorageManager;
+    public bool _hasQuitCommand = false;
 
 
 	void Awake() {
 		this.gameObject.AddComponent<HUDFPS>();
+		this.gameObject.AddComponent<ExtendsStorageManager>();
+		extendsStorageManager = this.GetComponent<ExtendsStorageManager>();
 	}
 
 	// Use this for initialization
@@ -87,11 +91,11 @@ public class Mz_BaseScene : MonoBehaviour {
 		else if (Application.isEditor || Application.isWebPlayer) {
 				smartDeviceInput.ImplementMouseInput ();
 		}
-		
-		if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Menu)) {
-			Application.Quit(); 
-			return;
-		}
+
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Menu))
+        {
+            _hasQuitCommand = true;
+        }
 	}
 
 	#region <!-- HasChangeTimeScale event.
@@ -182,7 +186,7 @@ public class Mz_BaseScene : MonoBehaviour {
     }
 
     void OnApplicationQuit() {
-        Mz_StorageManage.Save();
+        extendsStorageManager.SaveDataToPermanentMemory();
 
 #if UNITY_STANDALONE_WIN
         Application.CancelQuit();
@@ -196,6 +200,39 @@ public class Mz_BaseScene : MonoBehaviour {
 #if UNITY_IPHONE || UNITY_ANDROID
         //<-- to do asking for quit game.
 #endif
+    }
+
+    public virtual void OnDispose() { }
+     
+    protected virtual void OnGUI()
+    {
+        GUI.depth = 0;
+        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
+
+        if (_hasQuitCommand)
+        {			
+            GUI.BeginGroup(new Rect(Screen.width / 2 - (200 * Mz_OnGUIManager.Extend_heightScale), Main.GAMEHEIGHT / 2 - 100, 400 * Mz_OnGUIManager.Extend_heightScale, 200), "Do you want to quit ?", GUI.skin.window);
+            {
+                if (GUI.Button(new Rect(60 * Mz_OnGUIManager.Extend_heightScale, 155, 100 * Mz_OnGUIManager.Extend_heightScale, 40), "Yes"))
+                    Application.Quit();
+                else if (GUI.Button(new Rect(240 * Mz_OnGUIManager.Extend_heightScale, 155, 100 * Mz_OnGUIManager.Extend_heightScale, 40), "No")) {
+                    _hasQuitCommand = false; 
+				}
+            }
+            GUI.EndGroup();
+        }
+
+        #region <@!-- Draw_LogCallback debuging.
+
+        //if (debugLogCallback_style == null) {
+        //    debugLogCallback_style = new GUIStyle(GUI.skin.box);
+        //    debugLogCallback_style.fontSize = 12;
+        //    debugLogCallback_style.alignment = TextAnchor.MiddleLeft;
+        //}
+
+        //GUI.Box(new Rect(0, Main.GAMEHEIGHT - 50, Main.GAMEWIDTH * Mz_OnGUIManager.Extend_heightScale, 50), output, debugLogCallback_style);
+
+        #endregion
     }
 
 	#region <@-- Unity Log Callback.

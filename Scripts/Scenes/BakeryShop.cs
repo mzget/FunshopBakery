@@ -42,7 +42,6 @@ public class BakeryShop : Mz_BaseScene {
     private GameObject packaging_Obj;
 	public CharacterAnimationManager TK_animationManager;
 	public tk2dSprite shopLogo_sprite;
-    public ShopScene_GUIManager gui_manager;
     public GoodDataStore goodDataStore;
     public static List<int> NumberOfCansellItem = new List<int>();
     public List<Goods> CanSellGoodLists = new List<Goods>();
@@ -145,7 +144,14 @@ public class BakeryShop : Mz_BaseScene {
 	#endregion	
 
 	// Use this for initialization
-	IEnumerator Start () {		
+	IEnumerator Start () {
+        yield return StartCoroutine(this.InitailizeSceneObject());
+      
+        this.OpenShop();
+	}
+
+    private IEnumerator InitailizeSceneObject()
+    {
 		darkShadowPlane.active = false;
 //		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
         StartCoroutine(this.SceneInitializeAudio());
@@ -177,34 +183,32 @@ public class BakeryShop : Mz_BaseScene {
 		StartCoroutine(this.Initializing_FriutCookie());
 		StartCoroutine(this.Initializing_ButterCookie());
 
-        StartCoroutine(InitializeHotdogInstance());
+        StartCoroutine(this.InitializeHotdogInstance());
 
-        calculator_group_instance.SetActiveRecursively(false);
+        yield return null;
 
 		foodTrayBeh = new FoodTrayBeh();
         goodDataStore = new GoodDataStore();
-		//<!-- Not important will be remove in future;
-		this.gameObject.AddComponent<ShopScene_GUIManager>();
-		gui_manager = this.gameObject.GetComponent<ShopScene_GUIManager>();
 
         GameObject coinObj = GameObject.Find("Coin");
         coin_Textmesh = coinObj.GetComponent<tk2dTextMesh>();
         coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
         coin_Textmesh.Commit();
         
-		yield return null;
-
-        iTween.MoveTo(rollingDoor_Obj, iTween.Hash("position", new Vector3(0, 2.2f, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeInSine));
-        audioEffect.PlayOnecSound(base.soundEffect_clips[0]);
-
+        calculator_group_instance.SetActiveRecursively(false);
         // Debug can sell list.
-        InitializeCanSellGoodslist();
+        StartCoroutine(this.InitializeCanSellGoodslist());
 		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count);
 		Debug.Log("NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
+    }
+
+    private void OpenShop() {
+        iTween.MoveTo(rollingDoor_Obj, iTween.Hash("position", new Vector3(0, 2.2f, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeInSine));
+        audioEffect.PlayOnecSound(base.soundEffect_clips[0]);
 				
         nullCustomer_event += new EventHandler(BakeryShop_nullCustomer_event);
         OnNullCustomer_event(EventArgs.Empty);
-	}
+    }
    
 	private IEnumerator SceneInitializeAudio ()
 	{
@@ -252,8 +256,11 @@ public class BakeryShop : Mz_BaseScene {
         hotdog.gameObject.SetActiveRecursively(false);
     }
 
-    private void InitializeCanSellGoodslist()
-    {
+    private IEnumerator InitializeCanSellGoodslist()
+    {		
+        if(BakeryShop.NumberOfCansellItem.Count == 0)
+            base.extendsStorageManager.LoadCanSellGoodsListData();
+
         foreach (int id in NumberOfCansellItem)
         {
             CanSellGoodLists.Add(goodDataStore.Menu_list[id]);
@@ -325,9 +332,7 @@ public class BakeryShop : Mz_BaseScene {
 			#endregion
         }
 
-        foreach (Goods item in CanSellGoodLists) {
-            Debug.Log("CanSellGoodLists :: " + item.name);
-        }
+        yield return null;
     }
 	
 	#region <!-- Cake gameobject mechanism section.
@@ -1002,6 +1007,10 @@ public class BakeryShop : Mz_BaseScene {
 		currentCustomer.customerOrderingIcon_Obj.active = false;
 		yield return new WaitForSeconds(.5f);
 		darkShadowPlane.active = true;
+		
+		foreach (var item in arr_orderingItems) {
+            iTween.MoveTo(item.gameObject, iTween.Hash("y", 0.1f, "islocal", true, "time", .3f, "looptype", iTween.LoopType.pingPong));
+		}
 	}
 
 	IEnumerator CollapseOrderingGUI ()
@@ -1141,7 +1150,7 @@ public class BakeryShop : Mz_BaseScene {
         //<!-- Close shop button.
 		if(nameInput == close_button.name) {
 			if(Application.isLoadingLevel == false) {
-                Mz_StorageManage.Save();
+                base.extendsStorageManager.SaveDataToPermanentMemory();
                 this.PreparingToCloseShop();		
 				
 				return;
@@ -1248,13 +1257,38 @@ public class BakeryShop : Mz_BaseScene {
     
     private void PreparingToCloseShop()
     {
+        this.OnDispose();
+
         iTween.MoveTo(rollingDoor_Obj, iTween.Hash("position", new Vector3(0, 0, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutSine,
             "oncomplete", "RollingDoor_close", "oncompletetarget", this.gameObject));
 		audioEffect.PlayOnecWithOutStop(base.soundEffect_clips[0]);
-        rollingDoor_Obj.SetActiveRecursively(true);			
+        rollingDoor_Obj.SetActiveRecursively(true);
     }
     private void RollingDoor_close() {
         Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
         Application.LoadLevel(SceneNames.LoadingScene.ToString());	
+    }
+
+    public override void OnDispose()
+    {
+        base.OnDispose();
+        
+        Destroy(cupcake.gameObject);
+        Destroy(miniCake.gameObject);
+        Destroy(cake.gameObject);
+
+        Destroy(toasts[0].gameObject);
+        Destroy(toasts[1].gameObject);
+        
+        Destroy(blueberry_cream_Instance.gameObject);
+        Destroy(chocolate_cream_Instance.gameObject);
+        Destroy(strawberry_cream_Instance.gameObject);
+
+        Destroy(blueberryJam_instance.gameObject);
+        Destroy(custardJam_instance);
+        Destroy(freshButterJam_instance);
+        Destroy(strawberryJam_instance);
+
+        Destroy(hotdog.gameObject);
     }
 }

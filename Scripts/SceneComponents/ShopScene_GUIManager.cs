@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ShopScene_GUIManager : Mz_GUIManager {
+public class ShopScene_GUIManager : Mz_OnGUIManager {
 	
 	private Mz_BaseScene baseScene;
 
@@ -22,11 +22,11 @@ public class ShopScene_GUIManager : Mz_GUIManager {
     {
         //<!-- initialize data field.
 
-        trademark_Rect = new Rect(viewPort_rect.width - (350 * ShopScene_GUIManager.extend_heightScale), 0, 350 * ShopScene_GUIManager.extend_heightScale, 160);
-        shopName_Rect = new Rect(140, 35, 180 * ShopScene_GUIManager.extend_heightScale, 35);
+        trademark_Rect = new Rect(viewPort_rect.width - (350 * ShopScene_GUIManager.Extend_heightScale), 0, 350 * ShopScene_GUIManager.Extend_heightScale, 160);
+        shopName_Rect = new Rect(140, 35, 180 * ShopScene_GUIManager.Extend_heightScale, 35);
 
         if (Screen.height != Main.GAMEHEIGHT) {
-            shopName_Rect.x = shopName_Rect.x * ShopScene_GUIManager.extend_heightScale;
+            shopName_Rect.x = shopName_Rect.x * ShopScene_GUIManager.Extend_heightScale;
         }
     }
 	

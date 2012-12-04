@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class GoodsBeh : ObjectsBeh {
+public class GoodsBeh : ObjectsBeh {    
+    public const string ClassName = "GoodsBeh";
     
     public Vector3 offsetPos;
 	
@@ -26,13 +27,14 @@ public class GoodsBeh : ObjectsBeh {
 		if (putObjectOnTray_Event != null) {
 			putObjectOnTray_Event (this, eventArgs);
 			Debug.Log (putObjectOnTray_Event + " : " + this.name);
+
+            sceneManager.currentCustomer.CheckGoodsObjInTray(GoodsBeh.ClassName);
 		}
 	}
 	protected virtual void Handle_putObjectOnTray_Event (object sender, System.EventArgs e) {
 
 	}
-	
-
+    
 	protected override void ImplementDraggableObject ()
 	{
 		base.ImplementDraggableObject ();

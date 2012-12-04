@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public class Town : Mz_BaseScene {
-	//<!-- Dont destroy obj.
-    private GameObject bankBeh_obj;
 
 	public GameObject town_bg_group;
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
@@ -72,26 +70,12 @@ public class Town : Mz_BaseScene {
 
         yield return null;
 	}
-	
-	//<@-- Not implement.
-	private IEnumerator InitializeBankBeh ()
-	{		
-		bankBeh_obj = GameObject.Find("BankBeh");
-
-		if (bankBeh_obj == null) {
-			bankBeh_obj = new GameObject ("BankBeh", typeof(BankBeh));
-		}
-		/// Add event. Get interest from bank.
-        //BankBeh.GiveInterest_event += base.Handle_GiveInterest_event;
-
-		yield return 0;
-	}
 
 	void Initialize_OnGUIDataFields () {
-		TopLeft_Anchor_GroupRect  = new Rect(0, 0, 200 * ShopScene_GUIManager.extend_heightScale, 150);
-		drawPlayerName_rect  = new Rect(0, 20, 200 * ShopScene_GUIManager.extend_heightScale, 40);
-		drawShopName_rect  = new Rect(0, 65, 200 * ShopScene_GUIManager.extend_heightScale, 40);
-		drawPlayerMoney_rect = new Rect(0, 110, 200 * ShopScene_GUIManager.extend_heightScale, 40);
+		TopLeft_Anchor_GroupRect  = new Rect(0, 0, 200 * ShopScene_GUIManager.Extend_heightScale, 150);
+		drawPlayerName_rect  = new Rect(0, 20, 200 * ShopScene_GUIManager.Extend_heightScale, 40);
+		drawShopName_rect  = new Rect(0, 65, 200 * ShopScene_GUIManager.Extend_heightScale, 40);
+		drawPlayerMoney_rect = new Rect(0, 110, 200 * ShopScene_GUIManager.Extend_heightScale, 40);
 	}
 
 	#region <!-- Decoration upgrade bar.
@@ -156,12 +140,13 @@ public class Town : Mz_BaseScene {
 		}
 	}
 
-	#region <!-- Gui region.
-
-    void OnGUI() {
-        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height/ Main.GAMEHEIGHT, 1));
+    /// <summary>
+    /// <!-- Gui region.
+    /// </summary>
+    private new void OnGUI() {
+        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
 		
-		/// TopLeft_Anchor_GroupRect.
+   		/// TopLeft_Anchor_GroupRect.
         GUI.BeginGroup(TopLeft_Anchor_GroupRect, "TopLeft anchor", GUI.skin.window);
         {
             GUI.Box(drawPlayerName_rect, Mz_StorageManage.Username);
@@ -182,17 +167,27 @@ public class Town : Mz_BaseScene {
 	{
 		GUI.BeginGroup(new Rect (Screen.width / 2 - 150, Main.GAMEHEIGHT / 2 - 100, 300, 200), "Edit shopname !", GUI.skin.window);
 		{
-			username = GUI.TextField(editShop_Textfield_rect, username, 13);
+			username = GUI.TextField(editShop_Textfield_rect, username, 24);
 
 			if(GUI.Button(editShop_OKButton_rect, "OK")) {
-				if(username != "" && username.Length >= 5) {
+				if(username != "" && username.Length >= 3) {
 					Mz_StorageManage.ShopName = username;
 
-					if(username == "Greed is bad") {
+					if(username == "Fulfill your greed") {
 						Mz_StorageManage.AvailableMoney += 1000000;
+                        characterAnimatedManage.PlayRampageAnimation();
+					}
+					else if(username == "Greed is bad") {
+                        BakeryShop.NumberOfCansellItem.Clear();
+                        for (int i = 0; i < 30; i++)
+                        {
+                            BakeryShop.NumberOfCansellItem.Add(i);
+                        }
+                        base.extendsStorageManager.SaveCanSellGoodListData();
+                        characterAnimatedManage.PlayRampageAnimation();
 					}
 
-					Mz_StorageManage.Save();
+                    base.extendsStorageManager.SaveDataToPermanentMemory();
 
 					currentGUIState = OnGUIState.none;
 					base.UpdateTimeScale(1);
@@ -206,8 +201,6 @@ public class Town : Mz_BaseScene {
 		GUI.EndGroup();
 	}
 
-	#endregion
-
 	public override void OnInput (string nameInput)
 	{
 		switch (nameInput) {
@@ -217,9 +210,8 @@ public class Town : Mz_BaseScene {
 			break;
 		case "Back_button" :  
 			if(Application.isLoadingLevel == false) {
-                Mz_StorageManage.Save();
-				//<!-- Clear static NumberOfCanSellItem.
-				BakeryShop.NumberOfCansellItem.Clear();
+                base.extendsStorageManager.SaveDataToPermanentMemory();
+                this.OnDispose();
 				
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
                 Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
@@ -288,8 +280,7 @@ public class Town : Mz_BaseScene {
         bakeryShopDoorOpen_animated.Play();
         bakeryShopDoorOpen_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
         {
-            if (Application.isLoadingLevel == false)
-            {
+            if (Application.isLoadingLevel == false) {
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.BakeryShop.ToString();
                 Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
             }
@@ -305,5 +296,12 @@ public class Town : Mz_BaseScene {
                 Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
             }
         };
+    }
+
+    public override void OnDispose()
+    {
+        base.OnDispose();
+        //<!-- Clear static NumberOfCanSellItem.
+        BakeryShop.NumberOfCansellItem.Clear();
     }
 }
