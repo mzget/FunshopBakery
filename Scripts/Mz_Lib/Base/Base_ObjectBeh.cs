@@ -54,4 +54,6 @@ public class Base_ObjectBeh : MonoBehaviour {
     }
 
     #endregion
+
+	public virtual void OnDispose() {}
 }

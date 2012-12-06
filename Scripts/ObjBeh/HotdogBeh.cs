@@ -15,9 +15,8 @@ public class HotdogBeh : GoodsBeh {
 		base._canActive = true;
         base.offsetPos = Vector3.up * -0.1f;
 		
-		if(_canActive) {
-			base.waitForIngredientEvent += base.Handle_waitForIngredientEvent;
-		}
+		if(_canActive)
+            base.waitForIngredientEvent += base.Handle_waitForIngredientEvent;
     }
 	
 	
@@ -34,11 +33,13 @@ public class HotdogBeh : GoodsBeh {
 		
 		if(ingredientName == HotdogBeh.HotdogWithSauce) {
 			base.animatedSprite.Play(HotdogBeh.HotdogWithSauce);
-			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) 
-			{	
+			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {	
 				this.gameObject.name = GoodDataStore.GoodsOrderList.Hotdog.ToString();
 				
 				_canDragaable = true;
+                base._canActive = false;
+                GoodsBeh._IsActive = false;
+                base._isWaitFotIngredient = false;
 			};
 			
 			return;
@@ -46,11 +47,13 @@ public class HotdogBeh : GoodsBeh {
 		
 		if(ingredientName == HotdogBeh.HotdogWithCheese) {
 			base.animatedSprite.Play(HotdogBeh.HotdogWithCheese);
-			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
-			{		
+			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {		
 				this.gameObject.name = GoodDataStore.GoodsOrderList.HotdogWithCheese.ToString();
 				
 				_canDragaable = true;
+                base._canActive = false;
+                GoodsBeh._IsActive = false;
+                base._isWaitFotIngredient = false;
 			};
 			
 			return;

@@ -8,6 +8,7 @@ public class DisplayRewards_Scene : Mz_BaseScene {
 	const string PREVIOUS_BUTTON_NAME = "Previous_button";
 
 	public RewardManager rewardManager;
+	public CharacterAnimationManager tk_animationManager;
 	
 	// Use this for initialization
 	void Start () {
@@ -39,9 +40,13 @@ public class DisplayRewards_Scene : Mz_BaseScene {
 				Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
 			}
 			break;
-		case NEXT_BUTTON_NAME:rewardManager.HaveNextPageCommand();
+		case NEXT_BUTTON_NAME:
+			rewardManager.HaveNextPageCommand();
+			tk_animationManager.PlayGoodAnimation();
 			break;
-		case PREVIOUS_BUTTON_NAME : rewardManager.HavePreviousCommand();
+		case PREVIOUS_BUTTON_NAME : 
+			rewardManager.HavePreviousCommand();
+			tk_animationManager.PlayGoodAnimation();
 			break;
 		default:
 		break;

@@ -3,12 +3,11 @@ using System.Collections;
 
 public class GoodsBeh : ObjectsBeh {    
     public const string ClassName = "GoodsBeh";
+	protected static bool _IsActive = false;
     
-    public Vector3 offsetPos;
-	
-	/// <summary>
-	/// WaitForIngredientEvent.
-	/// </summary>
+    public Vector3 offsetPos;	
+
+	// WaitForIngredientEvent.
 	protected bool _isWaitFotIngredient = false;	
 	protected event System.EventHandler waitForIngredientEvent;
 	protected virtual void Handle_waitForIngredientEvent (object sender, System.EventArgs e)
@@ -19,9 +18,7 @@ public class GoodsBeh : ObjectsBeh {
 		Debug.Log("WaitForIngredient :: " + ingredientName);
 	}
 	
-	/// <summary>
 	/// Put goods objects intance on food tray.
-	/// </summary>
 	public event System.EventHandler putObjectOnTray_Event;
 	protected void OnPutOnTray_event (System.EventArgs eventArgs) {
 		if (putObjectOnTray_Event != null) {
@@ -48,7 +45,7 @@ public class GoodsBeh : ObjectsBeh {
 			if(hit.collider.name == sceneManager.bin_behavior_obj.name) {			
 				if(this._isDropObject == true) {
 					sceneManager.bin_behavior_obj.PlayOpenAnimation();
-					Destroy(this.gameObject);
+                    this.OnDispose();
                     OnDestroyObject_event(System.EventArgs.Empty);
 				}
 			}
@@ -100,21 +97,20 @@ public class GoodsBeh : ObjectsBeh {
 		}
     }
 	
-	#region <!-- OnInput Events.
-
+	/// <!-- OnInput Events.
 	protected override void OnTouchDown()
     {		
-		if(_canActive && _isActive == false) {
-			_isActive = true;
+		if(_canActive && _IsActive == false) {
+			_IsActive = true;
 			
 			if(waitForIngredientEvent != null) {
 				waitForIngredientEvent(this, System.EventArgs.Empty);
 			}
+			
+			base.OnTouchDown();
 		}	
 		else 
 			return;
-		
-		base.OnTouchDown();
     }	
 	protected override void OnTouchEnded ()
 	{
@@ -124,5 +120,17 @@ public class GoodsBeh : ObjectsBeh {
 			_isDropObject = true;
 	}
 
-	#endregion
+    public override void OnDispose()
+    {
+        base.OnDispose();
+
+        Destroy(this.gameObject);
+        this.waitForIngredientEvent -= this.Handle_waitForIngredientEvent;
+        this.putObjectOnTray_Event -= this.Handle_putObjectOnTray_Event;
+    }
+
+	public static void StaticDispose ()
+	{
+		GoodsBeh._IsActive = false;
+	}
 }

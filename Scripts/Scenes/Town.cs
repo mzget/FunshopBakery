@@ -6,6 +6,7 @@ public class Town : Mz_BaseScene {
 	public GameObject town_bg_group;
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject flyingBird_group;
+	public GameObject startingCar;
 	public GameObject shop_body_sprite;
     public GameObject sheepBank_body_Obj;
     public tk2dAnimatedSprite bakeryShopDoorOpen_animated;
@@ -59,7 +60,15 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", -.1f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+
+		iTween.MoveTo(startingCar, iTween.Hash("x", 5f, "Time", 20f, "easetype", iTween.EaseType.linear, "oncompletetarget", this.gameObject, "oncomplete", "OnStartingCarComplete"));
 	}
+
+	void OnStartingCarComplete ()
+	{
+		Destroy(startingCar);
+	}
+
 	protected new IEnumerator InitializeAudio ()
 	{
     	base.InitializeAudio();

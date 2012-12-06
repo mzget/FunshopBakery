@@ -3,8 +3,6 @@ using System.Collections;
 
 public class ShopScene_GUIManager : Mz_OnGUIManager {
 	
-	private Mz_BaseScene baseScene;
-
 
     void Awake() {
         CalculateViewportScreen();
@@ -12,9 +10,6 @@ public class ShopScene_GUIManager : Mz_OnGUIManager {
 
 	// Use this for initialization
 	void Start () {
-		baseScene = GameObject.FindGameObjectWithTag("GameController").GetComponent<Mz_BaseScene>();
-		bakeryShop_scene = baseScene as BakeryShop;
-
         this.Initialize_OnGUIDataField();
 	}
 
@@ -35,7 +30,6 @@ public class ShopScene_GUIManager : Mz_OnGUIManager {
 	
 	}
 
-    BakeryShop bakeryShop_scene;
     Rect shopName_Rect;
     Rect trademark_Rect;
 	void OnGUI() {

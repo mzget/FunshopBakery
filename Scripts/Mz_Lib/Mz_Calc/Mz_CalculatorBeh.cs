@@ -11,8 +11,7 @@ public class Mz_CalculatorBeh: MonoBehaviour
 	public Transform middleCenter;
 	public GameObject effectSpriteObj;
 	private GameObject effectSprite_Instance;
-	private tk2dAnimatedSprite effectSprite;
-    private AudioEffectManager audioEffect;    
+	private tk2dAnimatedSprite effectSprite; 
 	
 //    public List<GameObject> themeCalcLists = new List<GameObject>(4);
 //    public GUISkin calc_Skin;
@@ -48,9 +47,6 @@ public class Mz_CalculatorBeh: MonoBehaviour
         //calc.transform.localPosition = Vector3.zero;
 		
 //		Mz_ResizeScale.CalculationScale(calc.transform);
-		
-		//<!-- Store Audio Ebj.
-        audioEffect = GameObject.FindGameObjectWithTag("AudioEffect").GetComponent<AudioEffectManager>();
     }
 
     public int GetDisplayResultTextToInt() {

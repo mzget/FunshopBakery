@@ -27,6 +27,8 @@ public class SheepBank : Mz_BaseScene {
 	public tk2dTextMesh accountBalance_Textmesh;
 	public tk2dTextMesh passbookAccountBalance_textmesh;
     public Mz_CalculatorBeh calculatorBeh;
+	public GameObject availabelMoneyBillboard_Obj;
+	public tk2dTextMesh availableMoneyBillboard_Textmesh;
 	int resultValue = 0;
 
     //<!-- Button object.
@@ -53,9 +55,6 @@ public class SheepBank : Mz_BaseScene {
 	private DonationManager donationManager;
 	private UpgradeInsideManager upgradeInsideManager;
     public GameObject[] upgradeButtons = new GameObject[8];
-
-    //<!-- Texture resources.
-    public Texture2D tk_coin_img;
 
     public enum GameSceneStatus { none = 0, ShowUpgradeInside = 1, ShowDonationForm, ShowDepositForm, ShowWithdrawalForm, ShowPassbook, };
     public GameSceneStatus currentGameStatus;
@@ -202,6 +201,11 @@ public class SheepBank : Mz_BaseScene {
         shadowPlane_Obj.active = true;
 		if(upgradeInside_window_Obj.active) {        
             currentGameStatus = GameSceneStatus.ShowUpgradeInside;
+
+			availabelMoneyBillboard_Obj.gameObject.SetActiveRecursively(true);
+			availableMoneyBillboard_Textmesh.text = Mz_StorageManage.AccountBalance.ToString();
+			availableMoneyBillboard_Textmesh.Commit();
+
 			upgradeInsideManager.ReInitializeData();
         }
 	}
@@ -213,6 +217,7 @@ public class SheepBank : Mz_BaseScene {
         donationForm_group.SetActiveRecursively(false);
 		passbook_group.SetActiveRecursively(false);
 		shadowPlane_Obj.gameObject.active = false;
+		availabelMoneyBillboard_Obj.SetActiveRecursively(false);
 
         currentGameStatus = GameSceneStatus.none;        
     }
@@ -221,33 +226,6 @@ public class SheepBank : Mz_BaseScene {
         
         this.AccountBalanceManager(Mz_StorageManage.AccountBalance);
 	}
-    
-
-    public bool _showSkinLayout;
-    private void OnGUI() {
-        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
-
-		GUI.BeginGroup(ShopScene_GUIManager.viewPort_rect);
-		{
-            if(_showSkinLayout) {
-                GUI.Box(new Rect(0, 0, ShopScene_GUIManager.viewPort_rect.width, ShopScene_GUIManager.viewPort_rect.height), "Skin layout", GUI.skin.box);
-            }
-
-            if(currentGameStatus == GameSceneStatus.ShowUpgradeInside) {
-                Rect drawCoin_rect = new Rect(25, 10, 100, 100);
-                Rect drawPlayerName_rect = new Rect(150, 5, 250, 50);
-                Rect drawPlayerMoney_rect = new Rect(150, 60, 250, 50);
-                GUI.BeginGroup(new Rect(ShopScene_GUIManager.viewPort_rect.width / 2 - 100, 0, 400, 120), GUIContent.none, GUI.skin.box);
-                {
-                    GUI.DrawTexture(drawCoin_rect, tk_coin_img);
-                    GUI.Box(drawPlayerName_rect, Mz_StorageManage.ShopName);
-                    GUI.Box(drawPlayerMoney_rect, Mz_StorageManage.AccountBalance.ToString());
-                }
-                GUI.EndGroup();
-            }
-        }
-        GUI.EndGroup();
-    }
         
     public override void OnInput (string nameInput)	{        
 		if (nameInput == upgradeInside_button.name) {

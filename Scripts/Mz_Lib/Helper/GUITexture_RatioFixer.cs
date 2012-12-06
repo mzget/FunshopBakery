@@ -18,8 +18,6 @@ public class GUITexture_RatioFixer
 
     public static Rect ResizingTextureScale(Rect pixel_inset)
     {
-        float currentRatio = (float)Screen.width / (float)Screen.height;
-
         Vector2 newPos = new Vector2(pixel_inset.x, pixel_inset.y);
         Vector2 newScale = new Vector2(pixel_inset.width, pixel_inset.height);
 

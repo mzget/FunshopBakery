@@ -23,9 +23,11 @@ public class Goods {
 			this.price = instance.price;	
 
 			sceneManager.currentCustomer.list_goodsBag.Remove(instance);	
+
+			Debug.Log("list_goodsBag.Count : " + sceneManager.currentCustomer.list_goodsBag.Count);
 		}
         else {
-			Debug.LogWarning("CustomerInstance.arr_goodsBag.Length == 0");
+			Debug.LogError("CustomerInstance.arr_goodsBag.Length == 0");
         }
 	}
 	

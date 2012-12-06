@@ -24,7 +24,6 @@ public class ObjectsBeh : Base_ObjectBeh {
 	protected bool _isDraggable = false;
     protected bool _isDropObject = false;
 	public bool _canActive = false;	
-	protected bool _isActive = false;
     internal Vector3 originalPosition;
 
     /// <summary>

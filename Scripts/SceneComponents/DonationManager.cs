@@ -78,7 +78,6 @@ public class DonationManager : MonoBehaviour
 
     const int MAX_PageNumber = 3;
     private int currentPageId = 0;
-    Hashtable MoveToDonationTopic_hash = new Hashtable();
 	
 	
 	

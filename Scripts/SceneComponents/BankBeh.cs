@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 
 public class BankBeh : MonoBehaviour {
-
+/*
 	public static event EventHandler GiveInterest_event;
 	private void OnGiveInterestEvent (EventArgs e)
 	{
@@ -39,4 +39,5 @@ public class BankBeh : MonoBehaviour {
     {
         accountBalance = Mz_StorageManage.AccountBalance;
     }
+*/
 }

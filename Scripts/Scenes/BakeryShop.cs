@@ -1272,6 +1272,8 @@ public class BakeryShop : Mz_BaseScene {
     public override void OnDispose()
     {
         base.OnDispose();
+
+		GoodsBeh.StaticDispose();
         
         Destroy(cupcake.gameObject);
         Destroy(miniCake.gameObject);
