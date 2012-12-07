@@ -21,7 +21,9 @@ public class CostumeManager : MonoBehaviour {
     private tk2dSprite[] low1_Sprite = new tk2dSprite[3];
     public tk2dSprite shirt_button;
     public tk2dSprite hat_button;
+	public tk2dTextMesh displayCurrentPageID_textmesh;
     public CharacterCustomization characterCustomization;
+
     public enum TabMenuState { shirt = 0, hat, };
     public TabMenuState currentTabMenuState;
     private int maxPage = 0;
@@ -168,6 +170,10 @@ public class CostumeManager : MonoBehaviour {
                     break;
             }
         }
+
+		int temp_pageID = currentPageIndex + 1;
+		displayCurrentPageID_textmesh.text = temp_pageID + "/" + maxPage;
+		displayCurrentPageID_textmesh.Commit();
     }
     
     public void HaveChooseClotheCommand(string nameInput) {

@@ -26,6 +26,7 @@ public class Dressing : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.6f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
+
     protected new IEnumerator InitializeAudio()
     {
         base.InitializeAudio();
@@ -97,6 +98,5 @@ public class Dressing : Mz_BaseScene {
 				Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
 			}
 		}
-
 	}
 }

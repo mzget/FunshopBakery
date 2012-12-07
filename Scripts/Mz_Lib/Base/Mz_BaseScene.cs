@@ -18,6 +18,8 @@ public class Mz_BaseScene : MonoBehaviour {
 //    public List<AudioClip> appreciate_Clips = new List<AudioClip>();
 //	public List<AudioClip> warning_Clips = new List<AudioClip>();
 	
+	#region <@-- Detect Touch and Input Data Fields.
+
     public Touch touch;
     public Vector3 mousePos;
     public Vector3 originalPos;
@@ -27,13 +29,41 @@ public class Mz_BaseScene : MonoBehaviour {
     public bool _isDragMove = false;
 	internal Mz_SmartDeviceInput smartDeviceInput;
 	public ExtendsStorageManager extendsStorageManager;
+
+	#endregion
+
+	#region <@-- Banner.
+
+#if UNITY_IPHONE
+	
+	public static bool _IsShowADBanner = true;
+	protected Mz_ADBannerManager banner;
+	
+#endif
+
+	#endregion
+
     public bool _hasQuitCommand = false;
 
 
-	void Awake() {
-		this.gameObject.AddComponent<HUDFPS>();
-		this.gameObject.AddComponent<ExtendsStorageManager>();
-		extendsStorageManager = this.GetComponent<ExtendsStorageManager>();
+	void Awake ()
+	{
+		this.gameObject.AddComponent<HUDFPS> ();
+		this.gameObject.AddComponent<ExtendsStorageManager> ();
+		extendsStorageManager = this.GetComponent<ExtendsStorageManager> ();
+
+#if UNITY_IPHONE
+		GameObject bannerObj = GameObject.Find ("Banner_Obj");
+		if (Mz_BaseScene._IsShowADBanner && bannerObj == null) {
+			bannerObj = new GameObject ("Banner_Obj", typeof(Mz_ADBannerManager));
+			DontDestroyOnLoad (bannerObj);
+
+			banner = bannerObj.GetComponent<Mz_ADBannerManager> ();
+		}
+		else if(Mz_BaseScene._IsShowADBanner && bannerObj) {
+			banner = bannerObj.GetComponent<Mz_ADBannerManager> ();
+		} 
+#endif
 	}
 
 	// Use this for initialization

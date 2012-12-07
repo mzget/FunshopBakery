@@ -32,11 +32,11 @@ public class SheepBank : Mz_BaseScene {
 	int resultValue = 0;
 
     //<!-- Button object.
-    public GameObject upgradeOutside_button;
-    public GameObject upgradeInside_button;
 	public GameObject withdrawal_button;
 	public GameObject deposit_button;
-
+	
+	const string UpgradeInside_BUTTON_NAME = "UpgradeInside_button";
+	const string UpgradeOutside_BUTTON_NAME = "UpgradeOutside_button";
     const string DonateButtonName = "Donate_button";
 	const string PreviousButtonName = "Previous_button";
 	const string NextButtonName = "Next_button";
@@ -228,10 +228,10 @@ public class SheepBank : Mz_BaseScene {
 	}
         
     public override void OnInput (string nameInput)	{        
-		if (nameInput == upgradeInside_button.name) {
+		if (nameInput == UpgradeInside_BUTTON_NAME) {
 				StartCoroutine (this.PlayManOfficerAnimation ("ActiveUpgradeInsideForm"));
 				return;
-		} else if (nameInput == upgradeOutside_button.name) {
+		} else if (nameInput == UpgradeOutside_BUTTON_NAME) {
 				StartCoroutine (PlayManOfficerAnimation ("ActiveUpgradeOutside"));
 				return;
 		} else if (nameInput == deposit_button.name) {

@@ -37,7 +37,9 @@ public class UpgradeInsideManager : MonoBehaviour {
         {2200,2300,0,0},
     };
 	
-	private int pageIndex = 0;	
+	private int pageIndex = 0;
+    private const int MAX_PAGE_NUMBER = 3;
+    public tk2dTextMesh displayCurrentPageID_Textmesh;
 	
 	
 	// Use this for initialization
@@ -81,7 +83,7 @@ public class UpgradeInsideManager : MonoBehaviour {
             obj.animation.Play();
         }
 		
-		if(pageIndex < 2)	pageIndex += 1;
+		if(pageIndex < MAX_PAGE_NUMBER - 1)	pageIndex += 1;
 		else pageIndex = 0;
 		
         CalculateObjectsToDisplay();
@@ -95,14 +97,17 @@ public class UpgradeInsideManager : MonoBehaviour {
         if(pageIndex > 0)             
 			pageIndex -= 1;
 		else
-			pageIndex = 2;
+			pageIndex = MAX_PAGE_NUMBER - 1;
 		
 		CalculateObjectsToDisplay();
 	}
 
     private void CalculateObjectsToDisplay()
     {
-        if(pageIndex == 0) {
+        if(pageIndex == 0)
+        {
+            #region <@-- Page index == 0
+
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -149,9 +154,14 @@ public class UpgradeInsideManager : MonoBehaviour {
 			if(BakeryShop.NumberOfCansellItem.Contains(28) || Mz_StorageManage.AccountBalance < firstPage_prices[1,3])	{
 				upgradeButton_Sprites[1,3].spriteId = UnActiveUpgradeButtonID;
 				upgradeButton_Objs[1,3].collider.enabled = false;
-			}
+            }
+
+            #endregion
         }
-        else if(pageIndex == 1) {
+        else if(pageIndex == 1)
+        {
+            #region <@-- Page index = 1;
+
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -199,9 +209,14 @@ public class UpgradeInsideManager : MonoBehaviour {
 			if(BakeryShop.NumberOfCansellItem.Contains(3) || Mz_StorageManage.AccountBalance < secondPage_prices[1,3]) {
 				upgradeButton_Sprites[1,3].spriteId = UnActiveUpgradeButtonID;
 				upgradeButton_Objs[1,3].collider.enabled = false;
-			}
+            }
+
+            #endregion
         }
-        else if(pageIndex == 2) {
+        else if(pageIndex == 2)
+        {
+            #region <@-- Page index == 2
+
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -252,8 +267,14 @@ public class UpgradeInsideManager : MonoBehaviour {
 			if(BakeryShop.NumberOfCansellItem.Contains(29) || Mz_StorageManage.AccountBalance < thirdPage_prices[1,1]) {
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
 				upgradeButton_Objs[1,1].collider.enabled = false;
-			}
+            }
+
+            #endregion
         }
+
+        int temp_pageID = pageIndex + 1;
+        displayCurrentPageID_Textmesh.text = temp_pageID + "/" + MAX_PAGE_NUMBER;
+        displayCurrentPageID_Textmesh.Commit();
     }
 
     public void BuyingUpgradeMechanism(string upgradeName) {

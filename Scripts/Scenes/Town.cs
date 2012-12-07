@@ -35,12 +35,11 @@ public class Town : Mz_BaseScene {
 	Rect editShop_OKButton_rect = new Rect(10, 150, 100, 40);
 	Rect editShop_CancelButton_rect = new Rect(160, 150, 100, 40);
 
-    
+	
 	// Use this for initialization
 	void Start () 
 	{
 		StartCoroutine(this.InitializeAudio());
-
  		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
 
         //StartCoroutine(InitializeBankBeh());
