@@ -30,7 +30,7 @@ public class Town : Mz_BaseScene {
 	Rect drawShopName_rect;
 	Rect drawPlayerMoney_rect;
 
-	string username = "";
+	string shopname = "";
 	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
 	Rect editShop_OKButton_rect = new Rect(10, 150, 100, 40);
 	Rect editShop_CancelButton_rect = new Rect(160, 150, 100, 40);
@@ -175,17 +175,18 @@ public class Town : Mz_BaseScene {
 	{
 		GUI.BeginGroup(new Rect (Screen.width / 2 - 150, Main.GAMEHEIGHT / 2 - 100, 300, 200), "Edit shopname !", GUI.skin.window);
 		{
-			username = GUI.TextField(editShop_Textfield_rect, username, 24);
+			shopname = GUI.TextField(editShop_Textfield_rect, shopname, 24);
 
 			if(GUI.Button(editShop_OKButton_rect, "OK")) {
-				if(username != "" && username.Length >= 3) {
-					Mz_StorageManage.ShopName = username;
+				if(shopname != "" && shopname.Length >= 3) {
 
-					if(username == "Fulfill your greed") {
+					if(shopname == "Fulfill your greed") {
 						Mz_StorageManage.AvailableMoney += 1000000;
                         characterAnimatedManage.PlayRampageAnimation();
+
+						shopname = string.Empty;
 					}
-					else if(username == "Greed is bad") {
+					else if(shopname == "Greed is bad") {
                         BakeryShop.NumberOfCansellItem.Clear();
                         for (int i = 0; i < 30; i++)
                         {
@@ -193,6 +194,11 @@ public class Town : Mz_BaseScene {
                         }
                         base.extendsStorageManager.SaveCanSellGoodListData();
                         characterAnimatedManage.PlayRampageAnimation();
+
+						shopname = string.Empty;
+					}
+					else {
+						Mz_StorageManage.ShopName = shopname;
 					}
 
                     base.extendsStorageManager.SaveDataToPermanentMemory();

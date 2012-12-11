@@ -95,9 +95,10 @@ public class BakeryShop : Mz_BaseScene {
     public GameObject custardJam_instance;
 
 	#endregion
-	
-	#region <!-- Cakes object data. 
-	
+
+	/// <summary>
+	/// <!-- Cakes && CreamBeh data fields.
+	/// </summary>
 	public Transform cupcakeBase_transform;
 	public Transform miniCakeBase_transform;
 	public Transform cakeBase_transform;
@@ -107,8 +108,6 @@ public class BakeryShop : Mz_BaseScene {
     public GameObject chocolate_cream_Instance;
     public GameObject blueberry_cream_Instance;
     public GameObject strawberry_cream_Instance;
-	
-	#endregion
 
     #region <!-- Sandwich && Cookie data fields group.
 
@@ -168,9 +167,12 @@ public class BakeryShop : Mz_BaseScene {
 		custardJam_instance.SetActiveRecursively(false);
 
         StartCoroutine(CreateToastInstance());
+
+		StartCoroutine(this.InitializeCreamBeh());
         StartCoroutine(CreateCupcakeInstance());
         StartCoroutine(InitializeMinicakeInstance());
         StartCoroutine(InitializeCakeInstance());
+
         StartCoroutine(InitializeTunaSandwichInstance());
 		StartCoroutine(this.Initialize_deepFriedChickenSandwich());
 		StartCoroutine(this.Initailize_HamSandwich());
@@ -335,7 +337,23 @@ public class BakeryShop : Mz_BaseScene {
         yield return null;
     }
 	
-	#region <!-- Cake gameobject mechanism section.
+	#region <!-- Cake && Cream object mechanism section.
+
+	IEnumerator InitializeCreamBeh ()
+	{
+		chocolate_cream_Instance.active = true;
+		if(CreamBeh.arr_CreamBehs[1] != string.Empty)
+			blueberry_cream_Instance.active = true;
+		else
+			blueberry_cream_Instance.active = false;
+		if(CreamBeh.arr_CreamBehs[2] != string.Empty)
+			strawberry_cream_Instance.active = true;
+		else
+			strawberry_cream_Instance.active = false;
+		
+
+		yield return null;
+	}
 	
 	IEnumerator CreateCupcakeInstance() {		
 		yield return new WaitForFixedUpdate();
@@ -1274,6 +1292,7 @@ public class BakeryShop : Mz_BaseScene {
         base.OnDispose();
 
 		GoodsBeh.StaticDispose();
+		
         
         Destroy(cupcake.gameObject);
         Destroy(miniCake.gameObject);

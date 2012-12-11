@@ -6,6 +6,11 @@ public class CreamBeh : ObjectsBeh {
 	public const string ChocolateCream = "ChocolateCream";
 	public const string StrawberryCream = "StrawberryCream";
 	public const string BlueberryCream = "BlueberryCream";	
+
+	/// <summary>
+	/// Static game data.
+	/// </summary>
+	internal static string[] arr_CreamBehs = new string[3]; 
 	
 	
 	// Use this for initialization

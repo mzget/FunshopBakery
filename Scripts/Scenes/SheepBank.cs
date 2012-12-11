@@ -31,10 +31,9 @@ public class SheepBank : Mz_BaseScene {
 	public tk2dTextMesh availableMoneyBillboard_Textmesh;
 	int resultValue = 0;
 
-    //<!-- Button object.
-	public GameObject withdrawal_button;
-	public GameObject deposit_button;
-	
+    //<!-- Constance Button Name.
+	const string WITHDRAWAL_BUTTON_NAME = "Withdrawal_button";
+	const string DEPOSIT_BUTTON_NAME = "Deposit_button";
 	const string UpgradeInside_BUTTON_NAME = "UpgradeInside_button";
 	const string UpgradeOutside_BUTTON_NAME = "UpgradeOutside_button";
     const string DonateButtonName = "Donate_button";
@@ -61,8 +60,7 @@ public class SheepBank : Mz_BaseScene {
 	public BankOfficer offecer = new BankOfficer();
 	
 	internal static bool HaveUpgradeOutSide = false;
-
-
+	
 	// Use this for initialization
 	void Start () {
 		SheepBank.HaveUpgradeOutSide = false;
@@ -203,12 +201,18 @@ public class SheepBank : Mz_BaseScene {
             currentGameStatus = GameSceneStatus.ShowUpgradeInside;
 
 			availabelMoneyBillboard_Obj.gameObject.SetActiveRecursively(true);
-			availableMoneyBillboard_Textmesh.text = Mz_StorageManage.AccountBalance.ToString();
-			availableMoneyBillboard_Textmesh.Commit();
+			this.ManageAvailabelMoneyBillBoard();
 
 			upgradeInsideManager.ReInitializeData();
         }
 	}
+
+	internal void ManageAvailabelMoneyBillBoard ()
+	{
+		availableMoneyBillboard_Textmesh.text = Mz_StorageManage.AccountBalance.ToString();
+		availableMoneyBillboard_Textmesh.Commit();
+	}
+
     private void OnMoveUpComplete_event() {
         upgradeInside_window_Obj.SetActiveRecursively(false);
 		depositForm_Obj.gameObject.SetActiveRecursively(false);
@@ -234,10 +238,10 @@ public class SheepBank : Mz_BaseScene {
 		} else if (nameInput == UpgradeOutside_BUTTON_NAME) {
 				StartCoroutine (PlayManOfficerAnimation ("ActiveUpgradeOutside"));
 				return;
-		} else if (nameInput == deposit_button.name) {
+		} else if (nameInput == DEPOSIT_BUTTON_NAME) {
 				StartCoroutine (this.PlayWomanOfficerAnimation (ActiveDepositForm_function));
 				return;
-		} else if (nameInput == withdrawal_button.name) {
+		} else if (nameInput == WITHDRAWAL_BUTTON_NAME) {
 				StartCoroutine (this.PlayWomanOfficerAnimation (ActiveWithdrawalForm_function));
 				return;
 		} else if (nameInput == DonateButtonName) {
@@ -309,8 +313,9 @@ public class SheepBank : Mz_BaseScene {
                 }
                 break;
             case GameSceneStatus.ShowDepositForm:
-                if (nameInput == OKButtonName)
+                if (nameInput == OKButtonName) {
                     CompleteDopositSession();
+				}
                 break;
             case GameSceneStatus.ShowWithdrawalForm:
                 if (nameInput == OKButtonName)
@@ -358,15 +363,19 @@ public class SheepBank : Mz_BaseScene {
 	private void CompleteDopositSession ()
 	{
 		resultValue = calculatorBeh.GetDisplayResultTextToInt();
-        if(resultValue <= Mz_StorageManage.AvailableMoney) {
+        if(resultValue > 0 && resultValue <= Mz_StorageManage.AvailableMoney) {
 		    int sumOfAccountBalance =  Mz_StorageManage.AccountBalance + resultValue;
 		    int availableBalance = Mz_StorageManage.AvailableMoney - resultValue;
 		    AccountBalanceManager(sumOfAccountBalance);
 		    AvailableMoneyManager(availableBalance);
 		    calculatorBeh.ClearCalcMechanism();
+			
+			audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
         }
         else {
-            calculatorBeh.ClearCalcMechanism();
+            calculatorBeh.ClearCalcMechanism();			
+			audioEffect.PlayOnecWithOutStop(audioEffect.mutter_clip);
 
 			Debug.LogWarning("result value more than available money");
         }
@@ -386,17 +395,20 @@ public class SheepBank : Mz_BaseScene {
     {
         resultValue = calculatorBeh.GetDisplayResultTextToInt();
 
-        if (resultValue <= Mz_StorageManage.AccountBalance)
+        if (resultValue > 0 && resultValue <= Mz_StorageManage.AccountBalance)
         {
             int newAvailableBalance = Mz_StorageManage.AvailableMoney + resultValue;
             int newAccountBalance = Mz_StorageManage.AccountBalance - resultValue;
             AvailableMoneyManager(newAvailableBalance);
             AccountBalanceManager(newAccountBalance);
-            calculatorBeh.ClearCalcMechanism();
+            calculatorBeh.ClearCalcMechanism();			
+			
+			audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
         }
         else {
             calculatorBeh.ClearCalcMechanism();
-
+			audioEffect.PlayOnecWithOutStop(audioEffect.mutter_clip);
 			Debug.LogWarning("result value more than account balance");
         }
     }

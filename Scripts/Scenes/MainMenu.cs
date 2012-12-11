@@ -299,6 +299,8 @@ public class MainMenu : Mz_BaseScene {
 
         int[] IdOfCanSellItem = new int[] { 0, 5, 9, 18 };
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist", IdOfCanSellItem);
+		string[] availabelCreams = new string[] { CreamBeh.ChocolateCream, string.Empty, string.Empty, };
+		PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AVAILABLE_CREAM, availabelCreams);
 
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ROOF_ID, 255);
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AWNING_ID, 255);

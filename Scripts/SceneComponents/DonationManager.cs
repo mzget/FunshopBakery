@@ -585,7 +585,7 @@ public class DonationManager : MonoBehaviour
             {
                 //@! Can donation.
                 Mz_StorageManage.AccountBalance -= currentPriceToDonate;
-                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", topDonateButton_Obj.transform);
+                sceneController.effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, topDonateButton_Obj.transform);
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
 				ConservationAnimals.Level++;
@@ -604,7 +604,7 @@ public class DonationManager : MonoBehaviour
             if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
             {
                 Mz_StorageManage.AccountBalance -= currentPriceToDonate;
-                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", downDonateButton_Obj.transform);
+                sceneController.effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, downDonateButton_Obj.transform);
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
 				AIDSFoundation.Level++;
@@ -623,7 +623,7 @@ public class DonationManager : MonoBehaviour
             if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
             {
                 Mz_StorageManage.AccountBalance -= currentPriceToDonate;
-                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", topDonateButton_Obj.transform);
+                sceneController.effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, topDonateButton_Obj.transform);
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
 				LoveDogConsortium.Level++;
@@ -641,7 +641,7 @@ public class DonationManager : MonoBehaviour
             if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
             {
                 Mz_StorageManage.AccountBalance -= currentPriceToDonate;
-                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", downDonateButton_Obj.transform);
+                sceneController.effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, downDonateButton_Obj.transform);
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
 				LoveKidsFoundation.Level++;
@@ -660,7 +660,7 @@ public class DonationManager : MonoBehaviour
             if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
             {
                 Mz_StorageManage.AccountBalance -= currentPriceToDonate;
-                sceneController.effectManager.Create2DSpriteAnimationEffect("BloomStar", topDonateButton_Obj.transform);
+                sceneController.effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, topDonateButton_Obj.transform);
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
 				EcoFoundation.Level ++;

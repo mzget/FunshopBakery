@@ -57,7 +57,7 @@ public class GoodDataStore : ScriptableObject {
         new Goods(GoodsOrderList.ToastWithButterJam.ToString(), 10),         // 7
         new Goods(GoodsOrderList.ToastWithCustardJam.ToString(), 10),        // 8
         
-	    new Goods(GoodsOrderList.Chocolate_cupcake.ToString(), 15), //_can sell
+	    new Goods(GoodsOrderList.Chocolate_cupcake.ToString(), 15), // 9 << can sell >>
         new Goods(GoodsOrderList.Blueberry_cupcake.ToString(), 15),     // 10
         new Goods(GoodsOrderList.Strawberry_cupcake.ToString(), 15),    // 11
 		

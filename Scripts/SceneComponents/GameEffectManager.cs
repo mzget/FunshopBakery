@@ -3,7 +3,9 @@ using System.Collections;
 
 public class GameEffectManager : MonoBehaviour {
 	
-    public const string GameEffect_PATH = "GameEffects/";
+	public const string BLOOMSTAR_EFFECT_PATH = "GameEffects/BloomStar";
+	public const string IRIDESCENT_EFFECT_PATH = "GameEffects/Iridescent";
+	public const string STARINCIDENT_EFFECT_PATH = "GameEffects/StarIncident";
 	
 	// Use this for initialization
 //	void Start () {
@@ -11,9 +13,9 @@ public class GameEffectManager : MonoBehaviour {
 //	}
 	
 	public void Create2DSpriteAnimationEffect(string targetName, Transform transform) {
-        GameObject effect = Instantiate(Resources.Load(GameEffect_PATH + targetName, typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
+        GameObject effect = Instantiate(Resources.Load(targetName, typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
         effect.transform.parent = transform;
-        effect.transform.localScale = Vector3.one;
+        effect.transform.localScale = Vector3.one * Camera.main.orthographicSize;
         effect.transform.position += Vector3.back;
 		
 

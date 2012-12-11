@@ -40,11 +40,19 @@ public class UpgradeInsideManager : MonoBehaviour {
 	private int pageIndex = 0;
     private const int MAX_PAGE_NUMBER = 3;
     public tk2dTextMesh displayCurrentPageID_Textmesh;
+
+	/// <summary>
+	/// Calss references.
+	/// </summary>
+	private SheepBank sceneController;
 	
 	
 	// Use this for initialization
 	void Start () {
 		pageIndex = 0;
+
+		var controller = GameObject.FindGameObjectWithTag("GameController");
+		sceneController = controller.GetComponent<SheepBank>();
 	}
 	
 	internal void ReInitializeData() {
@@ -118,42 +126,45 @@ public class UpgradeInsideManager : MonoBehaviour {
                     upgradeInside_PriceTextmesh[i, j].Commit();
 
 					upgradeButton_Objs[i,j].active = true;
-					upgradeButton_Objs[i,j].collider.enabled = true;
+//					upgradeButton_Objs[i,j].collider.enabled = true;
 					upgradeButton_Sprites[i,j].spriteId = ActiveUpgradeButtonID;
                 }
             }			
 			
 			if(BakeryShop.NumberOfCansellItem.Contains(6) || Mz_StorageManage.AccountBalance < firstPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,0].collider.enabled = false;
+//				upgradeButton_Objs[0,0].collider.enabled = false;
 			}
-			if(BakeryShop.NumberOfCansellItem.Contains(10) || Mz_StorageManage.AccountBalance < firstPage_prices[0,1]) {
+//			if(BakeryShop.NumberOfCansellItem.Contains(10) || Mz_StorageManage.AccountBalance < firstPage_prices[0,1]) {
+//				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
+////				upgradeButton_Objs[0,1].collider.enabled = false;
+//			}
+			if(CreamBeh.arr_CreamBehs[1] != string.Empty || Mz_StorageManage.AccountBalance < firstPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,1].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13) || Mz_StorageManage.AccountBalance < firstPage_prices[0,2]) {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,2].collider.enabled = false;
+//				upgradeButton_Objs[0,2].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16) || Mz_StorageManage.AccountBalance < firstPage_prices[0,3]) {
 				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,3].collider.enabled = false;
+//				upgradeButton_Objs[0,3].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(19) || Mz_StorageManage.AccountBalance < firstPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,0].collider.enabled = false;
+//				upgradeButton_Objs[1,0].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(21) || Mz_StorageManage.AccountBalance < firstPage_prices[1,1]) {
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,1].collider.enabled = false;
+//				upgradeButton_Objs[1,1].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(25) || Mz_StorageManage.AccountBalance < firstPage_prices[1,2]) {
 				upgradeButton_Sprites[1,2].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,2].collider.enabled = false;
+//				upgradeButton_Objs[1,2].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(28) || Mz_StorageManage.AccountBalance < firstPage_prices[1,3])	{
 				upgradeButton_Sprites[1,3].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,3].collider.enabled = false;
+//				upgradeButton_Objs[1,3].collider.enabled = false;
             }
 
             #endregion
@@ -179,36 +190,36 @@ public class UpgradeInsideManager : MonoBehaviour {
 			
 			if(BakeryShop.NumberOfCansellItem.Contains(1) || Mz_StorageManage.AccountBalance < secondPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,0].collider.enabled = false;
+//				upgradeButton_Objs[0,0].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(2) || Mz_StorageManage.AccountBalance < secondPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,1].collider.enabled = false;
+//				upgradeButton_Objs[0,1].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(7) || Mz_StorageManage.AccountBalance < secondPage_prices[0,2]) {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,2].collider.enabled = false;
+//				upgradeButton_Objs[0,2].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(11) || BakeryShop.NumberOfCansellItem.Contains(14) || BakeryShop.NumberOfCansellItem.Contains(17) ||
 				Mz_StorageManage.AccountBalance < secondPage_prices[0,3]) {
 				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,3].collider.enabled = false;
+//				upgradeButton_Objs[0,3].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(20) || Mz_StorageManage.AccountBalance < secondPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,0].collider.enabled = false;
+//				upgradeButton_Objs[1,0].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(22) || Mz_StorageManage.AccountBalance < secondPage_prices[1,1])	{
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,1].collider.enabled = false;
+//				upgradeButton_Objs[1,1].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(26) || Mz_StorageManage.AccountBalance < secondPage_prices[1,2]) {
 				upgradeButton_Sprites[1,2].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,2].collider.enabled = false;
+//				upgradeButton_Objs[1,2].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(3) || Mz_StorageManage.AccountBalance < secondPage_prices[1,3]) {
 				upgradeButton_Sprites[1,3].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,3].collider.enabled = false;
+//				upgradeButton_Objs[1,3].collider.enabled = false;
             }
 
             #endregion
@@ -246,27 +257,27 @@ public class UpgradeInsideManager : MonoBehaviour {
 			
 			if(BakeryShop.NumberOfCansellItem.Contains(4) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,0].collider.enabled = false;
+//				upgradeButton_Objs[0,0].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(8) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,1].collider.enabled = false;
+//				upgradeButton_Objs[0,1].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(23) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,2]) {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,2].collider.enabled = false;
+//				upgradeButton_Objs[0,2].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(24) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,3]) {
 				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[0,3].collider.enabled = false;
+//				upgradeButton_Objs[0,3].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(27) || Mz_StorageManage.AccountBalance < thirdPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,0].collider.enabled = false;
+//				upgradeButton_Objs[1,0].collider.enabled = false;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(29) || Mz_StorageManage.AccountBalance < thirdPage_prices[1,1]) {
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
-				upgradeButton_Objs[1,1].collider.enabled = false;
+//				upgradeButton_Objs[1,1].collider.enabled = false;
             }
 
             #endregion
@@ -281,59 +292,128 @@ public class UpgradeInsideManager : MonoBehaviour {
         if(pageIndex == 0) {
 			#region <!-- page 0, low 0.
 			
-            if(upgradeName == "upgrade_00") {
-                if(Mz_StorageManage.AccountBalance >= firstPage_prices[0,0]) {
-                    Debug.Log("buying : blueberry_jam");
-					
+            if(upgradeName == "upgrade_00")
+            {
+                #region <@-- "buying : blueberry_jam".
+
+                if (Mz_StorageManage.AccountBalance >= firstPage_prices[0,0]) 
+				{
 					if(BakeryShop.NumberOfCansellItem.Contains(6) == false) {
 						BakeryShop.NumberOfCansellItem.Add(6);	
+						
+
+						this.BuyingUpgradeComplete(0, 0);
+                    	Debug.Log("buying : blueberry_jam");
 					}
-
-					upgradeButton_Sprites[0,0].spriteId = 28;
-                    Mz_StorageManage.AccountBalance -= firstPage_prices[0, 0];
-                    CalculateObjectsToDisplay();
+					else{
+						Debug.Log("This Item has be upgraded");
+						this.PlaySoundWarning();
+					}
                 }
-            }
-            else if(upgradeName == "upgrade_01") {
-                if(Mz_StorageManage.AccountBalance >= firstPage_prices[0,1]) {
-                    Debug.Log("buying : blueberry_cream");
-					
-					if(BakeryShop.NumberOfCansellItem.Contains(10) == false)
-						BakeryShop.NumberOfCansellItem.Add(10);	
-
-					upgradeButton_Sprites[0,1].spriteId = 28;
-                    Mz_StorageManage.AccountBalance -= firstPage_prices[0, 1];
-                    CalculateObjectsToDisplay();
+				else {
+					Debug.Log("Connot upgrade this item because availabel money is not enough.");
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
                 }
+
+                #endregion
             }
-			else if(upgradeName == "upgrade_02") {
-				if(Mz_StorageManage.AccountBalance >= firstPage_prices[0,2]) {
-                    Debug.Log("buying : miniCake");
-					
-					if(BakeryShop.NumberOfCansellItem.Contains(12) == false)
-						BakeryShop.NumberOfCansellItem.Add(12);	
-					if(BakeryShop.NumberOfCansellItem.Contains(13) == false)
-						BakeryShop.NumberOfCansellItem.Add(13);	
+            else if(upgradeName == "upgrade_01")
+            {
+                #region <@-- "buying : blueberry_cream"
 
-					upgradeButton_Sprites[0,2].spriteId = 28;
-                    Mz_StorageManage.AccountBalance -= firstPage_prices[0, 2];
-                    CalculateObjectsToDisplay();
-				}
-			}
-			else if(upgradeName == "upgrade_03") {
-				if(Mz_StorageManage.AccountBalance >= firstPage_prices[0, 3]) {
-                    Debug.Log("buying : Cake");
-					
-					if(BakeryShop.NumberOfCansellItem.Contains(15) == false)
-						BakeryShop.NumberOfCansellItem.Add(15);	
-					if(BakeryShop.NumberOfCansellItem.Contains(16) == false)
-						BakeryShop.NumberOfCansellItem.Add(16);	
+                if (Mz_StorageManage.AccountBalance >= firstPage_prices[0,1]) 
+				{					
+					if(CreamBeh.arr_CreamBehs[1] == string.Empty) {
+						CreamBeh.arr_CreamBehs[1] = CreamBeh.BlueberryCream;
 
-					upgradeButton_Sprites[0,3].spriteId = 28;
-                    Mz_StorageManage.AccountBalance -= firstPage_prices[0, 3];
-                    CalculateObjectsToDisplay();
+                        if (BakeryShop.NumberOfCansellItem.Contains(9)  // Chocolate_cupcake.
+                            && BakeryShop.NumberOfCansellItem.Contains(10) == false)
+                            BakeryShop.NumberOfCansellItem.Add(10);     // Add Blueberry_cupcake.
+
+                        if (BakeryShop.NumberOfCansellItem.Contains(12) //Chocolate_minicake.
+                            && BakeryShop.NumberOfCansellItem.Contains(13) == false)
+                            BakeryShop.NumberOfCansellItem.Add(13);     // Add Blueberry_minicake.
+
+                        if (BakeryShop.NumberOfCansellItem.Contains(15) // Chocolate_cake.
+                            && BakeryShop.NumberOfCansellItem.Contains(16) == false)   
+                            BakeryShop.NumberOfCansellItem.Add(16);     // Add Blueberry_cake.
+
+						this.BuyingUpgradeComplete(0,1);
+						Debug.Log("buying : blueberry_cream");
+					}
+					else{
+						Debug.Log("This Item has be upgraded");
+						this.PlaySoundWarning();
+					}
+                }
+				else {
+					Debug.Log("Connot upgrade this item because availabel money is not enough.");
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+                }
+
+                #endregion
+            }
+			else if(upgradeName == "upgrade_02")
+            {
+                #region <@-- buying : Mini Cake.
+
+                if (Mz_StorageManage.AccountBalance >= firstPage_prices[0,2])
+				{
+					if(!BakeryShop.NumberOfCansellItem.Contains(12) &&  CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream
+					   || !BakeryShop.NumberOfCansellItem.Contains(13) && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream
+					   || !BakeryShop.NumberOfCansellItem.Contains(14) && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
+					{
+						if(BakeryShop.NumberOfCansellItem.Contains(12) == false && CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream)
+							BakeryShop.NumberOfCansellItem.Add(12);	//Chocolate_minicake.
+						if(BakeryShop.NumberOfCansellItem.Contains(13) == false && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream)
+							BakeryShop.NumberOfCansellItem.Add(13);	//Blueberry_minicake.
+						if(BakeryShop.NumberOfCansellItem.Contains(14) == false && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
+							BakeryShop.NumberOfCansellItem.Add(14); //Strawberry_minicake.
+
+						this.BuyingUpgradeComplete(0,2);
+						Debug.Log("buying : Mini Cake");
+					}
+					else{
+						Debug.Log("This Item has be upgraded");
+						this.PlaySoundWarning();
+					}
 				}
-			}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+                }
+
+                #endregion
+            }
+			else if(upgradeName == "upgrade_03")
+            {
+                #region <@-- "buying : Cake".
+
+                if (Mz_StorageManage.AccountBalance >= firstPage_prices[0, 3]) {
+                    if(BakeryShop.NumberOfCansellItem.Contains(15) == false && CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream
+                        || BakeryShop.NumberOfCansellItem.Contains(16) == false && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream
+                        || BakeryShop.NumberOfCansellItem.Contains(17) == false && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
+                    {
+					    if(BakeryShop.NumberOfCansellItem.Contains(15) == false && CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream)
+						    BakeryShop.NumberOfCansellItem.Add(15);	// Add Chocolate_cake.
+					    if(BakeryShop.NumberOfCansellItem.Contains(16) == false && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream)
+						    BakeryShop.NumberOfCansellItem.Add(16);	// Add Blueberry_cake.
+						if(BakeryShop.NumberOfCansellItem.Contains(17) == false && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
+							BakeryShop.NumberOfCansellItem.Add(17); // Add Strawberry_cake.
+
+					    this.BuyingUpgradeComplete(0,3);
+                        Debug.Log("buying : Cake");
+                    }
+					else{
+						Debug.Log("This Item has be upgraded");
+						this.PlaySoundWarning();
+					}
+				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+                }
+
+                #endregion
+            }
 			
 			#endregion 
 			#region <!-- page 0, Low 1.
@@ -350,6 +430,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= firstPage_prices[1, 0];
                     CalculateObjectsToDisplay();
 				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			else if(upgradeName == "upgrade_11") {				
 				if(Mz_StorageManage.AccountBalance >= firstPage_prices[1, 1]) {
@@ -361,6 +444,9 @@ public class UpgradeInsideManager : MonoBehaviour {
 					upgradeButton_Sprites[1,1].spriteId = 28;
                     Mz_StorageManage.AccountBalance -= firstPage_prices[1, 1];
                     CalculateObjectsToDisplay();
+				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
 				}
 			}
 			else if(upgradeName == "upgrade_12") {				
@@ -374,6 +460,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= firstPage_prices[1, 2];
                     CalculateObjectsToDisplay();
 				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			else if(upgradeName == "upgrade_13") {				
 				if(Mz_StorageManage.AccountBalance >= firstPage_prices[1, 3]) {
@@ -385,6 +474,9 @@ public class UpgradeInsideManager : MonoBehaviour {
 					upgradeButton_Sprites[1,3].spriteId = 28;
                     Mz_StorageManage.AccountBalance -= firstPage_prices[1, 3];
                     CalculateObjectsToDisplay();
+				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
 				}
 			}
 			
@@ -404,6 +496,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= secondPage_prices[0, 0];
                     CalculateObjectsToDisplay();
                 }
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			else if(upgradeName == "upgrade_01") {		
                 if(Mz_StorageManage.AccountBalance >= secondPage_prices[0,1]) {
@@ -416,6 +511,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= secondPage_prices[0, 1];
                     CalculateObjectsToDisplay();
                 }
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			else if(upgradeName == "upgrade_02") {
 				if(Mz_StorageManage.AccountBalance >= secondPage_prices[0,2]) {
@@ -427,6 +525,9 @@ public class UpgradeInsideManager : MonoBehaviour {
 					upgradeButton_Sprites[0,2].spriteId = 28;
                     Mz_StorageManage.AccountBalance -= secondPage_prices[0, 2];
                     CalculateObjectsToDisplay();
+				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
 				}
 			}
 			else if(upgradeName == "upgrade_03") {
@@ -444,6 +545,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= secondPage_prices[0, 3];
                     CalculateObjectsToDisplay();
 				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			
 			#endregion
@@ -459,6 +563,9 @@ public class UpgradeInsideManager : MonoBehaviour {
 					upgradeButton_Sprites[1,0].spriteId = 28;
                     Mz_StorageManage.AccountBalance -= secondPage_prices[1, 0];
                     CalculateObjectsToDisplay();
+				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
 				}
 			}
 			else if(upgradeName == "upgrade_11") {				
@@ -484,6 +591,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= secondPage_prices[1, 2];
                     CalculateObjectsToDisplay();
 				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			else if(upgradeName == "upgrade_13") {				
 				if(Mz_StorageManage.AccountBalance >= secondPage_prices[1,3]) {
@@ -495,6 +605,9 @@ public class UpgradeInsideManager : MonoBehaviour {
 					upgradeButton_Sprites[1,3].spriteId = 28;
                     Mz_StorageManage.AccountBalance -= secondPage_prices[1, 3];
                     CalculateObjectsToDisplay();
+				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
 				}
 			}
 
@@ -514,6 +627,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= thirdPage_prices[0, 0];
                     CalculateObjectsToDisplay();
 				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			else if(upgradeName == "upgrade_01") {		
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[0,1]) {
@@ -525,6 +641,9 @@ public class UpgradeInsideManager : MonoBehaviour {
 					upgradeButton_Sprites[0, 1].spriteId = 28;
                     Mz_StorageManage.AccountBalance -= thirdPage_prices[0, 1];
                     CalculateObjectsToDisplay();
+				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
 				}
 			}
 			else if(upgradeName == "upgrade_02") {
@@ -538,6 +657,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= thirdPage_prices[0, 2];
                     CalculateObjectsToDisplay();
 				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			else if(upgradeName == "upgrade_03") {
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[0,3]) {
@@ -549,6 +671,9 @@ public class UpgradeInsideManager : MonoBehaviour {
 					upgradeButton_Sprites[0, 3].spriteId = 28;
                     Mz_StorageManage.AccountBalance -= thirdPage_prices[0, 3];
                     CalculateObjectsToDisplay();
+				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
 				}
 			}
 
@@ -566,6 +691,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= thirdPage_prices[1, 0];
                     CalculateObjectsToDisplay();
 				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 			else if(upgradeName == "upgrade_11") {		
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[1,1]) {
@@ -578,9 +706,27 @@ public class UpgradeInsideManager : MonoBehaviour {
                     Mz_StorageManage.AccountBalance -= thirdPage_prices[1, 1];
                     CalculateObjectsToDisplay();
 				}
+				else {
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+				}
 			}
 
 			#endregion
 		}
     }
+
+	void BuyingUpgradeComplete (int i, int j)
+	{
+		Mz_StorageManage.AccountBalance -= firstPage_prices[i, j];
+		upgradeButton_Sprites[i,j].spriteId = 28;
+		CalculateObjectsToDisplay();
+		sceneController.ManageAvailabelMoneyBillBoard();
+		sceneController.effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, upgradeButton_Objs[i,j].transform);
+		sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
+	}
+
+	void PlaySoundWarning ()
+	{
+		sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+	}
 }

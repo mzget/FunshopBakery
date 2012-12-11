@@ -12,11 +12,21 @@ public class ExtendsStorageManager : Mz_StorageManage
 		foreach (var item in array) {
 			BakeryShop.NumberOfCansellItem.Add(item);
 		}
+
+		string[] arr_availabelCreams = PlayerPrefsX.GetStringArray(Mz_StorageManage.SaveSlot + KEY_AVAILABLE_CREAM);
+		for (int i = 0; i < 3; i++) {
+			CreamBeh.arr_CreamBehs[i] = null;
+		}
+		for (int i = 0; i < arr_availabelCreams.Length; i++) {
+			CreamBeh.arr_CreamBehs[i] = arr_availabelCreams[i];	
+		}
 	}
 
     public void SaveCanSellGoodListData() {		
 		int[] array_temp = BakeryShop.NumberOfCansellItem.ToArray();
 		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist", array_temp);        
+
+		PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + KEY_AVAILABLE_CREAM, CreamBeh.arr_CreamBehs);
     }
 
 	public override void LoadSaveDataToGameStorage()
