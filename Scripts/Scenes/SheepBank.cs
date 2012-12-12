@@ -42,6 +42,8 @@ public class SheepBank : Mz_BaseScene {
     const string OKButtonName = "OK_button";
 	const string BACK_BUTTON_NAME = "Back_button";
 	const string PASSBOOKBUTTONNAME = "Passbook_button";
+	const string YES_BUTTON_NAME = "Yes_button";
+	const string NO_BUTTON_NAME = "No_button";
 	
 	const string ActiveDonationForm_function = "ActiveDonationForm";
     const string ActiveDepositForm_function = "ActiveDepositForm";
@@ -91,7 +93,7 @@ public class SheepBank : Mz_BaseScene {
 //		base.InitializeGameEffectGenerator ();
 
 		this.gameObject.AddComponent<GameEffectManager>();
-		base.effectManager = this.gameObject.GetComponent<GameEffectManager>();
+		base.gameEffectManager = this.gameObject.GetComponent<GameEffectManager>();
 	}
 
 	private IEnumerator InitializeBankOfficer ()
@@ -231,65 +233,87 @@ public class SheepBank : Mz_BaseScene {
         this.AccountBalanceManager(Mz_StorageManage.AccountBalance);
 	}
         
-    public override void OnInput (string nameInput)	{        
-		if (nameInput == UpgradeInside_BUTTON_NAME) {
-				StartCoroutine (this.PlayManOfficerAnimation ("ActiveUpgradeInsideForm"));
-				return;
-		} else if (nameInput == UpgradeOutside_BUTTON_NAME) {
-				StartCoroutine (PlayManOfficerAnimation ("ActiveUpgradeOutside"));
-				return;
-		} else if (nameInput == DEPOSIT_BUTTON_NAME) {
-				StartCoroutine (this.PlayWomanOfficerAnimation (ActiveDepositForm_function));
-				return;
-		} else if (nameInput == WITHDRAWAL_BUTTON_NAME) {
-				StartCoroutine (this.PlayWomanOfficerAnimation (ActiveWithdrawalForm_function));
-				return;
-		} else if (nameInput == DonateButtonName) {
-				StartCoroutine (this.PlayWomanOfficerAnimation (ActiveDonationForm_function));
-				return;
-		} else if (nameInput == PASSBOOKBUTTONNAME) {
-			this.ActivePassbookForm();
-			return;
-		}
-		else if (nameInput == BACK_BUTTON_NAME) {
-			if (upgradeInside_window_Obj.active) {
-				iTween.MoveTo (upgradeInside_window_Obj.gameObject, moveUp_hashdata);
-				return;
-			}
-			if(depositForm_Obj.gameObject.active) {
-				iTween.MoveTo(depositForm_Obj.gameObject, moveUp_hashdata);
-				iTween.MoveTo(transactionForm_Obj.gameObject, moveUp_hashdata);
-				return;
-			}
-			if(withdrawalForm_Obj.gameObject.active) {
-				iTween.MoveTo(withdrawalForm_Obj.gameObject, moveUp_hashdata);
-				iTween.MoveTo(transactionForm_Obj.gameObject, moveUp_hashdata);
-				return;
-			}
-            else if(donationForm_group.active) {
+    public override void OnInput (string nameInput)	
+	{
+        if (nameInput == UpgradeInside_BUTTON_NAME)
+        {
+            StartCoroutine(this.PlayManOfficerAnimation("ActiveUpgradeInsideForm"));
+            return;
+        }
+        else if (nameInput == UpgradeOutside_BUTTON_NAME)
+        {
+            StartCoroutine(PlayManOfficerAnimation("ActiveUpgradeOutside"));
+            return;
+        }
+        else if (nameInput == DEPOSIT_BUTTON_NAME)
+        {
+            StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDepositForm_function));
+            return;
+        }
+        else if (nameInput == WITHDRAWAL_BUTTON_NAME)
+        {
+            StartCoroutine(this.PlayWomanOfficerAnimation(ActiveWithdrawalForm_function));
+            return;
+        }
+        else if (nameInput == DonateButtonName)
+        {
+            StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDonationForm_function));
+            return;
+        }
+        else if (nameInput == PASSBOOKBUTTONNAME)
+        {
+            this.ActivePassbookForm();
+            return;
+        }
+        else if (nameInput == BACK_BUTTON_NAME)
+        {
+            if (upgradeInside_window_Obj.active)
+            {
+                iTween.MoveTo(upgradeInside_window_Obj.gameObject, moveUp_hashdata);
+                return;
+            }
+            if (depositForm_Obj.gameObject.active)
+            {
+                iTween.MoveTo(depositForm_Obj.gameObject, moveUp_hashdata);
+                iTween.MoveTo(transactionForm_Obj.gameObject, moveUp_hashdata);
+                return;
+            }
+            if (withdrawalForm_Obj.gameObject.active)
+            {
+                iTween.MoveTo(withdrawalForm_Obj.gameObject, moveUp_hashdata);
+                iTween.MoveTo(transactionForm_Obj.gameObject, moveUp_hashdata);
+                return;
+            }
+            else if (donationForm_group.active)
+            {
                 iTween.MoveTo(donationForm_group, moveUp_hashdata);
                 return;
             }
-			else if(currentGameStatus == GameSceneStatus.ShowPassbook){
-				iTween.MoveTo(passbook_group, moveUp_hashdata);
-				return;
-			}
-            
-			if (upgradeInside_window_Obj.active == false) {
-				if (Application.isLoadingLevel == false) {
-					Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString ();
-					Application.LoadLevelAsync (Mz_BaseScene.SceneNames.LoadingScene.ToString ());
-				}
+            else if (currentGameStatus == GameSceneStatus.ShowPassbook)
+            {
+                iTween.MoveTo(passbook_group, moveUp_hashdata);
+                return;
+            }
 
-				return;
-			}
-		}
+            if (upgradeInside_window_Obj.active == false)
+            {
+                if (Application.isLoadingLevel == false)
+                {
+                    Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString();
+                    Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+                }
+
+                return;
+            }
+        }
 
         switch (currentGameStatus)
         {
             case GameSceneStatus.ShowUpgradeInside:
                 if (nameInput == NextButtonName) { upgradeInsideManager.GotoNextPage(); }
                 else if (nameInput == PreviousButtonName) { upgradeInsideManager.BackToPreviousPage(); }
+                else if (nameInput == YES_BUTTON_NAME) { upgradeInsideManager.UserComfirm(); }
+                else if (nameInput == NO_BUTTON_NAME) { upgradeInsideManager.UnActiveComfirmationWindow(); }
                 else
                 {
                     for (int i = 0; i < upgradeButtons.Length; i++)
@@ -371,7 +395,7 @@ public class SheepBank : Mz_BaseScene {
 		    calculatorBeh.ClearCalcMechanism();
 			
 			audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
-			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
+			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
         }
         else {
             calculatorBeh.ClearCalcMechanism();			
@@ -404,7 +428,7 @@ public class SheepBank : Mz_BaseScene {
             calculatorBeh.ClearCalcMechanism();			
 			
 			audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
-			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
+			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
         }
         else {
             calculatorBeh.ClearCalcMechanism();

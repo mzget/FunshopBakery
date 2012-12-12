@@ -9,13 +9,13 @@ public class Mz_BaseScene : MonoBehaviour {
 	
     //<!-- Audio Manage.
     protected static bool ToggleAudioActive = true;
-    public GameEffectManager effectManager;
+    public GameEffectManager gameEffectManager;
     public AudioEffectManager audioEffect;
 	public AudioDescribeManager audioDescribe;
     public GameObject audioBackground_Obj;
     public AudioClip background_clip;
     public List<AudioClip> soundEffect_clips = new List<AudioClip>();
-//    public List<AudioClip> appreciate_Clips = new List<AudioClip>();
+//  public List<AudioClip> appreciate_Clips = new List<AudioClip>();
 //	public List<AudioClip> warning_Clips = new List<AudioClip>();
 	
 	#region <@-- Detect Touch and Input Data Fields.
@@ -105,6 +105,11 @@ public class Mz_BaseScene : MonoBehaviour {
             audioBackground_Obj.audio.mute = !ToggleAudioActive;
         }
     }
+    
+    /// <summary>
+    /// Virtual method. Used to generate game effect at runtime.
+    /// Override this and implement your derived class. 
+    /// </summary>
 	protected virtual void InitializeGameEffectGenerator() {}
 	
 	// Update is called once per frame

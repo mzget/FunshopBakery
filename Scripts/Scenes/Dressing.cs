@@ -17,7 +17,7 @@ public class Dressing : Mz_BaseScene {
         StartCoroutine(InitializeAudio());
 
         this.gameObject.AddComponent<GameEffectManager>();
-        effectManager = this.gameObject.GetComponent<GameEffectManager>();
+        gameEffectManager = this.gameObject.GetComponent<GameEffectManager>();
 		
         Mz_ResizeScale.ResizingScale(background_transform);
 		
@@ -60,32 +60,32 @@ public class Dressing : Mz_BaseScene {
                 break;
             case "Low0_1": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-                effectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
+                gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low0_2": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
+			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low0_3": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
+			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_1": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
+			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_2": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
+			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             case "Low1_3": costomeManager.HaveChooseClotheCommand(nameInput);
                 TK_animationManager.PlayGoodAnimation();
-			effectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
+			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
                 audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
                 break;
             default:

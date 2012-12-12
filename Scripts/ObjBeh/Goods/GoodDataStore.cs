@@ -6,43 +6,43 @@ public class GoodDataStore : ScriptableObject {
     public enum GoodsOrderList
     {
         //<!-- beverage.
-        Orange_juice = 0,           // 1. ¹éÓÊéÁ
-        Pineapple_juice = 1,        // 2. ¹éÓÊÑÁ»ÐÃŽ
-        Apple_juice,                // 3. ¹éÓáÍ»à»ÔéÅ
-        Cocoa_milk,                      // 4. ¹éÓâ¡â¡é
-        Freshmilk,                   // 5. ¹éÓ¹ÁàÂç¹
-        //<!-- Icecream.
-        Vanilla_icecream,            // 6. äÍÈ¡ÃÕÁÇÒ¹ÔÅÅÒ
-        Chocolate_icecream,        // 7. äÍÈ¡ÃÕÁªçÍ¡â¡àÅµ
-        Strawberry_icecream,       // 8. äÍÈ¡ÃÕÁÊµÃÍàºÍÃÃÕè
-        //<!--- Cookie.
-        Chocolate_cookie,      // 9.  €Ø¡¡ÕéªçÍ¡ªÔŸ
-        Butter_cookie,              // 10. €Ø¡¡Õéà¹Â
-        Fruit_cookie,               // 11. €Ø¡¡ÕéŒÅäÁé
-        //<!--- Sandwich.
-        Ham_sandwich,               // 12. á«¹ÇÔªäÊéáÎÁ
-        Egg_sandwich,               // 13. á«¹ÇÔªäÊéä¢è
-        DeepFriedChicken_sandwich,// 14. á«¹ÇÔªäÊéä¡è·ÍŽ
-        Tuna_sandwich,              // 15. á«¹ÇÔªäÊé·Ù¹èÒ 
+        Pineapple_juice = 0,
+        Apple_juice = 1,
+        Cocoa_milk = 2,
+        Orange_juice = 3,
+        Freshmilk = 4,
         //<!--- Toast with jam.
-        ToastWithStrawberryJam,  // 16. ¢¹Á»Ñ§áÂÁÊµÃÍàºÍÃÃÕè
-        ToastWithButterJam,          // 17. ¢¹Á»Ñ§à¹ÂÊŽ
-        ToastWithCustardJam,         // 18. ¢¹Á»Ñ§ÊÑ§¢ÂÒ
-        ToastWithBlueberryJam,   // 19. ¢¹Á»Ñ§ºÅÙàºÍÃÃÕè
+        ToastWithStrawberryJam = 5,
+        ToastWithBlueberryJam = 6,
+        ToastWithButterJam = 7,
+        ToastWithCustardJam = 8,
+        //<!-- Icecream.
+        Strawberry_icecream = 18,
+        Vanilla_icecream = 19,
+        Chocolate_icecream = 20,
+        //<!--- Sandwich.
+        Tuna_sandwich = 21,
+        DeepFriedChicken_sandwich = 22,
+        Ham_sandwich = 23,
+        Egg_sandwich = 24,
+        //<!--- Cookie.
+        Chocolate_cookie = 25,
+        Fruit_cookie = 26,
+        Butter_cookie = 27,
         //<!--- Cake.
-        Blueberry_cupcake,               // 20. à€é¡ÇÒ¹ÔÅÅÒ
-        Chocolate_cupcake,             // 21. à€é¡ªçÍ¡â¡àÅµ
-        Strawberry_cupcake,            // 22. à€é¡ÊµÃÍàºÍÃÃÕè		
-        Blueberry_minicake,              // 23. à€é¡ÇÒ¹ÔÅÅÒ
-        Chocolate_minicake,            // 24. à€é¡ªçÍ¡â¡àÅµ
-        Strawberry_minicake,           // 25. à€é¡ÊµÃÍàºÍÃÃÕè		
-        Blueberry_cake,               // 26. à€é¡ÇÒ¹ÔÅÅÒ
-        Chocolate_cake,             // 27. à€é¡ªçÍ¡â¡àÅµ
-        Strawberry_cake,            // 28. à€é¡ÊµÃÍàºÍÃÃÕè
+        Blueberry_cupcake, 
+        Chocolate_cupcake,
+        Strawberry_cupcake,	
+        Blueberry_minicake,
+        Chocolate_minicake,
+        Strawberry_minicake,	
+        Blueberry_cake,
+        Chocolate_cake,
+        Strawberry_cake,
         //</ cake >
 
-        Hotdog,                     // 2x. ÎÍ·ŽÍ¡
-        HotdogWithCheese,        // 2x. ÎÍ·ŽÍ¡ãÊèªÕÊ
+        Hotdog = 28,
+        HotdogWithCheese = 29,
     };
 	
    	public Goods[] Menu_list = new Goods[] {                               
@@ -69,20 +69,20 @@ public class GoodDataStore : ScriptableObject {
         new Goods(GoodsOrderList.Blueberry_cake.ToString(), 25),	//16	
         new Goods(GoodsOrderList.Strawberry_cake.ToString(), 25),	//17
         
-	    new Goods(GoodsOrderList.Strawberry_icecream.ToString(), 8), 				//_can sell.
-        new Goods(GoodsOrderList.Vanilla_icecream.ToString(), 8),					//19
-        new Goods(GoodsOrderList.Chocolate_icecream.ToString(), 8),					//20
+	    new Goods(GoodsOrderList.Strawberry_icecream.ToString(), 8), 			//_can sell.
+        new Goods(GoodsOrderList.Vanilla_icecream.ToString(), 8),				//19
+        new Goods(GoodsOrderList.Chocolate_icecream.ToString(), 8),				//20
 
-        new Goods(GoodsOrderList.Tuna_sandwich.ToString(), 12),						//21
+        new Goods(GoodsOrderList.Tuna_sandwich.ToString(), 12),					//21
         new Goods(GoodsOrderList.DeepFriedChicken_sandwich.ToString(), 20),		//22
-        new Goods(GoodsOrderList.Ham_sandwich.ToString(), 15),						//23
-        new Goods(GoodsOrderList.Egg_sandwich.ToString(), 12),						//24
+        new Goods(GoodsOrderList.Ham_sandwich.ToString(), 15),					//23
+        new Goods(GoodsOrderList.Egg_sandwich.ToString(), 12),					//24
 
         new Goods(GoodsOrderList.Chocolate_cookie.ToString(), 5),				//25
-        new Goods(GoodsOrderList.Fruit_cookie.ToString(), 5),						//26
-        new Goods(GoodsOrderList.Butter_cookie.ToString(), 5),						//27
+        new Goods(GoodsOrderList.Fruit_cookie.ToString(), 5),					//26
+        new Goods(GoodsOrderList.Butter_cookie.ToString(), 5),					//27
 
-        new Goods(GoodsOrderList.Hotdog.ToString(), 10),					//28
+        new Goods(GoodsOrderList.Hotdog.ToString(), 10),						//28
         new Goods(GoodsOrderList.HotdogWithCheese.ToString(), 15),				//29
     };
 	

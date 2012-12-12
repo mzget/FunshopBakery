@@ -145,7 +145,7 @@ public class BakeryShop : Mz_BaseScene {
 	// Use this for initialization
 	IEnumerator Start () {
         yield return StartCoroutine(this.InitailizeSceneObject());
-      
+        StartCoroutine(this.InitializeGameEffect());
         this.OpenShop();
 	}
 
@@ -156,30 +156,30 @@ public class BakeryShop : Mz_BaseScene {
         StartCoroutine(this.SceneInitializeAudio());
 		StartCoroutine(this.ChangeShopLogoIcon());
 		StartCoroutine(this.InitializeObjectAnimation());
-		///<!-- Souse Tank 
+		///<!-- Unactive Souse Tanks. 
 		appleTank_Obj.SetActiveRecursively(false);
 		orangeTank_Obj.SetActiveRecursively(false);
 		cocoaMilkTank_Obj.SetActiveRecursively(false);
 		freshMilkTank_Obj.SetActiveRecursively(false);
+        //<@-- Unactive Icecream tanks.
+		icecreamVanillaTank_obj.SetActiveRecursively(false);
+		icecreamChocolateTank_obj.SetActiveRecursively(false);
 		///<!-- Manage Jam Instance.
 		blueberryJam_instance.SetActiveRecursively(false);
 		freshButterJam_instance.SetActiveRecursively(false);
 		custardJam_instance.SetActiveRecursively(false);
 
         StartCoroutine(CreateToastInstance());
-
+        // <@-- Cake && Cream initilaize.
 		StartCoroutine(this.InitializeCreamBeh());
         StartCoroutine(CreateCupcakeInstance());
         StartCoroutine(InitializeMinicakeInstance());
         StartCoroutine(InitializeCakeInstance());
-
+        //<@-- Sandwich Initialize.
         StartCoroutine(InitializeTunaSandwichInstance());
 		StartCoroutine(this.Initialize_deepFriedChickenSandwich());
 		StartCoroutine(this.Initailize_HamSandwich());
 		StartCoroutine(this.Initialize_EggSandwich());
-
-		icecreamVanillaTank_obj.SetActiveRecursively(false);
-		icecreamChocolateTank_obj.SetActiveRecursively(false);
 
         StartCoroutine(this.InitializeChocolateChipCookie());
 		StartCoroutine(this.Initializing_FriutCookie());
@@ -222,6 +222,16 @@ public class BakeryShop : Mz_BaseScene {
 		
 		yield return null;
 	}
+
+    private IEnumerator InitializeGameEffect()
+    {
+        if (gameEffectManager == null) {
+            this.gameObject.AddComponent<GameEffectManager>();
+            gameEffectManager = this.GetComponent<GameEffectManager>();
+        }
+        else
+            yield return null;
+    }
 
 	IEnumerator ChangeShopLogoIcon ()
 	{
@@ -1131,8 +1141,8 @@ public class BakeryShop : Mz_BaseScene {
 
         yield return new WaitForSeconds(2);
         
-		audioEffect.PlayOnecSound(audioEffect.longBring_clip);
         StartCoroutine(this.CreateGameEffect());
+		audioEffect.PlayOnecSound(audioEffect.longBring_clip);
 
 		TK_animationManager.RandomPlayGoodAnimation();
 
@@ -1152,13 +1162,15 @@ public class BakeryShop : Mz_BaseScene {
 
     private IEnumerator CreateGameEffect()
     {
-        GameObject effect = Instantiate(Resources.Load(ResourceManager.GameEffect_ResourcePath + "BloomStar", typeof(GameObject))) as GameObject;
-        effect.transform.parent = foodsTray_obj.transform;
-        effect.transform.localPosition = new Vector3(0, 0, -0.2f);
-        effect.GetComponent<tk2dAnimatedSprite>().animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
-        {
-            Destroy(effect);
-        };
+        //GameObject effect = Instantiate(Resources.Load(GameEffectManager.BLOOMSTAR_EFFECT_PATH, typeof(GameObject))) as GameObject;
+        //effect.transform.parent = foodsTray_obj.transform;
+        //effect.transform.localPosition = new Vector3(0, 0, -0.2f);
+        //effect.GetComponent<tk2dAnimatedSprite>().animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
+        //{
+        //    Destroy(effect);
+        //};
+
+        gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, foodsTray_obj.transform);
 
         yield return 0;
     }
@@ -1292,7 +1304,9 @@ public class BakeryShop : Mz_BaseScene {
         base.OnDispose();
 
 		GoodsBeh.StaticDispose();
-		
+
+        Destroy(customerMenu_group_Obj);
+        currentCustomer.Dispose();
         
         Destroy(cupcake.gameObject);
         Destroy(miniCake.gameObject);
