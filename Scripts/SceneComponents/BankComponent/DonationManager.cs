@@ -38,9 +38,6 @@ public class LoveKidsFoundation {
 
 public class DonationManager : MonoBehaviour
 {
-    private string[] arr_nameOfDonationTopic = new string[] {
-        "ConservationAnimals_plate", "GlobalAIDFund_plate", "LoveDog_plate", "LoveKids_plate", "Eco_plate",
-    };
     public const string TOP_RED = "Top_red";
     public const string TOP_ORANGE = "Top_orange";
     public const string TOP_YELLOW = "Top_yellow";
@@ -54,6 +51,9 @@ public class DonationManager : MonoBehaviour
     public const string TOP_DONATEBUTTONNAME = "TopDonate_button";
     public const string DOWN_DONATEBUTTONNAME = "DownDonate_button";
 
+    private string[] arr_nameOfDonationTopic = new string[] {
+        "ConservationAnimals_plate", "GlobalAIDFund_plate", "LoveDog_plate", "LoveKids_plate", "Eco_plate",
+    };
     private Mz_BaseScene sceneController;
     ConservationAnimals conservationAnimal = new ConservationAnimals();
     EcoFoundation ecoDonation = new EcoFoundation();
@@ -75,15 +75,13 @@ public class DonationManager : MonoBehaviour
 	private tk2dSprite downDonationButton_sprite;
     public tk2dAnimatedSprite topAnimSprite;
     public tk2dAnimatedSprite downAnimSprite;
-
+    public tk2dTextMesh displayPageId_textmesh;
     const int MAX_PageNumber = 3;
     private int currentPageId = 0;
 	
 	
 	
-	void Awake() {		
-		print("DonationManager.Awake");
-		
+	void Awake() {				
         sceneController = GameObject.FindGameObjectWithTag("GameController").GetComponent<Mz_BaseScene>();
 
 		topDonationButton_sprite = topDonateButton_Obj.GetComponent<tk2dSprite>();
@@ -102,13 +100,15 @@ public class DonationManager : MonoBehaviour
         downAnimSprite.CurrentClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.Loop;
 		
         currentPageId = 0;
+
         this.ResetDatafields();
 		this.ChangeTopicIcon();
     }
 
-    public void ReInitializeData() {         
+    internal void ReInitializeData() {         
         this.ResetDatafields();
         this.ReActiveColorBarPicker();
+        this.RedrawPageIDTexmesh();
     }
 
     private void ResetDatafields()
@@ -211,7 +211,14 @@ public class DonationManager : MonoBehaviour
             }
     }
 
-    public void PreviousDonationPage() {
+    private void RedrawPageIDTexmesh()
+    {
+        int pageId = currentPageId + 1;
+        displayPageId_textmesh.text = pageId + "/" + MAX_PageNumber;
+        displayPageId_textmesh.Commit();
+    }
+
+    internal void PreviousDonationPage() {
         if (currentPageId > 0)
             currentPageId--;
         else

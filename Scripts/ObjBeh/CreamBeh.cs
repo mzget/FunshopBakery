@@ -10,7 +10,7 @@ public class CreamBeh : ObjectsBeh {
 	/// <summary>
 	/// Static game data.
 	/// </summary>
-	internal static string[] arr_CreamBehs = new string[3]; 
+	internal static string[] arr_CreamBehs = new string[3] { "", "", "", }; 
 	
 	
 	// Use this for initialization

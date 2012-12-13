@@ -23,11 +23,18 @@ public class CostumeManager : MonoBehaviour {
     public tk2dSprite hat_button;
 	public tk2dTextMesh displayCurrentPageID_textmesh;
     public CharacterCustomization characterCustomization;
+    private Dressing sceneController;
 
     public enum TabMenuState { shirt = 0, hat, };
     public TabMenuState currentTabMenuState;
     private int maxPage = 0;
     private int currentPageIndex = 0;
+
+
+    void Awake() {
+        var main = GameObject.FindGameObjectWithTag("GameController");
+        sceneController = main.GetComponent<Dressing>();
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -179,42 +186,117 @@ public class CostumeManager : MonoBehaviour {
     public void HaveChooseClotheCommand(string nameInput) {
         if (currentTabMenuState == TabMenuState.shirt)
         {
+            #region <@-- Shirt.
+
             switch (nameInput)
             {
-                case "Low0_1": characterCustomization.ChangeClotheAtRuntime(0 + (6 * currentPageIndex));
+                case "Low0_1":
+                    {
+                        int index = 0 + (6 * currentPageIndex);
+                        if (index < CharacterCustomization.AvailableClothesNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeClotheAtRuntime(index);
+                    } 
                     break;
-                case "Low0_2": characterCustomization.ChangeClotheAtRuntime(1 + (6 * currentPageIndex));
+                case "Low0_2":
+                    {
+                        int index = 1 + (6 * currentPageIndex);
+                        if (index < CharacterCustomization.AvailableClothesNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeClotheAtRuntime(index);
+                    } 
                     break;
-                case "Low0_3": characterCustomization.ChangeClotheAtRuntime(2 + (6 * currentPageIndex));
+                case "Low0_3":
+                    {
+                        int index = 2 + (6 * currentPageIndex);
+                        if (index < CharacterCustomization.AvailableClothesNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeClotheAtRuntime(index);
+                    } 
                     break;
-                case "Low1_1": characterCustomization.ChangeClotheAtRuntime(3 + (6 * currentPageIndex));
+                case "Low1_1":
+                    {
+                        int index = 3 + (6 * currentPageIndex);
+                        if (index < CharacterCustomization.AvailableClothesNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeClotheAtRuntime(index);
+                    } 
                     break;
-                case "Low1_2": characterCustomization.ChangeClotheAtRuntime(4 + (6 * currentPageIndex));
+                case "Low1_2":
+                    {
+                        int index = 4 + (6 * currentPageIndex);
+                        if (index < CharacterCustomization.AvailableClothesNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeClotheAtRuntime(index);
+                    } 
                     break;
-                case "Low1_3": characterCustomization.ChangeClotheAtRuntime(5 + (6 * currentPageIndex));
+                case "Low1_3":
+                    {
+                        int index = 5 + (6 * currentPageIndex);
+                        if (index < CharacterCustomization.AvailableClothesNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeClotheAtRuntime(index);
+                    }
                     break;
                 default:
                     break;
             }
+
+            #endregion
         }
-        else if (currentTabMenuState == TabMenuState.hat) {
+        else if (currentTabMenuState == TabMenuState.hat)
+        {
+            #region <@-- Hat section.
+
             switch (nameInput)
             {
-                case "Low0_1": characterCustomization.ChangeHatAtRuntime(0 + (6 * currentPageIndex));
-                    break;
-                case "Low0_2": characterCustomization.ChangeHatAtRuntime(1 + (6 * currentPageIndex));
-                    break;
-                case "Low0_3": characterCustomization.ChangeHatAtRuntime(2 + (6 * currentPageIndex));
-                    break;
-                case "Low1_1": characterCustomization.ChangeHatAtRuntime(3 + (6 * currentPageIndex));
-                    break;
-                case "Low1_2": characterCustomization.ChangeHatAtRuntime(4 + (6 * currentPageIndex));
-                    break;
-                case "Low1_3": characterCustomization.ChangeHatAtRuntime(5 + (6 * currentPageIndex));
-                    break;
+                case "Low0_1":
+                    {
+                        int id = 0 + (6 * currentPageIndex);
+                        if (id < CharacterCustomization.AvailableHatNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeHatAtRuntime(id);
+                    } break;
+                case "Low0_2":
+                    {
+                        int id = 1 + (6 * currentPageIndex);
+                        if (id < CharacterCustomization.AvailableHatNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeHatAtRuntime(id);
+                    } break;
+                case "Low0_3":
+                    {
+                        int id = 2 + (6 * currentPageIndex);
+                        if (id < CharacterCustomization.AvailableHatNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeHatAtRuntime(id);
+                    } break;
+                case "Low1_1":
+                    {
+                        int id = 3 + (6 * currentPageIndex);
+                        if (id < CharacterCustomization.AvailableHatNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeHatAtRuntime(id);
+                    } break;
+                case "Low1_2":
+                    {
+                        int id = 4 + (6 * currentPageIndex);
+                        if (id < CharacterCustomization.AvailableHatNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeHatAtRuntime(id);
+                    } break;
+                case "Low1_3":
+                    {
+                        int id = 5 + (6 * currentPageIndex);
+                        if (id < CharacterCustomization.AvailableHatNumber)
+                            sceneController.PlayGreatEffect();
+                        characterCustomization.ChangeHatAtRuntime(id);
+                    } break;
                 default:
                     break;
             }
+
+            #endregion
         }
     }
 }

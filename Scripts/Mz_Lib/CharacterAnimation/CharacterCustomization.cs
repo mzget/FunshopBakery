@@ -3,14 +3,16 @@ using System.Collections;
 
 public class CharacterCustomization : MonoBehaviour {
 
-    public string[] arr_clothesNameSpec = new string[] {
+    public const int AvailableClothesNumber = 15;
+    public string[] arr_clothesNameSpec = new string[AvailableClothesNumber] {
         "Clothe_0001", "Clothe_0002", "Clothe_0003", 
          "Clothe_0004", "Clothe_0005", "Clothe_0006",
           "Clothe_0007", "Clothe_0008", "Clothe_0009",
            "Clothe_0010", "Clothe_0011", "Clothe_0012",
             "Clothe_0013", "Clothe_0014", "Clothe_0015",
     };
-    public string[] arrHatNameSpec = new string[] {
+    public const int AvailableHatNumber = 23;
+    public string[] arrHatNameSpec = new string[AvailableHatNumber] {
 		"Hat_0001", "Hat_0002", "Hat_0003", 
         "Hat_0004", "Hat_0005", "Hat_0006", 
         "Hat_0007", "Hat_0008", "Hat_0009", 
@@ -18,9 +20,9 @@ public class CharacterCustomization : MonoBehaviour {
         "Hat_0013", "Hat_0014", "Hat_0015", 
         "Hat_0016", "Hat_0017", "Hat_0018", 
         "Hat_0019", "Hat_0020", "Hat_0021", 
-        "Hat_0022", "Hat_0023", "Hat_0024", 
+        "Hat_0022", "Hat_0023", 
     };
-	private Vector3[] arr_hatLocalPos = new Vector3[24] {
+	private Vector3[] arr_hatLocalPos = new Vector3[AvailableHatNumber] {
 		new Vector3(0, -.095f, -.4f),		
 		new Vector3(0, -.095f, -.4f),	
 		new Vector3(0, -.095f, -.4f),
@@ -43,7 +45,6 @@ public class CharacterCustomization : MonoBehaviour {
 		new Vector3(-0.003f, 0f, -0.4f),
 		new Vector3(-0.003f, 0f, -0.4f),	
 		new Vector3(0.033f, -0.04f, -0.4f),  // 20.
-		new Vector3(-0.003f, 0f, -0.4f),
 		new Vector3(-0.003f, 0f, -0.4f),
 		new Vector3(-0.003f, 0f, -0.4f),
 	};
@@ -70,7 +71,7 @@ public class CharacterCustomization : MonoBehaviour {
 	}
 
     public void ChangeClotheAtRuntime(int arr_index) {
-        if (arr_index >= 15)
+        if (arr_index >= AvailableClothesNumber)
         {
             TK_clothe.gameObject.active = false;
 			Mz_StorageManage.TK_clothe_id = 255;
@@ -85,7 +86,7 @@ public class CharacterCustomization : MonoBehaviour {
     }
 
     public void ChangeHatAtRuntime(int arr_index) {
-        if (arr_index == 23)
+        if (arr_index >= AvailableHatNumber)
         {
             TK_hat.gameObject.active = false;
 			Mz_StorageManage.TK_hat_id = 255;

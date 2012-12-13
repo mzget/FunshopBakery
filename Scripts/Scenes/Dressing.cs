@@ -58,35 +58,23 @@ public class Dressing : Mz_BaseScene {
             case "Next_button":
                 costomeManager.GotoNextPage();
                 break;
-            case "Low0_1": costomeManager.HaveChooseClotheCommand(nameInput);
-                TK_animationManager.PlayGoodAnimation();
-                gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
-                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+            case "Low0_1":
+                costomeManager.HaveChooseClotheCommand(nameInput);
                 break;
-            case "Low0_2": costomeManager.HaveChooseClotheCommand(nameInput);
-                TK_animationManager.PlayGoodAnimation();
-			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
-                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+            case "Low0_2": 
+                costomeManager.HaveChooseClotheCommand(nameInput);
                 break;
-            case "Low0_3": costomeManager.HaveChooseClotheCommand(nameInput);
-                TK_animationManager.PlayGoodAnimation();
-			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
-                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+            case "Low0_3":
+                costomeManager.HaveChooseClotheCommand(nameInput);
                 break;
-            case "Low1_1": costomeManager.HaveChooseClotheCommand(nameInput);
-                TK_animationManager.PlayGoodAnimation();
-			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
-                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+            case "Low1_1": 
+                costomeManager.HaveChooseClotheCommand(nameInput);
                 break;
-            case "Low1_2": costomeManager.HaveChooseClotheCommand(nameInput);
-                TK_animationManager.PlayGoodAnimation();
-			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
-                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+            case "Low1_2": 
+                costomeManager.HaveChooseClotheCommand(nameInput);
                 break;
-            case "Low1_3": costomeManager.HaveChooseClotheCommand(nameInput);
-                TK_animationManager.PlayGoodAnimation();
-			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
-                audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+            case "Low1_3":
+                costomeManager.HaveChooseClotheCommand(nameInput);
                 break;
             default:
                 break;
@@ -99,4 +87,11 @@ public class Dressing : Mz_BaseScene {
 			}
 		}
 	}
+
+    internal void PlayGreatEffect()
+    {
+        TK_animationManager.PlayGoodAnimation();
+        gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
+        audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+    }
 }

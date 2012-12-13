@@ -36,7 +36,7 @@ public class SheepBank : Mz_BaseScene {
 	const string DEPOSIT_BUTTON_NAME = "Deposit_button";
 	const string UpgradeInside_BUTTON_NAME = "UpgradeInside_button";
 	const string UpgradeOutside_BUTTON_NAME = "UpgradeOutside_button";
-    const string DonateButtonName = "Donate_button";
+    const string Donate_Button_Name = "Donate_button";
 	const string PreviousButtonName = "Previous_button";
 	const string NextButtonName = "Next_button";
     const string OKButtonName = "OK_button";
@@ -255,7 +255,7 @@ public class SheepBank : Mz_BaseScene {
             StartCoroutine(this.PlayWomanOfficerAnimation(ActiveWithdrawalForm_function));
             return;
         }
-        else if (nameInput == DonateButtonName)
+        else if (nameInput == Donate_Button_Name)
         {
             StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDonationForm_function));
             return;

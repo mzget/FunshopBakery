@@ -45,7 +45,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 	private bool _isInitialize = false;
 
     private event EventHandler<OnUpdateEvenArgs> OnUpgrade_Event;
-    private void ChickingUpgradeDelegation(OnUpdateEvenArgs e) {
+    private void OnUpgradeEvent_checkingDelegation(OnUpdateEvenArgs e) {
         if (OnUpgrade_Event != null)
             OnUpgrade_Event(this, e);
     }
@@ -54,6 +54,8 @@ public class UpgradeInsideManager : MonoBehaviour {
         public int I = 0;
         public int J = 0;
         public int Item_id;
+		public string AdditionalParams = string.Empty;
+		
         public OnUpdateEvenArgs() { }
     };
     private OnUpdateEvenArgs currentOnUpdateTarget;
@@ -103,7 +105,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 		}	
 		
 		_isInitialize  = true;
-		CalculateObjectsToDisplay();
+//		CalculateObjectsToDisplay();
 	}
 	
 	public void GotoNextPage() {
@@ -155,10 +157,6 @@ public class UpgradeInsideManager : MonoBehaviour {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
 //				upgradeButton_Objs[0,0].collider.enabled = false;
 			}
-//			if(BakeryShop.NumberOfCansellItem.Contains(10) || Mz_StorageManage.AccountBalance < firstPage_prices[0,1]) {
-//				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
-////				upgradeButton_Objs[0,1].collider.enabled = false;
-//			}
 			if(CreamBeh.arr_CreamBehs[1] != string.Empty || Mz_StorageManage.AccountBalance < firstPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
 			}
@@ -220,11 +218,10 @@ public class UpgradeInsideManager : MonoBehaviour {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
 //				upgradeButton_Objs[0,2].collider.enabled = false;
 			}
-			if(BakeryShop.NumberOfCansellItem.Contains(11) || BakeryShop.NumberOfCansellItem.Contains(14) || BakeryShop.NumberOfCansellItem.Contains(17) ||
-				Mz_StorageManage.AccountBalance < secondPage_prices[0,3]) {
-				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,3].collider.enabled = false;
-			}
+            if (CreamBeh.arr_CreamBehs[2] != string.Empty || Mz_StorageManage.AccountBalance < secondPage_prices[0, 3]) {
+                upgradeButton_Sprites[0, 3].spriteId = UnActiveUpgradeButtonID;
+                //				upgradeButton_Objs[0,3].collider.enabled = false;
+            }
 			if(BakeryShop.NumberOfCansellItem.Contains(20) || Mz_StorageManage.AccountBalance < secondPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
 //				upgradeButton_Objs[1,0].collider.enabled = false;
@@ -308,7 +305,7 @@ public class UpgradeInsideManager : MonoBehaviour {
         displayCurrentPageID_Textmesh.Commit();
     }
 
-    public void BuyingUpgradeMechanism(string upgradeName) {
+    internal void BuyingUpgradeMechanism(string upgradeName) {
         if(currentPageIndex == 0) 
 		{
 			#region <!-- page 0, low 0.
@@ -339,28 +336,37 @@ public class UpgradeInsideManager : MonoBehaviour {
             else if(upgradeName == "upgrade_01")
             {
                 #region <@-- "buying : blueberry_cream"
-/*
+
                 if (Mz_StorageManage.AccountBalance >= firstPage_prices[0,1])
                 {				
-					if(CreamBeh.arr_CreamBehs[1] == string.Empty) {
-                        Debug.Log("buying : blueberry_cream");
+					if(CreamBeh.arr_CreamBehs[1] == string.Empty) 
+					{
+                        int blueberry_cupcake = (int)GoodDataStore.GoodsOrderList.Blueberry_cupcake;
+                        int blueberry_minicake = (int)GoodDataStore.GoodsOrderList.Blueberry_minicake;
+                        int blueberry_cake = (int)GoodDataStore.GoodsOrderList.Blueberry_cake;
 
-						CreamBeh.arr_CreamBehs[1] = CreamBeh.BlueberryCream;
-
-                        if (BakeryShop.NumberOfCansellItem.Contains(9)  // Chocolate_cupcake.
-                            && BakeryShop.NumberOfCansellItem.Contains(10) == false)
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_cupcake) 
+						    && BakeryShop.NumberOfCansellItem.Contains(blueberry_cupcake) == false)
                         {
-                            currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 0, Item_id = 10, };    // Add Blueberry_cupcake.
+							Debug.Log("buying : blueberry_cream");
+                            currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 1, Item_id = blueberry_cupcake, AdditionalParams = CreamBeh.BlueberryCream };
                             this.ActiveComfirmationWindow();
                         }
 
-                        if (BakeryShop.NumberOfCansellItem.Contains(12) //Chocolate_minicake.
-                            && BakeryShop.NumberOfCansellItem.Contains(13) == false)
-                            BakeryShop.NumberOfCansellItem.Add(13);     // Add Blueberry_minicake.
-
-                        if (BakeryShop.NumberOfCansellItem.Contains(15) // Chocolate_cake.
-                            && BakeryShop.NumberOfCansellItem.Contains(16) == false)   
-                            BakeryShop.NumberOfCansellItem.Add(16);     // Add Blueberry_cake.
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_minicake)
+						    && BakeryShop.NumberOfCansellItem.Contains(blueberry_minicake) == false) 
+						{
+							Debug.Log("buying : blueberry_cream");
+							currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J=1, Item_id = blueberry_minicake, AdditionalParams = CreamBeh.BlueberryCream }; 
+							this.ActiveComfirmationWindow();
+						}
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_cake)
+                            && BakeryShop.NumberOfCansellItem.Contains(blueberry_cake) == false)
+						{
+							Debug.Log("buying : blueberry_cream");
+                            currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 1, Item_id = blueberry_cake, AdditionalParams = CreamBeh.BlueberryCream };
+							this.ActiveComfirmationWindow();
+						}
 
 					}
 					else {
@@ -371,68 +377,88 @@ public class UpgradeInsideManager : MonoBehaviour {
 					Debug.Log("Connot upgrade this item because availabel money is not enough.");
 					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
                 }
-*/
+
                 #endregion
             }
 			else if(upgradeName == "upgrade_02")
             {
                 #region <@-- buying : Mini Cake.
-/*
+
                 if (Mz_StorageManage.AccountBalance >= firstPage_prices[0,2])
 				{
-					if(!BakeryShop.NumberOfCansellItem.Contains(12) &&  CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream
-					   || !BakeryShop.NumberOfCansellItem.Contains(13) && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream
-					   || !BakeryShop.NumberOfCansellItem.Contains(14) && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
-					{
-						if(BakeryShop.NumberOfCansellItem.Contains(12) == false && CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream)
-							BakeryShop.NumberOfCansellItem.Add(12);	//Chocolate_minicake.
-						if(BakeryShop.NumberOfCansellItem.Contains(13) == false && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream)
-							BakeryShop.NumberOfCansellItem.Add(13);	//Blueberry_minicake.
-						if(BakeryShop.NumberOfCansellItem.Contains(14) == false && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
-							BakeryShop.NumberOfCansellItem.Add(14); //Strawberry_minicake.
+                    Debug.Log("buying : Mini Cake");
+					int chocolate_minicake = (int)GoodDataStore.GoodsOrderList.Chocolate_minicake;
+					int Blueberry_minicake = (int)GoodDataStore.GoodsOrderList.Blueberry_minicake;
+					int Strawberry_minicake = (int)GoodDataStore.GoodsOrderList.Strawberry_minicake;
 
-						this.BuyingUpgradeComplete(0,2);
-						Debug.Log("buying : Mini Cake");
-					}
-					else{
-						Debug.Log("This Item has be upgraded");
-						this.PlaySoundWarning();
-					}
+                    if (!BakeryShop.NumberOfCansellItem.Contains(chocolate_minicake)
+                        && !BakeryShop.NumberOfCansellItem.Contains(Blueberry_minicake)
+                        && !BakeryShop.NumberOfCansellItem.Contains(Strawberry_minicake))
+                    {
+                        if (BakeryShop.NumberOfCansellItem.Contains(chocolate_minicake) == false && CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream)
+                        {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 2, Item_id = chocolate_minicake };
+                            this.ActiveComfirmationWindow();
+                        }
+                        if (BakeryShop.NumberOfCansellItem.Contains(Blueberry_minicake) == false && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream)
+                        {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 2, Item_id = Blueberry_minicake, };
+                            this.ActiveComfirmationWindow();
+                        }
+                        if (BakeryShop.NumberOfCansellItem.Contains(Strawberry_minicake) == false && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
+                        {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 2, Item_id = Strawberry_minicake, };
+                            this.ActiveComfirmationWindow();
+                        }
+                    }
+                    else
+                    {
+                        this.PlaySoundWarning();
+                    }
 				}
 				else {
 					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
                 }
-*/
+
                 #endregion
             }
 			else if(upgradeName == "upgrade_03")
             {
                 #region <@-- "buying : Cake".
-/*
-                if (Mz_StorageManage.AccountBalance >= firstPage_prices[0, 3]) {
-                    if(BakeryShop.NumberOfCansellItem.Contains(15) == false && CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream
-                        || BakeryShop.NumberOfCansellItem.Contains(16) == false && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream
-                        || BakeryShop.NumberOfCansellItem.Contains(17) == false && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
-                    {
-					    if(BakeryShop.NumberOfCansellItem.Contains(15) == false && CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream)
-						    BakeryShop.NumberOfCansellItem.Add(15);	// Add Chocolate_cake.
-					    if(BakeryShop.NumberOfCansellItem.Contains(16) == false && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream)
-						    BakeryShop.NumberOfCansellItem.Add(16);	// Add Blueberry_cake.
-						if(BakeryShop.NumberOfCansellItem.Contains(17) == false && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream)
-							BakeryShop.NumberOfCansellItem.Add(17); // Add Strawberry_cake.
 
-					    this.BuyingUpgradeComplete(0,3);
-                        Debug.Log("buying : Cake");
+                if (Mz_StorageManage.AccountBalance >= firstPage_prices[0, 3]) 
+                {
+                    int Chocolate_cake = (int)GoodDataStore.GoodsOrderList.Chocolate_cake;
+                    int Blueberry_cake = (int)GoodDataStore.GoodsOrderList.Blueberry_cake;
+                    int Strawberry_cake = (int)GoodDataStore.GoodsOrderList.Strawberry_cake;
+
+                    Debug.Log("buying : Cake");
+
+                    if(BakeryShop.NumberOfCansellItem.Contains(Chocolate_cake) == false && 
+                        BakeryShop.NumberOfCansellItem.Contains(Blueberry_cake) == false &&                    
+                        BakeryShop.NumberOfCansellItem.Contains(Strawberry_cake) == false)
+                    {
+					    if(BakeryShop.NumberOfCansellItem.Contains(Chocolate_cake) == false && CreamBeh.arr_CreamBehs[0] == CreamBeh.ChocolateCream) {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Chocolate_cake };
+                            this.ActiveComfirmationWindow();
+						}
+                        if (BakeryShop.NumberOfCansellItem.Contains(Blueberry_cake) == false && CreamBeh.arr_CreamBehs[1] == CreamBeh.BlueberryCream) {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Blueberry_cake };
+                            this.ActiveComfirmationWindow();
+                        }
+                        if (BakeryShop.NumberOfCansellItem.Contains(Strawberry_cake) == false && CreamBeh.arr_CreamBehs[2] == CreamBeh.StrawberryCream) {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Strawberry_cake };
+                            this.ActiveComfirmationWindow();
+                        }
                     }
 					else{
-						Debug.Log("This Item has be upgraded");
 						this.PlaySoundWarning();
 					}
 				}
 				else {
 					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
                 }
-*/
+
                 #endregion
             }
 			
@@ -543,10 +569,11 @@ public class UpgradeInsideManager : MonoBehaviour {
 
                 if(Mz_StorageManage.AccountBalance >= secondPage_prices[0,0]) 
                 {
+					Debug.Log("buying : appleJuiceTank");
                     int id = (int)GoodDataStore.GoodsOrderList.Apple_juice;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
                         this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 0, Item_id = id };
-						Debug.Log("buying : appleJuiceTank");
+						this.ActiveComfirmationWindow();
 					}
 					else
 						PlaySoundWarning();
@@ -603,32 +630,44 @@ public class UpgradeInsideManager : MonoBehaviour {
 			{
 				#region <@-- "buying : strawberry_cream".
 
-                //if(Mz_StorageManage.AccountBalance >= secondPage_prices[0,3]) 
-                //{
-                //    if(CreamBeh.arr_CreamBehs[2] == string.Empty) {
-                //        CreamBeh.arr_CreamBehs[2] = CreamBeh.StrawberryCream;
+                if (Mz_StorageManage.AccountBalance >= secondPage_prices[0, 3])
+                {
+                    if (CreamBeh.arr_CreamBehs[2] == string.Empty)
+                    {
+                        Debug.Log("buying : strawberry_cream");
 
-                //        if (BakeryShop.NumberOfCansellItem.Contains(9)  // Chocolate_cupcake.
-                //            && BakeryShop.NumberOfCansellItem.Contains(11) == false) 
-                //            BakeryShop.NumberOfCansellItem.Add(11);		// Strawberry_cupcake.
+                        int Strawberry_cupcake = (int)GoodDataStore.GoodsOrderList.Strawberry_cupcake;
+                        int Strawberry_minicake = (int)GoodDataStore.GoodsOrderList.Strawberry_minicake;
+                        int Strawberry_cake = (int)GoodDataStore.GoodsOrderList.Strawberry_cake;
 
-                //        if (BakeryShop.NumberOfCansellItem.Contains(12) // Chocolate_minicake.
-                //            && BakeryShop.NumberOfCansellItem.Contains(14) == false)
-                //            BakeryShop.NumberOfCansellItem.Add(14);		// Strawberry_minicake.
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_cupcake)
+                            && BakeryShop.NumberOfCansellItem.Contains(Strawberry_cupcake) == false) 
+                        {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Strawberry_cupcake, AdditionalParams = CreamBeh.StrawberryCream };
+                            this.ActiveComfirmationWindow();
+                        }
 
-                //        if (BakeryShop.NumberOfCansellItem.Contains(15) // Chocolate_cake.
-                //            && BakeryShop.NumberOfCansellItem.Contains(17) == false)
-                //            BakeryShop.NumberOfCansellItem.Add(17);		// Strawberry_cake.
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_minicake)
+                            && BakeryShop.NumberOfCansellItem.Contains(Strawberry_minicake) == false)
+                        {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Strawberry_minicake, AdditionalParams = CreamBeh.StrawberryCream };
+                            this.ActiveComfirmationWindow();
+                        }
 
-                //        this.BuyingUpgradeComplete(0, 3);
-                //        Debug.Log("buying : strawberry_cream");
-                //    }
-                //    else
-                //        PlaySoundWarning();
-                //}
-                //else {
-                //    sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
-                //}
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_cake)
+                            && BakeryShop.NumberOfCansellItem.Contains(Strawberry_cake) == false) 
+                        {
+                            this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Strawberry_cake, AdditionalParams = CreamBeh.StrawberryCream };
+                            this.ActiveComfirmationWindow();
+                        }
+                    }
+                    else
+                        PlaySoundWarning();
+                }
+                else
+                {
+                    sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+                }
 
 				#endregion
 			}
@@ -860,26 +899,35 @@ public class UpgradeInsideManager : MonoBehaviour {
 		}
     }
 
-    private void Handle_OnUpgrade_Event(object sender, OnUpdateEvenArgs e) {
-        this.BuyingUpgradeComplete(e.I, e.J, e.Item_id);
-    }
-
-	void BuyingUpgradeComplete (int i, int j, int target_id) 
+	void BuyingUpgradeComplete (OnUpdateEvenArgs e) 
     {
         if (currentPageIndex == 0)
-            Mz_StorageManage.AccountBalance -= firstPage_prices[i, j];
+            Mz_StorageManage.AccountBalance -= firstPage_prices[e.I, e.J];
         else if (currentPageIndex == 1)
-            Mz_StorageManage.AccountBalance -= secondPage_prices[i, j];
+            Mz_StorageManage.AccountBalance -= secondPage_prices[e.I, e.J];
         else if (currentPageIndex == 2)
-            Mz_StorageManage.AccountBalance -= thirdPage_prices[i, j];
+            Mz_StorageManage.AccountBalance -= thirdPage_prices[e.I, e.J];
+		
+        if (e.AdditionalParams != string.Empty)
+        {
+            switch (e.AdditionalParams)
+            {
+                case CreamBeh.BlueberryCream: CreamBeh.arr_CreamBehs[1] = CreamBeh.BlueberryCream;
+                    break;
+                case CreamBeh.StrawberryCream: CreamBeh.arr_CreamBehs[2] = CreamBeh.StrawberryCream;
+                    break;
+                default:
+                    break;
+            }
+        }
 
-		upgradeButton_Sprites[i,j].spriteId = 28;
-        BakeryShop.NumberOfCansellItem.Add(target_id);
+        upgradeButton_Sprites[e.I, e.J].spriteId = UnActiveUpgradeButtonID;
+        BakeryShop.NumberOfCansellItem.Add(e.Item_id);
 		CalculateObjectsToDisplay();
 
 		sceneController.ManageAvailabelMoneyBillBoard();
-		sceneController.gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, upgradeButton_Objs[i,j].transform);
-		sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
+        sceneController.gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, upgradeButton_Objs[e.I, e.J].transform);
+        sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 	}
 
 	void PlaySoundWarning ()
@@ -896,10 +944,17 @@ public class UpgradeInsideManager : MonoBehaviour {
 	internal void UnActiveComfirmationWindow ()
 	{
         confirmationWindow.SetActiveRecursively(false);
+		currentOnUpdateTarget = null;
 	}
 
     internal void UserComfirm()
     {
-        this.ChickingUpgradeDelegation(currentOnUpdateTarget);
+        this.OnUpgradeEvent_checkingDelegation(currentOnUpdateTarget);
+    }
+
+    private void Handle_OnUpgrade_Event(object sender, OnUpdateEvenArgs e)
+    {
+        this.BuyingUpgradeComplete(e);
+        this.UnActiveComfirmationWindow();
     }
 }

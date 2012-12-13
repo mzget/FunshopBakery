@@ -16,10 +16,20 @@ public class GoodDataStore : ScriptableObject {
         ToastWithBlueberryJam = 6,
         ToastWithButterJam = 7,
         ToastWithCustardJam = 8,
-        //<!-- Icecream.
-        Strawberry_icecream = 18,
-        Vanilla_icecream = 19,
-        Chocolate_icecream = 20,
+		//<!--- Cake.
+		Chocolate_cupcake = 9,
+		Blueberry_cupcake = 10, 
+		Strawberry_cupcake = 11,	
+		Chocolate_minicake = 12, 
+		Blueberry_minicake = 13,
+		Strawberry_minicake = 14,	
+		Chocolate_cake = 15,
+		Blueberry_cake = 16,
+		Strawberry_cake = 17,     //</ cake >
+		//<!-- Icecream.
+		Strawberry_icecream = 18,
+		Vanilla_icecream = 19,
+		Chocolate_icecream = 20,
         //<!--- Sandwich.
         Tuna_sandwich = 21,
         DeepFriedChicken_sandwich = 22,
@@ -29,17 +39,6 @@ public class GoodDataStore : ScriptableObject {
         Chocolate_cookie = 25,
         Fruit_cookie = 26,
         Butter_cookie = 27,
-        //<!--- Cake.
-        Blueberry_cupcake, 
-        Chocolate_cupcake,
-        Strawberry_cupcake,	
-        Blueberry_minicake,
-        Chocolate_minicake,
-        Strawberry_minicake,	
-        Blueberry_cake,
-        Chocolate_cake,
-        Strawberry_cake,
-        //</ cake >
 
         Hotdog = 28,
         HotdogWithCheese = 29,

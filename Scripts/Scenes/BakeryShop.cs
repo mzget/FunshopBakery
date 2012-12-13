@@ -281,8 +281,8 @@ public class BakeryShop : Mz_BaseScene {
 			
             if (id == 6)
                 blueberryJam_instance.active = true;
-            if(id == 10)
-                blueberry_cream_Instance.active = true;
+//            if(id == 10)
+//                blueberry_cream_Instance.active = true;
             if (id == 12 || id == 13)
                 miniCake.gameObject.active = true;
 			if(id == 15 || id == 16)
@@ -311,8 +311,8 @@ public class BakeryShop : Mz_BaseScene {
 				cocoaMilkTank_Obj.SetActiveRecursively(true);
 			if(id == 7)
 				freshButterJam_instance.SetActiveRecursively(true);
-			if(id == 11 || id == 14 || id == 17)
-				strawberry_cream_Instance.SetActiveRecursively(true);
+//			if(id == 11 || id == 14 || id == 17)
+//				strawberry_cream_Instance.SetActiveRecursively(true);
 			if(id == 20) {
 				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_003);
 				icecreamChocolateTank_obj.SetActiveRecursively(true);
