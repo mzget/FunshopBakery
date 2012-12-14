@@ -29,6 +29,7 @@ public class Mz_BaseScene : MonoBehaviour {
     public bool _isDragMove = false;
 	internal Mz_SmartDeviceInput smartDeviceInput;
 	public ExtendsStorageManager extendsStorageManager;
+	private HUDFPS hudFPS_Trace;
 
 	#endregion
 
@@ -48,7 +49,10 @@ public class Mz_BaseScene : MonoBehaviour {
 
 	void Awake ()
 	{
-		this.gameObject.AddComponent<HUDFPS> ();
+		//<@-- Trace OnScreen FPS.
+//		this.gameObject.AddComponent<HUDFPS> ();
+//		hudFPS_Trace = this.gameObject.GetComponent<HUDFPS>();
+
 		this.gameObject.AddComponent<ExtendsStorageManager> ();
 		extendsStorageManager = this.GetComponent<ExtendsStorageManager> ();
 
@@ -104,6 +108,25 @@ public class Mz_BaseScene : MonoBehaviour {
         else { 
             audioBackground_Obj.audio.mute = !ToggleAudioActive;
         }
+    }
+
+    //<!--- GUI_identity.
+    public GameObject identityGUI_obj;
+    public tk2dTextMesh usernameTextmesh;
+    public tk2dTextMesh shopnameTextmesh;
+    public tk2dTextMesh availableMoney;
+    protected IEnumerator InitializeIdentityGUI()
+    {
+        usernameTextmesh.text = Mz_StorageManage.Username;
+        usernameTextmesh.Commit();
+
+        shopnameTextmesh.text = Mz_StorageManage.ShopName;
+        shopnameTextmesh.Commit();
+
+        availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
+        availableMoney.Commit();
+
+        yield return null;
     }
     
     /// <summary>

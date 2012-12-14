@@ -15,7 +15,7 @@ public class ExtendsStorageManager : Mz_StorageManage
 
 		string[] arr_availabelCreams = PlayerPrefsX.GetStringArray(Mz_StorageManage.SaveSlot + KEY_AVAILABLE_CREAM);
 		for (int i = 0; i < 3; i++) {
-			CreamBeh.arr_CreamBehs[i] = null;
+			CreamBeh.arr_CreamBehs[i] = string.Empty;
 		}
 		for (int i = 0; i < arr_availabelCreams.Length; i++) {
 			CreamBeh.arr_CreamBehs[i] = arr_availabelCreams[i];	

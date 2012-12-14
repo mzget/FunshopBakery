@@ -24,11 +24,13 @@ public class MainMenu : Mz_BaseScene {
     private Hashtable moveUpTransform_Data = new Hashtable();
     
     public GUISkin mainmenu_Skin;
+    public GUIStyle saveSlot_buttonStyle;
     public enum SceneState { none = 0, showOption, showNewGame, showNewShop, showLoadGame, };
     private SceneState sceneState;
 
     private string username = string.Empty;
     private string shopName = "";
+	private TouchScreenKeyboard touchScreenKeyboard;
 
     private bool _isNullUsernameNotification = false;
     private bool _isDuplicateUsername = false;
@@ -62,7 +64,6 @@ public class MainMenu : Mz_BaseScene {
 
         Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
-        ShopScene_GUIManager.CalculateViewportScreen();
 
         iTween.MoveTo(mainmenu_Group.gameObject, moveDownTransform_Data);
 
@@ -72,7 +73,7 @@ public class MainMenu : Mz_BaseScene {
         loadgame_Group.gameObject.SetActiveRecursively(false);
         back_button.gameObject.active = false;
 		
-		this.RecalculateOnGUI_DataFields();
+		this.InitailizeDataFields();
 		
         iTween.MoveTo(flyingBird_group, iTween.Hash("x", 1.8f, "time", 16f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.loop));
         //iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
@@ -80,6 +81,7 @@ public class MainMenu : Mz_BaseScene {
         //iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.5f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(movingCloud_Objs, iTween.Hash("x", -1f, "time", 16f, "easetype", iTween.EaseType.easeInOutSine, "looptype", iTween.LoopType.pingPong)); 
 	}
+	
 	protected IEnumerator PreparingAudio ()
 	{
 		base.InitializeAudio ();
@@ -90,44 +92,33 @@ public class MainMenu : Mz_BaseScene {
 		
 		yield return 0;
 	}
-//    protected override IEnumerator InitializeAudio()
-//    {
-//        yield return StartCoroutine(base.InitializeAudio());
-//        
-//        audioBackground_Obj.audio.clip = base.background_clip;
-//        audioBackground_Obj.audio.loop = true;
-//        audioBackground_Obj.audio.Play();
-//		
-//		yield return null;
-//    }
-	void RecalculateOnGUI_DataFields ()
-	{
-		newgame_Textfield_rect = new Rect((ShopScene_GUIManager.viewPort_rect.width / 2) - 150, ShopScene_GUIManager.viewPort_rect.height / 2 + 58, 300, 82);
-		newShopName_rect = new Rect((ShopScene_GUIManager.viewPort_rect.width / 2) - 138, ShopScene_GUIManager.viewPort_rect.height / 2 - 110, 400, 80);
-		
-		group_width = 400 * ShopScene_GUIManager.Extend_heightScale;
-		showSaveGameSlot_GroupRect = new Rect((ShopScene_GUIManager.viewPort_rect.width/2) - (group_width/2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
-		slot_1Rect = new Rect(32, 12, group_width - 60, 80);
-		slot_2Rect  = new Rect(32, 112, group_width - 60, 80);
-		slot_3Rect = new Rect(32, 212, group_width - 60, 80);
-		
-		if(Screen.height != Main.GAMEHEIGHT) {
-			newgame_Textfield_rect.width = newgame_Textfield_rect.width * ShopScene_GUIManager.Extend_heightScale;
-			newgame_Textfield_rect.x = (ShopScene_GUIManager.viewPort_rect.width / 2) - newgame_Textfield_rect.width / 2;
-			
-			newShopName_rect.width = newShopName_rect.width * ShopScene_GUIManager.Extend_heightScale;
-			newShopName_rect.x = (ShopScene_GUIManager.viewPort_rect.width / 2) - 138 * ShopScene_GUIManager.Extend_heightScale;
-			
-			slot_1Rect.width = group_width - (60 * ShopScene_GUIManager.Extend_heightScale);
-			slot_1Rect.x = slot_1Rect.x * ShopScene_GUIManager.Extend_heightScale;
-			
-			slot_2Rect.width = group_width - (60 * ShopScene_GUIManager.Extend_heightScale);
-			slot_2Rect.x = slot_2Rect.x * ShopScene_GUIManager.Extend_heightScale;
-			
-			slot_3Rect.width = group_width - (60 * ShopScene_GUIManager.Extend_heightScale);
-			slot_3Rect.x = slot_3Rect.x * ShopScene_GUIManager.Extend_heightScale;
-		}
-	}
+	
+    void InitailizeDataFields()
+    {
+        newgame_Textfield_rect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) - (70 * Mz_OnGUIManager.Extend_heightScale), Mz_OnGUIManager.viewPort_rect.height / 2 + 58, 300 * Mz_OnGUIManager.Extend_heightScale, 82);
+        newShopName_rect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) - (63 * Mz_OnGUIManager.Extend_heightScale), Mz_OnGUIManager.viewPort_rect.height / 2 - 110, 400 * Mz_OnGUIManager.Extend_heightScale, 80);
+
+        group_width = 400 * Mz_OnGUIManager.Extend_heightScale;
+        showSaveGameSlot_GroupRect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) + 50 - (group_width / 2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
+        slot_1Rect = new Rect(32, 12, group_width - 60, 80);
+        slot_2Rect = new Rect(32, 112, group_width - 60, 80);
+        slot_3Rect = new Rect(32, 212, group_width - 60, 80);
+
+        if (Screen.height != Main.GAMEHEIGHT)
+        {
+            slot_1Rect.width = group_width - (60 * Mz_OnGUIManager.Extend_heightScale);
+            slot_1Rect.x = slot_1Rect.x * Mz_OnGUIManager.Extend_heightScale;
+
+            slot_2Rect.width = group_width - (60 * Mz_OnGUIManager.Extend_heightScale);
+            slot_2Rect.x = slot_2Rect.x * Mz_OnGUIManager.Extend_heightScale;
+
+            slot_3Rect.width = group_width - (60 * Mz_OnGUIManager.Extend_heightScale);
+            slot_3Rect.x = slot_3Rect.x * Mz_OnGUIManager.Extend_heightScale;
+        }
+
+        saveSlot_buttonStyle.normal.textColor = Color.white;
+        saveSlot_buttonStyle.active.textColor = Color.green;
+    }
 	
 	// Update is called once per frame
 	protected override void Update ()
@@ -154,10 +145,10 @@ public class MainMenu : Mz_BaseScene {
 
 		GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
 		
-		GUI.BeginGroup(ShopScene_GUIManager.viewPort_rect);
+		GUI.BeginGroup(Mz_OnGUIManager.viewPort_rect);
         {
             if(_showSkinLayout) {
-                GUI.Box(new Rect(0, 0, ShopScene_GUIManager.viewPort_rect.width, ShopScene_GUIManager.viewPort_rect.height), "Skin layout", GUI.skin.box);
+				GUI.Box(new Rect(0, 0, Mz_OnGUIManager.viewPort_rect.width, Mz_OnGUIManager.viewPort_rect.height), "Skin layout", GUI.skin.box);
             }
 
             if(sceneState == SceneState.showNewGame) {
@@ -188,7 +179,7 @@ public class MainMenu : Mz_BaseScene {
 			dublicateNoticeText = "This name already exists.";
 
             mainmenu_Skin.textField.normal.textColor = Color.white;
-            Rect notification_Rect = new Rect(ShopScene_GUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64);
+			Rect notification_Rect = new Rect(Mz_OnGUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64);
 
             if (_isNullUsernameNotification)           
                 GUI.Box(notification_Rect, notificationText, mainmenu_Skin.textField);
@@ -201,7 +192,7 @@ public class MainMenu : Mz_BaseScene {
     
     private void DrawNewShopGUI()
     {
-        shopName = GUI.TextField(newShopName_rect, shopName, 13, GUI.skin.textArea);
+        shopName = GUI.TextField(newShopName_rect, shopName, 13, saveSlot_buttonStyle);
     }
 
     private void DrawNewGameTextField()
@@ -212,14 +203,24 @@ public class MainMenu : Mz_BaseScene {
                     
             this.CheckUserNameFormInput();
         }
-        
-        //<!-- "Please Insert Username !".
-        GUI.SetNextControlName("Username");
-        username = GUI.TextField(newgame_Textfield_rect, username, 13, GUI.skin.textArea);
 
-        if (GUI.GetNameOfFocusedControl() == string.Empty || GUI.GetNameOfFocusedControl() == "")
+        if (Application.isEditor || Application.isWebPlayer)
         {
-            GUI.FocusControl("Username");
+            //<!-- "Please Insert Username !".
+            GUI.SetNextControlName("Username");
+            username = GUI.TextField(newgame_Textfield_rect, username, 13, saveSlot_buttonStyle);
+
+            if (GUI.GetNameOfFocusedControl() == string.Empty || GUI.GetNameOfFocusedControl() == "")
+            {
+                GUI.FocusControl("Username");
+            }
+        }
+        else if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) { 
+			if(GUI.Button(newgame_Textfield_rect, username, saveSlot_buttonStyle)) {
+				touchScreenKeyboard = TouchScreenKeyboard.Open(username, TouchScreenKeyboardType.EmailAddress, false, false, false, true);
+			}
+			if(touchScreenKeyboard != null)
+				username = touchScreenKeyboard.text;
         }
 	}
 
@@ -341,7 +342,7 @@ public class MainMenu : Mz_BaseScene {
             message = "Select Data Slot To Replace New Data";
 			
             mainmenu_Skin.textField.normal.textColor = Color.white;
-            GUI.Box(new Rect(ShopScene_GUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64), message, mainmenu_Skin.textField);
+			GUI.Box(new Rect(Mz_OnGUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64), message, mainmenu_Skin.textField);
 		}
 
         GUI.BeginGroup(showSaveGameSlot_GroupRect);
@@ -351,7 +352,7 @@ public class MainMenu : Mz_BaseScene {
                 /// Display To Save Username.
 //                GUI.Box(textbox_header_rect, username, mainmenu_Skin.textField);
                 /// Choose SaveGame Slot for replace new data.
-                if (GUI.Button(slot_1Rect, new GUIContent(PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME), "button")))
+                if (GUI.Button(slot_1Rect, new GUIContent(PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME), "button"), saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -359,7 +360,7 @@ public class MainMenu : Mz_BaseScene {
 //                    SaveNewPlayer();
 					StartCoroutine(ShowInitializeNewShop());
                 }
-                else if (GUI.Button(slot_2Rect, new GUIContent(PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME), "button")))
+                else if (GUI.Button(slot_2Rect, new GUIContent(PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME), "button"), saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -367,7 +368,7 @@ public class MainMenu : Mz_BaseScene {
 //				    SaveNewPlayer();
 					StartCoroutine(ShowInitializeNewShop());
                 }
-                else if (GUI.Button(slot_3Rect, new GUIContent(PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME), "button")))
+                else if (GUI.Button(slot_3Rect, new GUIContent(PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME), "button"), saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -395,7 +396,7 @@ public class MainMenu : Mz_BaseScene {
 
                 #region <!-- GUI data slot button.
 
-                if (GUI.Button(slot_1Rect, new GUIContent(slot_1, "button")))
+                if (GUI.Button(slot_1Rect, new GUIContent(slot_1, "button"), saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -405,7 +406,7 @@ public class MainMenu : Mz_BaseScene {
                         this.LoadSceneTarget();
                     }
                 }
-                else if (GUI.Button(slot_2Rect, new GUIContent(slot_2, "button")))
+                else if (GUI.Button(slot_2Rect, new GUIContent(slot_2, "button"), saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -415,7 +416,7 @@ public class MainMenu : Mz_BaseScene {
                         this.LoadSceneTarget();
                     }
                 }
-                else if (GUI.Button(slot_3Rect, new GUIContent(slot_3, "button")))
+                else if (GUI.Button(slot_3Rect, new GUIContent(slot_3, "button"), saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 

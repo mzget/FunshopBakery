@@ -125,6 +125,8 @@ public class BakeryShop : Mz_BaseScene {
     /// Hotdog data fields group.
     public Transform hotdogTray_transform;
     public HotdogBeh hotdog;
+	public GameObject hotdogSauce;
+	public GameObject hotdogCheese;
 
 	#region <!-- Customer data group.
 
@@ -186,6 +188,8 @@ public class BakeryShop : Mz_BaseScene {
 		StartCoroutine(this.Initializing_ButterCookie());
 
         StartCoroutine(this.InitializeHotdogInstance());
+		hotdogSauce.gameObject.active = false;
+		hotdogCheese.gameObject.active = false;
 
         yield return null;
 
@@ -200,8 +204,7 @@ public class BakeryShop : Mz_BaseScene {
         calculator_group_instance.SetActiveRecursively(false);
         // Debug can sell list.
         StartCoroutine(this.InitializeCanSellGoodslist());
-		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count);
-		Debug.Log("NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
+		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count + " :: " + "NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
     }
 
     private void OpenShop() {
@@ -272,6 +275,9 @@ public class BakeryShop : Mz_BaseScene {
     {		
         if(BakeryShop.NumberOfCansellItem.Count == 0)
             base.extendsStorageManager.LoadCanSellGoodsListData();
+		
+
+        yield return new WaitForFixedUpdate();
 
         foreach (int id in NumberOfCansellItem)
         {
@@ -296,9 +302,11 @@ public class BakeryShop : Mz_BaseScene {
                 tunaSandwich.gameObject.SetActiveRecursively(true);
             if (id == 25)
                 chocolateChip_cookie.gameObject.SetActiveRecursively(true);
-            if (id == 28)
+            if (id == 28) {
                 hotdog.gameObject.SetActiveRecursively(true);
-			
+				hotdogSauce.gameObject.active = true;
+			}
+
 			#endregion
 			
 			#region Has page2 upgraded.
@@ -338,13 +346,13 @@ public class BakeryShop : Mz_BaseScene {
 				eggSandwich.gameObject.SetActiveRecursively(true);
             if (id == 27)
                 butter_cookie.gameObject.SetActiveRecursively(true);
-            if (id == 29)
+            if (id == 29) {
                 hotdog.gameObject.SetActiveRecursively(true);
+				hotdogCheese.gameObject.active = true;
+			}
 
 			#endregion
         }
-
-        yield return null;
     }
 	
 	#region <!-- Cake && Cream object mechanism section.
@@ -957,7 +965,11 @@ public class BakeryShop : Mz_BaseScene {
 
 	    if(currentCustomer != null) {
 	        currentCustomer.Dispose();
-            Destroy(currentCustomer.gameObject);
+			foreach (GoodsBeh item in foodTrayBeh.goodsOnTray_List) {
+				item.OnDispose();
+			}
+			foodTrayBeh.goodsOnTray_List.Clear();
+//            Destroy(currentCustomer.gameObject);
 	    }
 		
 		yield return new WaitForFixedUpdate();	

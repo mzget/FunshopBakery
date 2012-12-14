@@ -144,45 +144,63 @@ public class UpgradeInsideManager : MonoBehaviour {
                 {
                     string nameSpecify = firstPage_spriteNames[i, j];
                     upgradeInsideSprite2D[i, j].spriteId = upgradeInsideSprite2D[i, j].GetSpriteIdByName(nameSpecify);
+                    upgradeInsideSprite2D[i, j].color = Color.white;
+
                     upgradeInside_PriceTextmesh[i, j].text = firstPage_prices[i, j].ToString();
                     upgradeInside_PriceTextmesh[i, j].Commit();
-
+					
 					upgradeButton_Objs[i,j].active = true;
-//					upgradeButton_Objs[i,j].collider.enabled = true;
 					upgradeButton_Sprites[i,j].spriteId = ActiveUpgradeButtonID;
                 }
             }			
 			
 			if(BakeryShop.NumberOfCansellItem.Contains(6) || Mz_StorageManage.AccountBalance < firstPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,0].collider.enabled = false;
+
+                if(BakeryShop.NumberOfCansellItem.Contains(6))
+                    upgradeInsideSprite2D[0, 0].color = Color.grey;
 			}
 			if(CreamBeh.arr_CreamBehs[1] != string.Empty || Mz_StorageManage.AccountBalance < firstPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
+
+                if (CreamBeh.arr_CreamBehs[1] != string.Empty)
+                    upgradeInsideSprite2D[0, 1].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13) || Mz_StorageManage.AccountBalance < firstPage_prices[0,2]) {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,2].collider.enabled = false;
+
+                if(BakeryShop.NumberOfCansellItem.Contains(12))
+                    upgradeInsideSprite2D[0, 2].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16) || Mz_StorageManage.AccountBalance < firstPage_prices[0,3]) {
 				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,3].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16))
+                    upgradeInsideSprite2D[0, 3].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(19) || Mz_StorageManage.AccountBalance < firstPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,0].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(19))
+                    upgradeInsideSprite2D[1, 0].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(21) || Mz_StorageManage.AccountBalance < firstPage_prices[1,1]) {
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,1].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(21))
+                    upgradeInsideSprite2D[1, 1].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(25) || Mz_StorageManage.AccountBalance < firstPage_prices[1,2]) {
 				upgradeButton_Sprites[1,2].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,2].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(25))
+                    upgradeInsideSprite2D[1, 2].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(28) || Mz_StorageManage.AccountBalance < firstPage_prices[1,3])	{
 				upgradeButton_Sprites[1,3].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,3].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(28))
+                    upgradeInsideSprite2D[1, 3].color = Color.grey;
             }
 
             #endregion
@@ -197,46 +215,63 @@ public class UpgradeInsideManager : MonoBehaviour {
                 {
                     string nameSpecify = secondPage_spriteNames[i, j];
                     upgradeInsideSprite2D[i, j].spriteId = upgradeInsideSprite2D[i, j].GetSpriteIdByName(nameSpecify);
+                    upgradeInsideSprite2D[i, j].color = Color.white;
+
                     upgradeInside_PriceTextmesh[i, j].text = secondPage_prices[i, j].ToString();
                     upgradeInside_PriceTextmesh[i, j].Commit();
 					
 					upgradeButton_Objs[i,j].active = true;
-					upgradeButton_Objs[i,j].collider.enabled = true;
 					upgradeButton_Sprites[i,j].spriteId = ActiveUpgradeButtonID;
                 }
             }
 			
 			if(BakeryShop.NumberOfCansellItem.Contains(1) || Mz_StorageManage.AccountBalance < secondPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,0].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(1))
+                    upgradeInsideSprite2D[0, 0].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(2) || Mz_StorageManage.AccountBalance < secondPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,1].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(2))
+                    upgradeInsideSprite2D[0, 1].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(7) || Mz_StorageManage.AccountBalance < secondPage_prices[0,2]) {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,2].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(7))
+                    upgradeInsideSprite2D[0, 2].color = Color.grey;
 			}
             if (CreamBeh.arr_CreamBehs[2] != string.Empty || Mz_StorageManage.AccountBalance < secondPage_prices[0, 3]) {
                 upgradeButton_Sprites[0, 3].spriteId = UnActiveUpgradeButtonID;
-                //				upgradeButton_Objs[0,3].collider.enabled = false;
+
+                if (CreamBeh.arr_CreamBehs[2] != string.Empty)
+                    upgradeInsideSprite2D[0, 3].color = Color.grey;
             }
 			if(BakeryShop.NumberOfCansellItem.Contains(20) || Mz_StorageManage.AccountBalance < secondPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,0].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(20))
+                    upgradeInsideSprite2D[1, 0].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(22) || Mz_StorageManage.AccountBalance < secondPage_prices[1,1])	{
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,1].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(22))
+                    upgradeInsideSprite2D[1, 1].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(26) || Mz_StorageManage.AccountBalance < secondPage_prices[1,2]) {
 				upgradeButton_Sprites[1,2].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,2].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(26))
+                    upgradeInsideSprite2D[1, 2].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(3) || Mz_StorageManage.AccountBalance < secondPage_prices[1,3]) {
 				upgradeButton_Sprites[1,3].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,3].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(3))
+                    upgradeInsideSprite2D[1, 3].color = Color.grey;
             }
 
             #endregion
@@ -252,11 +287,12 @@ public class UpgradeInsideManager : MonoBehaviour {
                     string nameSpecify = thirdPage_spriteNames[i, j];
 					if(nameSpecify != "") {
                     	upgradeInsideSprite2D[i, j].spriteId = upgradeInsideSprite2D[i, j].GetSpriteIdByName(nameSpecify);
+                        upgradeInsideSprite2D[i, j].color = Color.white;
+
                     	upgradeInside_PriceTextmesh[i, j].text = thirdPage_prices[i, j].ToString();
                     	upgradeInside_PriceTextmesh[i, j].Commit();
 						
 						upgradeButton_Objs[i,j].active = true;
-						upgradeButton_Objs[i,j].collider.enabled = true;
 						upgradeButton_Sprites[i,j].spriteId = ActiveUpgradeButtonID;
 					}
 					else {
@@ -274,27 +310,39 @@ public class UpgradeInsideManager : MonoBehaviour {
 			
 			if(BakeryShop.NumberOfCansellItem.Contains(4) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,0].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(4))
+                    upgradeInsideSprite2D[0, 0].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(8) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,1].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(8))
+                    upgradeInsideSprite2D[0, 1].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(23) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,2]) {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,2].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(23))
+                    upgradeInsideSprite2D[0, 2].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(24) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,3]) {
 				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[0,3].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(24))
+                    upgradeInsideSprite2D[0, 3].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(27) || Mz_StorageManage.AccountBalance < thirdPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,0].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(27))
+                    upgradeInsideSprite2D[1, 0].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(29) || Mz_StorageManage.AccountBalance < thirdPage_prices[1,1]) {
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
-//				upgradeButton_Objs[1,1].collider.enabled = false;
+
+                if (BakeryShop.NumberOfCansellItem.Contains(29))
+                    upgradeInsideSprite2D[1, 1].color = Color.grey;
             }
 
             #endregion

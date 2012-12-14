@@ -5,7 +5,8 @@ public class Startup : Mz_BaseScene {
 	
 	
 	// Use this for initialization
-	void Start () {		
+	void Start () {
+        Mz_OnGUIManager.CalculateViewportScreen();
 		//<!-- get name quality.
 //		qualities_list = QualitySettings.names;
 		StartCoroutine(this.AutomaticSetup_QualitySetting());
@@ -19,12 +20,18 @@ public class Startup : Mz_BaseScene {
 		    Application.targetFrameRate = 30;
 		}
 		else {
-			QualitySettings.SetQualityLevel(3);
+			QualitySettings.SetQualityLevel(1);
 		    Application.targetFrameRate = 60;
 		}
 #elif UNITY_ANDROID
-        QualitySettings.SetQualityLevel(1);
-		Application.targetFrameRate = 60;
+		if(Screen.height < Main.HD_HEIGHT) {			
+			QualitySettings.SetQualityLevel(0);	
+		    Application.targetFrameRate = 30;
+		}
+		else {
+        	QualitySettings.SetQualityLevel(1);
+			Application.targetFrameRate = 60;
+		}
 #else 
 		QualitySettings.SetQualityLevel(3);
 		Application.targetFrameRate = 60;

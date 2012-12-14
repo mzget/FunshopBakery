@@ -12,4 +12,5 @@ public class Main {
 
 	public const float FixedGameWidth = 1024f;
 	public const float FixedGameHeight = 768f;
+	public const float HD_HEIGHT = 720f;
 }

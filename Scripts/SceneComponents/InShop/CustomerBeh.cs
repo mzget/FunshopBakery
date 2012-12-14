@@ -47,7 +47,7 @@ public class CustomerBeh : MonoBehaviour {
 
         StartCoroutine(RandomCustomerFace());
 
-		list_goodsBag = new List<Goods> (sceneManager.CanSellGoodLists);
+		list_goodsBag = new List<Goods>(sceneManager.CanSellGoodLists);
 		this.GenerateGoodOrder ();
 	}
 	
@@ -203,6 +203,6 @@ public class CustomerBeh : MonoBehaviour {
 		list_goodsBag.Clear();
         Destroy(customerSprite_Obj);
 		Destroy(customerOrderingIcon_Obj);
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 }

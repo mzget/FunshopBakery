@@ -14,21 +14,9 @@ public class Town : Mz_BaseScene {
 	public GameObject GUIMidcenter_anchor;
 	public UpgradeOutsideManager upgradeOutsideManager;
     public CharacterAnimationManager characterAnimatedManage;
-	
-	//<!--- Game button.
-//	public GameObject dressing_button_Obj;
-//	public GameObject trophy_button_Obj;
-//	public GameObject info_button_Obj;
-//	public GameObject back_button_obj;
-    //<!-- Texture2d resources.
-    public Texture2D tk_coin_img;
 
 	public enum OnGUIState { none = 0, DrawEditShopname, };
 	public OnGUIState currentGUIState;
-	Rect TopLeft_Anchor_GroupRect;          //<!-- TopLeft rectangle of screen.
-	Rect drawPlayerName_rect;
-	Rect drawShopName_rect;
-	Rect drawPlayerMoney_rect;
 
 	string shopname = "";
 	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
@@ -37,14 +25,14 @@ public class Town : Mz_BaseScene {
 
 	
 	// Use this for initialization
-	void Start () 
-	{
+	void Start ()
+    {
+        Mz_ResizeScale.ResizingScale(town_bg_group.transform);
 		StartCoroutine(this.InitializeAudio());
- 		Mz_ResizeScale.ResizingScale(town_bg_group.transform);
+        StartCoroutine(base.InitializeIdentityGUI());
 
         //StartCoroutine(InitializeBankBeh());
 
-		this.Initialize_OnGUIDataFields ();
         this.upgradeOutsideManager.InitializeDecorationObjects();
 
 		if (SheepBank.HaveUpgradeOutSide) {
@@ -77,13 +65,6 @@ public class Town : Mz_BaseScene {
         audioBackground_Obj.audio.Play();
 
         yield return null;
-	}
-
-	void Initialize_OnGUIDataFields () {
-		TopLeft_Anchor_GroupRect  = new Rect(0, 0, 200 * ShopScene_GUIManager.Extend_heightScale, 150);
-		drawPlayerName_rect  = new Rect(0, 20, 200 * ShopScene_GUIManager.Extend_heightScale, 40);
-		drawShopName_rect  = new Rect(0, 65, 200 * ShopScene_GUIManager.Extend_heightScale, 40);
-		drawPlayerMoney_rect = new Rect(0, 110, 200 * ShopScene_GUIManager.Extend_heightScale, 40);
 	}
 
 	#region <!-- Decoration upgrade bar.
@@ -152,23 +133,17 @@ public class Town : Mz_BaseScene {
     /// <!-- Gui region.
     /// </summary>
     private new void OnGUI() {
-        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
-		
-   		/// TopLeft_Anchor_GroupRect.
-        GUI.BeginGroup(TopLeft_Anchor_GroupRect, "TopLeft anchor", GUI.skin.window);
-        {
-            GUI.Box(drawPlayerName_rect, Mz_StorageManage.Username);
-			if(GUI.Button(drawShopName_rect, Mz_StorageManage.ShopName)) {
-				currentGUIState = OnGUIState.DrawEditShopname;
-				base.UpdateTimeScale(0);
-			}
-            GUI.Box(drawPlayerMoney_rect, new GUIContent(Mz_StorageManage.AvailableMoney.ToString(), tk_coin_img));
-        }
-        GUI.EndGroup();      
+        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));    
 		
 		/// OnGUIState.DrawEditShopname.
 		if(currentGUIState == OnGUIState.DrawEditShopname)
 			this.DrawEditShopnameWindow();
+
+        if (GUI.Button(new Rect(0, Main.FixedGameHeight / 2 - 25, 150 * Mz_OnGUIManager.Extend_heightScale, 50), "Swindle"))
+        {
+            Mz_StorageManage.AvailableMoney = 100000;
+            StartCoroutine(base.InitializeIdentityGUI());
+        }
     }
 
 	void DrawEditShopnameWindow ()

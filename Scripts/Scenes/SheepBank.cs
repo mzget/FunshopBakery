@@ -70,6 +70,7 @@ public class SheepBank : Mz_BaseScene {
 		StartCoroutine(this.InitializeAudio());
 		this.InitializeGameEffectGenerator();
 		StartCoroutine(this.InitializeBankOfficer());
+        StartCoroutine(base.InitializeIdentityGUI());
 		
 		upgradeInsideManager = upgradeInside_window_Obj.GetComponent<UpgradeInsideManager>();
         donationManager = donationForm_group.GetComponent<DonationManager>();
