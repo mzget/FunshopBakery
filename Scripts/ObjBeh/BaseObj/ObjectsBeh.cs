@@ -23,7 +23,7 @@ public class ObjectsBeh : Base_ObjectBeh {
     public bool _canDragaable = false;
 	protected bool _isDraggable = false;
     protected bool _isDropObject = false;
-	public bool _canActive = false;	
+	protected bool _canActive = false;	
     internal Vector3 originalPosition;
 
     /// <summary>
@@ -86,22 +86,7 @@ public class ObjectsBeh : Base_ObjectBeh {
 				_isDropObject = true;
 		}
 	}
-
-	protected override void OnTouchDown ()
-	{
-		if(_canActive) {
-			//<!--- On object active.
-			if(animatedSprite && animationName_001 != string.Empty) {
-				animatedSprite.Play(animationName_001);				
-				animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
-			}
-	        else{ 
-	            iTween.PunchPosition(this.gameObject, iTween.Hash("y", 0.2f, "time", 1f, "looptype", iTween.LoopType.loop));
-	        }
-		}
-		
-		base.OnTouchDown ();
-	}
+	
     protected override void OnTouchDrag()
     {
         base.OnTouchDrag();

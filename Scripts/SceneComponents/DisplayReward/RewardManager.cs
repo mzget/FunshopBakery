@@ -16,12 +16,11 @@ public class RewardManager : MonoBehaviour
  	
 	private const int MAX_PAGENUMBER = 2;
 	private int currentPageID = 0;
-	private string[] arr_nameOfPlates = new string[5] {
-		"ConservationAnimals_plate", "GlobalAIDFund_plate", "LoveDog_plate", "LoveKids_plate", "Eco_plate",
+	private string[] arr_nameOfPlates = new string[6] {
+		"ConservationAnimals_plate", "GlobalAIDFund_plate", "LoveDog_plate",
+        "LoveKids_plate", "Eco_plate", "GlobalWarming_plate",
 	};
 	
-
-
 	// Use this for initialization
 	private IEnumerator Start ()
 	{
@@ -83,6 +82,10 @@ public class RewardManager : MonoBehaviour
 			for (int i = 0; i < EcoFoundation.Level; i++) {
 				arr_medals_Low1[i].active = true;
 			}
+            for (int i = 0; i < GlobalWarmingOranization.Level; i++)
+            {
+                arr_medals_Low2[i].active = true;
+            }
 		}
 
 		this.ChangeDisplayPageIdText();
@@ -122,13 +125,13 @@ public class RewardManager : MonoBehaviour
 	void ChangePageProcessing ()
 	{
 		if (currentPageID == 0) {
-				titleIcon_0.spriteId = titleIcon_0.GetSpriteIdByName (arr_nameOfPlates [0]);
-				titleIcon_1.spriteId = titleIcon_1.GetSpriteIdByName (arr_nameOfPlates [1]);
-				titleIcon_2.spriteId = titleIcon_2.GetSpriteIdByName (arr_nameOfPlates [2]);
+            titleIcon_0.spriteId = titleIcon_0.GetSpriteIdByName(arr_nameOfPlates[0]);
+            titleIcon_1.spriteId = titleIcon_1.GetSpriteIdByName(arr_nameOfPlates[1]);
+            titleIcon_2.spriteId = titleIcon_2.GetSpriteIdByName(arr_nameOfPlates[2]);
 		} else if (currentPageID == 1) {
-				titleIcon_0.spriteId = titleIcon_0.GetSpriteIdByName (arr_nameOfPlates [3]);
-				titleIcon_1.spriteId = titleIcon_1.GetSpriteIdByName (arr_nameOfPlates [4]);
-//			titleIcon_2.spriteId = titleIcon_2.GetSpriteIdByName (arr_nameOfPlates [2]);
+            titleIcon_0.spriteId = titleIcon_0.GetSpriteIdByName(arr_nameOfPlates[3]);
+            titleIcon_1.spriteId = titleIcon_1.GetSpriteIdByName(arr_nameOfPlates[4]);
+            titleIcon_2.spriteId = titleIcon_2.GetSpriteIdByName(arr_nameOfPlates[5]);
 		}
 
 		this.ResetActiveAvailableMedal();

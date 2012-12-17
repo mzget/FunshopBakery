@@ -54,12 +54,12 @@ public class SheepBank : Mz_BaseScene {
     private Hashtable moveUp_hashdata = new Hashtable();
 	
 	private DonationManager donationManager;
-	private UpgradeInsideManager upgradeInsideManager;
+    private UpgradeInsideManager upgradeInsideManager;
+    public BankOfficer offecer = new BankOfficer();
     public GameObject[] upgradeButtons = new GameObject[8];
 
     public enum GameSceneStatus { none = 0, ShowUpgradeInside = 1, ShowDonationForm, ShowDepositForm, ShowWithdrawalForm, ShowPassbook, };
     public GameSceneStatus currentGameStatus;
-	public BankOfficer offecer = new BankOfficer();
 	
 	internal static bool HaveUpgradeOutSide = false;
 	

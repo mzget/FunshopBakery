@@ -117,14 +117,17 @@ public class Mz_BaseScene : MonoBehaviour {
     public tk2dTextMesh availableMoney;
     protected IEnumerator InitializeIdentityGUI()
     {
-        usernameTextmesh.text = Mz_StorageManage.Username;
-        usernameTextmesh.Commit();
+        if (Mz_StorageManage.Username != string.Empty)
+        {
+            usernameTextmesh.text = Mz_StorageManage.Username;
+            usernameTextmesh.Commit();
 
-        shopnameTextmesh.text = Mz_StorageManage.ShopName;
-        shopnameTextmesh.Commit();
+            shopnameTextmesh.text = Mz_StorageManage.ShopName;
+            shopnameTextmesh.Commit();
 
-        availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
-        availableMoney.Commit();
+            availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
+            availableMoney.Commit();
+        }
 
         yield return null;
     }

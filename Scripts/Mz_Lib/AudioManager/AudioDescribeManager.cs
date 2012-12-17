@@ -3,10 +3,6 @@ using System.Collections;
 
 public class AudioDescribeManager : MonoBehaviour {
 
-    public const string PathOfAudioDescriptions = "AudioClips/DescriptionClips/";
-    public const string PathOfAudioExtra = "AudioClips/extra/";
-
-
 	// Use this for initialization
 	void Start () {
 	

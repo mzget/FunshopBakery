@@ -54,6 +54,7 @@ public class ExtendsStorageManager : Mz_StorageManage
 		LoveDogConsortium.Level = PlayerPrefs.GetInt(SaveSlot + KEY_LOVEDOGFOUNDATION_LV, 0);
 		LoveKidsFoundation.Level = PlayerPrefs.GetInt(SaveSlot + KEY_LOVEKIDFOUNDATION_LV, 0);
 		EcoFoundation.Level = PlayerPrefs.GetInt(SaveSlot + KEY_ECOFOUNDATION_LV, 0);
+        GlobalWarmingOranization.Level = PlayerPrefs.GetInt(SaveSlot + KEY_GLOBALWARMING_LV, 0);
 
         this.LoadCanSellGoodsListData();
 	}
@@ -83,6 +84,7 @@ public class ExtendsStorageManager : Mz_StorageManage
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_LOVEDOGFOUNDATION_LV, LoveDogConsortium.Level);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_LOVEKIDFOUNDATION_LV, LoveKidsFoundation.Level);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ECOFOUNDATION_LV, EcoFoundation.Level);
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_GLOBALWARMING_LV, GlobalWarmingOranization.Level);
 
 		if(BakeryShop.NumberOfCansellItem.Count != 0)
 			this.SaveCanSellGoodListData();

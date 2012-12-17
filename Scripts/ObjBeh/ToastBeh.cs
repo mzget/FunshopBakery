@@ -1,8 +1,10 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class ToastBeh : GoodsBeh {	
 		
+	public static bool _IsActive = false;
 		
 	// Use this for initialization
 	protected override void Start ()
@@ -17,10 +19,19 @@ public class ToastBeh : GoodsBeh {
 			base.waitForIngredientEvent += base.Handle_waitForIngredientEvent;
 	}
 	
-	public override void WaitForIngredient(string ingredientName) 
+	protected override void OnTouchDown ()
 	{
-//		base.WaitForIngredient(ingredientName);		
+        if (_canActive && ToastBeh._IsActive == false)
+        {
+            ToastBeh._IsActive = true;
+            base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
+        }
 		
+		base.OnTouchDown();
+	}
+	
+	public override void WaitForIngredient(string ingredientName) 
+	{		
 		if(base._isWaitFotIngredient == false)
 			return;
 		
@@ -30,7 +41,7 @@ public class ToastBeh : GoodsBeh {
 				this.gameObject.name = GoodDataStore.GoodsOrderList.ToastWithStrawberryJam.ToString();
 				
 				base._canDragaable = true;
-				GoodsBeh._IsActive = false;
+				ToastBeh._IsActive = false;
 				base._canActive = false;
                 base._isWaitFotIngredient = false;
 			};
@@ -41,7 +52,7 @@ public class ToastBeh : GoodsBeh {
                 this.gameObject.name = GoodDataStore.GoodsOrderList.ToastWithBlueberryJam.ToString();
 				
 				base._canDragaable = true;
-				GoodsBeh._IsActive = false;
+				ToastBeh._IsActive = false;
 				base._canActive = false;
                 base._isWaitFotIngredient = false;
             };
@@ -52,7 +63,7 @@ public class ToastBeh : GoodsBeh {
                 this.gameObject.name = GoodDataStore.GoodsOrderList.ToastWithButterJam.ToString();
                 				
 				base._canDragaable = true;
-				GoodsBeh._IsActive = false;
+				ToastBeh._IsActive = false;
 				base._canActive = false;
                 base._isWaitFotIngredient = false;
             };
@@ -63,7 +74,7 @@ public class ToastBeh : GoodsBeh {
 				this.gameObject.name = GoodDataStore.GoodsOrderList.ToastWithCustardJam.ToString();
                 				
 				base._canDragaable = true;
-				GoodsBeh._IsActive = false;
+				ToastBeh._IsActive = false;
 				base._canActive = false;
                 base._isWaitFotIngredient = false;              
             };

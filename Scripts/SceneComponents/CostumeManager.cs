@@ -14,6 +14,24 @@ public class CostumeManager : MonoBehaviour {
 		"Hat_0013", "Hat_0014", "Hat_0015", "Hat_0016", "Hat_0017", "Hat_0018",  
 		"Hat_0019", "Hat_0020", "Hat_0021", "Hat_0022", "Hat_0023", "none",
 	};
+	private int[] arr_priceOfClothesData = new int[] {
+		150, 200, 300, 
+		400, 500, 600,
+		700, 800, 900,
+		1000, 1100, 1200,
+		1300, 1400, 1500,
+		0, 0, 0,
+	};
+	private int[] arr_HatPriceData = new int[] {
+		150, 200, 300, 
+		400, 500, 600,
+		700, 800, 900,
+		1000, 1100, 1200,
+		1300, 1400, 1500,
+		1600, 1700, 1800,
+		1900, 2000, 2100,
+		2200, 2300, 0,
+	};
 
     public GameObject[] low0_Obj;
     private tk2dSprite[] low0_Sprite = new tk2dSprite[3];
@@ -21,6 +39,7 @@ public class CostumeManager : MonoBehaviour {
     private tk2dSprite[] low1_Sprite = new tk2dSprite[3];
     public tk2dSprite shirt_button;
     public tk2dSprite hat_button;
+	public tk2dTextMesh[] costumePrice_textmesh = new tk2dTextMesh[6];
 	public tk2dTextMesh displayCurrentPageID_textmesh;
     public CharacterCustomization characterCustomization;
     private Dressing sceneController;
@@ -101,10 +120,16 @@ public class CostumeManager : MonoBehaviour {
                 for (int i = 0; i < low0_Sprite.Length; i++)
                 {
                     low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameClothesSpecify[i]);
+
+					costumePrice_textmesh[i].text = arr_priceOfClothesData[i].ToString();
+					costumePrice_textmesh[i].Commit();
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
                 {
                     low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameClothesSpecify[j + 3]);
+
+					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j+3].ToString();
+					costumePrice_textmesh[j+3].Commit();
                 }
             }
             else if (currentPageIndex == 1)
@@ -112,10 +137,16 @@ public class CostumeManager : MonoBehaviour {
                 for (int i = 0; i < low0_Sprite.Length; i++)
                 {
                     low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameClothesSpecify[i + 6]);
+
+					costumePrice_textmesh[i].text = arr_priceOfClothesData[i+6].ToString();
+					costumePrice_textmesh[i].Commit();
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
                 {
                     low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameClothesSpecify[j + 9]);
+
+					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j+9].ToString();
+					costumePrice_textmesh[j+3].Commit();
                 }
             }
             else if (currentPageIndex == 2)
@@ -123,54 +154,85 @@ public class CostumeManager : MonoBehaviour {
                 for (int i = 0; i < low0_Sprite.Length; i++)
                 {
                     low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameClothesSpecify[i + 12]);
+					
+					costumePrice_textmesh[i].text = arr_priceOfClothesData[i+12].ToString();
+					costumePrice_textmesh[i].Commit();
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
                 {
                     low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameClothesSpecify[j + 15]);
+					
+					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j + 15].ToString();
+					costumePrice_textmesh[j+3].Commit();
                 }
             }
         }
-        else if (currentTabMenuState == TabMenuState.hat) {
+        else if (currentTabMenuState == TabMenuState.hat) 
+		{
             switch (currentPageIndex)
             {
                 case 0:
                     for (int i = 0; i < low0_Sprite.Length; i++)
                     {
                         low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i]);
+
+						costumePrice_textmesh[i].text = arr_HatPriceData[i].ToString();
+						costumePrice_textmesh[i].Commit();
                     }
                     for (int j = 0; j < low1_Sprite.Length; j++)
                     {
                         low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 3]);
+
+						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+3].ToString();
+						costumePrice_textmesh[j+3].Commit();
                     }
                     break;
                 case 1:
                     for (int i = 0; i < low0_Sprite.Length; i++)
                     {
                         low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 6]);
+					
+						costumePrice_textmesh[i].text = arr_HatPriceData[i+6].ToString();
+						costumePrice_textmesh[i].Commit();
                     }
                     for (int j = 0; j < low1_Sprite.Length; j++)
                     {
                         low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 9]);
+					
+						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+9].ToString();
+						costumePrice_textmesh[j+3].Commit();
                     }
                     break;
                 case 2:
                     for (int i = 0; i < low0_Sprite.Length; i++)
                     {
                         low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 12]);
+					
+						costumePrice_textmesh[i].text = arr_HatPriceData[i+12].ToString();
+						costumePrice_textmesh[i].Commit();
                     }
                     for (int j = 0; j < low1_Sprite.Length; j++)
                     {
                         low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 15]);
+					
+						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+15].ToString();
+						costumePrice_textmesh[j+3].Commit();
                     }
                     break;
                 case 3:
                     for (int i = 0; i < low0_Sprite.Length; i++)
                     {
                         low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 18]);
+					
+						costumePrice_textmesh[i].text = arr_HatPriceData[i+18].ToString();
+						costumePrice_textmesh[i].Commit();
                     }
                     for (int j = 0; j < low1_Sprite.Length; j++)
                     {
                         low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 21]);
+					
+						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+21].ToString();
+						costumePrice_textmesh[j+3].Commit();
                     }
                     break;
                 default:

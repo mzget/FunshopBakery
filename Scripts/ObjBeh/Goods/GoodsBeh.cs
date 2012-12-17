@@ -1,15 +1,19 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class GoodsBeh : ObjectsBeh {    
     public const string ClassName = "GoodsBeh";
-	protected static bool _IsActive = false;
     
     public Vector3 offsetPos;	
 
 	// WaitForIngredientEvent.
 	protected bool _isWaitFotIngredient = false;	
 	protected event System.EventHandler waitForIngredientEvent;
+    protected void CheckingDelegationOfWaitFotIngredientEvent(object sender, EventArgs e) {
+        if (waitForIngredientEvent != null)
+            waitForIngredientEvent(sender, System.EventArgs.Empty);
+    }
 	protected virtual void Handle_waitForIngredientEvent (object sender, System.EventArgs e)
 	{
 		_isWaitFotIngredient = true;
@@ -98,20 +102,22 @@ public class GoodsBeh : ObjectsBeh {
     }
 	
 	/// <!-- OnInput Events.
-	protected override void OnTouchDown()
-    {		
-		if(_canActive && _IsActive == false) {
-			_IsActive = true;
-			
-			if(waitForIngredientEvent != null) {
-				waitForIngredientEvent(this, System.EventArgs.Empty);
+
+	protected override void OnTouchDown ()
+	{
+		if(_canActive && _isWaitFotIngredient) {
+			//<!--- On object active.
+			if(animatedSprite && animationName_001 != string.Empty) {
+				animatedSprite.Play(animationName_001);				
+				animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
 			}
-			
-			base.OnTouchDown();
-		}	
-		else 
-			return;
-    }	
+			else{ 
+				iTween.PunchPosition(this.gameObject, iTween.Hash("y", 0.2f, "time", 1f, "looptype", iTween.LoopType.loop));
+			}
+		}
+
+		base.OnTouchDown();
+	}
 	protected override void OnTouchEnded ()
 	{
         base.OnTouchEnded();
@@ -128,9 +134,4 @@ public class GoodsBeh : ObjectsBeh {
         this.waitForIngredientEvent -= this.Handle_waitForIngredientEvent;
         this.putObjectOnTray_Event -= this.Handle_putObjectOnTray_Event;
     }
-
-	public static void StaticDispose ()
-	{
-		GoodsBeh._IsActive = false;
-	}
 }

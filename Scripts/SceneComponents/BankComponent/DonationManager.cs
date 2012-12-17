@@ -35,6 +35,12 @@ public class LoveKidsFoundation {
         500, 1000, 1500, 2000, 2500,
     };
 };
+public class GlobalWarmingOranization {
+    public static int Level = 0;
+    public int[] donationPrice = new int[5] {
+        500, 1000, 1500, 2000, 2500,
+    };
+};
 
 public class DonationManager : MonoBehaviour
 {
@@ -52,7 +58,8 @@ public class DonationManager : MonoBehaviour
     public const string DOWN_DONATEBUTTONNAME = "DownDonate_button";
 
     private string[] arr_nameOfDonationTopic = new string[] {
-        "ConservationAnimals_plate", "GlobalAIDFund_plate", "LoveDog_plate", "LoveKids_plate", "Eco_plate",
+        "ConservationAnimals_plate", "GlobalAIDFund_plate", "LoveDog_plate",
+        "LoveKids_plate", "Eco_plate", "GlobalWarming_plate",
     };
     private Mz_BaseScene sceneController;
     ConservationAnimals conservationAnimal = new ConservationAnimals();
@@ -60,6 +67,7 @@ public class DonationManager : MonoBehaviour
     AIDSFoundation aidsFoundation = new AIDSFoundation();
     LoveDogConsortium loveDogFound = new LoveDogConsortium();
     LoveKidsFoundation loveKidsFound = new LoveKidsFoundation();
+    GlobalWarmingOranization globalWarmingORG = new GlobalWarmingOranization();
     public tk2dSprite topicIcon_0;
     public tk2dSprite topicIcon_1;
     public tk2dTextMesh topDonationPrice;
@@ -152,13 +160,15 @@ public class DonationManager : MonoBehaviour
         }
         else if (currentPageId == 2) {
             temp_topLv = EcoFoundation.Level;
+            temp_downLv = GlobalWarmingOranization.Level;
 			
 	        topDonationPrice.text = ecoDonation.donationPrice[EcoFoundation.Level].ToString();
 	        topDonationPrice.Commit();
             topDonationButton_sprite.spriteId = EcoFoundation.Level < 4 ? activeDonationButton_id : unactiveDonationButton_id;
 
-//	            downDonationPrice.text = AIDSFoundation.donationPrice[AIDSFoundation.Level].ToString();
-//	            downDonationPrice.Commit();
+            downDonationPrice.text =  globalWarmingORG.donationPrice[GlobalWarmingOranization.Level].ToString();
+            downDonationPrice.Commit();
+            downDonationButton_sprite.spriteId = GlobalWarmingOranization.Level < 4 ? activeDonationButton_id : unactiveDonationButton_id;
         }
 
         switch (temp_topLv) {
@@ -185,30 +195,30 @@ public class DonationManager : MonoBehaviour
                     break;
         }
 
-            switch (temp_downLv)
-            {
-                case 0:
-                    arr_downBarColor[0].active = true;
-                    break;
-                case 1:
-                    arr_downBarColor[0].active = true;
-                    arr_downBarColor[1].active = true;
-                    break;
-                case 2:
-                    for (int i = 0; i <= 2; i++)
-                        arr_downBarColor[i].active = true;
-                    break;
-                case 3:
-                    for (int i = 0; i <= 3; i++)
-                        arr_downBarColor[i].active = true;
-                    break;
-                case 4:
-                    for (int i = 0; i <= 4; i++)
-                        arr_downBarColor[i].active = true;
-                    break;
-                default:
-                    break;
-            }
+        switch (temp_downLv)
+        {
+            case 0:
+                arr_downBarColor[0].active = true;
+                break;
+            case 1:
+                arr_downBarColor[0].active = true;
+                arr_downBarColor[1].active = true;
+                break;
+            case 2:
+                for (int i = 0; i <= 2; i++)
+                    arr_downBarColor[i].active = true;
+                break;
+            case 3:
+                for (int i = 0; i <= 3; i++)
+                    arr_downBarColor[i].active = true;
+                break;
+            case 4:
+                for (int i = 0; i <= 4; i++)
+                    arr_downBarColor[i].active = true;
+                break;
+            default:
+                break;
+        }
     }
 
     private void RedrawPageIDTexmesh()
@@ -248,7 +258,7 @@ public class DonationManager : MonoBehaviour
         }
         else if (currentPageId == 2) {
             topicIcon_0.spriteId = topicIcon_0.GetSpriteIdByName(arr_nameOfDonationTopic[4]);
-            //topicIcon_1.spriteId = topicIcon_1.GetSpriteIdByName(arr_nameOfDonationTopic[3]);
+            topicIcon_1.spriteId = topicIcon_1.GetSpriteIdByName(arr_nameOfDonationTopic[5]);
         }
 
         this.ReInitializeData();
@@ -382,6 +392,7 @@ public class DonationManager : MonoBehaviour
 			break;
 		case TOP_DARKGREEN:
 			#region <@-- TOP_DARKGREEN.
+
 			if (currentPageId == 0) {
 					topDonationPrice.text = conservationAnimal.DonationPrices [4].ToString ();
 					topDonationPrice.Commit ();
@@ -409,10 +420,12 @@ public class DonationManager : MonoBehaviour
 				else 
 					topDonationButton_sprite.spriteId = activeDonationButton_id;
 			}
+
 			#endregion
 			break;
 		case DOWN_RED:
 			#region <!-- DOWN_RED.
+
 			if (currentPageId == 0) {
 				downDonationPrice.text = aidsFoundation.donationPrice [0].ToString ();
 				downDonationPrice.Commit ();
@@ -432,12 +445,20 @@ public class DonationManager : MonoBehaviour
 					downDonationButton_sprite.spriteId = activeDonationButton_id;
 			} 
 			else if (currentPageId == 2) {
-				print ("Not Implement !");
+                downDonationPrice.text = globalWarmingORG.donationPrice[0].ToString();
+                downDonationPrice.Commit();
+
+                if (GlobalWarmingOranization.Level > 0)
+                    downDonationButton_sprite.spriteId = unactiveDonationButton_id;
+                else
+                    downDonationButton_sprite.spriteId = activeDonationButton_id;
 			}
+
 			#endregion
 				break;
 		case DOWN_ORANGE:
 			#region <!-- DOWN_ORANGE.
+
 			if (currentPageId == 0) {
 				downDonationPrice.text = aidsFoundation.donationPrice [1].ToString ();
 				downDonationPrice.Commit ();
@@ -455,14 +476,23 @@ public class DonationManager : MonoBehaviour
 					downDonationButton_sprite.spriteId = unactiveDonationButton_id;
 				else 
 					downDonationButton_sprite.spriteId = activeDonationButton_id;
-				} 
-			else if (currentPageId == 2) {
-				print ("Not Implement !");
+				}
+            else if (currentPageId == 2)
+            {
+                downDonationPrice.text = globalWarmingORG.donationPrice[1].ToString();
+                downDonationPrice.Commit();
+
+                if (GlobalWarmingOranization.Level > 1)
+                    downDonationButton_sprite.spriteId = unactiveDonationButton_id;
+                else
+                    downDonationButton_sprite.spriteId = activeDonationButton_id;
 			}
+
 			#endregion
 				break;
 		case DOWN_YELLOW:
 			#region <!-- DOWN_YELLOW.
+
 			if (currentPageId == 0) {
 				downDonationPrice.text = aidsFoundation.donationPrice [2].ToString ();
 				downDonationPrice.Commit ();
@@ -480,14 +510,23 @@ public class DonationManager : MonoBehaviour
 					downDonationButton_sprite.spriteId = unactiveDonationButton_id;
 				else 
 					downDonationButton_sprite.spriteId = activeDonationButton_id;
-			} 
-			else if (currentPageId == 2) {
-				print ("Not Implement !");
 			}
+            else if (currentPageId == 2)
+            {
+                downDonationPrice.text = globalWarmingORG.donationPrice[2].ToString();
+                downDonationPrice.Commit();
+
+                if (GlobalWarmingOranization.Level > 2)
+                    downDonationButton_sprite.spriteId = unactiveDonationButton_id;
+                else
+                    downDonationButton_sprite.spriteId = activeDonationButton_id;
+			}
+
 			#endregion
 			break;
 		case DOWN_LIGHTGREEN:
 			#region <!-- DOWN_LIGHTGREEN.
+
 			if (currentPageId == 0) {
 				downDonationPrice.text = aidsFoundation.donationPrice [3].ToString ();
 				downDonationPrice.Commit ();
@@ -505,14 +544,23 @@ public class DonationManager : MonoBehaviour
 					downDonationButton_sprite.spriteId = unactiveDonationButton_id;
 				else 
 					downDonationButton_sprite.spriteId = activeDonationButton_id;
-			} 
-			else if (currentPageId == 2) {
-				print ("Not Implement !");
 			}
+            else if (currentPageId == 2)
+            {
+                downDonationPrice.text = globalWarmingORG.donationPrice[3].ToString();
+                downDonationPrice.Commit();
+
+                if (GlobalWarmingOranization.Level > 3)
+                    downDonationButton_sprite.spriteId = unactiveDonationButton_id;
+                else
+                    downDonationButton_sprite.spriteId = activeDonationButton_id;
+			}
+
 			#endregion
 			break;
 		case DOWN_DARKGREEN:
             #region <@!-- DOWN_DARKGREEN.
+
             if (currentPageId == 0) {
 				downDonationPrice.text = aidsFoundation.donationPrice [4].ToString ();
                 downDonationPrice.Commit();
@@ -531,9 +579,17 @@ public class DonationManager : MonoBehaviour
                 else
                     downDonationButton_sprite.spriteId = activeDonationButton_id;
 			}
-            else if (currentPageId == 2) {
-				print ("Not Implement !");
+            else if (currentPageId == 2)
+            {
+                downDonationPrice.text = globalWarmingORG.donationPrice[4].ToString();
+                downDonationPrice.Commit();
+
+                if (GlobalWarmingOranization.Level > 4)
+                    downDonationButton_sprite.spriteId = unactiveDonationButton_id;
+                else
+                    downDonationButton_sprite.spriteId = activeDonationButton_id;
 			}
+
             #endregion
             break;
 		case TOP_DONATEBUTTONNAME:
@@ -574,8 +630,14 @@ public class DonationManager : MonoBehaviour
                     else
                         Debug.LogWarning("Cannot donation!. Your donation level is more than limit");
                 }
-				//else if (currentPageId == 2)
-				//    this.DonationProcessing();
+                else if (currentPageId == 2)
+                {
+                    //<@-- GlobalWarmingOranization.
+                    if (GlobalWarmingOranization.Level < globalWarmingORG.donationPrice.Length - 1)
+                        this.DonationProcessing(arr_nameOfDonationTopic[5]);
+                    else
+                        Debug.LogWarning("Cannot donation!. Your donation level is more than limit");
+                }
 				break;
 		default:
 				break;
@@ -663,7 +725,7 @@ public class DonationManager : MonoBehaviour
         }
         else if (targetDonation == arr_nameOfDonationTopic[4])
         {
-            currentPriceToDonate = ecoDonation.donationPrice[LoveDogConsortium.Level];
+            currentPriceToDonate = ecoDonation.donationPrice[EcoFoundation.Level];
             if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
             {
                 Mz_StorageManage.AccountBalance -= currentPriceToDonate;
@@ -672,6 +734,24 @@ public class DonationManager : MonoBehaviour
 
 				EcoFoundation.Level ++;
 				this.ReActiveColorBarPicker();
+
+                print("DonationProcessing... complete !");
+            }
+            else
+            {
+                print("Cannot donation !, Your account balance are less than requirement.");
+            }
+        }
+        else if (targetDonation == arr_nameOfDonationTopic[5]) {
+            currentPriceToDonate = globalWarmingORG.donationPrice[GlobalWarmingOranization.Level];
+            if (currentPriceToDonate <= Mz_StorageManage.AccountBalance)
+            {
+                Mz_StorageManage.AccountBalance -= currentPriceToDonate;
+                sceneController.gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, downDonateButton_Obj.transform);
+                sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
+
+                GlobalWarmingOranization.Level++;
+                this.ReActiveColorBarPicker();
 
                 print("DonationProcessing... complete !");
             }
