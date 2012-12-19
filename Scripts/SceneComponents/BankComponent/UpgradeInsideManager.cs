@@ -166,16 +166,19 @@ public class UpgradeInsideManager : MonoBehaviour {
                 if (CreamBeh.arr_CreamBehs[1] != string.Empty)
                     upgradeInsideSprite2D[0, 1].color = Color.grey;
 			}
-			if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13) || Mz_StorageManage.AccountBalance < firstPage_prices[0,2]) {
+			if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13) ||
+				BakeryShop.NumberOfCansellItem.Contains(14) || Mz_StorageManage.AccountBalance < firstPage_prices[0,2]) 
+			{
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
 
-                if(BakeryShop.NumberOfCansellItem.Contains(12))
+                if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13) || BakeryShop.NumberOfCansellItem.Contains(14))
                     upgradeInsideSprite2D[0, 2].color = Color.grey;
 			}
-			if(BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16) || Mz_StorageManage.AccountBalance < firstPage_prices[0,3]) {
+			if(BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16) || 
+				BakeryShop.NumberOfCansellItem.Contains(17) || Mz_StorageManage.AccountBalance < firstPage_prices[0,3]) {
 				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16))
+                if (BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16) || BakeryShop.NumberOfCansellItem.Contains(17))
                     upgradeInsideSprite2D[0, 3].color = Color.grey;
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(19) || Mz_StorageManage.AccountBalance < firstPage_prices[1,0]) {

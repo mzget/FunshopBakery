@@ -7,12 +7,19 @@ public class DisplayRewards_Scene : Mz_BaseScene {
 	const string NEXT_BUTTON_NAME = "Next_button";
 	const string PREVIOUS_BUTTON_NAME = "Previous_button";
 
+	public Transform sceneBackground_transform;
+
 	public RewardManager rewardManager;
 	public CharacterAnimationManager tk_animationManager;
-	
+
+
+
 	// Use this for initialization
 	void Start () {
 		StartCoroutine(this.InitializeAudio());
+		StartCoroutine(base.InitializeIdentityGUI());
+
+		Mz_ResizeScale.ResizingScale(sceneBackground_transform);
 	}
 	
 	private new IEnumerator InitializeAudio() {

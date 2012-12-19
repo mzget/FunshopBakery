@@ -39,7 +39,6 @@ public class BakeryShop : Mz_BaseScene {
 	private Mz_CalculatorBeh calculatorBeh;
     private GameObject cash_obj;
 	private tk2dSprite cash_sprite;
-    private tk2dTextMesh coin_Textmesh;
     private GameObject packaging_Obj;
 	public CharacterAnimationManager TK_animationManager;
 	public tk2dSprite shopLogo_sprite;
@@ -196,13 +195,11 @@ public class BakeryShop : Mz_BaseScene {
 
 		foodTrayBeh = new FoodTrayBeh();
         goodDataStore = new GoodDataStore();
-
-        GameObject coinObj = GameObject.Find("Coin");
-        coin_Textmesh = coinObj.GetComponent<tk2dTextMesh>();
-        coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
-        coin_Textmesh.Commit();
         
         calculator_group_instance.SetActiveRecursively(false);
+
+		StartCoroutine(this.InitailizeShopLabelGUI());
+
         // Debug can sell list.
         StartCoroutine(this.InitializeCanSellGoodslist());
 		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count + " :: " + "NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
@@ -243,6 +240,18 @@ public class BakeryShop : Mz_BaseScene {
 		shopLogo_sprite.color = InitializeNewShop.shopLogos_Color[Mz_StorageManage.ShopLogoColor];
 
 		yield return 0;
+	}
+
+	IEnumerator InitailizeShopLabelGUI ()
+	{		
+		if(Mz_StorageManage.Username != string.Empty) {
+			base.shopnameTextmesh.text = Mz_StorageManage.ShopName;
+			base.shopnameTextmesh.Commit();
+
+			base.availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
+			base.availableMoney.Commit();
+		}
+		yield return null;
 	}
 
 	IEnumerator InitializeObjectAnimation ()
@@ -1173,8 +1182,8 @@ public class BakeryShop : Mz_BaseScene {
 		};
         
         Mz_StorageManage.AvailableMoney += currentCustomer.amount;
-        coin_Textmesh.text = Mz_StorageManage.AvailableMoney.ToString();
-        coin_Textmesh.Commit();
+        base.availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
+        base.availableMoney.Commit();
 
         //<!-- Clare resource data.
 		Destroy(packaging_Obj);

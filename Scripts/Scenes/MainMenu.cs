@@ -29,7 +29,7 @@ public class MainMenu : Mz_BaseScene {
     private SceneState sceneState;
 
     private string username = string.Empty;
-    private string shopName = "";
+	private string shopName = string.Empty;
 	private TouchScreenKeyboard touchScreenKeyboard;
 
     private bool _isNullUsernameNotification = false;
@@ -52,14 +52,7 @@ public class MainMenu : Mz_BaseScene {
 	
 	// Use this for initialization
 	void Start () {
-		moveDownTransform_Data.Add("position", new Vector3(0.2f, 0, -2));
-		moveDownTransform_Data.Add("time", 1f);
-		moveDownTransform_Data.Add("easetype", iTween.EaseType.spring);
-		
-		moveUpTransform_Data.Add("position", new Vector3(0.2f, 2, -2));
-		moveUpTransform_Data.Add("time", 1f);
-		moveUpTransform_Data.Add("easetype", iTween.EaseType.linear);
-
+		this.InitailizeDataFields();
         StartCoroutine(PreparingAudio());
 
         Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
@@ -72,8 +65,6 @@ public class MainMenu : Mz_BaseScene {
         initializeNewGame_Group.gameObject.SetActiveRecursively(false);
         loadgame_Group.gameObject.SetActiveRecursively(false);
         back_button.gameObject.active = false;
-		
-		this.InitailizeDataFields();
 		
         iTween.MoveTo(flyingBird_group, iTween.Hash("x", 1.8f, "time", 16f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.loop));
         //iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
@@ -95,26 +86,22 @@ public class MainMenu : Mz_BaseScene {
 	
     void InitailizeDataFields()
     {
+		moveDownTransform_Data.Add("position", new Vector3(0.2f, 0, -2));
+		moveDownTransform_Data.Add("time", 1f);
+		moveDownTransform_Data.Add("easetype", iTween.EaseType.spring);
+		
+		moveUpTransform_Data.Add("position", new Vector3(0.2f, 2, -2));
+		moveUpTransform_Data.Add("time", 1f);
+		moveUpTransform_Data.Add("easetype", iTween.EaseType.linear);
+
         newgame_Textfield_rect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) - (70 * Mz_OnGUIManager.Extend_heightScale), Mz_OnGUIManager.viewPort_rect.height / 2 + 58, 300 * Mz_OnGUIManager.Extend_heightScale, 82);
         newShopName_rect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) - (63 * Mz_OnGUIManager.Extend_heightScale), Mz_OnGUIManager.viewPort_rect.height / 2 - 110, 400 * Mz_OnGUIManager.Extend_heightScale, 80);
 
         group_width = 400 * Mz_OnGUIManager.Extend_heightScale;
         showSaveGameSlot_GroupRect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) + 50 - (group_width / 2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
-        slot_1Rect = new Rect(32, 12, group_width - 60, 80);
-        slot_2Rect = new Rect(32, 112, group_width - 60, 80);
-        slot_3Rect = new Rect(32, 212, group_width - 60, 80);
-
-        if (Screen.height != Main.GAMEHEIGHT)
-        {
-            slot_1Rect.width = group_width - (60 * Mz_OnGUIManager.Extend_heightScale);
-            slot_1Rect.x = slot_1Rect.x * Mz_OnGUIManager.Extend_heightScale;
-
-            slot_2Rect.width = group_width - (60 * Mz_OnGUIManager.Extend_heightScale);
-            slot_2Rect.x = slot_2Rect.x * Mz_OnGUIManager.Extend_heightScale;
-
-            slot_3Rect.width = group_width - (60 * Mz_OnGUIManager.Extend_heightScale);
-            slot_3Rect.x = slot_3Rect.x * Mz_OnGUIManager.Extend_heightScale;
-        }
+        slot_1Rect = new Rect(32*Mz_OnGUIManager.Extend_heightScale, 12, group_width - (60 * Mz_OnGUIManager.Extend_heightScale), 80);
+		slot_2Rect = new Rect(slot_1Rect.x, 112, group_width - (60 * Mz_OnGUIManager.Extend_heightScale), 80);
+		slot_3Rect = new Rect(slot_1Rect.x, 212, group_width - (60 * Mz_OnGUIManager.Extend_heightScale), 80);
 
         saveSlot_buttonStyle.normal.textColor = Color.white;
         saveSlot_buttonStyle.active.textColor = Color.green;
@@ -192,7 +179,21 @@ public class MainMenu : Mz_BaseScene {
     
     private void DrawNewShopGUI()
     {
-        shopName = GUI.TextField(newShopName_rect, shopName, 13, saveSlot_buttonStyle);
+		
+		if (Application.isEditor || Application.isWebPlayer)
+		{
+			//<!-- "Please Insert Shopname !".
+			shopName = GUI.TextField(newShopName_rect, shopName, 13, saveSlot_buttonStyle);
+		}
+		else if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) { 
+			if(GUI.Button(newShopName_rect, shopName, saveSlot_buttonStyle)) {
+				touchScreenKeyboard = TouchScreenKeyboard.Open(shopName, TouchScreenKeyboardType.ASCIICapable, false, false, false, true);
+			}
+			if(touchScreenKeyboard != null && touchScreenKeyboard.active)
+				shopName = touchScreenKeyboard.text;
+			if(touchScreenKeyboard != null && touchScreenKeyboard.active == false)
+				touchScreenKeyboard.text = string.Empty;
+		}
     }
 
     private void DrawNewGameTextField()
@@ -217,10 +218,12 @@ public class MainMenu : Mz_BaseScene {
         }
         else if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) { 
 			if(GUI.Button(newgame_Textfield_rect, username, saveSlot_buttonStyle)) {
-				touchScreenKeyboard = TouchScreenKeyboard.Open(username, TouchScreenKeyboardType.EmailAddress, false, false, false, true);
+				touchScreenKeyboard = TouchScreenKeyboard.Open(username, TouchScreenKeyboardType.ASCIICapable, false, false, false, true);
 			}
-			if(touchScreenKeyboard != null)
+			if(touchScreenKeyboard != null && touchScreenKeyboard.active)
 				username = touchScreenKeyboard.text;
+			if(touchScreenKeyboard != null && touchScreenKeyboard.active == false)
+				touchScreenKeyboard.text = string.Empty;
         }
 	}
 
@@ -319,6 +322,11 @@ public class MainMenu : Mz_BaseScene {
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ECOFOUNDATION_LV, 0);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_GLOBALWARMING_LV, 0);
 
+        //<@-- CAN_EQUIP_CLOTHE_LIST
+        int[] newPlayerClothes = new int[] { 0, 1, 2 };
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, newPlayerClothes);
+
+
         Debug.Log("Store new player data complete.");
 
         base.extendsStorageManager.LoadSaveDataToGameStorage();
@@ -327,6 +335,8 @@ public class MainMenu : Mz_BaseScene {
     }
     private void LoadSceneTarget() {
         if(Application.isLoadingLevel == false) {
+			Town.newGameStartup_Event += Town.Handle_NewGameStartupEvent;
+
 			Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString();
 			Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());					
 		}
@@ -346,7 +356,7 @@ public class MainMenu : Mz_BaseScene {
 			GUI.Box(new Rect(Mz_OnGUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64), message, mainmenu_Skin.textField);
 		}
 
-        GUI.BeginGroup(showSaveGameSlot_GroupRect);
+        GUI.BeginGroup(showSaveGameSlot_GroupRect, "", GUI.skin.box);
         {
             if (_toSaveGame)			
             {
@@ -397,7 +407,7 @@ public class MainMenu : Mz_BaseScene {
 
                 #region <!-- GUI data slot button.
 
-                if (GUI.Button(slot_1Rect, new GUIContent(slot_1, "button"), saveSlot_buttonStyle))
+                if (GUI.Button(slot_1Rect, new GUIContent(slot_1, "button"), GUI.skin.button)) // saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -407,7 +417,7 @@ public class MainMenu : Mz_BaseScene {
                         this.LoadSceneTarget();
                     }
                 }
-                else if (GUI.Button(slot_2Rect, new GUIContent(slot_2, "button"), saveSlot_buttonStyle))
+                else if (GUI.Button(slot_2Rect, new GUIContent(slot_2, "button"),  GUI.skin.button))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -417,7 +427,7 @@ public class MainMenu : Mz_BaseScene {
                         this.LoadSceneTarget();
                     }
                 }
-                else if (GUI.Button(slot_3Rect, new GUIContent(slot_3, "button"), saveSlot_buttonStyle))
+                else if (GUI.Button(slot_3Rect, new GUIContent(slot_3, "button"), GUI.skin.button))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 

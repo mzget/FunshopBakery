@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Dressing : Mz_BaseScene {
 
@@ -10,11 +12,12 @@ public class Dressing : Mz_BaseScene {
     public CostumeManager costomeManager;
 
     public Transform gameEffect_transform;
-	
-	
-	// Use this for initialization
+    public static List<int> CanEquipClothe_list = new List<int>();
+
+    // Use this for initialization
 	void Start () {
         StartCoroutine(InitializeAudio());
+		StartCoroutine(base.InitializeIdentityGUI());
 
         this.gameObject.AddComponent<GameEffectManager>();
         gameEffectManager = this.gameObject.GetComponent<GameEffectManager>();
@@ -26,6 +29,10 @@ public class Dressing : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.6f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
+
+    void Update() {
+
+    }
 
     protected new IEnumerator InitializeAudio()
     {
@@ -76,6 +83,12 @@ public class Dressing : Mz_BaseScene {
             case "Low1_3":
                 costomeManager.HaveChooseClotheCommand(nameInput);
                 break;
+            case "Yes_button":
+                costomeManager.UserConfirmTransaction();
+                break;
+            case "No_button":
+                costomeManager.UserCancleTransaction();
+                break;
             default:
                 break;
         }
@@ -93,5 +106,10 @@ public class Dressing : Mz_BaseScene {
         TK_animationManager.PlayGoodAnimation();
         gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.IRIDESCENT_EFFECT_PATH, gameEffect_transform);
         audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+    }
+
+    internal void PlaySoundWarning()
+    {
+        this.audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class CostumeManager : MonoBehaviour {
@@ -14,13 +15,13 @@ public class CostumeManager : MonoBehaviour {
 		"Hat_0013", "Hat_0014", "Hat_0015", "Hat_0016", "Hat_0017", "Hat_0018",  
 		"Hat_0019", "Hat_0020", "Hat_0021", "Hat_0022", "Hat_0023", "none",
 	};
-	private int[] arr_priceOfClothesData = new int[] {
-		150, 200, 300, 
+    private object[] arr_priceOfClothesData = new object[] {
+		"Free", "Free", "Free", 
 		400, 500, 600,
 		700, 800, 900,
 		1000, 1100, 1200,
 		1300, 1400, 1500,
-		0, 0, 0,
+		"None", "None", "None",
 	};
 	private int[] arr_HatPriceData = new int[] {
 		150, 200, 300, 
@@ -37,10 +38,12 @@ public class CostumeManager : MonoBehaviour {
     private tk2dSprite[] low0_Sprite = new tk2dSprite[3];
     public GameObject[] low1_Obj;
     private tk2dSprite[] low1_Sprite = new tk2dSprite[3];
+    public tk2dTextMesh[] costumePrice_textmesh = new tk2dTextMesh[6];
+
     public tk2dSprite shirt_button;
     public tk2dSprite hat_button;
-	public tk2dTextMesh[] costumePrice_textmesh = new tk2dTextMesh[6];
 	public tk2dTextMesh displayCurrentPageID_textmesh;
+    public GameObject confirmationWindowObj;
     public CharacterCustomization characterCustomization;
     private Dressing sceneController;
 
@@ -48,6 +51,16 @@ public class CostumeManager : MonoBehaviour {
     public TabMenuState currentTabMenuState;
     private int maxPage = 0;
     private int currentPageIndex = 0;
+
+    #region <@-- Event section.
+
+    public class ESessionIndex : EventArgs
+    {
+        public int SessionIndex = 255;
+    }
+    private ESessionIndex currentSessionIndex = null;
+
+    #endregion
 
 
     void Awake() {
@@ -68,6 +81,7 @@ public class CostumeManager : MonoBehaviour {
             low1_Sprite[i] = low1_Obj[i].GetComponent<tk2dSprite>();
         }
 
+        this.confirmationWindowObj.SetActiveRecursively(false);
 		this.ShowTab(TabMenuState.shirt);
 	}
 	
@@ -245,7 +259,8 @@ public class CostumeManager : MonoBehaviour {
 		displayCurrentPageID_textmesh.Commit();
     }
     
-    public void HaveChooseClotheCommand(string nameInput) {
+    public void HaveChooseClotheCommand(string nameInput)
+    {
         if (currentTabMenuState == TabMenuState.shirt)
         {
             #region <@-- Shirt.
@@ -255,49 +270,37 @@ public class CostumeManager : MonoBehaviour {
                 case "Low0_1":
                     {
                         int index = 0 + (6 * currentPageIndex);
-                        if (index < CharacterCustomization.AvailableClothesNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeClotheAtRuntime(index);
+                        this.CheckingCanEquipmentClothe(index);
                     } 
                     break;
                 case "Low0_2":
                     {
                         int index = 1 + (6 * currentPageIndex);
-                        if (index < CharacterCustomization.AvailableClothesNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeClotheAtRuntime(index);
-                    } 
+                        this.CheckingCanEquipmentClothe(index);
+                    }
                     break;
                 case "Low0_3":
                     {
                         int index = 2 + (6 * currentPageIndex);
-                        if (index < CharacterCustomization.AvailableClothesNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeClotheAtRuntime(index);
+                        this.CheckingCanEquipmentClothe(index);
                     } 
                     break;
                 case "Low1_1":
                     {
                         int index = 3 + (6 * currentPageIndex);
-                        if (index < CharacterCustomization.AvailableClothesNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeClotheAtRuntime(index);
-                    } 
+                        this.CheckingCanEquipmentClothe(index);
+                    }
                     break;
                 case "Low1_2":
                     {
                         int index = 4 + (6 * currentPageIndex);
-                        if (index < CharacterCustomization.AvailableClothesNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeClotheAtRuntime(index);
+                        this.CheckingCanEquipmentClothe(index);
                     } 
                     break;
                 case "Low1_3":
                     {
                         int index = 5 + (6 * currentPageIndex);
-                        if (index < CharacterCustomization.AvailableClothesNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeClotheAtRuntime(index);
+                        this.CheckingCanEquipmentClothe(index);
                     }
                     break;
                 default:
@@ -360,5 +363,43 @@ public class CostumeManager : MonoBehaviour {
 
             #endregion
         }
+    }
+
+    private void CheckingCanEquipmentClothe(int index)
+    {
+        if (Dressing.CanEquipClothe_list.Contains(index))
+        {
+            if (index < CharacterCustomization.AvailableClothesNumber)
+                sceneController.PlayGreatEffect();
+            characterCustomization.ChangeClotheAtRuntime(index);
+        }
+        else {
+            if (index < CharacterCustomization.AvailableClothesNumber) { 
+                /// To buy Costume. 
+                if (Mz_StorageManage.AvailableMoney >= (int)arr_priceOfClothesData[index])
+                {
+                    /// if user have available money more than item price.
+                    /// System display confirmation window for asking user for buy current target costume.
+                    confirmationWindowObj.SetActiveRecursively(true);
+                    currentSessionIndex = new ESessionIndex() { SessionIndex = index };
+                }
+                else {
+                    sceneController.PlaySoundWarning();
+                }
+            }
+        }
+    }
+
+    internal void UserConfirmTransaction() {
+        confirmationWindowObj.SetActiveRecursively(false);
+        Dressing.CanEquipClothe_list.Add(currentSessionIndex.SessionIndex);
+        this.CheckingCanEquipmentClothe(currentSessionIndex.SessionIndex);
+
+        currentSessionIndex = null;
+    }
+
+    internal void UserCancleTransaction() {
+        confirmationWindowObj.SetActiveRecursively(false);
+        currentSessionIndex = null;
     }
 }

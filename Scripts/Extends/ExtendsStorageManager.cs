@@ -22,11 +22,13 @@ public class ExtendsStorageManager : Mz_StorageManage
 		}
 	}
 
-    public void SaveCanSellGoodListData() {		
-		int[] array_temp = BakeryShop.NumberOfCansellItem.ToArray();
-		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist", array_temp);        
-
-		PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + KEY_AVAILABLE_CREAM, CreamBeh.arr_CreamBehs);
+    public void LoadCostumeData() {
+        int[] load_arr = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, 255, 4);
+        Dressing.CanEquipClothe_list.Clear();
+        foreach (int item in load_arr)
+        {
+            Dressing.CanEquipClothe_list.Add(item);
+        }
     }
 
 	public override void LoadSaveDataToGameStorage()
@@ -57,6 +59,7 @@ public class ExtendsStorageManager : Mz_StorageManage
         GlobalWarmingOranization.Level = PlayerPrefs.GetInt(SaveSlot + KEY_GLOBALWARMING_LV, 0);
 
         this.LoadCanSellGoodsListData();
+        this.LoadCostumeData();
 	}
 
     public override void SaveDataToPermanentMemory()
@@ -88,8 +91,24 @@ public class ExtendsStorageManager : Mz_StorageManage
 
 		if(BakeryShop.NumberOfCansellItem.Count != 0)
 			this.SaveCanSellGoodListData();
+        if (Dressing.CanEquipClothe_list.Count != 0)
+            this.SaveCostumeData();
 		
 		PlayerPrefs.Save();
+    }
+
+    public void SaveCanSellGoodListData()
+    {
+        int[] array_temp = BakeryShop.NumberOfCansellItem.ToArray();
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist", array_temp);
+
+        PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + KEY_AVAILABLE_CREAM, CreamBeh.arr_CreamBehs);
+    }
+
+    private void SaveCostumeData()
+    {
+        int[] arr_clothe = Dressing.CanEquipClothe_list.ToArray();
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, arr_clothe); 
     }
 }
 

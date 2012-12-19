@@ -54,6 +54,9 @@ public class Mz_StorageManage : MonoBehaviour
 
 	//<@-- Save available creambeh.
 	public const string KEY_AVAILABLE_CREAM = "AVAILABLE_CREAM";
+
+    //<@-- Costume Storage Key Data.
+    public const string KEY_CAN_EQUIP_CLOTHE_LIST = "KEY_CAN_EQUIP_CLOTHE_LIST";
 	
 
 	public virtual void LoadSaveDataToGameStorage()

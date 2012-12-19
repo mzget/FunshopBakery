@@ -57,6 +57,7 @@ public class Mz_BaseScene : MonoBehaviour {
 		extendsStorageManager = this.GetComponent<ExtendsStorageManager> ();
 
 #if UNITY_IPHONE
+
 		GameObject bannerObj = GameObject.Find ("Banner_Obj");
 		if (Mz_BaseScene._IsShowADBanner && bannerObj == null) {
 			bannerObj = new GameObject ("Banner_Obj", typeof(Mz_ADBannerManager));
@@ -67,6 +68,7 @@ public class Mz_BaseScene : MonoBehaviour {
 		else if(Mz_BaseScene._IsShowADBanner && bannerObj) {
 			banner = bannerObj.GetComponent<Mz_ADBannerManager> ();
 		} 
+
 #endif
 	}
 
@@ -101,6 +103,7 @@ public class Mz_BaseScene : MonoBehaviour {
             audioBackground_Obj = new GameObject("AudioBackground", typeof(AudioSource));
             audioBackground_Obj.tag = "AudioBackground";
             audioBackground_Obj.audio.playOnAwake = true;
+			audioBackground_Obj.audio.volume = 0.5f;
             audioBackground_Obj.audio.mute = !ToggleAudioActive;
 
             DontDestroyOnLoad(audioBackground_Obj);

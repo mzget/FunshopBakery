@@ -190,6 +190,7 @@ public class SheepBank : Mz_BaseScene {
         availableMoney_Textmesh.Commit();
 
 		Mz_StorageManage.AvailableMoney = r_value;
+		this.ReDrawGUIIdentity();
     }
     void AccountBalanceManager(int r_value) {
 		accountBalance_Textmesh.text = r_value.ToString("N");
@@ -197,6 +198,12 @@ public class SheepBank : Mz_BaseScene {
 
 		Mz_StorageManage.AccountBalance = r_value;
     }
+
+	void ReDrawGUIIdentity ()
+	{
+		base.availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
+		base.availableMoney.Commit();
+	}
 	
 	private void OnMoveDownComplete_event() {
         shadowPlane_Obj.active = true;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class Town : Mz_BaseScene {
@@ -6,7 +7,6 @@ public class Town : Mz_BaseScene {
 	public GameObject town_bg_group;
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject flyingBird_group;
-	public GameObject startingCar;
 	public GameObject shop_body_sprite;
     public GameObject sheepBank_body_Obj;
     public tk2dAnimatedSprite bakeryShopDoorOpen_animated;
@@ -17,6 +17,37 @@ public class Town : Mz_BaseScene {
 
 	public enum OnGUIState { none = 0, DrawEditShopname, };
 	public OnGUIState currentGUIState;
+
+	#region <@-- Event Handles Data section
+
+	public static event EventHandler newGameStartup_Event;
+	private void OnnewGameStartup_Event (EventArgs e)
+	{
+		EventHandler handler = Town.newGameStartup_Event;
+		if (handler != null)
+			handler (this, e);
+	}
+
+	public static GameObject StartingTrucks;
+	public static void Handle_NewGameStartupEvent (object sender, EventArgs e)
+	{
+		Town.newGameStartup_Event -= Town.Handle_NewGameStartupEvent;
+
+		if(StartingTrucks == null) {
+			StartingTrucks = Instantiate(Resources.Load("StartingTrucks", typeof(GameObject)), new Vector3(-2f, -0.62f, -4f), Quaternion.identity)  as GameObject;
+		}
+		
+		iTween.MoveTo(StartingTrucks, iTween.Hash("x", 5f, "Time", 20f, "easetype", iTween.EaseType.linear,
+		                                       "oncompletetarget", GameObject.FindGameObjectWithTag("GameController"), "oncomplete", "OnStartingCarComplete"));
+	}
+	
+	void OnStartingCarComplete ()
+	{
+		Destroy(Town.StartingTrucks);
+		StartingTrucks = null;
+	}
+
+	#endregion
 
 	string shopname = "";
 	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
@@ -31,10 +62,7 @@ public class Town : Mz_BaseScene {
 		StartCoroutine(this.InitializeAudio());
         StartCoroutine(base.InitializeIdentityGUI());
 
-        //StartCoroutine(InitializeBankBeh());
-
         this.upgradeOutsideManager.InitializeDecorationObjects();
-
 		if (SheepBank.HaveUpgradeOutSide) {
             StartCoroutine(this.ActiveDecorationBar());
 			SheepBank.HaveUpgradeOutSide = false;
@@ -48,12 +76,12 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 
-		iTween.MoveTo(startingCar, iTween.Hash("x", 5f, "Time", 20f, "easetype", iTween.EaseType.linear, "oncompletetarget", this.gameObject, "oncomplete", "OnStartingCarComplete"));
+		this.Checking_HasNewStartingTruckEvent();
 	}
 
-	void OnStartingCarComplete ()
+	void Checking_HasNewStartingTruckEvent ()
 	{
-		Destroy(startingCar);
+		OnnewGameStartup_Event(EventArgs.Empty);
 	}
 
 	protected new IEnumerator InitializeAudio ()
