@@ -70,6 +70,13 @@ public class Mz_BaseScene : MonoBehaviour {
 		} 
 
 #endif
+
+		this.Initialization();
+	}
+
+	protected virtual void Initialization ()
+	{
+		Debug.Log("Mz_BaseScene :: Initialization");
 	}
 
 	// Use this for initialization

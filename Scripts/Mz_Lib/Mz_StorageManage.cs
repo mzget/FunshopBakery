@@ -57,6 +57,7 @@ public class Mz_StorageManage : MonoBehaviour
 
     //<@-- Costume Storage Key Data.
     public const string KEY_CAN_EQUIP_CLOTHE_LIST = "KEY_CAN_EQUIP_CLOTHE_LIST";
+	public const string KEY_CAN_EQUIP_HAT_LIST = "KEY_CAN_EQUIP_HAT_LIST";
 	
 
 	public virtual void LoadSaveDataToGameStorage()

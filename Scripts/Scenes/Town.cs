@@ -4,6 +4,11 @@ using System.Collections;
 
 public class Town : Mz_BaseScene {
 
+    //<@--- Constance button name.
+    const string YES_BUTTON_NAME = "Yes_button";
+    const string NO_BUTTON_NAME = "No_button";
+
+
 	public GameObject town_bg_group;
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject flyingBird_group;
@@ -100,14 +105,14 @@ public class Town : Mz_BaseScene {
 	IEnumerator ActiveDecorationBar ()
 	{
 		yield return StartCoroutine(this.SettingGUIMidcenter(true));
-		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
+		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
 		upgradeOutsideManager.ActiveRoof();
 	}
 	IEnumerator UnActiveDecorationBar ()
 	{
 		yield return new WaitForEndOfFrame();
 		iTween.MoveTo(GUIMidcenter_anchor.gameObject,
-			iTween.Hash("position", new Vector3(0, -1, 1), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring,
+			iTween.Hash("position", new Vector3(0, -1, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring,
 			"oncomplete", "TweenDownComplete", "oncompletetarget", this.gameObject));		 
 	}
 	void TweenDownComplete() {
@@ -285,6 +290,10 @@ public class Town : Mz_BaseScene {
             case "Block_05": upgradeOutsideManager.BuyDecoration("Block_05");
                 break;
             case "Block_06": upgradeOutsideManager.BuyDecoration("Block_06");
+                break;
+            case YES_BUTTON_NAME: upgradeOutsideManager.UserConfirmTransaction();
+                break;
+            case NO_BUTTON_NAME: upgradeOutsideManager.UserCancleTransaction();
                 break;
 			default:
 			break;

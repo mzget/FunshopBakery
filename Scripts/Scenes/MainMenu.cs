@@ -105,6 +105,10 @@ public class MainMenu : Mz_BaseScene {
 
         saveSlot_buttonStyle.normal.textColor = Color.white;
         saveSlot_buttonStyle.active.textColor = Color.green;
+
+		player_1 = PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME);
+		player_2 = PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME);
+		player_3 = PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME);
     }
 	
 	// Update is called once per frame
@@ -125,10 +129,6 @@ public class MainMenu : Mz_BaseScene {
 
 	protected override void OnGUI() {
         base.OnGUI();
-
-        player_1 = PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME);
-        player_2 = PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME);
-        player_3 = PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME);
 
 		GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));
 		

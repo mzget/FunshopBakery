@@ -23,15 +23,15 @@ public class CostumeManager : MonoBehaviour {
 		1300, 1400, 1500,
 		"None", "None", "None",
 	};
-	private int[] arr_HatPriceData = new int[] {
-		150, 200, 300, 
+	private object[] arr_HatPriceData = new object[] {
+		"Free", "Free", "Free", 
 		400, 500, 600,
 		700, 800, 900,
 		1000, 1100, 1200,
 		1300, 1400, 1500,
 		1600, 1700, 1800,
 		1900, 2000, 2100,
-		2200, 2300, 0,
+		2200, 2300, "None",
 	};
 
     public GameObject[] low0_Obj;
@@ -39,6 +39,7 @@ public class CostumeManager : MonoBehaviour {
     public GameObject[] low1_Obj;
     private tk2dSprite[] low1_Sprite = new tk2dSprite[3];
     public tk2dTextMesh[] costumePrice_textmesh = new tk2dTextMesh[6];
+	public GameObject[] lockKey_obj = new GameObject[6];
 
     public tk2dSprite shirt_button;
     public tk2dSprite hat_button;
@@ -47,7 +48,7 @@ public class CostumeManager : MonoBehaviour {
     public CharacterCustomization characterCustomization;
     private Dressing sceneController;
 
-    public enum TabMenuState { shirt = 0, hat, };
+    public enum TabMenuState { clothes = 0, hat, };
     public TabMenuState currentTabMenuState;
     private int maxPage = 0;
     private int currentPageIndex = 0;
@@ -56,6 +57,7 @@ public class CostumeManager : MonoBehaviour {
 
     public class ESessionIndex : EventArgs
     {
+		public TabMenuState SessionType;
         public int SessionIndex = 255;
     }
     private ESessionIndex currentSessionIndex = null;
@@ -82,7 +84,7 @@ public class CostumeManager : MonoBehaviour {
         }
 
         this.confirmationWindowObj.SetActiveRecursively(false);
-		this.ShowTab(TabMenuState.shirt);
+		this.ShowTab(TabMenuState.clothes);
 	}
 	
 	// Update is called once per frame
@@ -108,7 +110,7 @@ public class CostumeManager : MonoBehaviour {
 
     internal void ShowTab(TabMenuState tabMenuState)
     {
-        if (tabMenuState == TabMenuState.shirt) {
+        if (tabMenuState == TabMenuState.clothes) {
             maxPage = 3;
             currentTabMenuState = tabMenuState;
             shirt_button.spriteId = shirt_button.GetSpriteIdByName("shirt_button_down");
@@ -127,7 +129,7 @@ public class CostumeManager : MonoBehaviour {
 
     private void CalculateObjectsToDisplay()
     {
-        if (currentTabMenuState == TabMenuState.shirt)
+        if (currentTabMenuState == TabMenuState.clothes)
         {
             if (currentPageIndex == 0)
             {
@@ -137,6 +139,13 @@ public class CostumeManager : MonoBehaviour {
 
 					costumePrice_textmesh[i].text = arr_priceOfClothesData[i].ToString();
 					costumePrice_textmesh[i].Commit();
+
+					if(Dressing.CanEquipClothe_list.Contains(i)) {
+						lockKey_obj[i].SetActiveRecursively(false);
+					}
+					else {
+						lockKey_obj[i].SetActiveRecursively(true);
+					}
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
                 {
@@ -144,6 +153,11 @@ public class CostumeManager : MonoBehaviour {
 
 					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j+3].ToString();
 					costumePrice_textmesh[j+3].Commit();
+
+					if(Dressing.CanEquipClothe_list.Contains(j+3)) 
+						lockKey_obj[j+3].SetActiveRecursively(false);
+					else
+						lockKey_obj[j+3].SetActiveRecursively(true);
                 }
             }
             else if (currentPageIndex == 1)
@@ -154,6 +168,11 @@ public class CostumeManager : MonoBehaviour {
 
 					costumePrice_textmesh[i].text = arr_priceOfClothesData[i+6].ToString();
 					costumePrice_textmesh[i].Commit();
+					
+					if(Dressing.CanEquipClothe_list.Contains(i+6)) 
+						lockKey_obj[i].SetActiveRecursively(false);
+					else
+						lockKey_obj[i].SetActiveRecursively(true);
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
                 {
@@ -161,6 +180,11 @@ public class CostumeManager : MonoBehaviour {
 
 					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j+9].ToString();
 					costumePrice_textmesh[j+3].Commit();
+					
+					if(Dressing.CanEquipClothe_list.Contains(j+9)) 
+						lockKey_obj[j+3].SetActiveRecursively(false);
+					else
+						lockKey_obj[j+3].SetActiveRecursively(true);
                 }
             }
             else if (currentPageIndex == 2)
@@ -171,6 +195,11 @@ public class CostumeManager : MonoBehaviour {
 					
 					costumePrice_textmesh[i].text = arr_priceOfClothesData[i+12].ToString();
 					costumePrice_textmesh[i].Commit();
+					
+					if(Dressing.CanEquipClothe_list.Contains(i+12)) 
+						lockKey_obj[i].SetActiveRecursively(false);
+					else
+						lockKey_obj[i].SetActiveRecursively(true);
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
                 {
@@ -178,6 +207,11 @@ public class CostumeManager : MonoBehaviour {
 					
 					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j + 15].ToString();
 					costumePrice_textmesh[j+3].Commit();
+					
+//					if(Dressing.CanEquipClothe_list.Contains(j+15)) 
+						lockKey_obj[j+3].SetActiveRecursively(false);
+//					else
+//						lockKey_obj[j+3].SetActiveRecursively(true);
                 }
             }
         }
@@ -192,6 +226,11 @@ public class CostumeManager : MonoBehaviour {
 
 						costumePrice_textmesh[i].text = arr_HatPriceData[i].ToString();
 						costumePrice_textmesh[i].Commit();
+					
+						if(Dressing.CanEquipHat_list.Contains(i))
+							lockKey_obj[i].SetActiveRecursively(false);
+						else 
+							lockKey_obj[i].SetActiveRecursively(true);
                     }
                     for (int j = 0; j < low1_Sprite.Length; j++)
                     {
@@ -199,6 +238,11 @@ public class CostumeManager : MonoBehaviour {
 
 						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+3].ToString();
 						costumePrice_textmesh[j+3].Commit();
+					
+						if(Dressing.CanEquipHat_list.Contains(j+3))
+							lockKey_obj[j+3].SetActiveRecursively(false);
+						else 
+							lockKey_obj[j+3].SetActiveRecursively(true);
                     }
                     break;
                 case 1:
@@ -208,6 +252,11 @@ public class CostumeManager : MonoBehaviour {
 					
 						costumePrice_textmesh[i].text = arr_HatPriceData[i+6].ToString();
 						costumePrice_textmesh[i].Commit();
+					
+						if(Dressing.CanEquipHat_list.Contains(i+6))
+							lockKey_obj[i].SetActiveRecursively(false);
+						else 
+							lockKey_obj[i].SetActiveRecursively(true);
                     }
                     for (int j = 0; j < low1_Sprite.Length; j++)
                     {
@@ -215,6 +264,11 @@ public class CostumeManager : MonoBehaviour {
 					
 						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+9].ToString();
 						costumePrice_textmesh[j+3].Commit();
+					
+						if(Dressing.CanEquipHat_list.Contains(j+9))
+							lockKey_obj[j+3].SetActiveRecursively(false);
+						else 
+							lockKey_obj[j+3].SetActiveRecursively(true);
                     }
                     break;
                 case 2:
@@ -224,6 +278,11 @@ public class CostumeManager : MonoBehaviour {
 					
 						costumePrice_textmesh[i].text = arr_HatPriceData[i+12].ToString();
 						costumePrice_textmesh[i].Commit();
+					
+						if(Dressing.CanEquipHat_list.Contains(i+12))
+							lockKey_obj[i].SetActiveRecursively(false);
+						else 
+							lockKey_obj[i].SetActiveRecursively(true);
                     }
                     for (int j = 0; j < low1_Sprite.Length; j++)
                     {
@@ -231,6 +290,11 @@ public class CostumeManager : MonoBehaviour {
 					
 						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+15].ToString();
 						costumePrice_textmesh[j+3].Commit();
+					
+						if(Dressing.CanEquipHat_list.Contains(j+15))
+							lockKey_obj[j+3].SetActiveRecursively(false);
+						else 
+							lockKey_obj[j+3].SetActiveRecursively(true);
                     }
                     break;
                 case 3:
@@ -240,6 +304,11 @@ public class CostumeManager : MonoBehaviour {
 					
 						costumePrice_textmesh[i].text = arr_HatPriceData[i+18].ToString();
 						costumePrice_textmesh[i].Commit();
+					
+						if(Dressing.CanEquipHat_list.Contains(i+18))
+							lockKey_obj[i].SetActiveRecursively(false);
+						else 
+							lockKey_obj[i].SetActiveRecursively(true);
                     }
                     for (int j = 0; j < low1_Sprite.Length; j++)
                     {
@@ -247,6 +316,15 @@ public class CostumeManager : MonoBehaviour {
 					
 						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+21].ToString();
 						costumePrice_textmesh[j+3].Commit();
+					
+						if(Dressing.CanEquipHat_list.Contains(j+21))
+							lockKey_obj[j+3].SetActiveRecursively(false);
+						else {
+							if(CharacterCustomization.AvailableHatNumber == j + 21)
+								lockKey_obj[j+3].SetActiveRecursively(false);
+							else
+								lockKey_obj[j+3].SetActiveRecursively(true);
+					    }
                     }
                     break;
                 default:
@@ -261,9 +339,9 @@ public class CostumeManager : MonoBehaviour {
     
     public void HaveChooseClotheCommand(string nameInput)
     {
-        if (currentTabMenuState == TabMenuState.shirt)
+        if (currentTabMenuState == TabMenuState.clothes)
         {
-            #region <@-- Shirt.
+            #region <@-- Clothes..
 
             switch (nameInput)
             {
@@ -316,47 +394,35 @@ public class CostumeManager : MonoBehaviour {
             switch (nameInput)
             {
                 case "Low0_1":
-                    {
-                        int id = 0 + (6 * currentPageIndex);
-                        if (id < CharacterCustomization.AvailableHatNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeHatAtRuntime(id);
-                    } break;
+			{
+				int id = 0 + (6 * currentPageIndex);
+				this.CheckingCanEquipHat(id);
+			}	break;
                 case "Low0_2":
-                    {
-                        int id = 1 + (6 * currentPageIndex);
-                        if (id < CharacterCustomization.AvailableHatNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeHatAtRuntime(id);
-                    } break;
+			{
+				int id = 1 + (6 * currentPageIndex);
+				this.CheckingCanEquipHat(id);
+			}	break;
                 case "Low0_3":
-                    {
-                        int id = 2 + (6 * currentPageIndex);
-                        if (id < CharacterCustomization.AvailableHatNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeHatAtRuntime(id);
-                    } break;
+			{
+				int id = 2 + (6 * currentPageIndex);
+				this.CheckingCanEquipHat(id);
+			} break;
                 case "Low1_1":
-                    {
-                        int id = 3 + (6 * currentPageIndex);
-                        if (id < CharacterCustomization.AvailableHatNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeHatAtRuntime(id);
-                    } break;
+			{
+				int id = 3 + (6 * currentPageIndex);
+				this.CheckingCanEquipHat(id);
+			} break;
                 case "Low1_2":
-                    {
-                        int id = 4 + (6 * currentPageIndex);
-                        if (id < CharacterCustomization.AvailableHatNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeHatAtRuntime(id);
-                    } break;
+			{
+				int id = 4 + (6 * currentPageIndex);
+				this.CheckingCanEquipHat(id);
+			} break;
                 case "Low1_3":
-                    {
-                        int id = 5 + (6 * currentPageIndex);
-                        if (id < CharacterCustomization.AvailableHatNumber)
-                            sceneController.PlayGreatEffect();
-                        characterCustomization.ChangeHatAtRuntime(id);
-                    } break;
+			{
+				int id = 5 + (6 * currentPageIndex);
+				this.CheckingCanEquipHat(id);
+			} break;
                 default:
                     break;
             }
@@ -381,19 +447,61 @@ public class CostumeManager : MonoBehaviour {
                     /// if user have available money more than item price.
                     /// System display confirmation window for asking user for buy current target costume.
                     confirmationWindowObj.SetActiveRecursively(true);
-                    currentSessionIndex = new ESessionIndex() { SessionIndex = index };
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.calc_clip);
+                    currentSessionIndex = new ESessionIndex() { SessionType = TabMenuState.clothes, SessionIndex = index };
                 }
                 else {
                     sceneController.PlaySoundWarning();
+					sceneController.TK_animationManager.PlayRampageAnimation();
                 }
             }
         }
     }
+	
+	void CheckingCanEquipHat (int id)
+	{
+		if(Dressing.CanEquipHat_list.Contains(id)) {
+			if (id < CharacterCustomization.AvailableHatNumber)
+				sceneController.PlayGreatEffect();
+			characterCustomization.ChangeHatAtRuntime(id);
+		}
+		else {
+			if(id < CharacterCustomization.AvailableHatNumber) {
+				if(Mz_StorageManage.AvailableMoney >= (int)arr_HatPriceData[id]) {
+					/// if user have available money more than item price.
+					/// System display confirmation window for asking user for buy current target costume.
+					confirmationWindowObj.SetActiveRecursively(true);
+					sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.calc_clip);
+					currentSessionIndex = new ESessionIndex() { SessionType = TabMenuState.hat, SessionIndex = id };
+				}
+				else {
+					sceneController.PlaySoundWarning();
+					sceneController.TK_animationManager.PlayRampageAnimation();
+				}
+			}
+		}
+	}
 
     internal void UserConfirmTransaction() {
         confirmationWindowObj.SetActiveRecursively(false);
-        Dressing.CanEquipClothe_list.Add(currentSessionIndex.SessionIndex);
-        this.CheckingCanEquipmentClothe(currentSessionIndex.SessionIndex);
+		if(currentSessionIndex.SessionType == TabMenuState.clothes) {
+	        Dressing.CanEquipClothe_list.Add(currentSessionIndex.SessionIndex);
+	        this.CheckingCanEquipmentClothe(currentSessionIndex.SessionIndex);
+			
+			/// Deductions AvailableMoney and Redraw GUI identity.
+			Mz_StorageManage.AvailableMoney -= (int)arr_priceOfClothesData[currentSessionIndex.SessionIndex];
+			sceneController.ReFreshAvailableMoney();
+			this.CalculateObjectsToDisplay();
+		}
+		else if(currentSessionIndex.SessionType == TabMenuState.hat) {
+			Dressing.CanEquipHat_list.Add(currentSessionIndex.SessionIndex);
+			this.CheckingCanEquipHat(currentSessionIndex.SessionIndex);
+			
+			/// Deductions AvailableMoney and Redraw GUI identity.
+			Mz_StorageManage.AvailableMoney -= (int)arr_HatPriceData[currentSessionIndex.SessionIndex];
+			sceneController.ReFreshAvailableMoney();
+			this.CalculateObjectsToDisplay();
+		}
 
         currentSessionIndex = null;
     }

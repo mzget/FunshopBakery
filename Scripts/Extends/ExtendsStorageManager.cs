@@ -23,12 +23,47 @@ public class ExtendsStorageManager : Mz_StorageManage
 	}
 
     public void LoadCostumeData() {
-        int[] load_arr = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, 255, 4);
-        Dressing.CanEquipClothe_list.Clear();
-        foreach (int item in load_arr)
-        {
-            Dressing.CanEquipClothe_list.Add(item);
-        }
+		/// Clothes data.
+		int[] load_arr = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST);
+		if(load_arr.Length != 0) {
+			this.AddCanEquipClotheTempToStaticVar(ref load_arr);
+		}
+		else if(load_arr.Length == 0) {
+			load_arr = new int[] { 0, 1, 2 };
+			this.AddCanEquipClotheTempToStaticVar(ref load_arr);
+		}
+
+		/// Hats data.
+		int[] load_temp_hats = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_HAT_LIST);
+		if(load_temp_hats.Length != 0) {
+			this.AddCanEquipHatTempToStaticVar(ref load_temp_hats);
+		}
+		else if(load_temp_hats.Length == 0) {
+			load_temp_hats = new int[] { 0, 1, 2 };
+			this.AddCanEquipHatTempToStaticVar(ref load_temp_hats);
+		}
+    }
+
+	void AddCanEquipClotheTempToStaticVar (ref int[] temp_arr)
+	{
+		Dressing.CanEquipClothe_list.Clear();
+		foreach (int item in temp_arr)
+		{
+			Dressing.CanEquipClothe_list.Add(item);
+		}
+	}
+
+	void AddCanEquipHatTempToStaticVar (ref int[] temp_hats)
+	{
+		Dressing.CanEquipHat_list.Clear();
+		foreach (int item in temp_hats) {
+			Dressing.CanEquipHat_list.Add(item);
+		}
+	}
+
+    private void LoadDecorationShopOutside()
+    {
+        throw new NotImplementedException();
     }
 
 	public override void LoadSaveDataToGameStorage()
@@ -60,6 +95,7 @@ public class ExtendsStorageManager : Mz_StorageManage
 
         this.LoadCanSellGoodsListData();
         this.LoadCostumeData();
+        this.LoadDecorationShopOutside();
 	}
 
     public override void SaveDataToPermanentMemory()
@@ -97,16 +133,14 @@ public class ExtendsStorageManager : Mz_StorageManage
 		PlayerPrefs.Save();
     }
 
-    public void SaveCanSellGoodListData()
-    {
+    public void SaveCanSellGoodListData() {
         int[] array_temp = BakeryShop.NumberOfCansellItem.ToArray();
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist", array_temp);
 
         PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + KEY_AVAILABLE_CREAM, CreamBeh.arr_CreamBehs);
     }
 
-    private void SaveCostumeData()
-    {
+    private void SaveCostumeData() {
         int[] arr_clothe = Dressing.CanEquipClothe_list.ToArray();
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, arr_clothe); 
     }

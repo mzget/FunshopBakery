@@ -13,14 +13,23 @@ public class Dressing : Mz_BaseScene {
 
     public Transform gameEffect_transform;
     public static List<int> CanEquipClothe_list = new List<int>();
+	public static List<int> CanEquipHat_list = new List<int>();
+	
+
+	protected override void Initialization ()
+	{
+		if (Dressing.CanEquipClothe_list.Count == 0) {
+			extendsStorageManager.LoadCostumeData();
+		}
+		
+		this.gameObject.AddComponent<GameEffectManager>();
+		gameEffectManager = this.gameObject.GetComponent<GameEffectManager>();
+	}
 
     // Use this for initialization
 	void Start () {
         StartCoroutine(InitializeAudio());
 		StartCoroutine(base.InitializeIdentityGUI());
-
-        this.gameObject.AddComponent<GameEffectManager>();
-        gameEffectManager = this.gameObject.GetComponent<GameEffectManager>();
 		
         Mz_ResizeScale.ResizingScale(background_transform);
 		
@@ -29,10 +38,6 @@ public class Dressing : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.6f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
-
-    void Update() {
-
-    }
 
     protected new IEnumerator InitializeAudio()
     {
@@ -53,7 +58,7 @@ public class Dressing : Mz_BaseScene {
         {
             case "shirt_button":
                 TK_animationManager.PlayTalkingAnimation();
-                costomeManager.ShowTab(CostumeManager.TabMenuState.shirt);
+                costomeManager.ShowTab(CostumeManager.TabMenuState.clothes);
                 break;
             case "hat_button":
                 TK_animationManager.PlayTalkingAnimation();
@@ -112,4 +117,10 @@ public class Dressing : Mz_BaseScene {
     {
         this.audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
     }
+
+	internal void ReFreshAvailableMoney ()
+	{
+		base.availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
+		base.availableMoney.Commit();
+	}
 }
