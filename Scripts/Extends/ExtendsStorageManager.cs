@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ExtendsStorageManager : Mz_StorageManage
 {	
+	#region <@-- Load secsion.
+
 	public void LoadCanSellGoodsListData ()
 	{		
 		int[] array = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist");
@@ -63,8 +65,58 @@ public class ExtendsStorageManager : Mz_StorageManage
 
     private void LoadDecorationShopOutside()
     {
-        throw new NotImplementedException();
+		int[] roof_temp_array = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ROOF_LIST);
+		if(roof_temp_array.Length != 0) {
+			this.AddCanDecorationRoofList(ref roof_temp_array);
+		}
+		else return;
+
+		int[] awning_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_AWNING_LIST);
+		if(awning_temp_array.Length != 0) {
+			this.AddCanDecorateAwningList(ref awning_temp_array);
+		}
+		else return;
+
+		int[] table_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_TABLE_LIST);
+		if(table_temp_array.Length != 0) {
+			this.AddCanDecorationTableList(ref table_temp_array);
+		}
+		else return;
+
+		int[] accessories_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_ACCESSORIES_LIST);
+		if(accessories_temp_array.Length != 0) {
+			this.AddCanDecorationAccessoriesList(ref accessories_temp_array);
+		}
+		else return;
     }
+	void AddCanDecorationRoofList (ref int[] roof_temp_array)
+	{
+		UpgradeOutsideManager.CanDecorateRoof_list.Clear();
+		foreach (int item in roof_temp_array) {
+			UpgradeOutsideManager.CanDecorateRoof_list.Add(item);
+		}
+	}
+	void AddCanDecorateAwningList (ref int[] awning_temp_array)
+	{
+		UpgradeOutsideManager.CanDecorateAwning_list.Clear();
+		foreach (int item in awning_temp_array) {
+			UpgradeOutsideManager.CanDecorateAwning_list.Add(item);
+		}
+	}
+	void AddCanDecorationTableList (ref int[] table_temp_array)
+	{
+		UpgradeOutsideManager.CanDecoration_Table_list.Clear();
+		foreach (int item in table_temp_array) {
+			UpgradeOutsideManager.CanDecoration_Table_list.Add(item);
+		}
+	}
+	void AddCanDecorationAccessoriesList (ref int[] accessories_temp_array)
+	{
+		UpgradeOutsideManager.CanDecoration_Accessories_list.Clear();
+		foreach (var item in accessories_temp_array) {
+			UpgradeOutsideManager.CanDecoration_Accessories_list.Add(item);
+		}
+	}
 
 	public override void LoadSaveDataToGameStorage()
 	{
@@ -98,6 +150,10 @@ public class ExtendsStorageManager : Mz_StorageManage
         this.LoadDecorationShopOutside();
 	}
 
+	#endregion
+
+	#region <@-- Save section.
+
     public override void SaveDataToPermanentMemory()
     {
         base.SaveDataToPermanentMemory();
@@ -129,6 +185,8 @@ public class ExtendsStorageManager : Mz_StorageManage
 			this.SaveCanSellGoodListData();
         if (Dressing.CanEquipClothe_list.Count != 0)
             this.SaveCostumeData();
+
+		this.SaveCanDecorateShopOutside();
 		
 		PlayerPrefs.Save();
     }
@@ -144,5 +202,30 @@ public class ExtendsStorageManager : Mz_StorageManage
         int[] arr_clothe = Dressing.CanEquipClothe_list.ToArray();
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, arr_clothe); 
     }
+
+	void SaveCanDecorateShopOutside ()
+	{
+		if(UpgradeOutsideManager.CanDecorateRoof_list.Count != 0) {
+			int[] roof_temp_arr = UpgradeOutsideManager.CanDecorateRoof_list.ToArray();
+			PlayerPrefsX.SetIntArray(SaveSlot + KEY_CAN_DECORATE_ROOF_LIST, roof_temp_arr); 
+		}
+
+		if(UpgradeOutsideManager.CanDecorateAwning_list.Count != 0) {
+			int[] awning_temp_array = UpgradeOutsideManager.CanDecorateAwning_list.ToArray();
+			PlayerPrefsX.SetIntArray(SaveSlot + KEY_CAN_DECORATE_AWNING_LIST, awning_temp_array);
+		}
+		
+		if(UpgradeOutsideManager.CanDecoration_Table_list.Count != 0) {
+			int[] table_temp_array = UpgradeOutsideManager.CanDecoration_Table_list.ToArray();
+			PlayerPrefsX.SetIntArray(SaveSlot + KEY_CAN_DECORATE_TABLE_LIST, table_temp_array);
+		}
+
+		if(UpgradeOutsideManager.CanDecoration_Accessories_list.Count != 0) {
+			int[] accessories_temp_array = UpgradeOutsideManager.CanDecoration_Accessories_list.ToArray();
+			PlayerPrefsX.SetIntArray(SaveSlot + KEY_CAN_DECORATE_ACCESSORIES_LIST, accessories_temp_array);
+		}
+	}
+ 
+	#endregion
 }
 

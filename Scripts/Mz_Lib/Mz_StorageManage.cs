@@ -59,6 +59,14 @@ public class Mz_StorageManage : MonoBehaviour
     public const string KEY_CAN_EQUIP_CLOTHE_LIST = "KEY_CAN_EQUIP_CLOTHE_LIST";
 	public const string KEY_CAN_EQUIP_HAT_LIST = "KEY_CAN_EQUIP_HAT_LIST";
 	
+	//<@-- Decoration storage key.
+	public const string KEY_CAN_DECORATE_ROOF_LIST = "KEY_CAN_DECORATE_ROOF_LIST";
+	public const string KEY_CAN_DECORATE_AWNING_LIST = "KEY_CAN_DECORATE_AWNING_LIST";
+	public const string KEY_CAN_DECORATE_TABLE_LIST = "KEY_CAN_DECORATE_TABLE_LIST";
+	public const string KEY_CAN_DECORATE_ACCESSORIES_LIST = "KEY_CAN_DECORATE_ACCESSORIES_LIST";
+	
+	
+	
 
 	public virtual void LoadSaveDataToGameStorage()
 	{		

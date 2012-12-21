@@ -112,7 +112,7 @@ public class Town : Mz_BaseScene {
 	{
 		yield return new WaitForEndOfFrame();
 		iTween.MoveTo(GUIMidcenter_anchor.gameObject,
-			iTween.Hash("position", new Vector3(0, -1, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring,
+			iTween.Hash("position", new Vector3(0, -2, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring,
 			"oncomplete", "TweenDownComplete", "oncompletetarget", this.gameObject));		 
 	}
 	void TweenDownComplete() {
@@ -323,6 +323,12 @@ public class Town : Mz_BaseScene {
             }
         };
     }
+
+	internal void PlaySoundRejoice ()
+	{
+		audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
+		characterAnimatedManage.RandomPlayGoodAnimation();
+	}
 
     public override void OnDispose()
     {

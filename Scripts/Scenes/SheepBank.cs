@@ -308,7 +308,7 @@ public class SheepBank : Mz_BaseScene {
                 if (Application.isLoadingLevel == false)
                 {
                     Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString();
-                    Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+                    Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
                 }
 
                 return;
@@ -375,11 +375,11 @@ public class SheepBank : Mz_BaseScene {
     }  
     private void ActiveUpgradeOutside()
     {
-			SheepBank.HaveUpgradeOutSide = true;
-			if (Application.isLoadingLevel == false) {
-				Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString ();
-				Application.LoadLevelAsync (Mz_BaseScene.SceneNames.LoadingScene.ToString ());
-			}
+		SheepBank.HaveUpgradeOutSide = true;
+		if (Application.isLoadingLevel == false) {
+			Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString ();
+			Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString ());
+		}
     }
 
     private void ActiveDepositForm() {
