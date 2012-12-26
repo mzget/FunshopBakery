@@ -25,16 +25,16 @@ public class UpgradeInsideManager : MonoBehaviour {
 		{"butter_cookie", "hotdog_cheese", "", ""},
 	};
     private int[,] firstPage_prices = new int[,] {
-        {200, 300, 400, 500},
-        {600, 700, 800, 900},
+        {300, 300, 1500, 3000},
+        {800, 900, 500, 1000},
     };
     private int[,] secondPage_prices = new int[,] {
-        {1000,1100,1200,1300},
-        {1400,1500,1600,1700},
+        {100, 150, 300, 300},
+        {1400, 1200, 500, 100},
     };
     private int[,] thirdPage_prices = new int[,] {
-        {1800,1900,2000,2100},
-        {2200,2300,0,0},
+        {150, 200, 1600, 700},
+        {500, 1300,0,0},
     };
 	
 	private int currentPageIndex = 0;

@@ -29,7 +29,7 @@ public class GoodsBeh : ObjectsBeh {
 			putObjectOnTray_Event (this, eventArgs);
 			Debug.Log (putObjectOnTray_Event + " : " + this.name);
 
-            sceneManager.currentCustomer.CheckGoodsObjInTray(GoodsBeh.ClassName);
+            StartCoroutine(sceneManager.CheckingGoodsObjInTray(GoodsBeh.ClassName));
 		}
 	}
 	protected virtual void Handle_putObjectOnTray_Event (object sender, System.EventArgs e) {

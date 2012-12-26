@@ -452,7 +452,7 @@ public class CostumeManager : MonoBehaviour {
                 }
                 else {
                     sceneController.PlaySoundWarning();
-					sceneController.TK_animationManager.PlayRampageAnimation();
+					sceneController.TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
                 }
             }
         }
@@ -476,7 +476,7 @@ public class CostumeManager : MonoBehaviour {
 				}
 				else {
 					sceneController.PlaySoundWarning();
-					sceneController.TK_animationManager.PlayRampageAnimation();
+					sceneController.TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
 				}
 			}
 		}

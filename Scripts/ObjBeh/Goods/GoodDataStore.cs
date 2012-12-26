@@ -47,18 +47,18 @@ public class GoodDataStore : ScriptableObject {
    	public Goods[] Menu_list = new Goods[] {                               
 	    new Goods(GoodsOrderList.Pineapple_juice.ToString(), 3), //_can sell
         new Goods(GoodsOrderList.Apple_juice.ToString(), 3),        // 1
-        new Goods(GoodsOrderList.Cocoa_milk.ToString(), 3),         // 2
+        new Goods(GoodsOrderList.Cocoa_milk.ToString(), 5),         // 2
         new Goods(GoodsOrderList.Orange_juice.ToString(), 3),       // 3
-        new Goods(GoodsOrderList.Freshmilk.ToString(), 3),         // 4
+        new Goods(GoodsOrderList.Freshmilk.ToString(), 5),         // 4
 
 	    new Goods(GoodsOrderList.ToastWithStrawberryJam.ToString(), 10), //_can sell
         new Goods(GoodsOrderList.ToastWithBlueberryJam.ToString(), 10),      // 6
         new Goods(GoodsOrderList.ToastWithButterJam.ToString(), 10),         // 7
         new Goods(GoodsOrderList.ToastWithCustardJam.ToString(), 10),        // 8
         
-	    new Goods(GoodsOrderList.Chocolate_cupcake.ToString(), 15), // 9 << can sell >>
-        new Goods(GoodsOrderList.Blueberry_cupcake.ToString(), 15),     // 10
-        new Goods(GoodsOrderList.Strawberry_cupcake.ToString(), 15),    // 11
+	    new Goods(GoodsOrderList.Chocolate_cupcake.ToString(), 13), // 9 << can sell >>
+        new Goods(GoodsOrderList.Blueberry_cupcake.ToString(), 13),     // 10
+        new Goods(GoodsOrderList.Strawberry_cupcake.ToString(), 13),    // 11
 		
         new Goods(GoodsOrderList.Chocolate_minicake.ToString(), 20),    // 12
         new Goods(GoodsOrderList.Blueberry_minicake.ToString(), 20),    // 13
@@ -69,20 +69,20 @@ public class GoodDataStore : ScriptableObject {
         new Goods(GoodsOrderList.Strawberry_cake.ToString(), 25),	//17
         
 	    new Goods(GoodsOrderList.Strawberry_icecream.ToString(), 8), 			//_can sell.
-        new Goods(GoodsOrderList.Vanilla_icecream.ToString(), 8),				//19
-        new Goods(GoodsOrderList.Chocolate_icecream.ToString(), 8),				//20
+        new Goods(GoodsOrderList.Vanilla_icecream.ToString(), 11),				//19
+        new Goods(GoodsOrderList.Chocolate_icecream.ToString(), 11),				//20
 
-        new Goods(GoodsOrderList.Tuna_sandwich.ToString(), 12),					//21
-        new Goods(GoodsOrderList.DeepFriedChicken_sandwich.ToString(), 20),		//22
-        new Goods(GoodsOrderList.Ham_sandwich.ToString(), 15),					//23
-        new Goods(GoodsOrderList.Egg_sandwich.ToString(), 12),					//24
+        new Goods(GoodsOrderList.Tuna_sandwich.ToString(), 13),					//21
+        new Goods(GoodsOrderList.DeepFriedChicken_sandwich.ToString(), 17),		//22
+        new Goods(GoodsOrderList.Ham_sandwich.ToString(), 21),					//23
+        new Goods(GoodsOrderList.Egg_sandwich.ToString(), 9),					//24
 
-        new Goods(GoodsOrderList.Chocolate_cookie.ToString(), 5),				//25
-        new Goods(GoodsOrderList.Fruit_cookie.ToString(), 5),					//26
-        new Goods(GoodsOrderList.Butter_cookie.ToString(), 5),					//27
+        new Goods(GoodsOrderList.Chocolate_cookie.ToString(), 6),				//25
+        new Goods(GoodsOrderList.Fruit_cookie.ToString(), 7),					//26
+        new Goods(GoodsOrderList.Butter_cookie.ToString(), 6),					//27
 
         new Goods(GoodsOrderList.Hotdog.ToString(), 10),						//28
-        new Goods(GoodsOrderList.HotdogWithCheese.ToString(), 15),				//29
+        new Goods(GoodsOrderList.HotdogWithCheese.ToString(), 13),				//29
     };
 	
     public GoodDataStore() {

@@ -11,8 +11,9 @@ public class Mz_LoadingScreen : MonoBehaviour
 	private bool _haveDisk = true;
 	private AsyncOperation async;
 
-    private GUIStyle loadingGUISkin;
     public GameObject loading_background_sprite;
+    private GUIStyle loadingGUISkin;
+    public Font loadingFont;
 
 	
 	/// <summary>
@@ -64,7 +65,8 @@ public class Mz_LoadingScreen : MonoBehaviour
         GUI.depth = 0;
         GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(Screen.width / Main.GAMEWIDTH, Screen.height / Main.GAMEHEIGHT, 1));
 
-        loadingGUISkin = GUI.skin.box;
+        loadingGUISkin = GUI.skin.label;
+        loadingGUISkin.font = loadingFont;
         loadingGUISkin.alignment = TextAnchor.MiddleCenter;
         loadingGUISkin.fontSize = 24;
         loadingGUISkin.normal.textColor = Color.white;

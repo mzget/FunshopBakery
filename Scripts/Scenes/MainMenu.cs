@@ -25,6 +25,7 @@ public class MainMenu : Mz_BaseScene {
     
     public GUISkin mainmenu_Skin;
     public GUIStyle saveSlot_buttonStyle;
+    public GUIStyle notification_TextboxStyle;
     public enum SceneState { none = 0, showOption, showNewGame, showNewShop, showLoadGame, };
     private SceneState sceneState;
 
@@ -42,7 +43,7 @@ public class MainMenu : Mz_BaseScene {
 	public bool _showSkinLayout;
 	Rect newgame_Textfield_rect;
 	Rect newShopName_rect;
-	
+    Rect notification_Rect;
 	float group_width = 400;
 	Rect showSaveGameSlot_GroupRect;
 	Rect slot_1Rect;
@@ -96,16 +97,19 @@ public class MainMenu : Mz_BaseScene {
 
         newgame_Textfield_rect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) - (70 * Mz_OnGUIManager.Extend_heightScale), Mz_OnGUIManager.viewPort_rect.height / 2 + 58, 300 * Mz_OnGUIManager.Extend_heightScale, 82);
         newShopName_rect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) - (63 * Mz_OnGUIManager.Extend_heightScale), Mz_OnGUIManager.viewPort_rect.height / 2 - 110, 400 * Mz_OnGUIManager.Extend_heightScale, 80);
-
+        notification_Rect = new Rect(Mz_OnGUIManager.viewPort_rect.width / 2 - (300 * Mz_OnGUIManager.Extend_heightScale), 0, 600 * Mz_OnGUIManager.Extend_heightScale, 64);
         group_width = 400 * Mz_OnGUIManager.Extend_heightScale;
-        showSaveGameSlot_GroupRect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) + 50 - (group_width / 2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
+        showSaveGameSlot_GroupRect = new Rect((Mz_OnGUIManager.viewPort_rect.width / 2) + (75 * Mz_OnGUIManager.Extend_heightScale) - (group_width / 2), (Main.GAMEHEIGHT / 2) - 70, group_width, 300);
         slot_1Rect = new Rect(32*Mz_OnGUIManager.Extend_heightScale, 12, group_width - (60 * Mz_OnGUIManager.Extend_heightScale), 80);
 		slot_2Rect = new Rect(slot_1Rect.x, 112, group_width - (60 * Mz_OnGUIManager.Extend_heightScale), 80);
 		slot_3Rect = new Rect(slot_1Rect.x, 212, group_width - (60 * Mz_OnGUIManager.Extend_heightScale), 80);
 
         saveSlot_buttonStyle.normal.textColor = Color.white;
         saveSlot_buttonStyle.active.textColor = Color.green;
-
+        notification_TextboxStyle = new GUIStyle(mainmenu_Skin.textArea);
+        notification_TextboxStyle.fontSize = 32;
+        notification_TextboxStyle.fontStyle = FontStyle.Bold;
+        
 		player_1 = PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME);
 		player_2 = PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME);
 		player_3 = PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME);
@@ -165,14 +169,10 @@ public class MainMenu : Mz_BaseScene {
 			notificationText = "Please Fill Your Username.";
 			dublicateNoticeText = "This name already exists.";
 
-            mainmenu_Skin.textField.normal.textColor = Color.white;
-			Rect notification_Rect = new Rect(Mz_OnGUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64);
-
             if (_isNullUsernameNotification)           
-                GUI.Box(notification_Rect, notificationText, mainmenu_Skin.textField);
+                GUI.Box(notification_Rect, notificationText, notification_TextboxStyle);
             if (_isDuplicateUsername)
-                GUI.Box(notification_Rect, dublicateNoticeText, mainmenu_Skin.textField);
-        
+                GUI.Box(notification_Rect, dublicateNoticeText, notification_TextboxStyle);
         }
         GUI.EndGroup();
     }
@@ -236,7 +236,7 @@ public class MainMenu : Mz_BaseScene {
 	        _isNullUsernameNotification = true;
             _isDuplicateUsername = false;
 
-            this.characterAnimationManager.PlayRampageAnimation();
+            this.characterAnimationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
             audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
 	    }
         else if (username == player_1 || username == player_2 || username == player_3) {
@@ -245,7 +245,7 @@ public class MainMenu : Mz_BaseScene {
             _isNullUsernameNotification = false;
             username = string.Empty;
 
-            this.characterAnimationManager.PlayRampageAnimation();
+            this.characterAnimationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
             audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
 	    }
         else
@@ -289,9 +289,7 @@ public class MainMenu : Mz_BaseScene {
         }
     }
 
-    /// <summary>
-    /// Save default game data for new player.
-    /// </summary>
+    // Save default game data for new player.
     private void SaveNewPlayer()
     {
 		PlayerPrefs.SetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_USERNAME, this.username);
@@ -302,7 +300,7 @@ public class MainMenu : Mz_BaseScene {
 		PlayerPrefs.SetString(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_SHOP_LOGO_COLOR , initializeNewShop.currentLogoColor);
 
         int[] IdOfCanSellItem = new int[] { 0, 5, 9, 18 };
-        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist", IdOfCanSellItem);
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CANSELLGOODSLIST, IdOfCanSellItem);
 		string[] availabelCreams = new string[] { CreamBeh.ChocolateCream, string.Empty, string.Empty, };
 		PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AVAILABLE_CREAM, availabelCreams);
 
@@ -351,12 +349,10 @@ public class MainMenu : Mz_BaseScene {
             string message = string.Empty;			
             //message = "���͡��ͧ����ͧ��� ����ź��������� ��зѺ���¢���������";
             message = "Select Data Slot To Replace New Data";
-			
-            mainmenu_Skin.textField.normal.textColor = Color.white;
-			GUI.Box(new Rect(Mz_OnGUIManager.viewPort_rect.width / 2 - 200, 0, 400, 64), message, mainmenu_Skin.textField);
+			GUI.Box(notification_Rect, message, notification_TextboxStyle);
 		}
 
-        GUI.BeginGroup(showSaveGameSlot_GroupRect, "", GUI.skin.box);
+        GUI.BeginGroup(showSaveGameSlot_GroupRect);
         {
             if (_toSaveGame)			
             {
@@ -407,7 +403,7 @@ public class MainMenu : Mz_BaseScene {
 
                 #region <!-- GUI data slot button.
 
-                if (GUI.Button(slot_1Rect, new GUIContent(slot_1, "button"), GUI.skin.button)) // saveSlot_buttonStyle))
+                if (GUI.Button(slot_1Rect, new GUIContent(slot_1, "button"), saveSlot_buttonStyle)) // saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -417,7 +413,7 @@ public class MainMenu : Mz_BaseScene {
                         this.LoadSceneTarget();
                     }
                 }
-                else if (GUI.Button(slot_2Rect, new GUIContent(slot_2, "button"),  GUI.skin.button))
+                else if (GUI.Button(slot_2Rect, new GUIContent(slot_2, "button"), saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -427,7 +423,7 @@ public class MainMenu : Mz_BaseScene {
                         this.LoadSceneTarget();
                     }
                 }
-                else if (GUI.Button(slot_3Rect, new GUIContent(slot_3, "button"), GUI.skin.button))
+                else if (GUI.Button(slot_3Rect, new GUIContent(slot_3, "button"), saveSlot_buttonStyle))
                 {
                     audioEffect.PlayOnecWithOutStop(audioEffect.buttonDown_Clip);
 
@@ -490,7 +486,7 @@ public class MainMenu : Mz_BaseScene {
                 	this.SaveNewPlayer();
 				}
                 else{
-                    this.characterAnimationManager.PlayRampageAnimation();
+                    this.characterAnimationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
                     base.audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
                 }
             }

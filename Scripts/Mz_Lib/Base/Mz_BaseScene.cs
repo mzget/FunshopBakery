@@ -24,8 +24,8 @@ public class Mz_BaseScene : MonoBehaviour {
     public Vector3 mousePos;
     public Vector3 originalPos;
     public Vector3 currentPos;
-    private Vector3[] mainCameraPos = new Vector3[] { new Vector3(0, -.13f, -10), new Vector3(2.66f, -.13f, -10) };
-	private Vector3 currentCameraPos = new Vector3(0, -.13f, -10);
+    private Vector3[] mainCameraPos = new Vector3[] { new Vector3(0, -.13f, -20), new Vector3(2.66f, -.13f, -20) };
+	private Vector3 currentCameraPos = new Vector3(0, -.13f, -20);
     public bool _isDragMove = false;
 	internal Mz_SmartDeviceInput smartDeviceInput;
 	public ExtendsStorageManager extendsStorageManager;

@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 class RoofDataCollection {
+    public readonly Vector3[] offsetPosY = new Vector3[7] {
+        Vector3.forward*0.8f, Vector3.forward*0.8f, Vector3.forward*0.8f, Vector3.forward*0.8f,
+        Vector3.forward*0.8f, new Vector3(0, -.25f,  0.8f) , new Vector3(0, -.25f, 0.8f),
+    };
+
 	public readonly string[] NameSpecify = new string[7] {
 		"roof_0001", "roof_0002", "roof_0003", "roof_0004", "roof_0005", "roof_0006", "roof_0007",
 	};
@@ -118,6 +123,7 @@ public class UpgradeOutsideManager : MonoBehaviour
         else {
 			roofDecoration_Sprite.gameObject.active = true;
             roofDecoration_Sprite.spriteId = roofDecoration_Sprite.GetSpriteIdByName(roofData.NameSpecify[Mz_StorageManage.Roof_id]);
+            roofDecoration_Sprite.gameObject.transform.localPosition = roofData.offsetPosY[Mz_StorageManage.Roof_id]; 
         }
         
         if(Mz_StorageManage.Awning_id == 255) {
@@ -442,7 +448,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 	            }
 			}
 			else {
-				this.ReActiveRoof(targetItem_id);
+				ReActiveRoof(targetItem_id);
 			}
         }
 		else if(currentStateBehavior == StateBehavior.activeAwning) {
@@ -562,6 +568,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 	{
 		roofDecoration_Sprite.gameObject.active = true;
 		roofDecoration_Sprite.spriteId = roofDecoration_Sprite.GetSpriteIdByName(roofData.NameSpecify[active_id]);
+        roofDecoration_Sprite.gameObject.transform.localPosition = roofData.offsetPosY[active_id]; 
 		Mz_StorageManage.Roof_id = active_id;
 
 		sceneController.PlaySoundRejoice();

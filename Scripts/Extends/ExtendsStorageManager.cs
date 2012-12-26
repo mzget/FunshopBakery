@@ -9,7 +9,7 @@ public class ExtendsStorageManager : Mz_StorageManage
 
 	public void LoadCanSellGoodsListData ()
 	{		
-		int[] array = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist");
+		int[] array = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + KEY_CANSELLGOODSLIST);
         BakeryShop.NumberOfCansellItem.Clear();
 		foreach (var item in array) {
 			BakeryShop.NumberOfCansellItem.Add(item);
@@ -193,7 +193,7 @@ public class ExtendsStorageManager : Mz_StorageManage
 
     public void SaveCanSellGoodListData() {
         int[] array_temp = BakeryShop.NumberOfCansellItem.ToArray();
-        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + "cansellgoodslist", array_temp);
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + KEY_CANSELLGOODSLIST, array_temp);
 
         PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + KEY_AVAILABLE_CREAM, CreamBeh.arr_CreamBehs);
     }

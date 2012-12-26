@@ -190,7 +190,7 @@ public class Town : Mz_BaseScene {
 
 					if(shopname == "Fulfill your greed") {
 						Mz_StorageManage.AvailableMoney += 1000000;
-                        characterAnimatedManage.PlayRampageAnimation();
+                        characterAnimatedManage.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
 
 						shopname = string.Empty;
 					}
@@ -201,7 +201,7 @@ public class Town : Mz_BaseScene {
                             BakeryShop.NumberOfCansellItem.Add(i);
                         }
                         base.extendsStorageManager.SaveCanSellGoodListData();
-                        characterAnimatedManage.PlayRampageAnimation();
+                        characterAnimatedManage.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
 
 						shopname = string.Empty;
 					}
@@ -225,40 +225,6 @@ public class Town : Mz_BaseScene {
 
 	public override void OnInput (string nameInput)
 	{
-		switch (nameInput) {
-		case "Shop_body" : this.PlayBakeryShopOpenAnimation ();
-			break;
-		case "SheepBank_body" : this.PlaySheepBankOpenAnimation ();
-			break;
-		case "Back_button" :  
-			if(Application.isLoadingLevel == false) {
-                base.extendsStorageManager.SaveDataToPermanentMemory();
-                this.OnDispose();
-				
-                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
-                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-            }
-			break;
-		case "Dress_button" : 
-			if (Application.isLoadingLevel == false) {
-                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
-                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-			}
-			break;
-        case "Decoration_button":
-            this.characterAnimatedManage.RandomPlayGoodAnimation();
-            StartCoroutine(ActiveDecorationBar());
-			break;
-		case "Trophy_button" : 
-			if (!Application.isLoadingLevel) {
-                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.DisplayReward.ToString();
-                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
-			}
-			break;
-		default:
-			break;
-		}
-
 		if (GUIMidcenter_anchor.active) {
 			switch (nameInput) {
 			case "Close_button": StartCoroutine(this.UnActiveDecorationBar());
@@ -297,6 +263,41 @@ public class Town : Mz_BaseScene {
                 break;
 			default:
 			break;
+			}
+		} 
+		else {
+			switch (nameInput) {
+			case "BakeryShop_door" : this.PlayBakeryShopOpenAnimation ();
+				break;
+			case "SheepbankDoor" : this.PlaySheepBankOpenAnimation ();
+				break;
+			case "Back_button" :  
+				if(Application.isLoadingLevel == false) {
+	                base.extendsStorageManager.SaveDataToPermanentMemory();
+	                this.OnDispose();
+					
+	                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.MainMenu.ToString();
+	                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+	            }
+				break;
+			case "Dress_button" : 
+				if (Application.isLoadingLevel == false) {
+	                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Dressing.ToString();
+	                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+				}
+				break;
+	        case "Decoration_button":
+	            this.characterAnimatedManage.RandomPlayGoodAnimation();
+	            StartCoroutine(ActiveDecorationBar());
+				break;
+			case "Trophy_button" : 
+				if (!Application.isLoadingLevel) {
+	                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.DisplayReward.ToString();
+	                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}

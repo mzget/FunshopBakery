@@ -7,7 +7,9 @@ public class CharacterAnimationManager : MonoBehaviour {
 	public tk2dAnimatedSprite eye_anim;
 	public tk2dAnimatedSprite lefthand_anim;
 	public tk2dAnimatedSprite righthand_anim;
-	
+
+	internal bool _isPlayingAnimation = false;
+
 	public enum NameAnimationsList {
 		idle = 0,
 		talk = 1,
@@ -41,7 +43,7 @@ public class CharacterAnimationManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         timer += Time.deltaTime;
-        if (timer >= 3) {
+        if (timer >= 5) {
             timer = 0;
 
             PlayEyeAnimation(NameAnimationsList.idle);
@@ -56,21 +58,20 @@ public class CharacterAnimationManager : MonoBehaviour {
 		righthand_anim.Play(nameAnimated.ToString());
 	}
 
-	private void PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList nameAnimated) {
+	internal void PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList nameAnimated) {
+		timer = 0;
 		eye_anim.Play(nameAnimated.ToString());
+		_isPlayingAnimation = true;
+		
+		eye_anim.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
+			_isPlayingAnimation = false;
+		};
 	}
 
 	public void PlayAnimationByName(NameAnimationsList nameAnimation) {
 		eye_anim.Play(nameAnimation.ToString());
 		lefthand_anim.Play(nameAnimation.ToString());
 		righthand_anim.Play(nameAnimation.ToString());
-	}
-	
-	public void PlayRampageAnimation() {
-        timer = 0;
-        int r = Random.Range(8, 10);
-        NameAnimationsList nameList = (NameAnimationsList)r;
-        eye_anim.Play(nameList.ToString());
 	}
 	
     public void PlayGoodAnimation() {
@@ -91,6 +92,8 @@ public class CharacterAnimationManager : MonoBehaviour {
 
     internal void PlayTalkingAnimation()
     {
+		timer = 0;
+		eye_anim.Stop();
         this.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.talk);
         this.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_active);
     }

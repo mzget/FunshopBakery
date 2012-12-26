@@ -6,6 +6,9 @@ public class CustomerBeh : MonoBehaviour {
 	
 	private BakeryShop sceneManager;	
     private tk2dAnimatedSprite animatedSprite;
+
+	internal bool _isPlayingAnimation = false;
+
 //	public tk2dAnimatedSprite AnimatedSprite { get {return animatedSprite;}}
 	private int currentPlayAnimatedID = 0;
 
@@ -26,29 +29,19 @@ public class CustomerBeh : MonoBehaviour {
     public List<CustomerOrderRequire> customerOrderRequire = new List<CustomerOrderRequire>();
     public int amount = 0;
 	public int payMoney = 0;
-    
-    /// <summary>
-    /// Manage goods complete Event handle.
-    /// </summary>
-    public event System.EventHandler manageGoodsComplete_event;
-	private void OnManageGoodComplete(System.EventArgs e) {
-		if(manageGoodsComplete_event != null) {
-			manageGoodsComplete_event(this, e);
-		}
-	}
 
 	
 	// Use this for initialization
 	void Start ()
 	{
-		Debug.Log ("Instancing Customer");
+		Debug.Log ("starting Customer");
 
 		sceneManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BakeryShop> ();
 
         StartCoroutine(RandomCustomerFace());
 
 		list_goodsBag = new List<Goods>(sceneManager.CanSellGoodLists);
-		this.GenerateGoodOrder ();
+//		this.GenerateGoodOrder ();
 	}
 	
 	private IEnumerator RandomCustomerFace() {
@@ -68,18 +61,20 @@ public class CustomerBeh : MonoBehaviour {
 		if (animatedSprite != null) {
 			animatedSprite.Play(arr_mutterAnimationClip_name[currentPlayAnimatedID]);	
             sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.audioEffect.mutter_clip);
+			_isPlayingAnimation = true;
 
             animatedSprite.animationCompleteDelegate += new tk2dAnimatedSprite.AnimationCompleteDelegate(delegate(tk2dAnimatedSprite sprite, int id) {
                 animatedSprite.Play(currentPlayAnimatedID);
+				_isPlayingAnimation = false;
             });
 		}
 	}
 
-    private void GenerateGoodOrder()
+    internal void GenerateGoodOrder()
     {		
-        int maxGoodsType = 0;
+        int maxGoodsType = 3;
 //        if(BakeryShop.gameLevel == 0)
-            maxGoodsType = 3;
+//            maxGoodsType = 3;
 //        else if(BakeryShop.gameLevel == 1)
 //            maxGoodsType = 3;
 //        else if(BakeryShop.gameLevel == 2)
@@ -116,7 +111,7 @@ public class CustomerBeh : MonoBehaviour {
 
         Debug.Log("CalculationPrice => amount : " + amount);
     }
-
+/*
 	internal void CheckGoodsObjInTray(string callFrom = "") {
         if (callFrom == GoodsBeh.ClassName) {        
 		    List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
@@ -194,12 +189,11 @@ public class CustomerBeh : MonoBehaviour {
 		    }
         }
 	}
-	
+*/	
 	// Update is called once per frame
 	void Update () { }
 
     public void Dispose() {
-        manageGoodsComplete_event -= sceneManager.currentCustomer_manageGoodsComplete_event;
 		list_goodsBag.Clear();
         Destroy(customerSprite_Obj);
 		Destroy(customerOrderingIcon_Obj);

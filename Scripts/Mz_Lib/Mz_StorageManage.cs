@@ -51,7 +51,8 @@ public class Mz_StorageManage : MonoBehaviour
     public const string KEY_LOVEKIDFOUNDATION_LV = "LOVEKIDFOUNDATION_LV";
     public const string KEY_ECOFOUNDATION_LV = "ECOFOUNDATION_LV";
     public const string KEY_GLOBALWARMING_LV = "KEY_GLOBALWARMING_LV";
-
+    //<@-- Can sell item list storage key.
+    public const string KEY_CANSELLGOODSLIST = "KEY_CANSELLGOODSLIST";
 	//<@-- Save available creambeh.
 	public const string KEY_AVAILABLE_CREAM = "AVAILABLE_CREAM";
 
