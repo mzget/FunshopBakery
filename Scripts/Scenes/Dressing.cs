@@ -10,6 +10,8 @@ public class Dressing : Mz_BaseScene {
 	public GameObject back_button_Obj;
 	public CharacterAnimationManager TK_animationManager;
     public CostumeManager costomeManager;
+//	public AudioClip[] en_appreciate_clip;
+//	public AudioClip[] th_appreciate_clip;
 
     public Transform gameEffect_transform;
     public static List<int> CanEquipClothe_list = new List<int>();

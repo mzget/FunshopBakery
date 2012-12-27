@@ -110,7 +110,7 @@ public class Mz_BaseScene : MonoBehaviour {
             audioBackground_Obj = new GameObject("AudioBackground", typeof(AudioSource));
             audioBackground_Obj.tag = "AudioBackground";
             audioBackground_Obj.audio.playOnAwake = true;
-			audioBackground_Obj.audio.volume = 0.5f;
+			audioBackground_Obj.audio.volume = 0.8f;
             audioBackground_Obj.audio.mute = !ToggleAudioActive;
 
             DontDestroyOnLoad(audioBackground_Obj);

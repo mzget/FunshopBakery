@@ -43,7 +43,7 @@ public class CharacterAnimationManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         timer += Time.deltaTime;
-        if (timer >= 5) {
+        if (timer >= 4) {
             timer = 0;
 
             PlayEyeAnimation(NameAnimationsList.idle);

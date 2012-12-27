@@ -91,7 +91,7 @@ public class ObjectsBeh : Base_ObjectBeh {
     {
         base.OnTouchDrag();
         
-        if(this._canDragaable) {
+        if(this._canDragaable && base._OnTouchBegin) {
 			this._isDraggable = true;
         }
     }

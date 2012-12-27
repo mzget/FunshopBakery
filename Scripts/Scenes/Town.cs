@@ -19,7 +19,8 @@ public class Town : Mz_BaseScene {
 	public GameObject GUIMidcenter_anchor;
 	public UpgradeOutsideManager upgradeOutsideManager;
     public CharacterAnimationManager characterAnimatedManage;
-
+	public DogBeh bullDog;
+	
 	public enum OnGUIState { none = 0, DrawEditShopname, };
 	public OnGUIState currentGUIState;
 
@@ -42,8 +43,9 @@ public class Town : Mz_BaseScene {
 			StartingTrucks = Instantiate(Resources.Load("StartingTrucks", typeof(GameObject)), new Vector3(-2f, -0.62f, -4f), Quaternion.identity)  as GameObject;
 		}
 		
-		iTween.MoveTo(StartingTrucks, iTween.Hash("x", 5f, "Time", 20f, "easetype", iTween.EaseType.linear,
+		iTween.MoveTo(StartingTrucks, iTween.Hash("x", 5f, "Time", 15f, "easetype", iTween.EaseType.linear,
 		                                       "oncompletetarget", GameObject.FindGameObjectWithTag("GameController"), "oncomplete", "OnStartingCarComplete"));
+        DogBeh.ChaseBite();
 	}
 	
 	void OnStartingCarComplete ()

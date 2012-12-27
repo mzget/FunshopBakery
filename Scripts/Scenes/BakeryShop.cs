@@ -14,8 +14,9 @@ public class BakeryShop : Mz_BaseScene {
 	public List<Goods> CanSellGoodLists = new List<Goods>();
 	public AudioClip[] en_greeting_clip = new AudioClip[6];
 	public AudioClip[] th_greeting_clip = new AudioClip[7];
-    public AudioClip[] en_apologize_clip = new AudioClip[3];
+    public AudioClip[] en_apologize_clip;
 //	public AudioClip[] th_apologize_clip = new AudioClip[];
+	public AudioClip[] en_appreciate_clip;
 	
 	//<!-- in game button.
 	public GameObject close_button;
@@ -56,7 +57,9 @@ public class BakeryShop : Mz_BaseScene {
 	public GameObject[] arr_goodsLabel = new GameObject[3];
 	public tk2dSprite[] arr_GoodsTag = new tk2dSprite[3];
 	public tk2dTextMesh[] arr_GoodsPrice_textmesh = new tk2dTextMesh[3];
-    public GameObject[] arr_orderingBaseItems = new GameObject[3];
+    public tk2dSprite[] arr_orderingBaseItems = new tk2dSprite[3];
+	private const string BASE_ORDER_ITEM_NORMAL = "Order_BaseItem";
+	private const string BASE_ORDER_ITEM_COMPLETE = "Order_BaseItem_complete";
 	public tk2dSprite[] arr_orderingItems = new tk2dSprite[3];
 	private Mz_CalculatorBeh calculatorBeh;
     private GameObject cash_obj;
@@ -1025,6 +1028,7 @@ public class BakeryShop : Mz_BaseScene {
 			}
 			foodTrayBeh.goodsOnTray_List.Clear();
 			StartCoroutine(this.CollapseOrderingGUI());
+			this.manageGoodsComplete_event -= Handle_manageGoodsComplete_event;
 	    }
 		
 		yield return new WaitForFixedUpdate();	
@@ -1036,6 +1040,9 @@ public class BakeryShop : Mz_BaseScene {
 
     public void Handle_manageGoodsComplete_event(object sender, System.EventArgs eventArgs)
 	{
+		int r = UnityEngine.Random.Range(0, en_appreciate_clip.Length);
+		this.PlayAppreciateAudioClip(en_appreciate_clip[r]);
+		
 		currentGamePlayState = GamePlayState.calculationPrice;
 
         TK_animationManager.PlayGoodAnimation();
@@ -1083,12 +1090,13 @@ public class BakeryShop : Mz_BaseScene {
 
     internal void GenerateOrderGUI ()
 	{
-		foreach (GameObject item in arr_orderingBaseItems) {
-			item.SetActiveRecursively (false);
+		foreach (tk2dSprite item in arr_orderingBaseItems) {
+			item.spriteId = item.GetSpriteIdByName(BASE_ORDER_ITEM_NORMAL);
+			item.gameObject.SetActiveRecursively (false);
 		}
 
 		for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++) {
-			arr_orderingBaseItems[i].SetActiveRecursively(true);	
+			arr_orderingBaseItems[i].gameObject.SetActiveRecursively(true);	
 			arr_orderingItems[i].spriteId = arr_orderingItems[i].GetSpriteIdByName(currentCustomer.customerOrderRequire[i].goods.name);
             arr_orderingItems[i].gameObject.name = currentCustomer.customerOrderRequire[i].goods.name;
 		}
@@ -1102,11 +1110,16 @@ public class BakeryShop : Mz_BaseScene {
 		iTween.MoveTo(baseOrderUI_Obj.gameObject, 
 		              iTween.Hash("position", new Vector3(-0.85f, .06f, 0f), "islocal", true, "time", .5f, "easetype", iTween.EaseType.spring));
 
+		StartCoroutine(this.CheckingGoodsObjInTray(GoodsBeh.ClassName));
+
 		currentCustomer.customerOrderingIcon_Obj.active = false;
+		
 		yield return new WaitForSeconds(.5f);
+		
 		darkShadowPlane.active = true;
 		
 		foreach (var item in arr_orderingItems) {
+			iTween.Resume(item.gameObject);
             iTween.MoveTo(item.gameObject, iTween.Hash("y", 0.1f, "islocal", true, "time", .3f, "looptype", iTween.LoopType.pingPong));
 		}
 	}
@@ -1117,6 +1130,11 @@ public class BakeryShop : Mz_BaseScene {
 		              iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.linear));
 
 		yield return new WaitForSeconds(0.5f);
+		
+		darkShadowPlane.active = false;
+		foreach (var item in arr_orderingItems) {
+			iTween.Pause(item.gameObject);
+		}
 
 		if(currentCustomer) {
 			currentCustomer.customerOrderingIcon_Obj.active = true;
@@ -1124,15 +1142,13 @@ public class BakeryShop : Mz_BaseScene {
 			iTween.PunchPosition(currentCustomer.customerOrderingIcon_Obj, 
             	iTween.Hash("x", .1f, "y", .1f, "delay", 1f, "time", .5f, "looptype", iTween.LoopType.pingPong));
 		}
-		
-		darkShadowPlane.active = false;
 	}
 
 	private void SetActiveGreetingMessage (bool activeState)
 	{
 		if(activeState) {
 			greetingMessage_ObjGroup.SetActiveRecursively(true);
-			iTween.ScaleTo(greetingMessage_ObjGroup, iTween.Hash("x", 1f, "y", 1f, "time", 1f, "easetype", iTween.EaseType.easeInSine));
+			iTween.ScaleTo(greetingMessage_ObjGroup, iTween.Hash("x", 1f, "y", 1f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
 		}
 		else {
 			greetingMessage_ObjGroup.transform.localScale = new Vector3(0.3f, 0.3f, 1);
@@ -1141,6 +1157,21 @@ public class BakeryShop : Mz_BaseScene {
 			currentCustomer.GenerateGoodOrder();
 		}
 	}
+	
+	IEnumerator PlayApologizeCustomer (AudioClip clip)
+	{
+		this.TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
+		currentCustomer.PlayRampage_animation();
+		
+		while (TK_animationManager._isPlayingAnimation) {
+			yield return null;
+		}
+		
+		TK_animationManager.PlayTalkingAnimation();
+		this.PlayApologizeAudioClip(clip);
+	}
+
+	#region <@-- Play Audio method.
 
 	IEnumerator PlayGreetingAudioClip (AudioClip clip)
 	{
@@ -1154,23 +1185,17 @@ public class BakeryShop : Mz_BaseScene {
 		this.SetActiveGreetingMessage(false);
 	}
 
-	void PlayApologizeSound (AudioClip targerAudioClip)
+	void PlayAppreciateAudioClip (AudioClip audioClip)
 	{
-		this.audioDescribe.PlayOnecSound(targerAudioClip);
+		this.audioDescribe.PlayOnecSound(audioClip);
 	}
 
-	IEnumerator PlayApologizeCustomer (AudioClip clip)
+	void PlayApologizeAudioClip (AudioClip audioClip)
 	{
-		this.TK_animationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);
-		currentCustomer.PlayRampage_animation();
-
-		while (TK_animationManager._isPlayingAnimation) {
-			yield return null;
-		}
-
-		TK_animationManager.PlayTalkingAnimation();
-		this.PlayApologizeSound(clip);
+		this.audioDescribe.PlayOnecSound(audioClip);
 	}
+
+	#endregion
     
     private void CreateTKCalculator() {
         if(calculator_group_instance) {
@@ -1278,14 +1303,6 @@ public class BakeryShop : Mz_BaseScene {
 
     private IEnumerator CreateGameEffect()
     {
-        //GameObject effect = Instantiate(Resources.Load(GameEffectManager.BLOOMSTAR_EFFECT_PATH, typeof(GameObject))) as GameObject;
-        //effect.transform.parent = foodsTray_obj.transform;
-        //effect.transform.localPosition = new Vector3(0, 0, -0.2f);
-        //effect.GetComponent<tk2dAnimatedSprite>().animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
-        //{
-        //    Destroy(effect);
-        //};
-
         gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, foodsTray_obj.transform);
 
         yield return 0;
@@ -1497,6 +1514,8 @@ public class BakeryShop : Mz_BaseScene {
 
     internal IEnumerator CheckingGoodsObjInTray(string callFrom)
     {
+		Debug.Log("Iterator CheckingGoodsObjInTray");
+		
         if (callFrom == GoodsBeh.ClassName)
         {
             List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
@@ -1514,8 +1533,7 @@ public class BakeryShop : Mz_BaseScene {
                     }
                 }
 
-                list_goodsTemp.Add(new CustomerOrderRequire()
-                {
+                list_goodsTemp.Add(new CustomerOrderRequire() {
                     goods = temp_goods,
                     number = temp_counter,
                 });
@@ -1523,11 +1541,18 @@ public class BakeryShop : Mz_BaseScene {
                 if (currentCustomer.customerOrderRequire[i].number == list_goodsTemp[i].number)
                 {
                     Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);
+						
+					/// Check correctly of goods with arr_orderingItems.
+					/// and change color of arr_orderingBaseItems.
+					foreach (tk2dSprite item in arr_orderingItems) {
+						if(item.gameObject.name == list_goodsTemp[i].goods.name)
+							item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_COMPLETE);
+//						else
+//							item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_NORMAL);
+					};
 
                     if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
-                    {
                         this.billingMachine.animation.Play();
-                    }
                 }
 
                 temp_goods = null;
@@ -1548,20 +1573,7 @@ public class BakeryShop : Mz_BaseScene {
 
                 yield return StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
             } 
-            else {			
-//			if(foodTrayBeh.goodsOnTray_List.Count == currentCustomer.customerOrderRequire.Count) 
-//			{
-//				foreach (GoodsBeh item in this.foodTrayBeh.goodsOnTray_List)
-//                {
-//                    if (item.name == currentCustomer.customerOrderRequire[i].goods.name)
-//                    {
-//                        temp_goods = currentCustomer.customerOrderRequire[i].goods;
-//                        temp_counter += 1;
-//                    }
-//					else return;
-//                }
-//			}
-			
+            else {						
 				List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
 	            Goods temp_goods = null;
 	            int temp_counter = 0;
@@ -1599,9 +1611,7 @@ public class BakeryShop : Mz_BaseScene {
 	                    Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);
 	
 	                    if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
-	                    {
-	                        OnManageGoodComplete(System.EventArgs.Empty);
-	                    }
+							OnManageGoodComplete(EventArgs.Empty);
 	                }
 	
 	                temp_goods = null;
