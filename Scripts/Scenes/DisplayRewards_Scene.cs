@@ -2,7 +2,13 @@ using UnityEngine;
 using System.Collections;
 
 public class DisplayRewards_Scene : Mz_BaseScene {
-	
+
+    internal const string MEDAL_Bronze = "Bronze";
+    internal const string MEDAL_Copper = "Copper";
+    internal const string MEDAL_Silver = "Silver";
+    internal const string MEDAL_Gold = "Gold";
+    internal const string MEDAL_Crystal = "Crystal";
+
 	const string BACK_BUTTON_NAME = "Back_button";
 	const string NEXT_BUTTON_NAME = "Next_button";
 	const string PREVIOUS_BUTTON_NAME = "Previous_button";

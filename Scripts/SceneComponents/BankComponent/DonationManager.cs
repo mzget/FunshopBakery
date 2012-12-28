@@ -44,6 +44,10 @@ public class GlobalWarmingOranization {
 
 public class DonationManager : MonoBehaviour
 {
+    const string NOTICE_levelMoreThanLimit = "Cannot donation!. Your donation level is more than limit";
+    const string NOTICE_accountBalanceLessThanRequire = "Cannot donation !, Your account balance are less than requirement.";
+
+
     public const string TOP_RED = "Top_red";
     public const string TOP_ORANGE = "Top_orange";
     public const string TOP_YELLOW = "Top_yellow";
@@ -61,7 +65,8 @@ public class DonationManager : MonoBehaviour
         "ConservationAnimals_plate", "GlobalAIDFund_plate", "LoveDog_plate",
         "LoveKids_plate", "Eco_plate", "GlobalWarming_plate",
     };
-    private Mz_BaseScene sceneController;
+
+    private SheepBank sceneController;
     ConservationAnimals conservationAnimal = new ConservationAnimals();
     EcoFoundation ecoDonation = new EcoFoundation();
     AIDSFoundation aidsFoundation = new AIDSFoundation();
@@ -84,13 +89,14 @@ public class DonationManager : MonoBehaviour
     public tk2dAnimatedSprite topAnimSprite;
     public tk2dAnimatedSprite downAnimSprite;
     public tk2dTextMesh displayPageId_textmesh;
+	public tk2dAnimatedSprite congratulationEffect;
+    public tk2dSprite medal_reward;
+
     const int MAX_PageNumber = 3;
     private int currentPageId = 0;
-	
-	
-	
+		
 	void Awake() {				
-        sceneController = GameObject.FindGameObjectWithTag("GameController").GetComponent<Mz_BaseScene>();
+        sceneController = GameObject.FindGameObjectWithTag("GameController").GetComponent<SheepBank>();
 
 		topDonationButton_sprite = topDonateButton_Obj.GetComponent<tk2dSprite>();
 		downDonationButton_sprite = downDonateButton_Obj.GetComponent<tk2dSprite>();
@@ -101,6 +107,8 @@ public class DonationManager : MonoBehaviour
 	
     private IEnumerator Start() {
 		print("DonationManager.Start");
+
+		congratulationEffect.gameObject.SetActiveRecursively(false);
 
         yield return new WaitForEndOfFrame();
 
@@ -113,7 +121,9 @@ public class DonationManager : MonoBehaviour
 		this.ChangeTopicIcon();
     }
 
-    internal void ReInitializeData() {         
+    internal void ReInitializeData() {     
+		congratulationEffect.gameObject.SetActiveRecursively(false);
+
         this.ResetDatafields();
         this.ReActiveColorBarPicker();
         this.RedrawPageIDTexmesh();
@@ -598,21 +608,21 @@ public class DonationManager : MonoBehaviour
                 if (ConservationAnimals.Level < conservationAnimal.DonationPrices.Length - 1)
                     this.DonationProcessing(arr_nameOfDonationTopic[0]);
                 else
-                    Debug.LogWarning("Cannot donation!. Your donation level is more than limit");
+					this.WarningCannotDonation(NOTICE_levelMoreThanLimit);
             }
             else if (currentPageId == 1) {
                 //<@!-- LoveDogConsortium.
                 if (LoveDogConsortium.Level < loveDogFound.donationPrice.Length - 1)
                     this.DonationProcessing(arr_nameOfDonationTopic[2]);
                 else
-                    Debug.LogWarning("Cannot donation!. Your donation level is more than limit");
+                    this.WarningCannotDonation(NOTICE_levelMoreThanLimit);
             }
             else if (currentPageId == 2) {
                 //<@!-- EcoFoundation.
                 if(EcoFoundation.Level < ecoDonation.donationPrice.Length -1)
                     this.DonationProcessing(arr_nameOfDonationTopic[4]);
                 else
-                    Debug.LogWarning("Cannot donation!. Your donation level is more than limit");
+                    this.WarningCannotDonation(NOTICE_levelMoreThanLimit);
             }
             break;
 		case DOWN_DONATEBUTTONNAME:
@@ -621,14 +631,14 @@ public class DonationManager : MonoBehaviour
                     if (AIDSFoundation.Level < aidsFoundation.donationPrice.Length - 1)
                         this.DonationProcessing(arr_nameOfDonationTopic[1]);
                     else
-                        Debug.LogWarning("Cannot donation!. Your donation level is more than limit");
+                        this.WarningCannotDonation(NOTICE_levelMoreThanLimit);
                 }
 				else if (currentPageId == 1) {
                     //<@!-- LoveKidsFoundation.
                     if(LoveKidsFoundation.Level < loveKidsFound.donationPrice.Length -1)
                         this.DonationProcessing (arr_nameOfDonationTopic [3]);
                     else
-                        Debug.LogWarning("Cannot donation!. Your donation level is more than limit");
+                        this.WarningCannotDonation(NOTICE_levelMoreThanLimit);
                 }
                 else if (currentPageId == 2)
                 {
@@ -636,7 +646,7 @@ public class DonationManager : MonoBehaviour
                     if (GlobalWarmingOranization.Level < globalWarmingORG.donationPrice.Length - 1)
                         this.DonationProcessing(arr_nameOfDonationTopic[5]);
                     else
-                        Debug.LogWarning("Cannot donation!. Your donation level is more than limit");
+                        this.WarningCannotDonation(NOTICE_levelMoreThanLimit);
                 }
 				break;
 		default:
@@ -657,15 +667,14 @@ public class DonationManager : MonoBehaviour
                 sceneController.gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, topDonateButton_Obj.transform);
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
-				ConservationAnimals.Level++;
-				this.ReActiveColorBarPicker();
+                ConservationAnimals.Level++;
+                StartCoroutine(this.ActiveCongratulationEffect(ConservationAnimals.Level));
+                this.ReActiveColorBarPicker();
 
                 print("DonationProcessing... complete !");
             }
             else
-            {
-                print("Cannot donation !, Your account balance are less than requirement.");
-            }
+                WarningCannotDonation(NOTICE_accountBalanceLessThanRequire);
         }
         else if (targetDonation == arr_nameOfDonationTopic[1])
         {
@@ -676,15 +685,14 @@ public class DonationManager : MonoBehaviour
                 sceneController.gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, downDonateButton_Obj.transform);
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
-				AIDSFoundation.Level++;
-				this.ReActiveColorBarPicker();
+                AIDSFoundation.Level++;
+                StartCoroutine(this.ActiveCongratulationEffect(AIDSFoundation.Level));
+                this.ReActiveColorBarPicker();
 
                 print("DonationProcessing... complete !");
             }
             else
-            {
-                print("Cannot donation !, Your account balance are less than requirement.");
-            }
+                WarningCannotDonation(NOTICE_accountBalanceLessThanRequire);
         }
         else if (targetDonation == arr_nameOfDonationTopic[2])
         {
@@ -696,14 +704,13 @@ public class DonationManager : MonoBehaviour
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
 				LoveDogConsortium.Level++;
+                StartCoroutine(this.ActiveCongratulationEffect(LoveDogConsortium.Level));
 				this.ReActiveColorBarPicker();
 
                 print("DonationProcessing... complete !");
             }
             else
-            {
-                print("Cannot donation !, Your account balance are less than requirement.");
-            }
+                WarningCannotDonation(NOTICE_accountBalanceLessThanRequire);
         }
         else if (targetDonation == arr_nameOfDonationTopic[3]) {
             currentPriceToDonate = loveKidsFound.donationPrice[LoveKidsFoundation.Level];
@@ -714,14 +721,13 @@ public class DonationManager : MonoBehaviour
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
 				LoveKidsFoundation.Level++;
+                StartCoroutine(this.ActiveCongratulationEffect(LoveKidsFoundation.Level));
 				this.ReActiveColorBarPicker();
 
                 print("DonationProcessing... complete !");
             }
             else
-            {
-                print("Cannot donation !, Your account balance are less than requirement.");
-            }
+                WarningCannotDonation(NOTICE_accountBalanceLessThanRequire);
         }
         else if (targetDonation == arr_nameOfDonationTopic[4])
         {
@@ -733,14 +739,13 @@ public class DonationManager : MonoBehaviour
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
 				EcoFoundation.Level ++;
+                StartCoroutine(this.ActiveCongratulationEffect(EcoFoundation.Level));
 				this.ReActiveColorBarPicker();
 
                 print("DonationProcessing... complete !");
             }
             else
-            {
-                print("Cannot donation !, Your account balance are less than requirement.");
-            }
+                WarningCannotDonation(NOTICE_accountBalanceLessThanRequire);
         }
         else if (targetDonation == arr_nameOfDonationTopic[5]) {
             currentPriceToDonate = globalWarmingORG.donationPrice[GlobalWarmingOranization.Level];
@@ -751,14 +756,48 @@ public class DonationManager : MonoBehaviour
                 sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.longBring_clip);
 
                 GlobalWarmingOranization.Level++;
+                StartCoroutine(this.ActiveCongratulationEffect(GlobalWarmingOranization.Level));
                 this.ReActiveColorBarPicker();
 
                 print("DonationProcessing... complete !");
             }
             else
-            {
-                print("Cannot donation !, Your account balance are less than requirement.");
-            }
+                WarningCannotDonation(NOTICE_accountBalanceLessThanRequire);
         }
     }
+
+	IEnumerator ActiveCongratulationEffect (int level)
+	{
+		Debug.Log("ActiveCongratulationEffect");
+
+		sceneController.shadowPlane_Obj.transform.position += Vector3.back * 20; 
+		congratulationEffect.gameObject.SetActiveRecursively(true);
+
+        switch (level)
+        {
+            case 1: medal_reward.spriteId = medal_reward.GetSpriteIdByName(DisplayRewards_Scene.MEDAL_Bronze);
+                break;
+            case 2: medal_reward.spriteId = medal_reward.GetSpriteIdByName(DisplayRewards_Scene.MEDAL_Copper);
+                break;
+            case 3: medal_reward.spriteId = medal_reward.GetSpriteIdByName(DisplayRewards_Scene.MEDAL_Silver);
+                break;
+            case 4: medal_reward.spriteId = medal_reward.GetSpriteIdByName(DisplayRewards_Scene.MEDAL_Gold);
+                break;
+            case 5: medal_reward.spriteId = medal_reward.GetSpriteIdByName(DisplayRewards_Scene.MEDAL_Crystal);
+                break;
+            default:
+                break;
+        }
+
+		yield return new WaitForSeconds(3);
+
+		sceneController.shadowPlane_Obj.transform.position += Vector3.forward * 20;
+        congratulationEffect.gameObject.SetActiveRecursively(false);
+	}
+
+	void WarningCannotDonation (string noticeMessage)
+	{
+		sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
+		Debug.LogWarning(noticeMessage);
+	}
 }

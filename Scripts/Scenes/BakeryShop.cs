@@ -804,7 +804,6 @@ public class BakeryShop : Mz_BaseScene {
     #region <!-- Cookie Object Behavior.
 
 	/// Creates the chocolate chip_ cookie.
-
     IEnumerator InitializeChocolateChipCookie()
     {
         yield return StartCoroutine(this.CreateChocolateChip_Cookie());
@@ -983,7 +982,7 @@ public class BakeryShop : Mz_BaseScene {
 
     #endregion
 
-    #region <!-- Customer manage system..
+    #region <!-- Customer manage system.
 
     private void BakeryShop_nullCustomer_event(object sender, EventArgs e) {
     	StartCoroutine(CreateCustomer());

@@ -15,7 +15,7 @@ public class BankOfficer {
 
 public class SheepBank : Mz_BaseScene {
 
-    //public GameObject background_obj;
+    public GameObject background_obj;
     public GameObject upgradeInside_window_Obj;
 	public GameObject depositForm_Obj;
 	public GameObject withdrawalForm_Obj;
@@ -65,6 +65,8 @@ public class SheepBank : Mz_BaseScene {
 	
 	// Use this for initialization
 	void Start () {
+        Mz_ResizeScale.ResizingScale(background_obj.transform);
+		
 		SheepBank.HaveUpgradeOutSide = false;
 
 		StartCoroutine(this.InitializeAudio());
@@ -76,7 +78,6 @@ public class SheepBank : Mz_BaseScene {
         donationManager = donationForm_group.GetComponent<DonationManager>();
 
         this.InitializeFields();
-        //Mz_ResizeScale.ResizingScale(background_obj.transform);
 		shadowPlane_Obj.gameObject.active = false;
 	}
     protected new IEnumerator InitializeAudio()
@@ -235,9 +236,7 @@ public class SheepBank : Mz_BaseScene {
 
         currentGameStatus = GameSceneStatus.none;        
     }
-	void OnTransactionMoveDownComplete() {
-		shadowPlane_Obj.gameObject.active = true;
-        
+	void OnTransactionMoveDownComplete() {        
         this.AccountBalanceManager(Mz_StorageManage.AccountBalance);
 	}
         
@@ -246,31 +245,37 @@ public class SheepBank : Mz_BaseScene {
         if (nameInput == UpgradeInside_BUTTON_NAME)
         {
             StartCoroutine(this.PlayManOfficerAnimation("ActiveUpgradeInsideForm"));
+            shadowPlane_Obj.gameObject.active = true;
             return;
         }
         else if (nameInput == UpgradeOutside_BUTTON_NAME)
         {
             StartCoroutine(PlayManOfficerAnimation("ActiveUpgradeOutside"));
+            shadowPlane_Obj.gameObject.active = true;
             return;
         }
         else if (nameInput == DEPOSIT_BUTTON_NAME)
         {
             StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDepositForm_function));
+            shadowPlane_Obj.gameObject.active = true;
             return;
         }
         else if (nameInput == WITHDRAWAL_BUTTON_NAME)
         {
             StartCoroutine(this.PlayWomanOfficerAnimation(ActiveWithdrawalForm_function));
+            shadowPlane_Obj.gameObject.active = true;
             return;
         }
         else if (nameInput == Donate_Button_Name)
         {
             StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDonationForm_function));
+            shadowPlane_Obj.gameObject.active = true;
             return;
         }
         else if (nameInput == PASSBOOKBUTTONNAME)
         {
             this.ActivePassbookForm();
+            shadowPlane_Obj.gameObject.active = true;
             return;
         }
         else if (nameInput == BACK_BUTTON_NAME)
