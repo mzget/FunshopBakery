@@ -37,8 +37,9 @@ public class ToastBeh : GoodsBeh {
 		
 		if(ingredientName == JamBeh.StrawberryJam) {
 			base.animatedSprite.Play(JamBeh.StrawberryJam);
-			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite anim, int Id) {				
-				this.gameObject.name = GoodDataStore.GoodsOrderList.ToastWithStrawberryJam.ToString();
+			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite anim, int Id)
+			{				
+				this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithStrawberryJam.ToString();
 				
 				base._canDragaable = true;
 				ToastBeh._IsActive = false;
@@ -48,8 +49,9 @@ public class ToastBeh : GoodsBeh {
 		}
 		else if(ingredientName == JamBeh.BlueberryJam) {
 			base.animatedSprite.Play(JamBeh.BlueberryJam);
-            base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id) {
-                this.gameObject.name = GoodDataStore.GoodsOrderList.ToastWithBlueberryJam.ToString();
+            base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id)
+			{
+                this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithBlueberryJam.ToString();
 				
 				base._canDragaable = true;
 				ToastBeh._IsActive = false;
@@ -59,8 +61,9 @@ public class ToastBeh : GoodsBeh {
 		}
 		else if(ingredientName == JamBeh.ButterJam) {
 			base.animatedSprite.Play(JamBeh.ButterJam);
-            base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id) {
-                this.gameObject.name = GoodDataStore.GoodsOrderList.ToastWithButterJam.ToString();
+            base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id)
+			{
+                this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithButterJam.ToString();
                 				
 				base._canDragaable = true;
 				ToastBeh._IsActive = false;
@@ -70,8 +73,9 @@ public class ToastBeh : GoodsBeh {
 		}
 		else if(ingredientName == JamBeh.CustardJam) {
 			base.animatedSprite.Play(JamBeh.CustardJam);
-            base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id) { 
-				this.gameObject.name = GoodDataStore.GoodsOrderList.ToastWithCustardJam.ToString();
+            base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id)
+			{ 
+				this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithCustardJam.ToString();
                 				
 				base._canDragaable = true;
 				ToastBeh._IsActive = false;

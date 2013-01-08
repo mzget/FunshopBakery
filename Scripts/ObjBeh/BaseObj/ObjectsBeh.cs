@@ -62,7 +62,7 @@ public class ObjectsBeh : Base_ObjectBeh {
             screenPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
 
-        this.transform.position = new Vector3(screenPoint.x, screenPoint.y, -3f);
+        this.transform.position = new Vector3(screenPoint.x, screenPoint.y, -2.5f);
 	}
 
 	public void animationCompleteDelegate(tk2dAnimatedSprite sprite, int clipId) {

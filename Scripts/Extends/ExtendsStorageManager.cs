@@ -65,25 +65,25 @@ public class ExtendsStorageManager : Mz_StorageManage
 
     private void LoadDecorationShopOutside()
     {
-		int[] roof_temp_array = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ROOF_LIST);
+		int[] roof_temp_array = PlayerPrefsX.GetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ROOF_LIST, 0, 0);
 		if(roof_temp_array.Length != 0) {
 			this.AddCanDecorationRoofList(ref roof_temp_array);
 		}
 		else return;
 
-		int[] awning_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_AWNING_LIST);
+		int[] awning_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_AWNING_LIST, 0, 0);
 		if(awning_temp_array.Length != 0) {
 			this.AddCanDecorateAwningList(ref awning_temp_array);
 		}
 		else return;
 
-		int[] table_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_TABLE_LIST);
+		int[] table_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_TABLE_LIST, 0, 0);
 		if(table_temp_array.Length != 0) {
 			this.AddCanDecorationTableList(ref table_temp_array);
 		}
 		else return;
 
-		int[] accessories_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_ACCESSORIES_LIST);
+		int[] accessories_temp_array = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_DECORATE_ACCESSORIES_LIST, 0, 0);
 		if(accessories_temp_array.Length != 0) {
 			this.AddCanDecorationAccessoriesList(ref accessories_temp_array);
 		}

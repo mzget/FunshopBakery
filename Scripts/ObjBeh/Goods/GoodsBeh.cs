@@ -7,7 +7,7 @@ public class GoodsBeh : ObjectsBeh {
     
     public Vector3 offsetPos;	
 
-	// WaitForIngredientEvent.
+	//@-- WaitForIngredientEvent.
 	protected bool _isWaitFotIngredient = false;	
 	protected event System.EventHandler waitForIngredientEvent;
     protected void CheckingDelegationOfWaitFotIngredientEvent(object sender, EventArgs e) {
@@ -29,11 +29,8 @@ public class GoodsBeh : ObjectsBeh {
 			putObjectOnTray_Event (this, eventArgs);
 			Debug.Log (putObjectOnTray_Event + " : " + this.name);
 
-            StartCoroutine(sceneManager.CheckingGoodsObjInTray(GoodsBeh.ClassName));
+//            sceneManager.CheckingGoodsObjInTray(GoodsBeh.ClassName);
 		}
-	}
-	protected virtual void Handle_putObjectOnTray_Event (object sender, System.EventArgs e) {
-
 	}
     
 	protected override void ImplementDraggableObject ()
@@ -111,7 +108,7 @@ public class GoodsBeh : ObjectsBeh {
 				animatedSprite.Play(animationName_001);				
 				animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
 			}
-			else{ 
+			else { 
 				iTween.PunchPosition(this.gameObject, iTween.Hash("y", 0.2f, "time", 1f, "looptype", iTween.LoopType.loop));
 			}
 		}
@@ -132,6 +129,5 @@ public class GoodsBeh : ObjectsBeh {
 
         Destroy(this.gameObject);
         this.waitForIngredientEvent -= this.Handle_waitForIngredientEvent;
-        this.putObjectOnTray_Event -= this.Handle_putObjectOnTray_Event;
     }
 }

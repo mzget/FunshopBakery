@@ -23,7 +23,7 @@ public class CustomerBeh : MonoBehaviour {
 		"boy009_mutter", "boy010_mutter", "boy011_mutter", 
 	};
 	
-	public List<Goods> list_goodsBag;		// Use for shuffle bag goods obj.
+	public List<Food> list_goodsBag;		// Use for shuffle bag goods obj.
     public GameObject customerSprite_Obj;
 	public GameObject customerOrderingIcon_Obj;
     public List<CustomerOrderRequire> customerOrderRequire = new List<CustomerOrderRequire>();
@@ -40,7 +40,7 @@ public class CustomerBeh : MonoBehaviour {
 
         StartCoroutine(RandomCustomerFace());
 
-		list_goodsBag = new List<Goods>(sceneManager.CanSellGoodLists);
+		list_goodsBag = new List<Food>(sceneManager.CanSellGoodLists);
 //		this.GenerateGoodOrder ();
 	}
 	
@@ -82,11 +82,7 @@ public class CustomerBeh : MonoBehaviour {
 
         int r = Random.Range(1, maxGoodsType + 1);
         for (int i = 0; i < r; i++) {
-			customerOrderRequire.Add(new CustomerOrderRequire() 
-            { 
-				goods = new Goods(),
-				number = 1,	// Random.Range(1, 4),
-			});
+			customerOrderRequire.Add(new CustomerOrderRequire() { food = new Food(), });   // number = 1,	// Random.Range(1, 4),
         }
 
         Debug.Log("GenerateGoodOrder complete! " + "Type : " + customerOrderRequire.Count);
@@ -98,98 +94,20 @@ public class CustomerBeh : MonoBehaviour {
     private void CalculationPrice()
     {
         int[] prices = new int[3];
-        int[] number = new int[3];
+//        int[] number = new int[3];
         for (int i = 0; i < customerOrderRequire.Count; i++)
         {
-            prices[i] = customerOrderRequire[i].goods.price;
-            number[i] = customerOrderRequire[i].number;
+            prices[i] = customerOrderRequire[i].food.price;
+//            number[i] = customerOrderRequire[i].number;
         }
 
         for(int j = 0; j < customerOrderRequire.Count; j++) {
-            amount += prices[j] * number[j];
+            amount += prices[j]; // * number[j];
         }
 
         Debug.Log("CalculationPrice => amount : " + amount);
     }
-/*
-	internal void CheckGoodsObjInTray(string callFrom = "") {
-        if (callFrom == GoodsBeh.ClassName) {        
-		    List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
-		    Goods temp_goods = null;
-		    int temp_counter = 0;
-		
-		    for (int i = 0; i < customerOrderRequire.Count; i++) 
-            {				
-			    foreach(GoodsBeh item in sceneManager.foodTrayBeh.goodsOnTray_List) 
-			    {
-				    if(item.name == customerOrderRequire[i].goods.name) { 		
-					    temp_goods = customerOrderRequire[i].goods;
-					    temp_counter += 1;
-				    }
-			    }
 
-                list_goodsTemp.Add(new CustomerOrderRequire() { 
-				    goods = temp_goods, 
-				    number = temp_counter,
-			    });
-
-                if (customerOrderRequire[i].number == list_goodsTemp[i].number) {
-                    Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);    
-								
-				    if(list_goodsTemp.Count == customerOrderRequire.Count) {
-                        sceneManager.billingMachine.animation.Play();
-				    }					
-                }
-			
-			    temp_goods = null;
-			    temp_counter = 0;
-		    }
-        }
-        else {
-		    if(sceneManager.foodTrayBeh.goodsOnTray_List.Count == 0) {
-			    sceneManager.TK_animationManager.PlayRampageAnimation();
-                this.PlayRampage_animation();
-			    return;
-		    }
-		    if(sceneManager.foodTrayBeh.goodsOnTray_List.Count != customerOrderRequire.Count) {
-			    sceneManager.TK_animationManager.PlayRampageAnimation();
-                this.PlayRampage_animation();
-			    return;
-		    }
-		
-		    List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
-		    Goods temp_goods = null;
-		    int temp_counter = 0;
-		
-		    for (int i = 0; i < customerOrderRequire.Count; i++) 
-            {				
-			    foreach(GoodsBeh item in sceneManager.foodTrayBeh.goodsOnTray_List) 
-			    {
-				    if(item.name == customerOrderRequire[i].goods.name) { 		
-					    temp_goods = customerOrderRequire[i].goods;
-					    temp_counter += 1;
-				    }
-			    }
-
-                list_goodsTemp.Add(new CustomerOrderRequire() { 
-				    goods = temp_goods, 
-				    number = temp_counter,
-			    });
-
-                if (customerOrderRequire[i].number == list_goodsTemp[i].number) {
-                    Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);    
-								
-				    if(list_goodsTemp.Count == customerOrderRequire.Count) {
-                        OnManageGoodComplete(System.EventArgs.Empty);
-				    }					
-                }
-			
-			    temp_goods = null;
-			    temp_counter = 0;
-		    }
-        }
-	}
-*/	
 	// Update is called once per frame
 	void Update () { }
 

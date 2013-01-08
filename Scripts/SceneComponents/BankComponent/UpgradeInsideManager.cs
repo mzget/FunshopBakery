@@ -157,53 +157,69 @@ public class UpgradeInsideManager : MonoBehaviour {
 			if(BakeryShop.NumberOfCansellItem.Contains(6) || Mz_StorageManage.AccountBalance < firstPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
 
-                if(BakeryShop.NumberOfCansellItem.Contains(6))
+                if(BakeryShop.NumberOfCansellItem.Contains(6)) {
                     upgradeInsideSprite2D[0, 0].color = Color.grey;
+					upgradeButton_Objs[0,0].SetActiveRecursively(false);
+				}
 			}
 			if(CreamBeh.arr_CreamBehs[1] != string.Empty || Mz_StorageManage.AccountBalance < firstPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
 
-                if (CreamBeh.arr_CreamBehs[1] != string.Empty)
+                if (CreamBeh.arr_CreamBehs[1] != string.Empty) {
                     upgradeInsideSprite2D[0, 1].color = Color.grey;
+					upgradeButton_Objs[0,1].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13) ||
 				BakeryShop.NumberOfCansellItem.Contains(14) || Mz_StorageManage.AccountBalance < firstPage_prices[0,2]) 
 			{
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
 
-                if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13) || BakeryShop.NumberOfCansellItem.Contains(14))
+                if(BakeryShop.NumberOfCansellItem.Contains(12) || BakeryShop.NumberOfCansellItem.Contains(13) || BakeryShop.NumberOfCansellItem.Contains(14)) {
                     upgradeInsideSprite2D[0, 2].color = Color.grey;
+					upgradeButton_Objs[0,2].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16) || 
 				BakeryShop.NumberOfCansellItem.Contains(17) || Mz_StorageManage.AccountBalance < firstPage_prices[0,3]) {
 				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16) || BakeryShop.NumberOfCansellItem.Contains(17))
+                if (BakeryShop.NumberOfCansellItem.Contains(15) || BakeryShop.NumberOfCansellItem.Contains(16) || BakeryShop.NumberOfCansellItem.Contains(17)) {
                     upgradeInsideSprite2D[0, 3].color = Color.grey;
+					upgradeButton_Objs[0,3].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(19) || Mz_StorageManage.AccountBalance < firstPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(19))
+                if (BakeryShop.NumberOfCansellItem.Contains(19)) {
                     upgradeInsideSprite2D[1, 0].color = Color.grey;
+					upgradeButton_Objs[1,0].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(21) || Mz_StorageManage.AccountBalance < firstPage_prices[1,1]) {
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(21))
+                if (BakeryShop.NumberOfCansellItem.Contains(21)) {
                     upgradeInsideSprite2D[1, 1].color = Color.grey;
+					upgradeButton_Objs[1,1].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(25) || Mz_StorageManage.AccountBalance < firstPage_prices[1,2]) {
 				upgradeButton_Sprites[1,2].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(25))
+                if (BakeryShop.NumberOfCansellItem.Contains(25)) {
                     upgradeInsideSprite2D[1, 2].color = Color.grey;
+					upgradeButton_Objs[1,2].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(28) || Mz_StorageManage.AccountBalance < firstPage_prices[1,3])	{
 				upgradeButton_Sprites[1,3].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(28))
+                if (BakeryShop.NumberOfCansellItem.Contains(28)) {
                     upgradeInsideSprite2D[1, 3].color = Color.grey;
+					upgradeButton_Objs[1,3].SetActiveRecursively(false);
+				}
             }
 
             #endregion
@@ -231,50 +247,66 @@ public class UpgradeInsideManager : MonoBehaviour {
 			if(BakeryShop.NumberOfCansellItem.Contains(1) || Mz_StorageManage.AccountBalance < secondPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(1))
+                if (BakeryShop.NumberOfCansellItem.Contains(1)) {
                     upgradeInsideSprite2D[0, 0].color = Color.grey;
+					upgradeButton_Objs[0,0].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(2) || Mz_StorageManage.AccountBalance < secondPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(2))
+                if (BakeryShop.NumberOfCansellItem.Contains(2)) {
                     upgradeInsideSprite2D[0, 1].color = Color.grey;
+					upgradeButton_Objs[0,1].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(7) || Mz_StorageManage.AccountBalance < secondPage_prices[0,2]) {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(7))
+                if (BakeryShop.NumberOfCansellItem.Contains(7)) {
                     upgradeInsideSprite2D[0, 2].color = Color.grey;
+					upgradeButton_Objs[0,2].SetActiveRecursively(false);
+				}
 			}
             if (CreamBeh.arr_CreamBehs[2] != string.Empty || Mz_StorageManage.AccountBalance < secondPage_prices[0, 3]) {
                 upgradeButton_Sprites[0, 3].spriteId = UnActiveUpgradeButtonID;
 
-                if (CreamBeh.arr_CreamBehs[2] != string.Empty)
+                if (CreamBeh.arr_CreamBehs[2] != string.Empty) {
                     upgradeInsideSprite2D[0, 3].color = Color.grey;
+					upgradeButton_Objs[0,3].SetActiveRecursively(false);
+				}
             }
 			if(BakeryShop.NumberOfCansellItem.Contains(20) || Mz_StorageManage.AccountBalance < secondPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(20))
+                if (BakeryShop.NumberOfCansellItem.Contains(20)) {
                     upgradeInsideSprite2D[1, 0].color = Color.grey;
+					upgradeButton_Objs[1,0].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(22) || Mz_StorageManage.AccountBalance < secondPage_prices[1,1])	{
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(22))
+                if (BakeryShop.NumberOfCansellItem.Contains(22)) {
                     upgradeInsideSprite2D[1, 1].color = Color.grey;
+					upgradeButton_Objs[1,1].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(26) || Mz_StorageManage.AccountBalance < secondPage_prices[1,2]) {
 				upgradeButton_Sprites[1,2].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(26))
+                if (BakeryShop.NumberOfCansellItem.Contains(26)) {
                     upgradeInsideSprite2D[1, 2].color = Color.grey;
+					upgradeButton_Objs[1,2].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(3) || Mz_StorageManage.AccountBalance < secondPage_prices[1,3]) {
 				upgradeButton_Sprites[1,3].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(3))
+                if (BakeryShop.NumberOfCansellItem.Contains(3)) {
                     upgradeInsideSprite2D[1, 3].color = Color.grey;
+					upgradeButton_Objs[1,3].SetActiveRecursively(false);
+				}
             }
 
             #endregion
@@ -314,38 +346,50 @@ public class UpgradeInsideManager : MonoBehaviour {
 			if(BakeryShop.NumberOfCansellItem.Contains(4) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,0]) {
 				upgradeButton_Sprites[0,0].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(4))
+                if (BakeryShop.NumberOfCansellItem.Contains(4)) {
                     upgradeInsideSprite2D[0, 0].color = Color.grey;
+					upgradeButton_Objs[0,0].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(8) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,1]) {
 				upgradeButton_Sprites[0,1].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(8))
+                if (BakeryShop.NumberOfCansellItem.Contains(8)) {
                     upgradeInsideSprite2D[0, 1].color = Color.grey;
+					upgradeButton_Objs[0,1].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(23) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,2]) {
 				upgradeButton_Sprites[0,2].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(23))
+                if (BakeryShop.NumberOfCansellItem.Contains(23)) {
                     upgradeInsideSprite2D[0, 2].color = Color.grey;
+					upgradeButton_Objs[0,2].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(24) || Mz_StorageManage.AccountBalance < thirdPage_prices[0,3]) {
 				upgradeButton_Sprites[0,3].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(24))
+                if (BakeryShop.NumberOfCansellItem.Contains(24)) {
                     upgradeInsideSprite2D[0, 3].color = Color.grey;
+					upgradeButton_Objs[0,3].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(27) || Mz_StorageManage.AccountBalance < thirdPage_prices[1,0]) {
 				upgradeButton_Sprites[1,0].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(27))
+                if (BakeryShop.NumberOfCansellItem.Contains(27)) {
                     upgradeInsideSprite2D[1, 0].color = Color.grey;
+					upgradeButton_Objs[1,0].SetActiveRecursively(false);
+				}
 			}
 			if(BakeryShop.NumberOfCansellItem.Contains(29) || Mz_StorageManage.AccountBalance < thirdPage_prices[1,1]) {
 				upgradeButton_Sprites[1,1].spriteId = UnActiveUpgradeButtonID;
 
-                if (BakeryShop.NumberOfCansellItem.Contains(29))
+                if (BakeryShop.NumberOfCansellItem.Contains(29)) {
                     upgradeInsideSprite2D[1, 1].color = Color.grey;
+					upgradeButton_Objs[1,1].SetActiveRecursively(false);
+				}
             }
 
             #endregion
@@ -367,7 +411,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
                 if (Mz_StorageManage.AccountBalance >= firstPage_prices[0,0]) 
 				{
-                    int item_id = (int)GoodDataStore.GoodsOrderList.ToastWithBlueberryJam;
+                    int item_id = (int)GoodDataStore.FoodMenuList.ToastWithBlueberryJam;
 					if(BakeryShop.NumberOfCansellItem.Contains(item_id) == false) {
                         Debug.Log("buying : blueberry_jam");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 0, Item_id = item_id, };
@@ -392,11 +436,11 @@ public class UpgradeInsideManager : MonoBehaviour {
                 {				
 					if(CreamBeh.arr_CreamBehs[1] == string.Empty) 
 					{
-                        int blueberry_cupcake = (int)GoodDataStore.GoodsOrderList.Blueberry_cupcake;
-                        int blueberry_minicake = (int)GoodDataStore.GoodsOrderList.Blueberry_minicake;
-                        int blueberry_cake = (int)GoodDataStore.GoodsOrderList.Blueberry_cake;
+                        int blueberry_cupcake = (int)GoodDataStore.FoodMenuList.Blueberry_cupcake;
+                        int blueberry_minicake = (int)GoodDataStore.FoodMenuList.Blueberry_minicake;
+                        int blueberry_cake = (int)GoodDataStore.FoodMenuList.Blueberry_cake;
 
-                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_cupcake) 
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.FoodMenuList.Chocolate_cupcake) 
 						    && BakeryShop.NumberOfCansellItem.Contains(blueberry_cupcake) == false)
                         {
 							Debug.Log("buying : blueberry_cream");
@@ -404,14 +448,14 @@ public class UpgradeInsideManager : MonoBehaviour {
                             this.ActiveComfirmationWindow();
                         }
 
-                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_minicake)
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.FoodMenuList.Chocolate_minicake)
 						    && BakeryShop.NumberOfCansellItem.Contains(blueberry_minicake) == false) 
 						{
 							Debug.Log("buying : blueberry_cream");
 							currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J=1, Item_id = blueberry_minicake, AdditionalParams = CreamBeh.BlueberryCream }; 
 							this.ActiveComfirmationWindow();
 						}
-                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_cake)
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.FoodMenuList.Chocolate_cake)
                             && BakeryShop.NumberOfCansellItem.Contains(blueberry_cake) == false)
 						{
 							Debug.Log("buying : blueberry_cream");
@@ -438,9 +482,9 @@ public class UpgradeInsideManager : MonoBehaviour {
                 if (Mz_StorageManage.AccountBalance >= firstPage_prices[0,2])
 				{
                     Debug.Log("buying : Mini Cake");
-					int chocolate_minicake = (int)GoodDataStore.GoodsOrderList.Chocolate_minicake;
-					int Blueberry_minicake = (int)GoodDataStore.GoodsOrderList.Blueberry_minicake;
-					int Strawberry_minicake = (int)GoodDataStore.GoodsOrderList.Strawberry_minicake;
+					int chocolate_minicake = (int)GoodDataStore.FoodMenuList.Chocolate_minicake;
+					int Blueberry_minicake = (int)GoodDataStore.FoodMenuList.Blueberry_minicake;
+					int Strawberry_minicake = (int)GoodDataStore.FoodMenuList.Strawberry_minicake;
 
                     if (!BakeryShop.NumberOfCansellItem.Contains(chocolate_minicake)
                         && !BakeryShop.NumberOfCansellItem.Contains(Blueberry_minicake)
@@ -479,9 +523,9 @@ public class UpgradeInsideManager : MonoBehaviour {
 
                 if (Mz_StorageManage.AccountBalance >= firstPage_prices[0, 3]) 
                 {
-                    int Chocolate_cake = (int)GoodDataStore.GoodsOrderList.Chocolate_cake;
-                    int Blueberry_cake = (int)GoodDataStore.GoodsOrderList.Blueberry_cake;
-                    int Strawberry_cake = (int)GoodDataStore.GoodsOrderList.Strawberry_cake;
+                    int Chocolate_cake = (int)GoodDataStore.FoodMenuList.Chocolate_cake;
+                    int Blueberry_cake = (int)GoodDataStore.FoodMenuList.Blueberry_cake;
+                    int Strawberry_cake = (int)GoodDataStore.FoodMenuList.Strawberry_cake;
 
                     Debug.Log("buying : Cake");
 
@@ -523,7 +567,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
                 if (Mz_StorageManage.AccountBalance >= firstPage_prices[1, 0])
                 {
-                    int id = (int)GoodDataStore.GoodsOrderList.Vanilla_icecream;
+                    int id = (int)GoodDataStore.FoodMenuList.Vanilla_icecream;
                     if (BakeryShop.NumberOfCansellItem.Contains(id) == false)
                     {
                         Debug.Log("buying : vanilla_icecream");
@@ -546,7 +590,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 				
 				if(Mz_StorageManage.AccountBalance >= firstPage_prices[1, 1]) 
                 {
-                    int id = (int)GoodDataStore.GoodsOrderList.Tuna_sandwich;
+                    int id = (int)GoodDataStore.FoodMenuList.Tuna_sandwich;
                     if (BakeryShop.NumberOfCansellItem.Contains(id) == false)
                     {
                         Debug.Log("buying : tuna_sandwich");
@@ -569,7 +613,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= firstPage_prices[1, 2])
                 {
-                    int id = (int)GoodDataStore.GoodsOrderList.Chocolate_cookie;
+                    int id = (int)GoodDataStore.FoodMenuList.Chocolate_cookie;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : chocolate_chip_cookie");
                         this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 1, J = 2, Item_id = id };
@@ -591,7 +635,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= firstPage_prices[1, 3]) 
                 {
-                    int id = (int)GoodDataStore.GoodsOrderList.Hotdog;
+                    int id = (int)GoodDataStore.FoodMenuList.Hotdog;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : hotdog");
                         this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 1, J = 3, Item_id = id };
@@ -621,7 +665,7 @@ public class UpgradeInsideManager : MonoBehaviour {
                 if(Mz_StorageManage.AccountBalance >= secondPage_prices[0,0]) 
                 {
 					Debug.Log("buying : appleJuiceTank");
-                    int id = (int)GoodDataStore.GoodsOrderList.Apple_juice;
+                    int id = (int)GoodDataStore.FoodMenuList.Apple_juice;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
                         this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 0, Item_id = id };
 						this.ActiveComfirmationWindow();
@@ -641,7 +685,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
                 if(Mz_StorageManage.AccountBalance >= secondPage_prices[0,1])
                 {
-                    int id = (int)GoodDataStore.GoodsOrderList.Cocoa_milk;
+                    int id = (int)GoodDataStore.FoodMenuList.Cocoa_milk;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : chocolateMilkTank");
                         this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 1, Item_id = id };
@@ -662,7 +706,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= secondPage_prices[0,2]) 
                 {
-                    int id = (int)GoodDataStore.GoodsOrderList.ToastWithButterJam;
+                    int id = (int)GoodDataStore.FoodMenuList.ToastWithButterJam;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : butter_jam");
                         this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 2, Item_id = id };
@@ -687,25 +731,25 @@ public class UpgradeInsideManager : MonoBehaviour {
                     {
                         Debug.Log("buying : strawberry_cream");
 
-                        int Strawberry_cupcake = (int)GoodDataStore.GoodsOrderList.Strawberry_cupcake;
-                        int Strawberry_minicake = (int)GoodDataStore.GoodsOrderList.Strawberry_minicake;
-                        int Strawberry_cake = (int)GoodDataStore.GoodsOrderList.Strawberry_cake;
+                        int Strawberry_cupcake = (int)GoodDataStore.FoodMenuList.Strawberry_cupcake;
+                        int Strawberry_minicake = (int)GoodDataStore.FoodMenuList.Strawberry_minicake;
+                        int Strawberry_cake = (int)GoodDataStore.FoodMenuList.Strawberry_cake;
 
-                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_cupcake)
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.FoodMenuList.Chocolate_cupcake)
                             && BakeryShop.NumberOfCansellItem.Contains(Strawberry_cupcake) == false) 
                         {
                             this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Strawberry_cupcake, AdditionalParams = CreamBeh.StrawberryCream };
                             this.ActiveComfirmationWindow();
                         }
 
-                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_minicake)
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.FoodMenuList.Chocolate_minicake)
                             && BakeryShop.NumberOfCansellItem.Contains(Strawberry_minicake) == false)
                         {
                             this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Strawberry_minicake, AdditionalParams = CreamBeh.StrawberryCream };
                             this.ActiveComfirmationWindow();
                         }
 
-                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.GoodsOrderList.Chocolate_cake)
+                        if (BakeryShop.NumberOfCansellItem.Contains((int)GoodDataStore.FoodMenuList.Chocolate_cake)
                             && BakeryShop.NumberOfCansellItem.Contains(Strawberry_cake) == false) 
                         {
                             this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = Strawberry_cake, AdditionalParams = CreamBeh.StrawberryCream };
@@ -733,7 +777,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= secondPage_prices[1,0]) 
                 {
-                    int id = (int)GoodDataStore.GoodsOrderList.Chocolate_icecream;
+                    int id = (int)GoodDataStore.FoodMenuList.Chocolate_icecream;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : chocolate_icecream");
                         this.currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 1, J = 0, Item_id = id };
@@ -754,7 +798,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= secondPage_prices[1,1])
                 {		
-			        int id = (int)GoodDataStore.GoodsOrderList.DeepFriedChicken_sandwich;
+			        int id = (int)GoodDataStore.FoodMenuList.DeepFriedChicken_sandwich;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : deep_fried_chicken_sandwich");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 1, J = 1, Item_id = id };
@@ -775,7 +819,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= secondPage_prices[1,2]) 
                 {
-                    int id = (int)GoodDataStore.GoodsOrderList.Fruit_cookie;
+                    int id = (int)GoodDataStore.FoodMenuList.Fruit_cookie;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : fruit_cookie");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 1, J = 2, Item_id = id };
@@ -796,7 +840,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= secondPage_prices[1,3]) 
 				{
-                    int id = (int)GoodDataStore.GoodsOrderList.Orange_juice;
+                    int id = (int)GoodDataStore.FoodMenuList.Orange_juice;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : orangeJuiceTank");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 1, J = 3, Item_id = id };
@@ -823,7 +867,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 				#region <@-- "buying : freshMilkTank".
 
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[0,0]) {
-                    int id = (int)GoodDataStore.GoodsOrderList.Freshmilk;
+                    int id = (int)GoodDataStore.FoodMenuList.Freshmilk;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : freshMilkTank");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 0, Item_id = id };
@@ -843,7 +887,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 				#region <@-- "buying : custard_jam".
 
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[0,1]) {
-                    int id = (int)GoodDataStore.GoodsOrderList.ToastWithCustardJam;
+                    int id = (int)GoodDataStore.FoodMenuList.ToastWithCustardJam;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : custard_jam");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 1, Item_id = id };
@@ -863,7 +907,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 				#region <@-- "buying : ham_sandwich".
 
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[0,2]) {
-                    int id = (int)GoodDataStore.GoodsOrderList.Ham_sandwich;
+                    int id = (int)GoodDataStore.FoodMenuList.Ham_sandwich;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : ham_sandwich");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 2, Item_id = id };
@@ -884,7 +928,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[0,3]) 
 				{
-                    int id = (int)GoodDataStore.GoodsOrderList.Egg_sandwich;
+                    int id = (int)GoodDataStore.FoodMenuList.Egg_sandwich;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false)  {
 						Debug.Log("buying : egg_sandwich");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 3, Item_id = id };
@@ -909,7 +953,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 				#region <@-- "buying : butter_cookie".
 
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[1,0]) {
-                    int id = (int)GoodDataStore.GoodsOrderList.Butter_cookie;
+                    int id = (int)GoodDataStore.FoodMenuList.Butter_cookie;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : butter_cookie");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 1, J = 0, Item_id = id };
@@ -930,7 +974,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 				if(Mz_StorageManage.AccountBalance >= thirdPage_prices[1,1]) 
 				{
-                    int id = (int)GoodDataStore.GoodsOrderList.HotdogWithCheese;
+                    int id = (int)GoodDataStore.FoodMenuList.HotdogWithCheese;
 					if(BakeryShop.NumberOfCansellItem.Contains(id) == false) {
 						Debug.Log("buying : hotdog_cheese");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 1, J = 1, Item_id = id };

@@ -323,7 +323,16 @@ public class MainMenu : Mz_BaseScene {
         //<@-- CAN_EQUIP_CLOTHE_LIST
         int[] newPlayerClothes = new int[] { 0, 1, 2 };
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, newPlayerClothes);
+		//<@-- Can decoration shop outside.
 
+		int[] roof_temp_arr = new int[1] { 255 };
+		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ROOF_LIST, roof_temp_arr); 
+		int[] awning_temp_array = new int[1] { 255};
+		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_AWNING_LIST, awning_temp_array);
+		int[] table_temp_array = new int[1] {255};
+		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_TABLE_LIST, table_temp_array);
+		int[] accessories_temp_array = new int[1] {255};
+		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ACCESSORIES_LIST, accessories_temp_array);
 
         Debug.Log("Store new player data complete.");
 

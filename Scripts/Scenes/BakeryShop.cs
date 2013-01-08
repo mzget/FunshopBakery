@@ -11,7 +11,7 @@ public class BakeryShop : Mz_BaseScene {
 	public tk2dSprite shopLogo_sprite;
 	public GoodDataStore goodDataStore;
 	public static List<int> NumberOfCansellItem = new List<int>();
-	public List<Goods> CanSellGoodLists = new List<Goods>();
+	public List<Food> CanSellGoodLists = new List<Food>();
 	public AudioClip[] en_greeting_clip = new AudioClip[6];
 	public AudioClip[] th_greeting_clip = new AudioClip[7];
     public AudioClip[] en_apologize_clip;
@@ -336,7 +336,7 @@ public class BakeryShop : Mz_BaseScene {
 
         foreach (int id in NumberOfCansellItem)
         {
-            CanSellGoodLists.Add(goodDataStore.Menu_list[id]);
+            CanSellGoodLists.Add(goodDataStore.FoodDatabase_list[id]);
 			
 			#region Has page1 upgraded.
 			
@@ -347,12 +347,22 @@ public class BakeryShop : Mz_BaseScene {
             if (id == 12 || id == 13)
                 miniCake.gameObject.active = true;
 			if(id == 15 || id == 16)
-				cake.gameObject.active = true;
-			if(id == 19) {
-                icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_002);
+				cake.gameObject.active = true;	
+			if(NumberOfCansellItem.Contains(19) && !NumberOfCansellItem.Contains(20)) {
+				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_002);
 				icecreamVanillaTank_obj.SetActiveRecursively(true);
-                //break;
-			}	
+				icecreamChocolateTank_obj.SetActiveRecursively(false);
+			}
+			if(NumberOfCansellItem.Contains(19) && NumberOfCansellItem.Contains(20)) {
+				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_003);
+				icecreamVanillaTank_obj.SetActiveRecursively(true);
+				icecreamChocolateTank_obj.SetActiveRecursively(true);
+			}
+			if(!NumberOfCansellItem.Contains(19) && NumberOfCansellItem.Contains(20)) {
+				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_003);
+				icecreamVanillaTank_obj.SetActiveRecursively(false);
+				icecreamChocolateTank_obj.SetActiveRecursively(true);
+			}
 			if(id == 21)
                 tunaSandwich.gameObject.SetActiveRecursively(true);
             if (id == 25)
@@ -376,10 +386,6 @@ public class BakeryShop : Mz_BaseScene {
 				freshButterJam_instance.SetActiveRecursively(true);
 //			if(id == 11 || id == 14 || id == 17)
 //				strawberry_cream_Instance.SetActiveRecursively(true);
-			if(id == 20) {
-				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_003);
-				icecreamChocolateTank_obj.SetActiveRecursively(true);
-			}
 			if(id == 22)
 				deepFriedChickenSandwich.gameObject.SetActiveRecursively(true);
 			if(id == 26)
@@ -638,7 +644,7 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "TunaSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
             sandwich.transform.localPosition = new Vector3(.235f, -.15f, -.1f);
-            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.Tuna_sandwich.ToString();
+            sandwich.gameObject.name = GoodDataStore.FoodMenuList.Tuna_sandwich.ToString();
 
             tunaSandwich = sandwich.GetComponent<SandwichBeh>();
             tunaSandwich.putObjectOnTray_Event += new EventHandler(tunaSandwich_putObjectOnTray_Event);
@@ -680,7 +686,7 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "DeepFriedChickenSandwich", typeof(GameObject))) as GameObject;
 			sandwich.transform.parent = sandwichCookieTray_Transform;
 			sandwich.transform.localPosition = new Vector3(0.105f, -.16f, -.2f);
-            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.DeepFriedChicken_sandwich.ToString();
+            sandwich.gameObject.name = GoodDataStore.FoodMenuList.DeepFriedChicken_sandwich.ToString();
 			
 			deepFriedChickenSandwich = sandwich.GetComponent<SandwichBeh>();
 			deepFriedChickenSandwich.putObjectOnTray_Event += Handle_DeepFriedChickenSandwich_putObjectOnTray_Event;
@@ -723,7 +729,7 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "HamSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
             sandwich.transform.localPosition = new Vector3(-.015f, -.17f, -.3f);
-            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.Ham_sandwich.ToString();
+            sandwich.gameObject.name = GoodDataStore.FoodMenuList.Ham_sandwich.ToString();
 
             hamSandwich = sandwich.GetComponent<SandwichBeh>();
             hamSandwich.putObjectOnTray_Event += Handle_HamSandwich_putObjectOnTray_Event;
@@ -766,7 +772,7 @@ public class BakeryShop : Mz_BaseScene {
 			GameObject sandwich = Instantiate(Resources.Load(ObjectsBeh.Sandwich_ResourcePath + "EggSandwich", typeof(GameObject))) as GameObject;
             sandwich.transform.parent = sandwichCookieTray_Transform;
             sandwich.transform.localPosition = new Vector3(-.14f, -.17f, -.4f);
-            sandwich.gameObject.name = GoodDataStore.GoodsOrderList.Egg_sandwich.ToString();
+            sandwich.gameObject.name = GoodDataStore.FoodMenuList.Egg_sandwich.ToString();
 
             eggSandwich = sandwich.GetComponent<SandwichBeh>();
             eggSandwich.putObjectOnTray_Event += Handle_EggSandwich_putObjectOnTray_Event;
@@ -816,7 +822,7 @@ public class BakeryShop : Mz_BaseScene {
             GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "ChocolateChip_Cookie", typeof(GameObject))) as GameObject;
             cookie.transform.parent = sandwichCookieTray_Transform;
             cookie.transform.localPosition = new Vector3(-.165f, 0.1f, -.1f);
-            cookie.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_cookie.ToString();
+            cookie.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_cookie.ToString();
 
             chocolateChip_cookie = cookie.GetComponent<CookieBeh>();
             chocolateChip_cookie.putObjectOnTray_Event += new EventHandler(chocolateChip_cookie_putObjectOnTray_Event);
@@ -860,7 +866,7 @@ public class BakeryShop : Mz_BaseScene {
             GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "Fruit_Cookie", typeof(GameObject))) as GameObject;
             cookie.transform.parent = sandwichCookieTray_Transform;
             cookie.transform.localPosition = new Vector3(0.02f, 0.1f, -.1f);
-            cookie.gameObject.name = GoodDataStore.GoodsOrderList.Fruit_cookie.ToString();
+            cookie.gameObject.name = GoodDataStore.FoodMenuList.Fruit_cookie.ToString();
 
             fruit_cookie = cookie.GetComponent<CookieBeh>();
             fruit_cookie.putObjectOnTray_Event += new EventHandler(Handle_FruitCookie_putObjectOnTray_Event);
@@ -905,7 +911,7 @@ public class BakeryShop : Mz_BaseScene {
             GameObject cookie = Instantiate(Resources.Load(ObjectsBeh.Cookie_ResourcePath + "Butter_Cookie", typeof(GameObject))) as GameObject;
             cookie.transform.parent = sandwichCookieTray_Transform;
             cookie.transform.localPosition = new Vector3(.2f, 0.11f, -.1f);
-            cookie.gameObject.name = GoodDataStore.GoodsOrderList.Butter_cookie.ToString();
+            cookie.gameObject.name = GoodDataStore.FoodMenuList.Butter_cookie.ToString();
 
             butter_cookie = cookie.GetComponent<CookieBeh>();
             butter_cookie.putObjectOnTray_Event += new EventHandler(butter_cookie_putObjectOnTray_Event);
@@ -1079,8 +1085,8 @@ public class BakeryShop : Mz_BaseScene {
 	{		
 		for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++) {
 			arr_goodsLabel[i].SetActiveRecursively(true);
-			arr_GoodsTag[i].spriteId = arr_GoodsTag[i].GetSpriteIdByName(currentCustomer.customerOrderRequire[i].goods.name);
-			arr_GoodsPrice_textmesh[i].text = currentCustomer.customerOrderRequire[i].goods.price.ToString();
+			arr_GoodsTag[i].spriteId = arr_GoodsTag[i].GetSpriteIdByName(currentCustomer.customerOrderRequire[i].food.name);
+			arr_GoodsPrice_textmesh[i].text = currentCustomer.customerOrderRequire[i].food.price.ToString();
 			arr_GoodsPrice_textmesh[i].Commit();
 			if(i != 0)
 				arr_addNotations[i - 1].active = true;
@@ -1096,8 +1102,8 @@ public class BakeryShop : Mz_BaseScene {
 
 		for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++) {
 			arr_orderingBaseItems[i].gameObject.SetActiveRecursively(true);	
-			arr_orderingItems[i].spriteId = arr_orderingItems[i].GetSpriteIdByName(currentCustomer.customerOrderRequire[i].goods.name);
-            arr_orderingItems[i].gameObject.name = currentCustomer.customerOrderRequire[i].goods.name;
+			arr_orderingItems[i].spriteId = arr_orderingItems[i].GetSpriteIdByName(currentCustomer.customerOrderRequire[i].food.name);
+            arr_orderingItems[i].gameObject.name = currentCustomer.customerOrderRequire[i].food.name;
 		}
 
 		StartCoroutine(this.ShowOrderingGUI());
@@ -1108,13 +1114,11 @@ public class BakeryShop : Mz_BaseScene {
 	{
 		iTween.MoveTo(baseOrderUI_Obj.gameObject, 
 		              iTween.Hash("position", new Vector3(-0.85f, .06f, 0f), "islocal", true, "time", .5f, "easetype", iTween.EaseType.spring));
-
-		StartCoroutine(this.CheckingGoodsObjInTray(GoodsBeh.ClassName));
-
+		
+		yield return new WaitForFixedUpdate();
+		
+		this.CheckingGoodsObjInTray(GoodsBeh.ClassName);
 		currentCustomer.customerOrderingIcon_Obj.active = false;
-		
-		yield return new WaitForSeconds(.5f);
-		
 		darkShadowPlane.active = true;
 		
 		foreach (var item in arr_orderingItems) {
@@ -1150,11 +1154,15 @@ public class BakeryShop : Mz_BaseScene {
 			iTween.ScaleTo(greetingMessage_ObjGroup, iTween.Hash("x", 1f, "y", 1f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
 		}
 		else {
-			greetingMessage_ObjGroup.transform.localScale = new Vector3(0.3f, 0.3f, 1);
-			greetingMessage_ObjGroup.SetActiveRecursively(false);
-
-			currentCustomer.GenerateGoodOrder();
+			iTween.ScaleTo(greetingMessage_ObjGroup, iTween.Hash("x", 0f, "y", 0f, "time", 0.5f, "easetype", iTween.EaseType.easeInExpo,
+				"oncomplete", "UnActiveGreetingMessage", "oncompletetarget", this.gameObject));
+//			greetingMessage_ObjGroup.transform.localScale = new Vector3(0.3f, 0.3f, 1);
 		}
+	}
+	
+	void UnActiveGreetingMessage() {		
+		greetingMessage_ObjGroup.SetActiveRecursively(false);
+		currentCustomer.GenerateGoodOrder();
 	}
 	
 	IEnumerator PlayApologizeCustomer (AudioClip clip)
@@ -1176,12 +1184,9 @@ public class BakeryShop : Mz_BaseScene {
 	{
 		audioDescribe.audio.clip = clip;		
 		audioDescribe.audio.Play();
-		
-		while (audioDescribe.audio.isPlaying) {
-			yield return null;
-		}
-		
 		this.SetActiveGreetingMessage(false);
+		
+		yield return null;
 	}
 
 	void PlayAppreciateAudioClip (AudioClip audioClip)
@@ -1218,11 +1223,11 @@ public class BakeryShop : Mz_BaseScene {
 			cash_obj.transform.position = new Vector3(0, 0, -5);
 			cash_sprite = cash_obj.GetComponent<tk2dSprite>();
 			
-            if(currentCustomer.amount <= 20) {
+            if(currentCustomer.amount < 20) {
 				cash_sprite.spriteId = cash_sprite.GetSpriteIdByName("cash_20");
 				currentCustomer.payMoney = 20;
             }
-            else if(currentCustomer.amount <= 50) {
+            else if(currentCustomer.amount < 50) {
 				cash_sprite.spriteId = cash_sprite.GetSpriteIdByName("cash_50");
 				currentCustomer.payMoney = 50;
             }
@@ -1371,66 +1376,66 @@ public class BakeryShop : Mz_BaseScene {
 		}
         else if (currentGamePlayState == GamePlayState.Ordering)
         {
-            if (nameInput == GoodDataStore.GoodsOrderList.Apple_juice.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Apple_juice]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Blueberry_cake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Blueberry_cake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Blueberry_cupcake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Blueberry_cupcake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Blueberry_minicake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Blueberry_minicake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Butter_cookie.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Butter_cookie]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Chocolate_cake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Chocolate_cake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Chocolate_cookie.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Chocolate_cookie]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Chocolate_cupcake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Chocolate_cupcake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Chocolate_icecream.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Chocolate_icecream]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Chocolate_minicake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Chocolate_minicake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Cocoa_milk.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Cocoa_milk]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.DeepFriedChicken_sandwich.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.DeepFriedChicken_sandwich]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Egg_sandwich.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Egg_sandwich]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Freshmilk.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Freshmilk]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Fruit_cookie.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Fruit_cookie]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Ham_sandwich.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Ham_sandwich]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Hotdog.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Hotdog]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.HotdogWithCheese.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.HotdogWithCheese]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Orange_juice.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Orange_juice]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Pineapple_juice.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Pineapple_juice]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Strawberry_cake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Strawberry_cake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Strawberry_cupcake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Strawberry_cupcake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Strawberry_icecream.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Strawberry_icecream]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Strawberry_minicake.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Strawberry_minicake]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.ToastWithBlueberryJam.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.ToastWithBlueberryJam]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.ToastWithButterJam.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.ToastWithButterJam]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.ToastWithCustardJam.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.ToastWithCustardJam]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.ToastWithStrawberryJam.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.ToastWithStrawberryJam]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Tuna_sandwich.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Tuna_sandwich]);
-            else if (nameInput == GoodDataStore.GoodsOrderList.Vanilla_icecream.ToString())
-                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.GoodsOrderList.Vanilla_icecream]);
+            if (nameInput == GoodDataStore.FoodMenuList.Apple_juice.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Apple_juice]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Blueberry_cake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Blueberry_cake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Blueberry_cupcake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Blueberry_cupcake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Blueberry_minicake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Blueberry_minicake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Butter_cookie.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Butter_cookie]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Chocolate_cake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Chocolate_cake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Chocolate_cookie.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Chocolate_cookie]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Chocolate_cupcake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Chocolate_cupcake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Chocolate_icecream.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Chocolate_icecream]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Chocolate_minicake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Chocolate_minicake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Cocoa_milk.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Cocoa_milk]);
+            else if (nameInput == GoodDataStore.FoodMenuList.DeepFriedChicken_sandwich.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.DeepFriedChicken_sandwich]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Egg_sandwich.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Egg_sandwich]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Freshmilk.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Freshmilk]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Fruit_cookie.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Fruit_cookie]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Ham_sandwich.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Ham_sandwich]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Hotdog.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Hotdog]);
+            else if (nameInput == GoodDataStore.FoodMenuList.HotdogWithCheese.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.HotdogWithCheese]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Orange_juice.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Orange_juice]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Pineapple_juice.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Pineapple_juice]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Strawberry_cake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Strawberry_cake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Strawberry_cupcake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Strawberry_cupcake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Strawberry_icecream.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Strawberry_icecream]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Strawberry_minicake.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Strawberry_minicake]);
+            else if (nameInput == GoodDataStore.FoodMenuList.ToastWithBlueberryJam.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.ToastWithBlueberryJam]);
+            else if (nameInput == GoodDataStore.FoodMenuList.ToastWithButterJam.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.ToastWithButterJam]);
+            else if (nameInput == GoodDataStore.FoodMenuList.ToastWithCustardJam.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.ToastWithCustardJam]);
+            else if (nameInput == GoodDataStore.FoodMenuList.ToastWithStrawberryJam.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.ToastWithStrawberryJam]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Tuna_sandwich.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Tuna_sandwich]);
+            else if (nameInput == GoodDataStore.FoodMenuList.Vanilla_icecream.ToString())
+                audioDescribe.PlayOnecWithOutStop(audioDescriptionData.merchandiseNameDescribes[(int)GoodDataStore.FoodMenuList.Vanilla_icecream]);
             else
             {
                 switch (nameInput)
@@ -1508,54 +1513,61 @@ public class BakeryShop : Mz_BaseScene {
 
 		Debug.LogWarning(targetAnimatedName + " finish !");
 
-		StartCoroutine(this.CheckingGoodsObjInTray(string.Empty));
+		this.CheckingGoodsObjInTray(string.Empty);
     }
 
-    internal IEnumerator CheckingGoodsObjInTray(string callFrom)
+    internal void CheckingGoodsObjInTray(string callFrom)
     {
-		Debug.Log("Iterator CheckingGoodsObjInTray");
+		Debug.Log("CheckingGoodsObjInTray");
 		
         if (callFrom == GoodsBeh.ClassName)
         {
+			// Check correctly of goods with arr_orderingItems.
+			// and change color of arr_orderingBaseItems.
+			foreach (tk2dSprite item in arr_orderingItems) 
+				item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_NORMAL);
+			if(foodTrayBeh.goodsOnTray_List.Count == 0) {
+				return;
+			}
+			
             List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
-            Goods temp_goods = null;
-            int temp_counter = 0;
+            Food temp_goods = null;
 
             for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++)
             {
                 foreach (GoodsBeh item in this.foodTrayBeh.goodsOnTray_List)
                 {
-                    if (item.name == currentCustomer.customerOrderRequire[i].goods.name)
+                    if (item.name == currentCustomer.customerOrderRequire[i].food.name)
                     {
-                        temp_goods = currentCustomer.customerOrderRequire[i].goods;
-                        temp_counter += 1;
+                        temp_goods = currentCustomer.customerOrderRequire[i].food;
                     }
                 }
-
-                list_goodsTemp.Add(new CustomerOrderRequire() {
-                    goods = temp_goods,
-                    number = temp_counter,
-                });
-
-                if (currentCustomer.customerOrderRequire[i].number == list_goodsTemp[i].number)
-                {
-                    Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);
-						
+				
+				if(temp_goods != null) {
+	                list_goodsTemp.Add(new CustomerOrderRequire() { food = temp_goods, });
+	
+	//				Debug.Log(list_goodsTemp[i].food.name);
+					
 					/// Check correctly of goods with arr_orderingItems.
 					/// and change color of arr_orderingBaseItems.
-					foreach (tk2dSprite item in arr_orderingItems) {
-						if(item.gameObject.name == list_goodsTemp[i].goods.name)
-							item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_COMPLETE);
+					foreach (tk2dSprite item in arr_orderingItems) {		
+						if(list_goodsTemp[i] != null) {
+							if(item.gameObject.name == list_goodsTemp[i].food.name)
+								item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_COMPLETE);
+						}
 //						else
 //							item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_NORMAL);
 					};
-
-                    if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
-                        this.billingMachine.animation.Play();
-                }
-
-                temp_goods = null;
-                temp_counter = 0;
+					
+					if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
+						this.billingMachine.animation.Play();
+	
+	                temp_goods = null;
+				}
+				else {
+					list_goodsTemp.Add(new CustomerOrderRequire() { food = null });
+					audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
+				}
             }
         }
         else if(callFrom == string.Empty) 
@@ -1564,57 +1576,43 @@ public class BakeryShop : Mz_BaseScene {
 			{		
 				Debug.Log("food on tray is empty.");
 				
-				yield return StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
+				StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
             } 
             else if (this.foodTrayBeh.goodsOnTray_List.Count != currentCustomer.customerOrderRequire.Count)
             {
                 Debug.Log("food on tray != customer require.");
 
-                yield return StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
+                StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
             } 
             else {						
 				List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
-	            Goods temp_goods = null;
-	            int temp_counter = 0;
-	//			List<bool> checkinFailed = new List<bool>();
-				int temp_wrongItemCounter = 0;
+	            Food temp_goods = null;
 	
 	            for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++)
 	            {
 	                foreach (GoodsBeh item in this.foodTrayBeh.goodsOnTray_List)
 	                {
-	                    if (item.name == currentCustomer.customerOrderRequire[i].goods.name)
+	                    if (item.name == currentCustomer.customerOrderRequire[i].food.name)
 	                    {
-	                        temp_goods = currentCustomer.customerOrderRequire[i].goods;
-	                        temp_counter += 1;
-							break;
+	                        temp_goods = currentCustomer.customerOrderRequire[i].food;
 	                    }
-						else {
-							temp_wrongItemCounter += 1;
-						}
 	                }
 					
-					if(temp_wrongItemCounter == currentCustomer.customerOrderRequire.Count) {
-						Debug.Log("wrong item at loop " + i);
-						yield return null;
-					}
-					
-	                list_goodsTemp.Add(new CustomerOrderRequire()
-	                {
-	                    goods = temp_goods,
-	                    number = temp_counter,
-	                });
-	
-	                if (currentCustomer.customerOrderRequire[i].number == list_goodsTemp[i].number)
-	                {
-	                    Debug.Log(list_goodsTemp[i].goods.name + " : " + list_goodsTemp[i].number);
-	
-	                    if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
+					if(temp_goods != null) {
+						list_goodsTemp.Add(new CustomerOrderRequire() { food = temp_goods, });
+		
+						Debug.Log(list_goodsTemp[i].food.name);
+						
+						if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
 							OnManageGoodComplete(EventArgs.Empty);
-	                }
-	
-	                temp_goods = null;
-	                temp_counter = 0;
+		
+		                temp_goods = null;
+					}
+					else {
+						list_goodsTemp.Add(new CustomerOrderRequire() { food = null });						
+						StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
+						return;
+					}
 	            }
 			}
         }

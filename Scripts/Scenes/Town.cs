@@ -338,5 +338,9 @@ public class Town : Mz_BaseScene {
         base.OnDispose();
         //<!-- Clear static NumberOfCanSellItem.
         BakeryShop.NumberOfCansellItem.Clear();
+		UpgradeOutsideManager.CanDecorateRoof_list.Clear();
+		UpgradeOutsideManager.CanDecorateAwning_list.Clear();
+		UpgradeOutsideManager.CanDecoration_Table_list.Clear();
+		UpgradeOutsideManager.CanDecoration_Accessories_list.Clear();
     }
 }

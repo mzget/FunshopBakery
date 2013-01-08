@@ -2,17 +2,15 @@ using UnityEngine;
 using System.Collections;
 
 
-public class Goods {
+public class Food {
 
     public BakeryShop sceneManager;
-    private Goods instance;
+    private Food instance;
 	public string name;
 	public int price;
 	
-	public Goods ()
+	public Food ()
 	{
-		Debug.Log ("Starting Goods");
-
         sceneManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BakeryShop>();        
 
 		if (sceneManager.currentCustomer.list_goodsBag.Count > 0) {
@@ -31,7 +29,7 @@ public class Goods {
         }
 	}
 	
-	public Goods(string Init_name, int p_price) {
+	public Food(string Init_name, int p_price) {
 		this.instance = this;
 		this.instance.name = Init_name;
 		this.instance.price = p_price;

@@ -47,7 +47,7 @@ public class HotdogBeh : GoodsBeh {
 		if(ingredientName == HotdogBeh.HotdogWithSauce) {
 			base.animatedSprite.Play(HotdogBeh.HotdogWithSauce);
 			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {	
-				this.gameObject.name = GoodDataStore.GoodsOrderList.Hotdog.ToString();
+				this.gameObject.name = GoodDataStore.FoodMenuList.Hotdog.ToString();
 				
 				_canDragaable = true;
                 base._canActive = false;
@@ -61,7 +61,7 @@ public class HotdogBeh : GoodsBeh {
 		if(ingredientName == HotdogBeh.HotdogWithCheese) {
 			base.animatedSprite.Play(HotdogBeh.HotdogWithCheese);
 			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {		
-				this.gameObject.name = GoodDataStore.GoodsOrderList.HotdogWithCheese.ToString();
+				this.gameObject.name = GoodDataStore.FoodMenuList.HotdogWithCheese.ToString();
 				
 				_canDragaable = true;
                 base._canActive = false;

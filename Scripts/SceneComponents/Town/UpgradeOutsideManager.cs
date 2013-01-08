@@ -176,9 +176,16 @@ public class UpgradeOutsideManager : MonoBehaviour
 	public void ActiveRoof ()
 	{
 		for (int i = 0; i < 7; i++) {
-			upgrade_sprites [i].spriteId = upgrade_sprites [0].GetSpriteIdByName (roofData.NameSpecify [i]);
-			itemPrice_textmesh[i].text = roofData.upgradePrice[i].ToString();
-			itemPrice_textmesh[i].Commit();
+			upgrade_sprites[i].spriteId = upgrade_sprites [0].GetSpriteIdByName (roofData.NameSpecify [i]);
+			
+			if(UpgradeOutsideManager.CanDecorateRoof_list.Contains(i) == false) {
+				itemPrice_textmesh[i].gameObject.SetActiveRecursively(true);
+				itemPrice_textmesh[i].text = roofData.upgradePrice[i].ToString();
+				itemPrice_textmesh[i].Commit();
+			}
+			else {
+				itemPrice_textmesh[i].gameObject.SetActiveRecursively(false);
+			}
 		}
 
 		previousButton_Obj.active = false;
@@ -191,8 +198,14 @@ public class UpgradeOutsideManager : MonoBehaviour
 	public void ActiveAwning() {		
 		for (int i = 0; i < 7; i++) {
 			upgrade_sprites [i].spriteId = upgrade_sprites [0].GetSpriteIdByName (awningData.NameSpecify[i]);
-			itemPrice_textmesh[i].text = awningData.upgradePrice[i].ToString();
-			itemPrice_textmesh[i].Commit();
+			if(UpgradeOutsideManager.CanDecorateAwning_list.Contains(i) == false) {
+				itemPrice_textmesh[i].gameObject.SetActiveRecursively(true);
+				itemPrice_textmesh[i].text = awningData.upgradePrice[i].ToString();
+				itemPrice_textmesh[i].Commit();
+			}
+			else {
+				itemPrice_textmesh[i].gameObject.SetActiveRecursively(false);
+			}
 		}
 		
 		previousButton_Obj.active = false;
@@ -206,8 +219,15 @@ public class UpgradeOutsideManager : MonoBehaviour
 	{
 		for (int i = 0; i < 7; i++) {
 			upgrade_sprites [i].spriteId = upgrade_sprites [0].GetSpriteIdByName (tableData.NameSpecify[i]);
-			itemPrice_textmesh[i].text = tableData.upgradePrices[i].ToString();
-			itemPrice_textmesh[i].Commit();
+
+			if(UpgradeOutsideManager.CanDecoration_Table_list.Contains(i) == false) {
+				itemPrice_textmesh[i].gameObject.SetActiveRecursively(true);
+				itemPrice_textmesh[i].text = tableData.upgradePrices[i].ToString();
+				itemPrice_textmesh[i].Commit();
+			}
+			else {
+				itemPrice_textmesh[i].gameObject.SetActiveRecursively(false);
+			}
 		}
 		
 		previousButton_Obj.active = true;
@@ -221,8 +241,15 @@ public class UpgradeOutsideManager : MonoBehaviour
 	{
 		for (int i = 0; i < 7; i++) {
 			upgrade_sprites [i].spriteId = upgrade_sprites [0].GetSpriteIdByName (accessoriesData.NameSpeccify[i]);
-			itemPrice_textmesh[i].text = accessoriesData.upgradePrices[i].ToString();
-			itemPrice_textmesh[i].Commit();
+
+			if(UpgradeOutsideManager.CanDecoration_Accessories_list.Contains(i) == false) {
+				itemPrice_textmesh[i].gameObject.SetActiveRecursively(true);
+				itemPrice_textmesh[i].text = accessoriesData.upgradePrices[i].ToString();
+				itemPrice_textmesh[i].Commit();
+			}
+			else {
+				itemPrice_textmesh[i].gameObject.SetActiveRecursively(false);
+			}
 		}
 		
 		previousButton_Obj.active = true;
@@ -273,9 +300,15 @@ public class UpgradeOutsideManager : MonoBehaviour
                     /// Display item sprite.
 					int spriteID = upgrade_sprites [i].GetSpriteIdByName (tableData.NameSpecify [j]);
 					upgrade_sprites [i].spriteId = spriteID;
-                    /// Display price.
-                    itemPrice_textmesh[i].text = tableData.upgradePrices[j].ToString();
-                    itemPrice_textmesh[i].Commit();
+                    //@-- Display price.
+					if(UpgradeOutsideManager.CanDecoration_Table_list.Contains(j) == false) {
+						itemPrice_textmesh[i].gameObject.SetActiveRecursively(true);
+						itemPrice_textmesh[i].text = tableData.upgradePrices[j].ToString();
+						itemPrice_textmesh[i].Commit();
+					}
+					else {
+						itemPrice_textmesh[i].gameObject.SetActiveRecursively(false);
+					}
 				}
 			}		
 		} 
@@ -286,9 +319,15 @@ public class UpgradeOutsideManager : MonoBehaviour
                     /// Display item sprite.
 					int spriteID = upgrade_sprites [i].GetSpriteIdByName (accessoriesData.NameSpeccify [j]);
 					upgrade_sprites [i].spriteId = spriteID;
-                    /// Display price.
-                    itemPrice_textmesh[i].text = accessoriesData.upgradePrices[j].ToString();
-                    itemPrice_textmesh[i].Commit();
+                    //@-- Display price.
+					if(UpgradeOutsideManager.CanDecoration_Accessories_list.Contains(j) == false) {
+						itemPrice_textmesh[i].gameObject.SetActiveRecursively(true);
+						itemPrice_textmesh[i].text = accessoriesData.upgradePrices[j].ToString();
+						itemPrice_textmesh[i].Commit();
+					}
+					else {
+						itemPrice_textmesh[i].gameObject.SetActiveRecursively(false);
+					}
 				}
 			}	
 		}
@@ -448,7 +487,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 	            }
 			}
 			else {
-				ReActiveRoof(targetItem_id);
+				DisplayRoof(targetItem_id);
 			}
         }
 		else if(currentStateBehavior == StateBehavior.activeAwning) {
@@ -463,7 +502,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 					this.PlaySoundWarning();
 			}
 			else {
-				ReActiveAwning(targetItem_id);
+				DisplayAwning(targetItem_id);
 			}
 		}
 		else if(currentStateBehavior == StateBehavior.activeTable) {
@@ -478,7 +517,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 					this.PlaySoundWarning();
 			}
 			else {
-				ReActiveTable(targetItem_id);
+				DisplayTable(targetItem_id);
 			}
 		}
 		else if(currentStateBehavior == StateBehavior.activeAccessories) {
@@ -493,7 +532,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 					this.PlaySoundWarning();
 			}
 			else
-				ReActiveAccessories(targetItem_id);
+				DisplayAccessories(targetItem_id);
 		}
     }
 
@@ -501,9 +540,11 @@ public class UpgradeOutsideManager : MonoBehaviour
     {
         if (currentStateBehavior == StateBehavior.activeRoof)
         {
-			this.ReActiveRoof(transaction_id);
+			this.DisplayRoof(transaction_id);
 			/// Add transaction item to CAN_DECORATION_LIST.
 			UpgradeOutsideManager.CanDecorateRoof_list.Add(transaction_id);
+			//@-- Reset transaction roof page.
+			this.ActiveRoof();
 
             //@!-- Close confirmation window.
             //@!-- Deductions AvailableMoney and Redraw GUI identity.
@@ -512,11 +553,12 @@ public class UpgradeOutsideManager : MonoBehaviour
 			this.ReFreshAccountBalanceTextDisplay();
         }
 		else if(currentStateBehavior == StateBehavior.activeAwning) {
-			this.ReActiveAwning(transaction_id);
-			
+			this.DisplayAwning(transaction_id);			
 			/// Add transaction item to CAN_DECORATION_LIST.
 			UpgradeOutsideManager.CanDecorateAwning_list.Add(transaction_id);
-			
+			//@!-- Reset transaction awning page.
+			this.ActiveAwning();
+
 			//@!-- Close confirmation window.
 			//@!-- Deductions AvailableMoney and Redraw GUI identity.
 			confirmWindow_Obj.SetActiveRecursively(false);
@@ -524,9 +566,11 @@ public class UpgradeOutsideManager : MonoBehaviour
 			this.ReFreshAccountBalanceTextDisplay();
 		}
 		else if(currentStateBehavior == StateBehavior.activeTable) {
-			this.ReActiveTable(transaction_id);
+			this.DisplayTable(transaction_id);
 			// Add transaction item to CAN_DECORATION_LIST.
 			UpgradeOutsideManager.CanDecoration_Table_list.Add(transaction_id);
+			//@!-- Reset transaction table page.
+			this.GoToPage(currentPage);
 			
 			//@!-- Close confirmation window.
 			//@!-- Deductions AvailableMoney and Redraw GUI identity.
@@ -535,9 +579,11 @@ public class UpgradeOutsideManager : MonoBehaviour
 			this.ReFreshAccountBalanceTextDisplay();
 		}
 		else if(currentStateBehavior == StateBehavior.activeAccessories) {			
-			this.ReActiveAccessories(transaction_id);
+			this.DisplayAccessories(transaction_id);
 			// Add transaction item to CAN_DECORATION_LIST.
 			UpgradeOutsideManager.CanDecoration_Accessories_list.Add(transaction_id);
+			//@!-- Reset transaction accesorries page.
+			this.GoToPage(currentPage);
 			
 			//@!-- Close confirmation window.
 			//@!-- Deductions AvailableMoney and Redraw GUI identity.
@@ -564,7 +610,7 @@ public class UpgradeOutsideManager : MonoBehaviour
         Debug.LogWarning("Your AccountBalance is less than item price.");
     }
 
-	void ReActiveRoof (int active_id)
+	void DisplayRoof (int active_id)
 	{
 		roofDecoration_Sprite.gameObject.active = true;
 		roofDecoration_Sprite.spriteId = roofDecoration_Sprite.GetSpriteIdByName(roofData.NameSpecify[active_id]);
@@ -574,7 +620,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 		sceneController.PlaySoundRejoice();
 	}
 
-	void ReActiveAwning (int active_id)
+	void DisplayAwning (int active_id)
 	{
 		awningDecoration_Sprite.gameObject.active = true;
 		awningDecoration_Sprite.spriteId = awningDecoration_Sprite.GetSpriteIdByName(awningData.NameSpecify[active_id]);
@@ -583,7 +629,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 		sceneController.PlaySoundRejoice();
 	}
 
-	void ReActiveTable (int active_id)
+	void DisplayTable (int active_id)
 	{		
 		tableDecoration_Sprite.gameObject.active = true;
 		tableDecoration_Sprite.spriteId = tableDecoration_Sprite.GetSpriteIdByName(tableData.NameSpecify[active_id]);
@@ -592,7 +638,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 		sceneController.PlaySoundRejoice();
 	}
 
-	void ReActiveAccessories (int targetItem_id)
+	void DisplayAccessories (int targetItem_id)
 	{
 		accessories_Sprite.gameObject.active = true;
 		accessories_Sprite.spriteId = accessories_Sprite.GetSpriteIdByName(accessoriesData.NameSpeccify[targetItem_id]);

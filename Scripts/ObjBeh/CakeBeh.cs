@@ -51,11 +51,11 @@ public class CakeBeh : GoodsBeh {
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id)
             {
                 if (this.gameObject.name == Cupcake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_cupcake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_cupcake.ToString();
                 else if (this.gameObject.name == MiniCake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_minicake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_minicake.ToString();
                 else if (this.gameObject.name == Cake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Chocolate_cake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_cake.ToString();
 
                 base._canDragaable = true;
                 CakeBeh._IsActive = false;
@@ -69,11 +69,11 @@ public class CakeBeh : GoodsBeh {
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
             {
                 if (this.gameObject.name == Cupcake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Blueberry_cupcake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Blueberry_cupcake.ToString();
                 else if (this.gameObject.name == MiniCake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Blueberry_minicake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Blueberry_minicake.ToString();
                 else if (this.gameObject.name == Cake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Blueberry_cake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Blueberry_cake.ToString();
 
                 base._canDragaable = true;
                 CakeBeh._IsActive = false;
@@ -87,11 +87,11 @@ public class CakeBeh : GoodsBeh {
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
             {
                 if (this.gameObject.name == Cupcake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Strawberry_cupcake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_cupcake.ToString();
                 else if (this.gameObject.name == MiniCake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Strawberry_minicake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_minicake.ToString();
                 else if (this.gameObject.name == Cake)
-                    this.gameObject.name = GoodDataStore.GoodsOrderList.Strawberry_cake.ToString();
+                    this.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_cake.ToString();
 
                 base._canDragaable = true;
                 CakeBeh._IsActive = false;
