@@ -240,6 +240,16 @@ public class SheepBank : Mz_BaseScene {
         this.AccountBalanceManager(Mz_StorageManage.AccountBalance);
 	}
         
+//	protected override void Update ()
+//	{
+//		base.Update ();
+//	}
+	
+	private new void OnGUI ()
+	{
+		
+	}
+	
     public override void OnInput (string nameInput)	
 	{
         if (nameInput == UpgradeInside_BUTTON_NAME)

@@ -44,7 +44,7 @@ public class GoodDataStore : ScriptableObject {
         HotdogWithCheese = 29,
     };
 	
-   	public Food[] FoodDatabase_list = new Food[] {                               
+   	public Food[] FoodDatabase_list = new Food[30] {                               
 	    new Food(FoodMenuList.Pineapple_juice.ToString(), 3), //_can sell
         new Food(FoodMenuList.Apple_juice.ToString(), 3),        // 1
         new Food(FoodMenuList.Cocoa_milk.ToString(), 5),         // 2

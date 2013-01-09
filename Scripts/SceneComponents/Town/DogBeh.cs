@@ -7,7 +7,7 @@ public class DogBeh : PetBeh {
 	public AudioClip chaseBite_clip;
     public AudioClip yelp_clip;
 
-    public enum NameAnimationList { None = 0, WalkRight, WalkLeft, Glad, Glad2, Eat, Crap, ChaseBite, };
+    public new enum NameAnimationList { None = 0, WalkRight, WalkLeft, Glad, Glad2, Eat, Crap, ChaseBite, };
     public static NameAnimationList nameAnimationList;
 	
 		
@@ -27,7 +27,7 @@ public class DogBeh : PetBeh {
         NameAnimationList nameAnimated = (NameAnimationList)r;
         animatedSprite.Play(nameAnimated.ToString());
         animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
-            WalkLeft();
+            WalkRight();
         };
     }
 
@@ -41,8 +41,8 @@ public class DogBeh : PetBeh {
         animatedSprite.Play(NameAnimationList.WalkRight.ToString());
 		audio.Play();
 		
-        this.transform.position = new Vector3(-3f, -0.9f, -4f);
-        iTween.MoveTo(this.gameObject, iTween.Hash("position", new Vector3(3f, -0.9f, -4f), "islocal", false, "time", 12f, "easetype", iTween.EaseType.linear, "looptype", iTween.LoopType.none,
+        this.transform.position = new Vector3(-3f, -1.1f, -5f);
+        iTween.MoveTo(this.gameObject, iTween.Hash("position", new Vector3(3f, -1.1f, -5f), "islocal", false, "time", 12f, "easetype", iTween.EaseType.linear, "looptype", iTween.LoopType.none,
             "oncomplete", "ONChaseBakeryTruckComplete", "oncompletetarget", this.gameObject));
     }
 	

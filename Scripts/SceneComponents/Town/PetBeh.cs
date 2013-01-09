@@ -29,14 +29,14 @@ public class PetBeh : MonoBehaviour {
     {
         animatedSprite.Play(NameAnimationList.WalkLeft.ToString());
         iTween.MoveTo(this.gameObject, iTween.Hash("position", new Vector3(1.2f, -0.78f, -2f), "islocal", true, "time", 5f, "easetype", iTween.EaseType.easeInOutSine, "looptype", iTween.LoopType.none,
-            "oncomplete", FUNC_WALKRIGHT, "oncompletetarget", this.gameObject));
+            "oncomplete", FUNC_RANDOM_BEH, "oncompletetarget", this.gameObject));
     }
 
     protected virtual void WalkRight()
     {
         animatedSprite.Play(NameAnimationList.WalkRight.ToString());
         iTween.MoveTo(this.gameObject, iTween.Hash("position", new Vector3(1.7f, -0.78f, -2f), "islocal", true, "time", 3f, "easetype", iTween.EaseType.easeInOutSine, "looptype", iTween.LoopType.none,
-            "oncomplete", FUNC_RANDOM_BEH, "oncompletetarget", this.gameObject));
+            "oncomplete", WALKLEFT_FUNC, "oncompletetarget", this.gameObject));
     }
 
     protected virtual void RandomBeh()
@@ -45,7 +45,7 @@ public class PetBeh : MonoBehaviour {
         NameAnimationList nameAnimated = (NameAnimationList)r;
         animatedSprite.Play(nameAnimated.ToString());
         animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
-            WalkLeft();
+            WalkRight();
         };
     }
 	

@@ -44,6 +44,15 @@ public class Mz_BaseScene : MonoBehaviour {
 
 	#endregion
 
+	#region <@-- tutor.
+
+	public GameObject cameraTutor_Obj;
+	public GameObject plane_darkShadow;
+	public GameObject handTutor;
+	public GameObject[] tutorDescriptions = new GameObject[4];
+
+	#endregion
+
     public bool _hasQuitCommand = false;
 
 
@@ -292,34 +301,5 @@ public class Mz_BaseScene : MonoBehaviour {
             }
             GUI.EndGroup();
         }
-
-        #region <@!-- Draw_LogCallback debuging.
-
-        //if (debugLogCallback_style == null) {
-        //    debugLogCallback_style = new GUIStyle(GUI.skin.box);
-        //    debugLogCallback_style.fontSize = 12;
-        //    debugLogCallback_style.alignment = TextAnchor.MiddleLeft;
-        //}
-
-        //GUI.Box(new Rect(0, Main.GAMEHEIGHT - 50, Main.GAMEWIDTH * Mz_OnGUIManager.Extend_heightScale, 50), output, debugLogCallback_style);
-
-        #endregion
     }
-
-	#region <@-- Unity Log Callback.
-
-//    public string output = "";
-//    public string stack = "";
-//    void OnEnable() {
-//        Application.RegisterLogCallback(HandleLog);
-//    }
-//    void OnDisable() {
-//        Application.RegisterLogCallback(null);
-//    }
-//    public void HandleLog(string logString, string stackTrace, LogType type) {
-//        output = logString;
-//        stack = stackTrace;
-//    }
-
-	#endregion
 }

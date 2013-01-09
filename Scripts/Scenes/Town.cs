@@ -7,22 +7,26 @@ public class Town : Mz_BaseScene {
     //<@--- Constance button name.
     const string YES_BUTTON_NAME = "Yes_button";
     const string NO_BUTTON_NAME = "No_button";
-
+	const string MoveCameraToTutorPointComplete_FUNC = "MoveCameraToTutorPointComplete";
 
 	public GameObject town_bg_group;
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject flyingBird_group;
 	public GameObject shop_body_sprite;
-    public GameObject sheepBank_body_Obj;
+    public GameObject SheepbankDoor;
     public tk2dAnimatedSprite bakeryShopDoorOpen_animated;
     public tk2dAnimatedSprite sheepBank_door_animated;
 	public GameObject GUIMidcenter_anchor;
 	public UpgradeOutsideManager upgradeOutsideManager;
     public CharacterAnimationManager characterAnimatedManage;
 	public DogBeh bullDog;
-	
+
 	public enum OnGUIState { none = 0, DrawEditShopname, };
 	public OnGUIState currentGUIState;
+	string shopname = "";
+	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
+	Rect editShop_OKButton_rect = new Rect(10, 150, 100, 40);
+	Rect editShop_CancelButton_rect = new Rect(160, 150, 100, 40);
 
 	#region <@-- Event Handles Data section
 
@@ -56,11 +60,6 @@ public class Town : Mz_BaseScene {
 
 	#endregion
 
-	string shopname = "";
-	Rect editShop_Textfield_rect = new Rect( 50, 60, 200, 50);
-	Rect editShop_OKButton_rect = new Rect(10, 150, 100, 40);
-	Rect editShop_CancelButton_rect = new Rect(160, 150, 100, 40);
-
 	
 	// Use this for initialization
 	void Start ()
@@ -83,7 +82,34 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 
-		this.Checking_HasNewStartingTruckEvent();
+		if(MainMenu._HasNewGameEvent == false)
+			this.Checking_HasNewStartingTruckEvent();
+		else if(MainMenu._HasNewGameEvent) {
+			plane_darkShadow.active = true;
+			SheepbankDoor.transform.position += Vector3.back * 10;
+			this.CreateTutorObjectAtRuntime();
+		}
+	}
+
+	void CreateTutorObjectAtRuntime ()
+	{
+		cameraTutor_Obj = GameObject.FindGameObjectWithTag("MainCamera");
+		
+		handTutor = Instantiate(Resources.Load("Tutor_Objs/Town/HandTutor", typeof(GameObject))) as GameObject;
+		handTutor.transform.parent = cameraTutor_Obj.transform;
+		handTutor.transform.localPosition = new Vector3(-0.1f, 0, 8);
+		
+		tutorDescriptions[0] = Instantiate(Resources.Load("Tutor_Objs/Town/Tutor_description", typeof(GameObject))) as GameObject;
+		tutorDescriptions[0].transform.parent = cameraTutor_Obj.transform;
+		tutorDescriptions[0].transform.localPosition = new Vector3(0.15f, 0.2f, 8f);
+		
+		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("x", 2.66f, "time", 1f, "easetype", iTween.EaseType.easeInOutSine,
+		                                                  "oncomplete", MoveCameraToTutorPointComplete_FUNC, "oncompletetarget", this.gameObject));
+	}
+
+	void MoveCameraToTutorPointComplete() {		
+		handTutor.active = true;
+		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0.2f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
 	}
 
 	void Checking_HasNewStartingTruckEvent ()

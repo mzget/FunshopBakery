@@ -4,13 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BakeryShop : Mz_BaseScene {
-
+	
+	public Transform shop_background;
     public GameObject bakeryShop_backgroup_group;
     public ExtendAudioDescribeData audioDescriptionData = new ExtendAudioDescribeData();
 	public CharacterAnimationManager TK_animationManager;
 	public tk2dSprite shopLogo_sprite;
 	public GoodDataStore goodDataStore;
-	public static List<int> NumberOfCansellItem = new List<int>();
+	public static List<int> NumberOfCansellItem = new List<int>(30);
 	public List<Food> CanSellGoodLists = new List<Food>();
 	public AudioClip[] en_greeting_clip = new AudioClip[6];
 	public AudioClip[] th_greeting_clip = new AudioClip[7];
@@ -118,6 +119,7 @@ public class BakeryShop : Mz_BaseScene {
 	#endregion
 
 	#region <!-- Cakes && CreamBeh data fields.
+	
 	public Transform cupcakeBase_transform;
 	public Transform miniCakeBase_transform;
 	public Transform cakeBase_transform;
@@ -182,6 +184,8 @@ public class BakeryShop : Mz_BaseScene {
 
 	// Use this for initialization
 	IEnumerator Start () {		
+		Mz_ResizeScale.ResizingScale(shop_background);
+		
         yield return StartCoroutine(this.InitailizeSceneObject());
         StartCoroutine(this.InitializeGameEffect());
         this.OpenShop();
@@ -342,12 +346,18 @@ public class BakeryShop : Mz_BaseScene {
 			
             if (id == 6)
                 blueberryJam_instance.active = true;
-//            if(id == 10)
-//                blueberry_cream_Instance.active = true;
-            if (id == 12 || id == 13)
+			
+			#region <@-- Cake object Instance.
+			
+            if (id == 12 || id == 13 || id == 14)
                 miniCake.gameObject.active = true;
-			if(id == 15 || id == 16)
+			if(id == 15 || id == 16 || id == 17)
 				cake.gameObject.active = true;	
+			
+			#endregion
+			
+			#region <@-- IcecreamTank management.
+			
 			if(NumberOfCansellItem.Contains(19) && !NumberOfCansellItem.Contains(20)) {
 				icecreamTankBase_Sprite.spriteId = icecreamTankBase_Sprite.GetSpriteIdByName(NameOfBaseTankIcecream_002);
 				icecreamVanillaTank_obj.SetActiveRecursively(true);
@@ -363,6 +373,9 @@ public class BakeryShop : Mz_BaseScene {
 				icecreamVanillaTank_obj.SetActiveRecursively(false);
 				icecreamChocolateTank_obj.SetActiveRecursively(true);
 			}
+			
+			#endregion
+			
 			if(id == 21)
                 tunaSandwich.gameObject.SetActiveRecursively(true);
             if (id == 25)

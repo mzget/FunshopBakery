@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class MainMenu : Mz_BaseScene {
@@ -50,6 +51,18 @@ public class MainMenu : Mz_BaseScene {
 	Rect slot_2Rect;
 	Rect slot_3Rect;
 
+	#region <@-- Events
+
+	internal static bool _HasNewGameEvent = false;
+	public event EventHandler NewGame_event;
+	void OnNewGameEvent (EventArgs e)
+	{
+		if(NewGame_event != null) {
+			NewGame_event(this, e);
+		}
+	}
+
+	#endregion
 	
 	// Use this for initialization
 	void Start () {
@@ -72,6 +85,10 @@ public class MainMenu : Mz_BaseScene {
         //iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", 0.2f, "time", 3.5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
         //iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.5f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(movingCloud_Objs, iTween.Hash("x", -1f, "time", 16f, "easetype", iTween.EaseType.easeInOutSine, "looptype", iTween.LoopType.pingPong)); 
+
+		//<@-- Add new game eventhandle. 
+		_HasNewGameEvent = false;
+		this.NewGame_event += Handle_NewGame_event;
 	}
 	
 	protected IEnumerator PreparingAudio ()
@@ -492,6 +509,7 @@ public class MainMenu : Mz_BaseScene {
 				if(shopName != "") {
                     this.characterAnimationManager.RandomPlayGoodAnimation();
                     audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
+					OnNewGameEvent(EventArgs.Empty);
                 	this.SaveNewPlayer();
 				}
                 else{
@@ -523,6 +541,11 @@ public class MainMenu : Mz_BaseScene {
 				initializeNewShop.HaveChangeLogoColor("Yellow");
 			}
         }
+    }
+
+    void Handle_NewGame_event (object sender, EventArgs e)
+    {
+		_HasNewGameEvent = true;
     }
 
     private IEnumerator ShowInitializeNewShop()
