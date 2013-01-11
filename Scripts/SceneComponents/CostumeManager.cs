@@ -458,7 +458,7 @@ public class CostumeManager : MonoBehaviour {
         }
     }
 	
-	void CheckingCanEquipHat (int id)
+	private void CheckingCanEquipHat (int id)
 	{
 		if(Dressing.CanEquipHat_list.Contains(id)) {
 			if (id < CharacterCustomization.AvailableHatNumber)

@@ -1,6 +1,18 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
+
+[System.Serializable]
+public class TownTutorDataStore {
+
+    public GameObject roof_00_button_obj;
+
+    public TownTutorDataStore() { }
+
+    public void OnDestroy() { }
+};
 
 public class Town : Mz_BaseScene {
 
@@ -20,7 +32,9 @@ public class Town : Mz_BaseScene {
 	public UpgradeOutsideManager upgradeOutsideManager;
     public CharacterAnimationManager characterAnimatedManage;
 	public DogBeh bullDog;
+    public TownTutorDataStore townTutorData;
 
+    private bool _updatable = true;
 	public enum OnGUIState { none = 0, DrawEditShopname, };
 	public OnGUIState currentGUIState;
 	string shopname = "";
@@ -60,7 +74,6 @@ public class Town : Mz_BaseScene {
 
 	#endregion
 
-	
 	// Use this for initialization
 	void Start ()
     {
@@ -71,7 +84,6 @@ public class Town : Mz_BaseScene {
         this.upgradeOutsideManager.InitializeDecorationObjects();
 		if (SheepBank.HaveUpgradeOutSide) {
             StartCoroutine(this.ActiveDecorationBar());
-			SheepBank.HaveUpgradeOutSide = false;
 		}
 		else
 			StartCoroutine(this.UnActiveDecorationBar());
@@ -80,18 +92,26 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", -.1f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", -.1f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
-		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
 
-		if(MainMenu._HasNewGameEvent == false)
-			this.Checking_HasNewStartingTruckEvent();
-		else if(MainMenu._HasNewGameEvent) {
-			plane_darkShadow.active = true;
-			SheepbankDoor.transform.position += Vector3.back * 10;
-			this.CreateTutorObjectAtRuntime();
-		}
+        if(MainMenu._HasNewGameEvent == false)
+            this.Checking_HasNewStartingTruckEvent();
+        else if(MainMenu._HasNewGameEvent && SheepBank.HaveUpgradeOutSide == false) {
+            plane_darkShadow.active = true;
+            SheepbankDoor.transform.position += Vector3.back * 10;
+            this.CreateTutorObjectAtRuntime();
+        }
+        else if (MainMenu._HasNewGameEvent && SheepBank.HaveUpgradeOutSide) {           
+            plane_darkShadow.active = true;
+            plane_darkShadow.transform.position -= Vector3.forward * 2.5f;
+            townTutorData.roof_00_button_obj.transform.position -= Vector3.forward * 2;
+            this.CreateBuyDecoratuionTutorEvent();
+        }
 	}
 
-	void CreateTutorObjectAtRuntime ()
+    #region <@-- Tutor system.
+
+    void CreateTutorObjectAtRuntime ()
 	{
 		cameraTutor_Obj = GameObject.FindGameObjectWithTag("MainCamera");
 		
@@ -99,9 +119,11 @@ public class Town : Mz_BaseScene {
 		handTutor.transform.parent = cameraTutor_Obj.transform;
 		handTutor.transform.localPosition = new Vector3(-0.1f, 0, 8);
 		
-		tutorDescriptions[0] = Instantiate(Resources.Load("Tutor_Objs/Town/Tutor_description", typeof(GameObject))) as GameObject;
-		tutorDescriptions[0].transform.parent = cameraTutor_Obj.transform;
-		tutorDescriptions[0].transform.localPosition = new Vector3(0.15f, 0.2f, 8f);
+		GameObject tutor_text = Instantiate(Resources.Load("Tutor_Objs/Town/Tutor_description", typeof(GameObject))) as GameObject;
+        tutor_text.transform.parent = cameraTutor_Obj.transform;
+        tutor_text.transform.localPosition = new Vector3(0.15f, 0.2f, 8f);
+        base.tutorDescriptions = new List<GameObject>();
+        base.tutorDescriptions.Add(tutor_text);
 		
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("x", 2.66f, "time", 1f, "easetype", iTween.EaseType.easeInOutSine,
 		                                                  "oncomplete", MoveCameraToTutorPointComplete_FUNC, "oncompletetarget", this.gameObject));
@@ -109,10 +131,54 @@ public class Town : Mz_BaseScene {
 
 	void MoveCameraToTutorPointComplete() {		
 		handTutor.active = true;
+        this._updatable = false;
 		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0.2f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
 	}
 
-	void Checking_HasNewStartingTruckEvent ()
+    private void CreateBuyDecoratuionTutorEvent()
+    {
+        cameraTutor_Obj = GameObject.FindGameObjectWithTag("MainCamera");
+
+        handTutor = Instantiate(Resources.Load("Tutor_Objs/Town/HandTutor", typeof(GameObject))) as GameObject;
+        handTutor.transform.parent = cameraTutor_Obj.transform;
+        handTutor.transform.localPosition = new Vector3(-0.8f, -0.5f, 6);
+
+        GameObject tutor_text = Instantiate(Resources.Load("Tutor_Objs/Town/Tutor_description", typeof(GameObject))) as GameObject;
+        tutor_text.transform.parent = cameraTutor_Obj.transform;
+        tutor_text.transform.localPosition = new Vector3(-0.65f, -0.4f, 6f);
+        tutor_text.GetComponent<tk2dTextMesh>().text = "BUY DECORATION";
+        tutor_text.GetComponent<tk2dTextMesh>().Commit();
+        base.tutorDescriptions = new List<GameObject>();
+        base.tutorDescriptions.Add(tutor_text);
+
+        this._updatable = false;
+        iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", -0.4f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+    }
+	
+	private IEnumerator WaitForDecorationTweenDownComplete() {
+		yield return StartCoroutine(this.UnActiveDecorationBar());
+		this.CreateGoToShopTutorEvent();
+	}
+
+    private void CreateGoToShopTutorEvent()
+    {
+        base.SetActivateTotorObject(true);
+
+        bakeryShopDoorOpen_animated.gameObject.transform.position += Vector3.back * 13;
+        characterAnimatedManage.gameObject.transform.position += Vector3.back * 13;
+
+        handTutor.transform.localPosition = new Vector3(0.08f, 0f, 5f);
+        tutorDescriptions[0].transform.localPosition = new Vector3(0.25f, 0.1f, 5);
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "LET PLAY";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+
+        this._updatable = false;
+        iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0.1f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+    }
+
+    #endregion
+
+    void Checking_HasNewStartingTruckEvent ()
 	{
 		OnnewGameStartup_Event(EventArgs.Empty);
 	}
@@ -134,7 +200,9 @@ public class Town : Mz_BaseScene {
 	{
 		yield return StartCoroutine(this.SettingGUIMidcenter(true));
 		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
-		upgradeOutsideManager.ActiveRoof();
+        upgradeOutsideManager.ActiveRoof();
+
+        SheepBank.HaveUpgradeOutSide = false;
 	}
 	IEnumerator UnActiveDecorationBar ()
 	{
@@ -156,15 +224,18 @@ public class Town : Mz_BaseScene {
 	
 	// Update is called once per frame
 	protected override void Update ()
-	{
-		base.Update ();
-		
-		base.ImplementTouchPostion();
-		
-		if(Camera.main.transform.position.x > 2.66f) 
-			Camera.main.transform.position = new Vector3(2.66f, Camera.main.transform.position.y, Camera.main.transform.position.z); 	//Vector3.left * Time.deltaTime;
-		else if(Camera.main.transform.position.x < 0) 
-			Camera.main.transform.position = new Vector3(0, Camera.main.transform.position.y, Camera.main.transform.position.z);	 //Vector3.right * Time.deltaTime;
+    {
+        base.Update();
+
+        if (_updatable)
+        {
+            base.ImplementTouchPostion();
+
+            if (Camera.main.transform.position.x > 2.66f)
+                Camera.main.transform.position = new Vector3(2.66f, Camera.main.transform.position.y, Camera.main.transform.position.z); 	//Vector3.left * Time.deltaTime;
+            else if (Camera.main.transform.position.x < 0)
+                Camera.main.transform.position = new Vector3(0, Camera.main.transform.position.y, Camera.main.transform.position.z);	 //Vector3.right * Time.deltaTime;
+        }
 	}
 
 	protected override void MovingCameraTransform ()
@@ -271,7 +342,11 @@ public class Town : Mz_BaseScene {
 				break;
 			case "Next_button" : upgradeOutsideManager.HaveNextPageCommand();
 				break;
-            case "Block_00": upgradeOutsideManager.BuyDecoration("Block_00");
+            case "Block_00": 
+                if (MainMenu._HasNewGameEvent)
+                    base.SetActivateTotorObject(false);
+
+                upgradeOutsideManager.BuyDecoration("Block_00"); 
                 break;
             case "Block_01": upgradeOutsideManager.BuyDecoration("Block_01");
                 break;
@@ -285,9 +360,18 @@ public class Town : Mz_BaseScene {
                 break;
             case "Block_06": upgradeOutsideManager.BuyDecoration("Block_06");
                 break;
-            case YES_BUTTON_NAME: upgradeOutsideManager.UserConfirmTransaction();
+            case YES_BUTTON_NAME:
+                if (MainMenu._HasNewGameEvent)
+                {
+                    StartCoroutine(this.WaitForDecorationTweenDownComplete());
+                }
+                upgradeOutsideManager.UserConfirmTransaction();
                 break;
-            case NO_BUTTON_NAME: upgradeOutsideManager.UserCancleTransaction();
+            case NO_BUTTON_NAME:
+                if (MainMenu._HasNewGameEvent)
+                    this.audioDescribe.PlayOnecWithOutStop(this.audioEffect.wrong_Clip);
+                else
+                    upgradeOutsideManager.UserCancleTransaction();
                 break;
 			default:
 			break;
@@ -336,6 +420,9 @@ public class Town : Mz_BaseScene {
         bakeryShopDoorOpen_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
         {
             if (Application.isLoadingLevel == false) {
+                if (MainMenu._HasNewGameEvent)
+                    MainMenu._HasNewGameEvent = false;
+
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.BakeryShop.ToString();
                 Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
             }

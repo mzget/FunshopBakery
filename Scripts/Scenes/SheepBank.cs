@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]	
 public class BankOfficer {
@@ -11,6 +12,26 @@ public class BankOfficer {
 
 	public tk2dAnimatedSprite woman_animated;
 	public tk2dAnimatedSprite man_animated;
+};
+
+[System.Serializable]
+public class SheepBankTutor {
+	//<@-- Button name -->
+	public GameObject Back_Button_obj;
+	public GameObject Deposit_button_obj;
+	public GameObject Withdrawal_button_obj;
+	public GameObject UpgradeInside_button_obj;
+    public GameObject UpgradeOutside_button_obj;
+	
+	public GameObject blueberry_sprite_icon;
+	public GameObject upgrade_blueberryJam_button;
+
+	public SheepBankTutor() {}
+
+	public void OnDestroy() {
+		Deposit_button_obj = null;
+		Withdrawal_button_obj = null;
+	}
 };
 
 public class SheepBank : Mz_BaseScene {
@@ -52,9 +73,11 @@ public class SheepBank : Mz_BaseScene {
 	private Hashtable moveDown_Transaction_Hash;
     private Hashtable moveDownUpgradeInside = new Hashtable();
     private Hashtable moveUp_hashdata = new Hashtable();
-	
+
+
 	private DonationManager donationManager;
     private UpgradeInsideManager upgradeInsideManager;
+	public SheepBankTutor sheepBankTutor;
     public BankOfficer offecer = new BankOfficer();
     public GameObject[] upgradeButtons = new GameObject[8];
 
@@ -78,8 +101,91 @@ public class SheepBank : Mz_BaseScene {
         donationManager = donationForm_group.GetComponent<DonationManager>();
 
         this.InitializeFields();
-		shadowPlane_Obj.gameObject.active = false;
+		
+		if(MainMenu._HasNewGameEvent) {
+			shadowPlane_Obj.gameObject.active = true;
+			sheepBankTutor.Deposit_button_obj.transform.position += Vector3.back * 11;
+			sheepBankTutor.Back_Button_obj.transform.position += Vector3.forward * 20;
+			this.CreateTutorObjectAtRuntime();
+		}
+		else {
+			shadowPlane_Obj.gameObject.active = false;
+		}
 	}
+
+    #region <@-- Tutor system.
+
+    void CreateTutorObjectAtRuntime ()
+	{
+//		sheepBankTutor = new SheepBankTutor();
+		cameraTutor_Obj = GameObject.FindGameObjectWithTag("MainCamera");
+		
+		handTutor = Instantiate(Resources.Load("Tutor_Objs/Town/HandTutor", typeof(GameObject))) as GameObject;
+		handTutor.transform.parent = cameraTutor_Obj.transform;
+		handTutor.transform.localPosition = new Vector3(-75f, 17f, 8);
+		handTutor.transform.localScale += Vector3.one * 100;
+		
+		GameObject tutorText_0 = Instantiate(Resources.Load("Tutor_Objs/SheepBank/Tutor_description", typeof(GameObject))) as GameObject;
+		tutorText_0.transform.parent = cameraTutor_Obj.transform;
+		tutorText_0.transform.localPosition = new Vector3(-36f, 30f, 8f);
+		tutorText_0.transform.localScale += Vector3.one * 100;
+		base.tutorDescriptions = new List<GameObject>();
+		tutorDescriptions.Add(tutorText_0);
+		//<@-- Animated hand with tweening.
+		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 25f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+	}
+
+	void CreateUpgradeInsideTutorEvent ()
+	{
+		SetActivateTotorObject(true);
+		shadowPlane_Obj.gameObject.active = true;
+		sheepBankTutor.UpgradeInside_button_obj.transform.position += Vector3.back * 11;
+		sheepBankTutor.Back_Button_obj.transform.position += Vector3.forward * 20;
+
+		handTutor.transform.localPosition = new Vector3(48f, 17f, 8f);
+		tutorDescriptions[0].transform.localPosition = new Vector3(100f, 32f, 8f);
+		tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "UPGRADE SHOP";
+		tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+		
+		//<@-- Animated hand with tweening.
+		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 25f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+	}
+
+    private void CreateBuyUpgradeShopTutorEvent()
+    {
+        this.SetActivateTotorObject(true);
+
+        handTutor.transform.localPosition = new Vector3(-65f, 22f, 8f);
+        tutorDescriptions[0].transform.localPosition = new Vector3(-98f, 30f, 8f);
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "BUY ITEM";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+
+        sheepBankTutor.blueberry_sprite_icon.transform.position += Vector3.back * 10;
+        sheepBankTutor.upgrade_blueberryJam_button.transform.position += Vector3.back * 10;
+
+        //<@-- Animated hand with tweening.
+        iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 25f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+    }
+
+    private void CreateUpgradeOutsideTutorEvent()
+    {
+        SetActivateTotorObject(true);
+
+        shadowPlane_Obj.gameObject.active = true;
+        sheepBankTutor.UpgradeOutside_button_obj.transform.position += Vector3.back * 11;
+        sheepBankTutor.Back_Button_obj.transform.localPosition = new Vector3(-108f, -85f, -5);
+
+        handTutor.transform.localPosition = new Vector3(93f, 17f, 8f);
+        tutorDescriptions[0].transform.localPosition = new Vector3(35f, 20f, 8f);
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "BUY DECORATION";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+
+        //<@-- Animated hand with tweening.
+        iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 25f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+    }
+
+    #endregion
+
     protected new IEnumerator InitializeAudio()
     {
         base.InitializeAudio();
@@ -216,6 +322,11 @@ public class SheepBank : Mz_BaseScene {
 
 			upgradeInsideManager.ReInitializeData();
         }
+		
+		if(MainMenu._HasNewGameEvent) {
+			upgradeInside_window_Obj.transform.position += Vector3.forward * 15;
+            this.CreateBuyUpgradeShopTutorEvent();
+		}
 	}
 
 	internal void ManageAvailabelMoneyBillBoard ()
@@ -231,19 +342,22 @@ public class SheepBank : Mz_BaseScene {
 		transactionForm_Obj.gameObject.SetActiveRecursively(false);
         donationForm_group.SetActiveRecursively(false);
 		passbook_group.SetActiveRecursively(false);
-		shadowPlane_Obj.gameObject.active = false;
 		availabelMoneyBillboard_Obj.SetActiveRecursively(false);
 
-        currentGameStatus = GameSceneStatus.none;        
+        currentGameStatus = GameSceneStatus.none;   
+		
+		if(MainMenu._HasNewGameEvent == false)
+			shadowPlane_Obj.gameObject.active = false;
     }
+
 	void OnTransactionMoveDownComplete() {        
         this.AccountBalanceManager(Mz_StorageManage.AccountBalance);
 	}
         
-//	protected override void Update ()
-//	{
-//		base.Update ();
-//	}
+	protected override void Update ()
+	{
+		base.Update ();
+	}
 	
 	private new void OnGUI ()
 	{
@@ -254,6 +368,11 @@ public class SheepBank : Mz_BaseScene {
 	{
         if (nameInput == UpgradeInside_BUTTON_NAME)
         {
+			if(MainMenu._HasNewGameEvent) {
+				this.SetActivateTotorObject(false);
+				sheepBankTutor.UpgradeInside_button_obj.transform.position += Vector3.forward * 11;
+			}
+			
             StartCoroutine(this.PlayManOfficerAnimation("ActiveUpgradeInsideForm"));
             shadowPlane_Obj.gameObject.active = true;
             return;
@@ -266,9 +385,14 @@ public class SheepBank : Mz_BaseScene {
         }
         else if (nameInput == DEPOSIT_BUTTON_NAME)
         {
-            StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDepositForm_function));
-            shadowPlane_Obj.gameObject.active = true;
-            return;
+			if(MainMenu._HasNewGameEvent) {
+				this.SetActivateTotorObject(false);
+				sheepBankTutor.Deposit_button_obj.transform.position += Vector3.forward * 11;
+			}
+			
+			StartCoroutine(this.PlayWomanOfficerAnimation(ActiveDepositForm_function));
+			shadowPlane_Obj.gameObject.active = true;
+			return;
         }
         else if (nameInput == WITHDRAWAL_BUTTON_NAME)
         {
@@ -335,8 +459,23 @@ public class SheepBank : Mz_BaseScene {
             case GameSceneStatus.ShowUpgradeInside:
                 if (nameInput == NextButtonName) { upgradeInsideManager.GotoNextPage(); }
                 else if (nameInput == PreviousButtonName) { upgradeInsideManager.BackToPreviousPage(); }
-                else if (nameInput == YES_BUTTON_NAME) { upgradeInsideManager.UserComfirm(); }
-                else if (nameInput == NO_BUTTON_NAME) { upgradeInsideManager.UnActiveComfirmationWindow(); }
+                else if (nameInput == YES_BUTTON_NAME) {
+                    if (MainMenu._HasNewGameEvent)
+                    {
+                        this.SetActivateTotorObject(false);
+                        upgradeInsideManager.UserComfirm(); 
+                        this.OnInput(BACK_BUTTON_NAME);
+                        this.CreateUpgradeOutsideTutorEvent();
+                    }
+                    else
+                        upgradeInsideManager.UserComfirm(); 
+			    }
+                else if (nameInput == NO_BUTTON_NAME) {
+					if(MainMenu._HasNewGameEvent)
+						this.audioEffect.PlayOnecWithOutStop(this.audioEffect.wrong_Clip);
+					else 
+						upgradeInsideManager.UnActiveComfirmationWindow(); 
+				}
                 else
                 {
                     for (int i = 0; i < upgradeButtons.Length; i++)
@@ -361,7 +500,7 @@ public class SheepBank : Mz_BaseScene {
                 break;
             case GameSceneStatus.ShowDepositForm:
                 if (nameInput == OKButtonName) {
-                    CompleteDopositSession();
+                    CompleteDepositSession();
 				}
                 break;
             case GameSceneStatus.ShowWithdrawalForm:
@@ -407,7 +546,7 @@ public class SheepBank : Mz_BaseScene {
 
         currentGameStatus = GameSceneStatus.ShowDepositForm;
     }
-	private void CompleteDopositSession ()
+	private void CompleteDepositSession ()
 	{
 		resultValue = calculatorBeh.GetDisplayResultTextToInt();
         if(resultValue > 0 && resultValue <= Mz_StorageManage.AvailableMoney) {
@@ -419,6 +558,11 @@ public class SheepBank : Mz_BaseScene {
 			
 			audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
 			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
+			
+			if(MainMenu._HasNewGameEvent) {
+				this.OnInput(BACK_BUTTON_NAME);
+				this.CreateUpgradeInsideTutorEvent();
+			}
         }
         else {
             calculatorBeh.ClearCalcMechanism();			

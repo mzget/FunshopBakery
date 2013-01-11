@@ -12,8 +12,8 @@ public class Mz_StorageManage : MonoBehaviour
     public static string Username = "";
     
     public static string ShopName;
-    public static int AvailableMoney = 500;
-    public static int AccountBalance = 0;
+    public static int AvailableMoney = 100000;
+    public static int AccountBalance = 100000;
 	public static int ShopLogo = 0;
 	public static string ShopLogoColor = "Blue";
 

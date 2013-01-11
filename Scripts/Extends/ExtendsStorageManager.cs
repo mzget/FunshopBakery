@@ -184,7 +184,9 @@ public class ExtendsStorageManager : Mz_StorageManage
 		if(BakeryShop.NumberOfCansellItem.Count != 0)
 			this.SaveCanSellGoodListData();
         if (Dressing.CanEquipClothe_list.Count != 0)
-            this.SaveCostumeData();
+            this.SaveCanEquipClothesData();
+		if(Dressing.CanEquipHat_list.Count != 0) 
+			this.SaveCanEquipHatData();
 
 		this.SaveCanDecorateShopOutside();
 		
@@ -198,10 +200,16 @@ public class ExtendsStorageManager : Mz_StorageManage
         PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + KEY_AVAILABLE_CREAM, CreamBeh.arr_CreamBehs);
     }
 
-    private void SaveCostumeData() {
+    private void SaveCanEquipClothesData() {
         int[] arr_clothe = Dressing.CanEquipClothe_list.ToArray();
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, arr_clothe); 
     }
+
+	private void SaveCanEquipHatData ()
+	{
+		int[] arr_hat = Dressing.CanEquipHat_list.ToArray();
+		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_HAT_LIST, arr_hat);
+	}
 
 	void SaveCanDecorateShopOutside ()
 	{

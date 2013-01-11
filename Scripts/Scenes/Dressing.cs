@@ -101,7 +101,11 @@ public class Dressing : Mz_BaseScene {
         }
 
 		if(nameInput == back_button_Obj.name) {
-			if(Application.isLoadingLevel == false) {
+			if(Application.isLoadingLevel == false && _onDestroyScene == false) {
+				_onDestroyScene = true;
+				
+				base.extendsStorageManager.SaveDataToPermanentMemory();
+				
 				Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString();
 				Application.LoadLevelAsync(Mz_BaseScene.SceneNames.LoadingScene.ToString());
 			}

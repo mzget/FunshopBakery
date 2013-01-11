@@ -48,11 +48,24 @@ public class Mz_BaseScene : MonoBehaviour {
 
 	public GameObject cameraTutor_Obj;
 	public GameObject plane_darkShadow;
-	public GameObject handTutor;
-	public GameObject[] tutorDescriptions = new GameObject[4];
+	protected GameObject handTutor;
+    protected List<GameObject> tutorDescriptions;
+
+    internal void SetActivateTotorObject(bool activeState)
+    {
+        handTutor.active = activeState;
+        if (activeState == false)
+            iTween.Stop(handTutor);
+
+        foreach (GameObject item in tutorDescriptions)
+        {
+            item.active = activeState;
+        }
+    }
 
 	#endregion
-
+	
+	protected bool _onDestroyScene = false;
     public bool _hasQuitCommand = false;
 
 

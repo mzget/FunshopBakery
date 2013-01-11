@@ -416,6 +416,10 @@ public class UpgradeInsideManager : MonoBehaviour {
                         Debug.Log("buying : blueberry_jam");
                         currentOnUpdateTarget = new OnUpdateEvenArgs() { I = 0, J = 0, Item_id = item_id, };
                         this.ActiveComfirmationWindow();
+
+                        if (MainMenu._HasNewGameEvent) {
+                            sceneController.SetActivateTotorObject(false);
+                        }
                     }
 					else{
 						this.PlaySoundWarning();
@@ -1038,7 +1042,7 @@ public class UpgradeInsideManager : MonoBehaviour {
 
 	internal void UnActiveComfirmationWindow ()
 	{
-        confirmationWindow.SetActiveRecursively(false);
+    	confirmationWindow.SetActiveRecursively(false);
 		currentOnUpdateTarget = null;
 	}
 

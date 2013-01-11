@@ -20,7 +20,7 @@ public class BakeryShop : Mz_BaseScene {
 	public AudioClip[] en_appreciate_clip;
 	
 	//<!-- in game button.
-	public GameObject close_button;
+	public GameObject close_button;	
 	public GameObject billingMachine;
     private tk2dAnimatedSprite billingAnimatedSprite;
 	private AnimationState billingMachine_animState;
@@ -245,6 +245,8 @@ public class BakeryShop : Mz_BaseScene {
         // Debug can sell list.
         StartCoroutine(this.InitializeCanSellGoodslist());
 		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count + " :: " + "NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
+		
+		close_button.active = true;
     }
 
     private void OpenShop() {
@@ -1329,7 +1331,9 @@ public class BakeryShop : Mz_BaseScene {
 	{		
         //<!-- Close shop button.
 		if(nameInput == close_button.name) {
-			if(Application.isLoadingLevel == false) {
+			if(Application.isLoadingLevel == false && _onDestroyScene == false) {
+				_onDestroyScene = true;
+				
                 base.extendsStorageManager.SaveDataToPermanentMemory();
                 this.PreparingToCloseShop();		
 				
@@ -1652,9 +1656,6 @@ public class BakeryShop : Mz_BaseScene {
         CakeBeh._IsActive = false;
 		ToastBeh._IsActive = false;
 		HotdogBeh._IsActive = false;
-
-        Destroy(customerMenu_group_Obj);
-        currentCustomer.Dispose();
         
         Destroy(cupcake.gameObject);
         Destroy(miniCake.gameObject);
