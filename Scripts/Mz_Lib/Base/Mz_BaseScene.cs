@@ -14,6 +14,7 @@ public class Mz_BaseScene : MonoBehaviour {
 	public AudioDescribeManager audioDescribe;
     public GameObject audioBackground_Obj;
     public AudioClip background_clip;
+    public List<AudioClip> description_clips = new List<AudioClip>();
     public List<AudioClip> soundEffect_clips = new List<AudioClip>();
 //  public List<AudioClip> appreciate_Clips = new List<AudioClip>();
 //	public List<AudioClip> warning_Clips = new List<AudioClip>();

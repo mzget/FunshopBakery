@@ -68,6 +68,7 @@ public class MainMenu : Mz_BaseScene {
 	void Start () {
 		this.InitailizeDataFields();
         StartCoroutine(PreparingAudio());
+		this.PlayWelcomeEvent();
 
         Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
@@ -131,6 +132,11 @@ public class MainMenu : Mz_BaseScene {
 		player_2 = PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME);
 		player_3 = PlayerPrefs.GetString(3 + Mz_StorageManage.KEY_USERNAME);
     }
+
+	private void PlayWelcomeEvent ()
+	{		
+		audioDescribe.PlayOnecSound(description_clips[0]);
+	}
 	
 	// Update is called once per frame
 	protected override void Update ()
@@ -475,7 +481,7 @@ public class MainMenu : Mz_BaseScene {
                 //<!-- SceneState.showNewShop -->
                 StartCoroutine(ShowCreateNewShop());
 				this.characterAnimationManager.PlayGoodAnimation();
-
+				audioDescribe.PlayOnecSound(description_clips[1]);
                 return;
             }
             else if (nameInput == loadShop_button.name) {
@@ -493,7 +499,6 @@ public class MainMenu : Mz_BaseScene {
             }
             else if(nameInput == "OK_button") {
                 this.CheckUserNameFormInput();
-                //StartCoroutine(ShowInitializeNewShop());
             }
         }
         else if(loadgame_Group.gameObject.active) {

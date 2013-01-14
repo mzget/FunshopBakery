@@ -3,6 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class BakeryShopTutor {
+	public GameObject greeting_textSprite;
+	public GameObject greeting_textmesh;
+	public GameObject goaway_button_obj;
+};
+
 public class BakeryShop : Mz_BaseScene {
 	
 	public Transform shop_background;
@@ -66,6 +73,8 @@ public class BakeryShop : Mz_BaseScene {
     private GameObject cash_obj;
 	private tk2dSprite cash_sprite;
     private GameObject packaging_Obj;
+	public BakeryShopTutor bakeryShopTutor;
+
     //<!-- Core data
     public enum GamePlayState { 
 		none = 0,
@@ -148,7 +157,7 @@ public class BakeryShop : Mz_BaseScene {
     #region <!-- Hotdog data fields group.
 
     public Transform hotdogTray_transform;
-    public HotdogBeh hotdog;
+    internal HotdogBeh hotdog;
 	public GameObject hotdogSauce;
 	public GameObject hotdogCheese;
 
@@ -157,7 +166,7 @@ public class BakeryShop : Mz_BaseScene {
 	#region <!-- Customer data group.
 
     public GameObject customerMenu_group_Obj;
-    public CustomerBeh currentCustomer;
+    internal CustomerBeh currentCustomer;
 
     public event EventHandler nullCustomer_event;
     private void OnNullCustomer_event(EventArgs e) {
@@ -193,7 +202,6 @@ public class BakeryShop : Mz_BaseScene {
 
     private IEnumerator InitailizeSceneObject()
     {
-		darkShadowPlane.active = false;
 //		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
 
         StartCoroutine(this.SceneInitializeAudio());
@@ -255,6 +263,15 @@ public class BakeryShop : Mz_BaseScene {
 				
         nullCustomer_event += new EventHandler(BakeryShop_nullCustomer_event);
         OnNullCustomer_event(EventArgs.Empty);
+
+		if(MainMenu._HasNewGameEvent) {
+			darkShadowPlane.active = true;
+			darkShadowPlane.transform.position += Vector3.back * 2f;
+			this.CreateTutorObjectAtRuntime();
+			this.CreateGreetingCustomerTutorEvent();
+		}
+		else
+			darkShadowPlane.active = false;
     }
    
 	private IEnumerator SceneInitializeAudio ()
@@ -277,6 +294,50 @@ public class BakeryShop : Mz_BaseScene {
         else
             yield return null;
     }
+
+	#region <!-- Tutor systems.
+	
+	void CreateTutorObjectAtRuntime ()
+	{
+		cameraTutor_Obj = GameObject.FindGameObjectWithTag("MainCamera");
+		
+		handTutor = Instantiate(Resources.Load("Tutor_Objs/Town/HandTutor", typeof(GameObject))) as GameObject;
+		handTutor.transform.parent = cameraTutor_Obj.transform;
+		handTutor.transform.localPosition = new Vector3(0.3f, 0.75f, 3f);
+		handTutor.transform.localScale = Vector3.one;
+		
+		GameObject tutorText_0 = Instantiate(Resources.Load("Tutor_Objs/SheepBank/Tutor_description", typeof(GameObject))) as GameObject;
+		tutorText_0.transform.parent = cameraTutor_Obj.transform;
+		tutorText_0.transform.localPosition = new Vector3(0.65f, 0.8f, 3f);
+		tutorText_0.transform.localScale = Vector3.one;
+
+		base.tutorDescriptions = new List<GameObject>();
+		tutorDescriptions.Add(tutorText_0);
+		//<@-- Animated hand with tweening.
+		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0.65f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+	}
+
+	void CreateGreetingCustomerTutorEvent ()
+	{
+		bakeryShopTutor.greeting_textSprite.active = false;
+		bakeryShopTutor.greeting_textmesh.active = true;
+	}
+
+	void CreateAcceptOrdersTutorEvent ()
+	{
+		this.SetActivateTotorObject(true);
+		bakeryShopTutor.goaway_button_obj.active = false;
+		
+		handTutor.transform.localPosition = new Vector3(-0.62f, -0.13f, 3f);
+		
+		tutorDescriptions[0].transform.localPosition = new Vector3(0f, 0f, 3f);
+		tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "ACCEPT ORDERS";
+		tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+		//<@-- Animated hand with tweening.
+		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", -0.2f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+	}
+
+	#endregion
 
 	IEnumerator ChangeShopLogoIcon ()
 	{
@@ -1127,9 +1188,16 @@ public class BakeryShop : Mz_BaseScene {
 
 	IEnumerator ShowOrderingGUI ()
 	{
-		iTween.MoveTo(baseOrderUI_Obj.gameObject, 
+		if(MainMenu._HasNewGameEvent) {
+			iTween.MoveTo(baseOrderUI_Obj.gameObject, 
+			              iTween.Hash("position", new Vector3(-0.85f, .06f, -2.5f), "islocal", true, "time", .5f, "easetype", iTween.EaseType.spring));
+			this.CreateAcceptOrdersTutorEvent();
+		}
+		else {
+			iTween.MoveTo(baseOrderUI_Obj.gameObject, 
 		              iTween.Hash("position", new Vector3(-0.85f, .06f, 0f), "islocal", true, "time", .5f, "easetype", iTween.EaseType.spring));
-		
+		}
+
 		yield return new WaitForFixedUpdate();
 		
 		this.CheckingGoodsObjInTray(GoodsBeh.ClassName);
@@ -1144,8 +1212,18 @@ public class BakeryShop : Mz_BaseScene {
 
 	IEnumerator CollapseOrderingGUI ()
 	{
-		iTween.MoveTo(baseOrderUI_Obj.gameObject, 
-		              iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.linear));
+        if (MainMenu._HasNewGameEvent)
+        {
+            iTween.MoveTo(baseOrderUI_Obj.gameObject,
+                      iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.linear));
+
+            base.SetActivateTotorObject(false);
+        }
+        else
+        {
+            iTween.MoveTo(baseOrderUI_Obj.gameObject,
+                      iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.linear));
+        }
 
 		yield return new WaitForSeconds(0.5f);
 		
@@ -1328,7 +1406,16 @@ public class BakeryShop : Mz_BaseScene {
     }
 	
 	public override void OnInput(string nameInput)
-	{		
+	{	
+		if(MainMenu._HasNewGameEvent) {
+			if(nameInput == "EN_001_textmesh") {
+				StartCoroutine(this.PlayGreetingAudioClip(en_greeting_clip[0]));
+                base.SetActivateTotorObject(false);
+
+                return;
+			}
+		}
+
         //<!-- Close shop button.
 		if(nameInput == close_button.name) {
 			if(Application.isLoadingLevel == false && _onDestroyScene == false) {

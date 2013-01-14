@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 [System.Serializable]	
 public class BankOfficer {
-	public const string WOMAN_IDLE = "woman_idle"; 	
-	public const string WOMAN_TALK = "woman_talk";
+	public const string WOMAN_IDLE = "woman_idle";
+    public const string WOMAN_TALK = "woman_talk";
+    public const string WOMAN_TALK_LOOP = "woman_talk_loop";
 	public const string MAN_TALK = "man_talk";
 	public const string MAN_IDLE = "man_idle";
 
@@ -73,13 +74,14 @@ public class SheepBank : Mz_BaseScene {
 	private Hashtable moveDown_Transaction_Hash;
     private Hashtable moveDownUpgradeInside = new Hashtable();
     private Hashtable moveUp_hashdata = new Hashtable();
-
-
+	
 	private DonationManager donationManager;
     private UpgradeInsideManager upgradeInsideManager;
 	public SheepBankTutor sheepBankTutor;
     public BankOfficer offecer = new BankOfficer();
     public GameObject[] upgradeButtons = new GameObject[8];
+	public AudioClip long_introduce_clip;
+	public AudioClip short_introduce_clip;
 
     public enum GameSceneStatus { none = 0, ShowUpgradeInside = 1, ShowDonationForm, ShowDepositForm, ShowWithdrawalForm, ShowPassbook, };
     public GameSceneStatus currentGameStatus;
@@ -92,10 +94,10 @@ public class SheepBank : Mz_BaseScene {
 		
 		SheepBank.HaveUpgradeOutSide = false;
 
-		StartCoroutine(this.InitializeAudio());
-		this.InitializeGameEffectGenerator();
-		StartCoroutine(this.InitializeBankOfficer());
+        StartCoroutine(this.InitializeAudio());
         StartCoroutine(base.InitializeIdentityGUI());
+        StartCoroutine(this.InitializeBankOfficer());
+        this.InitializeGameEffectGenerator();
 		
 		upgradeInsideManager = upgradeInside_window_Obj.GetComponent<UpgradeInsideManager>();
         donationManager = donationForm_group.GetComponent<DonationManager>();
@@ -112,6 +114,26 @@ public class SheepBank : Mz_BaseScene {
 			shadowPlane_Obj.gameObject.active = false;
 		}
 	}
+
+    private IEnumerator InitializeBankOfficer()
+    {
+        if (MainMenu._HasNewGameEvent)
+        {
+            audioDescribe.PlayOnecWithOutStop(long_introduce_clip);
+            StartCoroutine(PlayWomanOfficerAnimation(string.Empty));
+            StartCoroutine(PlayManOfficerAnimation(string.Empty));
+        }
+        else
+        {
+            audioDescribe.PlayOnecWithOutStop(short_introduce_clip);
+            offecer.woman_animated.Play(BankOfficer.WOMAN_TALK_LOOP);
+            StartCoroutine(PlayManOfficerAnimation(string.Empty));
+
+            yield return new WaitForSeconds(short_introduce_clip.length);
+
+            StartCoroutine(PlayWomanOfficerAnimation(string.Empty));
+        }
+    }
 
     #region <@-- Tutor system.
 
@@ -135,9 +157,25 @@ public class SheepBank : Mz_BaseScene {
 		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 25f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
 	}
 
-	void CreateUpgradeInsideTutorEvent ()
+	void CreateDepositMoneyTutorEvent ()
 	{
+		this.SetActivateTotorObject(true);
+
+		handTutor.transform.localPosition = new Vector3(-27f, 1.9f, 8f);
+
+		tutorDescriptions[0].transform.localPosition = new Vector3(15f, 5.5f, 8f);
+		tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "PUT \"1300\"";
+		tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+		//<@-- Animated hand with tweening.
+		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 15f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+	}
+
+	IEnumerator CreateUpgradeInsideTutorEvent ()
+	{
+		yield return new WaitForFixedUpdate();
+
 		SetActivateTotorObject(true);
+
 		shadowPlane_Obj.gameObject.active = true;
 		sheepBankTutor.UpgradeInside_button_obj.transform.position += Vector3.back * 11;
 		sheepBankTutor.Back_Button_obj.transform.position += Vector3.forward * 20;
@@ -151,7 +189,7 @@ public class SheepBank : Mz_BaseScene {
 		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 25f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
 	}
 
-    private void CreateBuyUpgradeShopTutorEvent()
+    void CreateBuyUpgradeShopTutorEvent()
     {
         this.SetActivateTotorObject(true);
 
@@ -167,7 +205,7 @@ public class SheepBank : Mz_BaseScene {
         iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 25f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
     }
 
-    private void CreateUpgradeOutsideTutorEvent()
+    void CreateUpgradeOutsideTutorEvent()
     {
         SetActivateTotorObject(true);
 
@@ -204,20 +242,6 @@ public class SheepBank : Mz_BaseScene {
 		base.gameEffectManager = this.gameObject.GetComponent<GameEffectManager>();
 	}
 
-	private IEnumerator InitializeBankOfficer ()
-	{		
-		offecer.woman_animated.Play(BankOfficer.WOMAN_TALK);
-		offecer.woman_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
-			offecer.woman_animated.Play(BankOfficer.WOMAN_IDLE);
-		};
-
-		offecer.man_animated.Play(BankOfficer.MAN_TALK);
-		offecer.man_animated.animationCompleteDelegate = delegate {			
-			offecer.man_animated.Play(BankOfficer.MAN_IDLE);
-		};
-
-		yield return 0;
-	}
 	private IEnumerator PlayWomanOfficerAnimation (string onCompleteFuctionName)
 	{
 		offecer.woman_animated.Play(BankOfficer.WOMAN_TALK);
@@ -444,8 +468,10 @@ public class SheepBank : Mz_BaseScene {
 
             if (upgradeInside_window_Obj.active == false)
             {
-                if (Application.isLoadingLevel == false)
-                {
+                if (Application.isLoadingLevel == false && _onDestroyScene == false) {
+					_onDestroyScene = true;
+					base.extendsStorageManager.SaveDataToPermanentMemory();
+
                     Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.Town.ToString();
                     Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
                 }
@@ -545,31 +571,62 @@ public class SheepBank : Mz_BaseScene {
         audioEffect.PlayOnecWithOutStop(audioEffect.calc_clip);
 
         currentGameStatus = GameSceneStatus.ShowDepositForm;
+		
+		if(MainMenu._HasNewGameEvent) {
+			this.CreateDepositMoneyTutorEvent();			
+		}
     }
 	private void CompleteDepositSession ()
 	{
 		resultValue = calculatorBeh.GetDisplayResultTextToInt();
-        if(resultValue > 0 && resultValue <= Mz_StorageManage.AvailableMoney) {
-		    int sumOfAccountBalance =  Mz_StorageManage.AccountBalance + resultValue;
-		    int availableBalance = Mz_StorageManage.AvailableMoney - resultValue;
-		    AccountBalanceManager(sumOfAccountBalance);
-		    AvailableMoneyManager(availableBalance);
-		    calculatorBeh.ClearCalcMechanism();
-			
-			audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
-			gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
-			
-			if(MainMenu._HasNewGameEvent) {
-				this.OnInput(BACK_BUTTON_NAME);
-				this.CreateUpgradeInsideTutorEvent();
-			}
-        }
-        else {
-            calculatorBeh.ClearCalcMechanism();			
-			audioEffect.PlayOnecWithOutStop(audioEffect.mutter_clip);
 
-			Debug.LogWarning("result value more than available money");
-        }
+		if(MainMenu._HasNewGameEvent) {   //<@-- Has nawgame tutor event.
+			if(resultValue != 1300) {
+				calculatorBeh.ClearCalcMechanism();		
+				audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
+				return;
+			}
+			else if(resultValue == 1300) {
+					int sumOfAccountBalance =  Mz_StorageManage.AccountBalance + resultValue;
+					int availableBalance = Mz_StorageManage.AvailableMoney - resultValue;
+					AccountBalanceManager(sumOfAccountBalance);
+					AvailableMoneyManager(availableBalance);
+					calculatorBeh.ClearCalcMechanism();
+					
+					audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+					gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
+					
+					base.SetActivateTotorObject(false);
+					this.OnInput(BACK_BUTTON_NAME);
+					StartCoroutine(this.CreateUpgradeInsideTutorEvent());
+			}
+		}
+		else {   //<@-- General game event.
+	        if(resultValue > 0 && resultValue <= Mz_StorageManage.AvailableMoney) {
+			    int sumOfAccountBalance =  Mz_StorageManage.AccountBalance + resultValue;
+			    int availableBalance = Mz_StorageManage.AvailableMoney - resultValue;
+				//<@-- Checking available money after deposit more than 200.
+				if(availableBalance >= 200) {				
+				    AccountBalanceManager(sumOfAccountBalance);
+				    AvailableMoneyManager(availableBalance);
+				    calculatorBeh.ClearCalcMechanism();
+					
+					audioEffect.PlayOnecWithOutStop(audioEffect.longBring_clip);
+					gameEffectManager.Create2DSpriteAnimationEffect(GameEffectManager.BLOOMSTAR_EFFECT_PATH, GameObject.Find(OKButtonName).transform);
+				}
+				else {
+					//<@-- warning sound user not enough available money.
+					audioDescribe.PlayOnecWithOutStop(audioEffect.wrong_Clip);
+	            	calculatorBeh.ClearCalcMechanism();		
+				}
+	        }
+	        else {
+	            calculatorBeh.ClearCalcMechanism();			
+				audioEffect.PlayOnecWithOutStop(audioEffect.mutter_clip);
+
+				Debug.LogWarning("result value more than available money");
+	        }
+		}
 	}
 
     private void ActiveWithdrawalForm() { 

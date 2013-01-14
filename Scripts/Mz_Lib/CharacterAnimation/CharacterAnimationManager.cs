@@ -69,17 +69,20 @@ public class CharacterAnimationManager : MonoBehaviour {
 	}
 
 	public void PlayAnimationByName(NameAnimationsList nameAnimation) {
+//		_CanUpdatable = true;
 		eye_anim.Play(nameAnimation.ToString());
 		lefthand_anim.Play(nameAnimation.ToString());
 		righthand_anim.Play(nameAnimation.ToString());
 	}
 	
     public void PlayGoodAnimation() {
+//		_CanUpdatable = true;
         eye_anim.Play(NameAnimationsList.good1.ToString());
         lefthand_anim.Play(NameAnimationsList.lefthand_good1.ToString());
     }
 	
 	public void RandomPlayGoodAnimation() {
+//		_CanUpdatable = true;
 		int i = UnityEngine.Random.Range(2, 5);		/// Random TK_good animation.
 		this.PlayEyeAnimation((CharacterAnimationManager.NameAnimationsList)i);
 		this.PlayLeftHandAnimation(CharacterAnimationManager.NameAnimationsList.lefthand_active);
@@ -87,11 +90,13 @@ public class CharacterAnimationManager : MonoBehaviour {
 	} 
 
 	public void PlaySad2Animation() {
+//		_CanUpdatable = true;
         eye_anim.Play(NameAnimationsList.sad2.ToString());
 	}
 
     internal void PlayTalkingAnimation()
     {
+//		_CanUpdatable = false;
 		timer = 0;
 		eye_anim.Stop();
         this.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.talk);

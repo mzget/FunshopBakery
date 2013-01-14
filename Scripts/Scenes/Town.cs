@@ -113,6 +113,7 @@ public class Town : Mz_BaseScene {
 
     void CreateTutorObjectAtRuntime ()
 	{
+        audioDescribe.PlayOnecWithOutStop(description_clips[0]);
 		cameraTutor_Obj = GameObject.FindGameObjectWithTag("MainCamera");
 		
 		handTutor = Instantiate(Resources.Load("Tutor_Objs/Town/HandTutor", typeof(GameObject))) as GameObject;
@@ -173,6 +174,7 @@ public class Town : Mz_BaseScene {
         tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
 
         this._updatable = false;
+		audioDescribe.PlayOnecSound(description_clips[1]);
         iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0.1f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
     }
 
@@ -420,9 +422,6 @@ public class Town : Mz_BaseScene {
         bakeryShopDoorOpen_animated.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
         {
             if (Application.isLoadingLevel == false) {
-                if (MainMenu._HasNewGameEvent)
-                    MainMenu._HasNewGameEvent = false;
-
                 Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.BakeryShop.ToString();
                 Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
             }
