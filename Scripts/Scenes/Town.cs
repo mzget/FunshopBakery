@@ -245,7 +245,7 @@ public class Town : Mz_BaseScene {
 		base.MovingCameraTransform();
 
 		if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
-			float speed = Time.fixedDeltaTime * 0.2f;
+			float speed = Time.deltaTime * 0.1f;
 			// Get movement of the finger since last frame   
 			Vector2 touchDeltaPosition = touch.deltaPosition;
 			// Move object across XY plane       

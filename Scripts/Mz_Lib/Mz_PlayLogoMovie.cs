@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 
-public class PlayLogoMovie : MonoBehaviour {
+public class Mz_PlayLogoMovie : MonoBehaviour {
 	
 #if UNITY_STANDALONE_WIN
 	

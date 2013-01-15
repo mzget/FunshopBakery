@@ -670,6 +670,7 @@ public class DonationManager : MonoBehaviour
                 ConservationAnimals.Level++;
                 StartCoroutine(this.ActiveCongratulationEffect(ConservationAnimals.Level));
                 this.ReActiveColorBarPicker();
+				sceneController.ManageAvailabelMoneyBillBoard();
 
                 print("DonationProcessing... complete !");
             }
@@ -688,6 +689,7 @@ public class DonationManager : MonoBehaviour
                 AIDSFoundation.Level++;
                 StartCoroutine(this.ActiveCongratulationEffect(AIDSFoundation.Level));
                 this.ReActiveColorBarPicker();
+				sceneController.ManageAvailabelMoneyBillBoard();
 
                 print("DonationProcessing... complete !");
             }
@@ -706,6 +708,7 @@ public class DonationManager : MonoBehaviour
 				LoveDogConsortium.Level++;
                 StartCoroutine(this.ActiveCongratulationEffect(LoveDogConsortium.Level));
 				this.ReActiveColorBarPicker();
+				sceneController.ManageAvailabelMoneyBillBoard();
 
                 print("DonationProcessing... complete !");
             }
@@ -723,6 +726,7 @@ public class DonationManager : MonoBehaviour
 				LoveKidsFoundation.Level++;
                 StartCoroutine(this.ActiveCongratulationEffect(LoveKidsFoundation.Level));
 				this.ReActiveColorBarPicker();
+				sceneController.ManageAvailabelMoneyBillBoard();
 
                 print("DonationProcessing... complete !");
             }
@@ -741,6 +745,7 @@ public class DonationManager : MonoBehaviour
 				EcoFoundation.Level ++;
                 StartCoroutine(this.ActiveCongratulationEffect(EcoFoundation.Level));
 				this.ReActiveColorBarPicker();
+				sceneController.ManageAvailabelMoneyBillBoard();
 
                 print("DonationProcessing... complete !");
             }
@@ -758,6 +763,7 @@ public class DonationManager : MonoBehaviour
                 GlobalWarmingOranization.Level++;
                 StartCoroutine(this.ActiveCongratulationEffect(GlobalWarmingOranization.Level));
                 this.ReActiveColorBarPicker();
+				sceneController.ManageAvailabelMoneyBillBoard();
 
                 print("DonationProcessing... complete !");
             }

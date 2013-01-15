@@ -8,6 +8,15 @@ public class BakeryShopTutor {
 	public GameObject greeting_textSprite;
 	public GameObject greeting_textmesh;
 	public GameObject goaway_button_obj;
+
+    public enum TutorStatus {
+        None = 0,
+        Greeting,
+        AcceptOrders,
+        CheckAccuracy,
+        Billing,
+    };
+    public TutorStatus currentTutorState;
 };
 
 public class BakeryShop : Mz_BaseScene {
@@ -120,10 +129,39 @@ public class BakeryShop : Mz_BaseScene {
 	public ToastBeh[] toasts = new ToastBeh[2]; 
 	private Vector3 toast_1_pos = new Vector3(-0.415f, 0.419f, -1);
 	private Vector3 toast_2_pos = new Vector3(-0.220f, 0.418f, -1);
-    public JamBeh strawberryJam_instance;
+    public GameObject strawberryJam_instance;
     public GameObject blueberryJam_instance;
     public GameObject freshButterJam_instance;
     public GameObject custardJam_instance;
+	
+	internal void SetAnimatedJamInstance(bool activeState) {	
+		if(activeState)	{ 			
+			if(this.strawberryJam_instance) 
+				iTween.PunchPosition(this.strawberryJam_instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+			
+			if(this.blueberryJam_instance)
+				iTween.PunchPosition(this.blueberryJam_instance, iTween.Hash("y", -.1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+
+			if(this.freshButterJam_instance)
+				iTween.PunchPosition(this.freshButterJam_instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+			
+			if(this.custardJam_instance)
+				iTween.PunchPosition(this.custardJam_instance, iTween.Hash("y", -.1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+		}
+		else {			
+			if(this.blueberryJam_instance)
+				iTween.Stop(this.blueberryJam_instance);	
+			
+			if(this.custardJam_instance)
+				iTween.Stop(this.custardJam_instance);	
+			
+			if(this.freshButterJam_instance)
+				iTween.Stop(this.freshButterJam_instance);	
+			
+			if(this.strawberryJam_instance) 
+				iTween.Stop(this.strawberryJam_instance);	
+		}
+	}
 
 	#endregion
 
@@ -138,6 +176,25 @@ public class BakeryShop : Mz_BaseScene {
     public GameObject chocolate_cream_Instance;
     public GameObject blueberry_cream_Instance;
     public GameObject strawberry_cream_Instance;
+	
+	internal void SetAnimatedCreamInstance(bool activeState) {	
+		if(activeState)	{ 
+			if(this.chocolate_cream_Instance)
+				iTween.PunchPosition(this.chocolate_cream_Instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.pingPong));
+			if(this.strawberry_cream_Instance)
+				iTween.PunchPosition(this.strawberry_cream_Instance, iTween.Hash("y", -.1f, "time", 1f, "looptype", iTween.LoopType.pingPong));			
+			if(this.blueberry_cream_Instance)
+				iTween.PunchPosition(this.blueberry_cream_Instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+		}
+		else {			
+			if(this.chocolate_cream_Instance)
+				iTween.Stop(this.chocolate_cream_Instance);		
+			if(this.blueberry_cream_Instance)
+				iTween.Stop(this.blueberry_cream_Instance);	
+			if(this.strawberry_cream_Instance)
+				iTween.Stop(this.strawberry_cream_Instance);	
+		}
+	}
 
 	#endregion
 
@@ -266,12 +323,14 @@ public class BakeryShop : Mz_BaseScene {
 
 		if(MainMenu._HasNewGameEvent) {
 			darkShadowPlane.active = true;
-			darkShadowPlane.transform.position += Vector3.back * 2f;
+            darkShadowPlane.transform.position += Vector3.back * 2f;
+            this.CreateGreetingCustomerTutorEvent();
 			this.CreateTutorObjectAtRuntime();
-			this.CreateGreetingCustomerTutorEvent();
 		}
-		else
+		else {
 			darkShadowPlane.active = false;
+            Destroy(bakeryShopTutor.greeting_textmesh);
+        }
     }
    
 	private IEnumerator SceneInitializeAudio ()
@@ -318,13 +377,15 @@ public class BakeryShop : Mz_BaseScene {
 	}
 
 	void CreateGreetingCustomerTutorEvent ()
-	{
+    {
 		bakeryShopTutor.greeting_textSprite.active = false;
-		bakeryShopTutor.greeting_textmesh.active = true;
+        bakeryShopTutor.greeting_textmesh.active = true;
+
+        audioDescribe.PlayOnecSound(description_clips[0]);
 	}
 
 	void CreateAcceptOrdersTutorEvent ()
-	{
+    {
 		this.SetActivateTotorObject(true);
 		bakeryShopTutor.goaway_button_obj.active = false;
 		
@@ -334,8 +395,53 @@ public class BakeryShop : Mz_BaseScene {
 		tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "ACCEPT ORDERS";
 		tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
 		//<@-- Animated hand with tweening.
-		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", -0.2f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+        iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", -0.2f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+		
+		if(_isPlayAcceptOuderSound == false)
+			StartCoroutine(this.WaitForHelloCustomer());
 	}
+	
+	private bool _isPlayAcceptOuderSound = false;
+    private IEnumerator WaitForHelloCustomer()
+    {
+		_isPlayAcceptOuderSound = true;
+		
+        yield return new WaitForSeconds(en_greeting_clip[0].length);
+        audioDescribe.PlayOnecSound(description_clips[1]);
+    }
+
+    private void CreateCheckingAccuracyTutorEvent()
+    {
+        this.SetActivateTotorObject(true);
+        bakeryShopTutor.goaway_button_obj.active = false;
+
+        handTutor.transform.localPosition = new Vector3(-0.62f, -0.13f, 3f);
+
+        tutorDescriptions[0].transform.localPosition = new Vector3(0f, 0f, 3f);
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "CHECK ACCURACY";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+        //<@-- Animated hand with tweening.
+        iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", -0.2f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+    }
+
+    private void CreateBillingTutorEvent()
+    {
+        bakeryShopTutor.currentTutorState = BakeryShopTutor.TutorStatus.Billing;
+
+        base.SetActivateTotorObject(true);
+		darkShadowPlane.active = true;
+        billingMachine.transform.position += Vector3.back * 5f;
+
+        handTutor.transform.localPosition = new Vector3(-0.25f, -0.1f, 3f);
+
+        tutorDescriptions[0].transform.localPosition = new Vector3(0.1f, 0f, 3f);
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "BILLING";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+        //<@-- Animated hand with tweening.
+        iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+
+        audioDescribe.PlayOnecSound(description_clips[2]);
+    }
 
 	#endregion
 
@@ -1145,6 +1251,10 @@ public class BakeryShop : Mz_BaseScene {
 		receiptGUIForm_groupObj.SetActiveRecursively(true);
 		this.DeActiveCalculationPriceGUI();
 		this.ManageCalculationPriceGUI();
+
+        if(MainMenu._HasNewGameEvent) {
+            audioDescribe.PlayOnecSound(description_clips[3]);
+        }
     }
 
 	void DeActiveCalculationPriceGUI ()
@@ -1191,7 +1301,10 @@ public class BakeryShop : Mz_BaseScene {
 		if(MainMenu._HasNewGameEvent) {
 			iTween.MoveTo(baseOrderUI_Obj.gameObject, 
 			              iTween.Hash("position", new Vector3(-0.85f, .06f, -2.5f), "islocal", true, "time", .5f, "easetype", iTween.EaseType.spring));
-			this.CreateAcceptOrdersTutorEvent();
+            if (bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.AcceptOrders)
+                this.CreateAcceptOrdersTutorEvent();
+            else if(bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.CheckAccuracy)
+                this.CreateCheckingAccuracyTutorEvent();
 		}
 		else {
 			iTween.MoveTo(baseOrderUI_Obj.gameObject, 
@@ -1218,26 +1331,49 @@ public class BakeryShop : Mz_BaseScene {
                       iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.linear));
 
             base.SetActivateTotorObject(false);
+
+            if(bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.AcceptOrders) {
+                yield return new WaitForSeconds(0.5f);
+
+                darkShadowPlane.active = false;
+                foreach (var item in arr_orderingItems)
+                {
+                    iTween.Pause(item.gameObject);
+                }
+
+                if (currentCustomer)
+                {
+                    currentCustomer.customerOrderingIcon_Obj.active = true;
+
+                    iTween.PunchPosition(currentCustomer.customerOrderingIcon_Obj,
+                        iTween.Hash("x", .1f, "y", .1f, "delay", 1f, "time", .5f, "looptype", iTween.LoopType.pingPong));
+                }
+            }
+            else if(bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.CheckAccuracy) {
+				this.CreateBillingTutorEvent();
+			}
         }
         else
         {
             iTween.MoveTo(baseOrderUI_Obj.gameObject,
                       iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.linear));
+
+            yield return new WaitForSeconds(0.5f);
+
+            darkShadowPlane.active = false;
+            foreach (var item in arr_orderingItems)
+            {
+                iTween.Pause(item.gameObject);
+            }
+
+            if (currentCustomer)
+            {
+                currentCustomer.customerOrderingIcon_Obj.active = true;
+
+                iTween.PunchPosition(currentCustomer.customerOrderingIcon_Obj,
+                    iTween.Hash("x", .1f, "y", .1f, "delay", 1f, "time", .5f, "looptype", iTween.LoopType.pingPong));
+            }
         }
-
-		yield return new WaitForSeconds(0.5f);
-		
-		darkShadowPlane.active = false;
-		foreach (var item in arr_orderingItems) {
-			iTween.Pause(item.gameObject);
-		}
-
-		if(currentCustomer) {
-			currentCustomer.customerOrderingIcon_Obj.active = true;
-        
-			iTween.PunchPosition(currentCustomer.customerOrderingIcon_Obj, 
-            	iTween.Hash("x", .1f, "y", .1f, "delay", 1f, "time", .5f, "looptype", iTween.LoopType.pingPong));
-		}
 	}
 
 	private void SetActiveGreetingMessage (bool activeState)
@@ -1338,6 +1474,10 @@ public class BakeryShop : Mz_BaseScene {
 
 		this.ShowGiveTheChangeForm();
 		currentGamePlayState = GamePlayState.giveTheChange;
+
+        if(MainMenu._HasNewGameEvent) {
+            audioDescribe.PlayOnecSound(description_clips[4]);
+        }
     }
 
 	void ShowGiveTheChangeForm ()
@@ -1365,6 +1505,16 @@ public class BakeryShop : Mz_BaseScene {
         foodTrayBeh.goodsOnTray_List.Clear();
 
         StartCoroutine(this.PackagingGoods());
+
+        if(MainMenu._HasNewGameEvent) {
+            MainMenu._HasNewGameEvent = false;
+            Destroy(bakeryShopTutor.greeting_textmesh);
+            bakeryShopTutor.goaway_button_obj.active = true;
+            bakeryShopTutor = null;
+            darkShadowPlane.transform.position += Vector3.forward * 2f;
+
+            audioDescribe.PlayOnecSound(description_clips[5]);
+        }
     }
 
     private IEnumerator PackagingGoods()
@@ -1411,6 +1561,7 @@ public class BakeryShop : Mz_BaseScene {
 			if(nameInput == "EN_001_textmesh") {
 				StartCoroutine(this.PlayGreetingAudioClip(en_greeting_clip[0]));
                 base.SetActivateTotorObject(false);
+                bakeryShopTutor.currentTutorState = BakeryShopTutor.TutorStatus.AcceptOrders;
 
                 return;
 			}
@@ -1546,7 +1697,6 @@ public class BakeryShop : Mz_BaseScene {
                 {
                     case "OK_button":
                         StartCoroutine(this.CollapseOrderingGUI());
-                        //				currentCustomer.CheckGoodsObjInTray();
                         break;
                     case "Goaway_button":
                         currentCustomer.PlayRampage_animation();
@@ -1555,6 +1705,9 @@ public class BakeryShop : Mz_BaseScene {
                     case "OrderingIcon": StartCoroutine(this.ShowOrderingGUI());
                         break;
                     case "Billing_machine":
+                        if (MainMenu._HasNewGameEvent) {
+                            base.SetActivateTotorObject(false);
+                        }
                         audioEffect.PlayOnecSound(audioEffect.calc_clip);
                         billingMachine.animation.Play(billingMachine_animState.name);
                         StartCoroutine(this.CheckingUNITYAnimationComplete(billingMachine.animation, billingMachine_animState.name));
@@ -1624,8 +1777,7 @@ public class BakeryShop : Mz_BaseScene {
     {
 		Debug.Log("CheckingGoodsObjInTray");
 		
-        if (callFrom == GoodsBeh.ClassName)
-        {
+        if (callFrom == GoodsBeh.ClassName) {
 			// Check correctly of goods with arr_orderingItems.
 			// and change color of arr_orderingBaseItems.
 			foreach (tk2dSprite item in arr_orderingItems) 
@@ -1649,8 +1801,6 @@ public class BakeryShop : Mz_BaseScene {
 				
 				if(temp_goods != null) {
 	                list_goodsTemp.Add(new CustomerOrderRequire() { food = temp_goods, });
-	
-	//				Debug.Log(list_goodsTemp[i].food.name);
 					
 					/// Check correctly of goods with arr_orderingItems.
 					/// and change color of arr_orderingBaseItems.
@@ -1659,8 +1809,6 @@ public class BakeryShop : Mz_BaseScene {
 							if(item.gameObject.name == list_goodsTemp[i].food.name)
 								item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_COMPLETE);
 						}
-//						else
-//							item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_NORMAL);
 					};
 					
 					if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
@@ -1674,51 +1822,113 @@ public class BakeryShop : Mz_BaseScene {
 				}
             }
         }
-        else if(callFrom == string.Empty) 
-        {
+        else if (callFrom == "newgame_event") {
+            // Check correctly of goods with arr_orderingItems.
+            // and change color of arr_orderingBaseItems.
+            foreach (tk2dSprite item in arr_orderingItems)
+                item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_NORMAL);
+            if (foodTrayBeh.goodsOnTray_List.Count == 0)
+            {
+                Debug.Log("food on tray is empty.");
+                return;
+            }
+            else if (this.foodTrayBeh.goodsOnTray_List.Count != currentCustomer.customerOrderRequire.Count)
+            {
+                Debug.Log("food on tray != customer require.");
+                return;
+            }
+            else {
+                List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
+                Food temp_goods = null;
+
+                for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++)
+                {
+                    foreach (GoodsBeh item in this.foodTrayBeh.goodsOnTray_List)
+                    {
+                        if (item.name == currentCustomer.customerOrderRequire[i].food.name)
+                        {
+                            temp_goods = currentCustomer.customerOrderRequire[i].food;
+                        }
+                    }
+
+                    if (temp_goods != null)
+                    {
+                        list_goodsTemp.Add(new CustomerOrderRequire() { food = temp_goods, });
+
+                        /// Check correctly of goods with arr_orderingItems.
+                        /// and change color of arr_orderingBaseItems.
+                        foreach (tk2dSprite item in arr_orderingItems)
+                        {
+                            if (list_goodsTemp[i] != null)
+                            {
+                                if (item.gameObject.name == list_goodsTemp[i].food.name)
+                                    item.transform.parent.GetComponent<tk2dSprite>().spriteId = arr_orderingBaseItems[0].GetSpriteIdByName(BASE_ORDER_ITEM_COMPLETE);
+                            }
+                        };
+
+                        if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
+                        {
+                            bakeryShopTutor.currentTutorState = BakeryShopTutor.TutorStatus.CheckAccuracy;
+                            this.billingMachine.animation.Play();
+                            StartCoroutine(this.ShowOrderingGUI());
+                        }
+
+                        temp_goods = null;
+                    }
+                    else
+                    {
+                        list_goodsTemp.Add(new CustomerOrderRequire() { food = null });
+                    }
+                }
+            }
+        }
+        else if (callFrom == string.Empty) {
             if (this.foodTrayBeh.goodsOnTray_List.Count == 0)
-			{		
-				Debug.Log("food on tray is empty.");
-				
-				StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
-            } 
+            {
+                Debug.Log("food on tray is empty.");
+
+                StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
+            }
             else if (this.foodTrayBeh.goodsOnTray_List.Count != currentCustomer.customerOrderRequire.Count)
             {
                 Debug.Log("food on tray != customer require.");
 
                 StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
-            } 
-            else {						
-				List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
-	            Food temp_goods = null;
-	
-	            for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++)
-	            {
-	                foreach (GoodsBeh item in this.foodTrayBeh.goodsOnTray_List)
-	                {
-	                    if (item.name == currentCustomer.customerOrderRequire[i].food.name)
-	                    {
-	                        temp_goods = currentCustomer.customerOrderRequire[i].food;
-	                    }
-	                }
-					
-					if(temp_goods != null) {
-						list_goodsTemp.Add(new CustomerOrderRequire() { food = temp_goods, });
-		
-						Debug.Log(list_goodsTemp[i].food.name);
-						
-						if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
-							OnManageGoodComplete(EventArgs.Empty);
-		
-		                temp_goods = null;
-					}
-					else {
-						list_goodsTemp.Add(new CustomerOrderRequire() { food = null });						
-						StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
-						return;
-					}
-	            }
-			}
+            }
+            else
+            {
+                List<CustomerOrderRequire> list_goodsTemp = new List<CustomerOrderRequire>();
+                Food temp_goods = null;
+
+                for (int i = 0; i < currentCustomer.customerOrderRequire.Count; i++)
+                {
+                    foreach (GoodsBeh item in this.foodTrayBeh.goodsOnTray_List)
+                    {
+                        if (item.name == currentCustomer.customerOrderRequire[i].food.name)
+                        {
+                            temp_goods = currentCustomer.customerOrderRequire[i].food;
+                        }
+                    }
+
+                    if (temp_goods != null)
+                    {
+                        list_goodsTemp.Add(new CustomerOrderRequire() { food = temp_goods, });
+
+                        Debug.Log(list_goodsTemp[i].food.name);
+
+                        if (list_goodsTemp.Count == currentCustomer.customerOrderRequire.Count)
+                            OnManageGoodComplete(EventArgs.Empty);
+
+                        temp_goods = null;
+                    }
+                    else
+                    {
+                        list_goodsTemp.Add(new CustomerOrderRequire() { food = null });
+                        StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
+                        return;
+                    }
+                }
+            }
         }
     }
     

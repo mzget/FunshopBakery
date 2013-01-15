@@ -38,7 +38,7 @@ public class Mz_BaseScene : MonoBehaviour {
 
 #if UNITY_IPHONE
 	
-	public static bool _IsShowADBanner = true;
+	public static bool _IsShowADBanner = false;
 	protected Mz_ADBannerManager banner;
 	
 #endif

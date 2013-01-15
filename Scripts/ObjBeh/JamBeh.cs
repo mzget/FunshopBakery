@@ -8,7 +8,11 @@ public class JamBeh : ObjectsBeh {
 	public const string ButterJam = "ButterJam";
 	public const string CustardJam = "CustardJam";
 	
-	
+
+	void Awake() {
+		iTween.Init(this.gameObject);
+	}
+
 	// Use this for initialization
 	protected override void  Start()
     {
@@ -38,6 +42,8 @@ public class JamBeh : ObjectsBeh {
 
 	protected override void OnTouchDown()
     {
+		sceneManager.SetAnimatedJamInstance(false);
+
         if(base.animationName_001 != "") {
             base.animatedSprite.Play(base.animationName_001);
             base.animatedSprite.animationCompleteDelegate = AnimationComplete;

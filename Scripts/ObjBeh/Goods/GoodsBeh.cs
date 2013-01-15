@@ -29,7 +29,8 @@ public class GoodsBeh : ObjectsBeh {
 			putObjectOnTray_Event (this, eventArgs);
 			Debug.Log (putObjectOnTray_Event + " : " + this.name);
 
-//            sceneManager.CheckingGoodsObjInTray(GoodsBeh.ClassName);
+            if(MainMenu._HasNewGameEvent)
+                sceneManager.CheckingGoodsObjInTray("newgame_event");
 		}
 	}
     

@@ -12,7 +12,11 @@ public class CreamBeh : ObjectsBeh {
 	/// </summary>
 	internal static string[] arr_CreamBehs = new string[3] { "", "", "", }; 
 	
-	
+
+	void Awake() {
+		iTween.Init(this.gameObject);
+	}
+
 	// Use this for initialization
 	protected override void Start ()
 	{
@@ -25,6 +29,8 @@ public class CreamBeh : ObjectsBeh {
 
 	protected override void OnTouchDown ()
 	{
+		sceneManager.SetAnimatedCreamInstance(false);
+
 		animatedSprite.Play(animationName_001);				
 		animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
 		

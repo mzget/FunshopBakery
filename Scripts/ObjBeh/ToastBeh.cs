@@ -25,6 +25,8 @@ public class ToastBeh : GoodsBeh {
         {
             ToastBeh._IsActive = true;
             base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
+
+			sceneManager.SetAnimatedJamInstance(true);
         }
 		
 		base.OnTouchDown();

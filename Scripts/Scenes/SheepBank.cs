@@ -181,7 +181,7 @@ public class SheepBank : Mz_BaseScene {
 		sheepBankTutor.Back_Button_obj.transform.position += Vector3.forward * 20;
 
 		handTutor.transform.localPosition = new Vector3(48f, 17f, 8f);
-		tutorDescriptions[0].transform.localPosition = new Vector3(100f, 32f, 8f);
+		tutorDescriptions[0].transform.localPosition = new Vector3(1f, 32f, 8f);
 		tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "UPGRADE SHOP";
 		tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
 		
@@ -376,6 +376,11 @@ public class SheepBank : Mz_BaseScene {
 
 	void OnTransactionMoveDownComplete() {        
         this.AccountBalanceManager(Mz_StorageManage.AccountBalance);
+		
+		if(donationForm_group.active) {			
+			availabelMoneyBillboard_Obj.gameObject.SetActiveRecursively(true);
+			this.ManageAvailabelMoneyBillBoard();
+		}
 	}
         
 	protected override void Update ()
@@ -514,15 +519,19 @@ public class SheepBank : Mz_BaseScene {
                     }
                 }
                 break;
-            case GameSceneStatus.ShowDonationForm:
-                if (nameInput == PreviousButtonName)
-                {
-                    donationManager.PreviousDonationPage();
-                }
-                else if (nameInput == NextButtonName)
-                {
-                    donationManager.NextDonationPage();
-                }
+            case GameSceneStatus.ShowDonationForm : {
+	                if (nameInput == PreviousButtonName)
+	                {
+	                    donationManager.PreviousDonationPage();
+	                }
+	                else if (nameInput == NextButtonName)
+	                {
+	                    donationManager.NextDonationPage();
+	                }
+					else {
+            			donationManager.GetInput(nameInput);
+					}
+				}
                 break;
             case GameSceneStatus.ShowDepositForm:
                 if (nameInput == OKButtonName) {
@@ -539,10 +548,6 @@ public class SheepBank : Mz_BaseScene {
 
         if(calculatorBeh.gameObject.active) {
             calculatorBeh.GetInput(nameInput);
-        }
-
-        if (currentGameStatus == GameSceneStatus.ShowDonationForm) {
-            donationManager.GetInput(nameInput);
         }
     }
 

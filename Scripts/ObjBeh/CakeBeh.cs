@@ -28,6 +28,7 @@ public class CakeBeh : GoodsBeh {
         {
             CakeBeh._IsActive = true;
             base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
+			sceneManager.SetAnimatedCreamInstance(true);
 
             base.OnTouchDown();
         }

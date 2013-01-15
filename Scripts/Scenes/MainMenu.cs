@@ -53,7 +53,7 @@ public class MainMenu : Mz_BaseScene {
 
 	#region <@-- Events
 
-	internal static bool _HasNewGameEvent = true;
+	internal static bool _HasNewGameEvent = false;
 	public event EventHandler NewGame_event;
 	void OnNewGameEvent (EventArgs e)
 	{
@@ -151,7 +151,7 @@ public class MainMenu : Mz_BaseScene {
         }
         
         if(OK_button_Obj != null && OK_button_Obj.active)
-            iTween.ShakeScale(OK_button_Obj, iTween.Hash("amount", new Vector3(.1f, 0.1f, 0), "time", 2f, "looptype", iTween.LoopType.loop));
+            iTween.ScaleTo(OK_button_Obj, iTween.Hash("scale", new Vector3(1.2f, 1.2f, 1f), "time", .6f, "looptype", iTween.LoopType.pingPong));
 	}
 
 	protected override void OnGUI() {
