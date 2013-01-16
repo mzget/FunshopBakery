@@ -324,8 +324,8 @@ public class BakeryShop : Mz_BaseScene {
 		if(MainMenu._HasNewGameEvent) {
 			darkShadowPlane.active = true;
             darkShadowPlane.transform.position += Vector3.back * 2f;
+            this.CreateTutorObjectAtRuntime();
             this.CreateGreetingCustomerTutorEvent();
-			this.CreateTutorObjectAtRuntime();
 		}
 		else {
 			darkShadowPlane.active = false;
@@ -339,6 +339,7 @@ public class BakeryShop : Mz_BaseScene {
 		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
+        audioBackground_Obj.audio.volume = 0.6f;
         audioBackground_Obj.audio.Play();
 		
 		yield return null;
@@ -381,6 +382,9 @@ public class BakeryShop : Mz_BaseScene {
 		bakeryShopTutor.greeting_textSprite.active = false;
         bakeryShopTutor.greeting_textmesh.active = true;
 
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "GREETING";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+
         audioDescribe.PlayOnecSound(description_clips[0]);
 	}
 
@@ -400,6 +404,36 @@ public class BakeryShop : Mz_BaseScene {
 		if(_isPlayAcceptOuderSound == false)
 			StartCoroutine(this.WaitForHelloCustomer());
 	}
+
+	void GenerateGoodOrderTutorEvent ()
+	{
+		base.SetActivateTotorObject(true);
+		cupcake.gameObject.transform.position += Vector3.back * 9f;
+
+        handTutor.transform.localPosition = new Vector3(-0.68f, 0.38f, 3f);
+		
+		tutorDescriptions[0].transform.localPosition = new Vector3(-0.48f, 0.5f, 3f);
+		tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "TAP";
+		tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+		//<@-- Animated hand with tweening.
+		iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0.45f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+	}
+
+    internal void CreateDragGoodsToTrayTutorEvent()
+    {
+        Vector3 originalFoodTrayPos = foodsTray_obj.transform.position;
+        foodsTray_obj.transform.position = new Vector3(originalFoodTrayPos.x, originalFoodTrayPos.y, -5.5f);
+
+        base.SetActivateTotorObject(true);
+
+        handTutor.transform.localPosition = new Vector3(0f, -0.5f, 3f);
+
+        tutorDescriptions[0].transform.localPosition = new Vector3(0.6f, -0.3f, 3f);
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "DRAG GOOD TO TRAY";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
+        //<@-- Animated hand with tweening.
+        iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", -.6f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+    }
 	
 	private bool _isPlayAcceptOuderSound = false;
     private IEnumerator WaitForHelloCustomer()
@@ -414,6 +448,8 @@ public class BakeryShop : Mz_BaseScene {
     {
         this.SetActivateTotorObject(true);
         bakeryShopTutor.goaway_button_obj.active = false;
+        Vector3 originalFoodTrayPos = foodsTray_obj.transform.position;
+        foodsTray_obj.transform.position = new Vector3(originalFoodTrayPos.x, originalFoodTrayPos.y, -2f);
 
         handTutor.transform.localPosition = new Vector3(-0.62f, -0.13f, 3f);
 
@@ -1303,8 +1339,10 @@ public class BakeryShop : Mz_BaseScene {
 			              iTween.Hash("position", new Vector3(-0.85f, .06f, -2.5f), "islocal", true, "time", .5f, "easetype", iTween.EaseType.spring));
             if (bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.AcceptOrders)
                 this.CreateAcceptOrdersTutorEvent();
-            else if(bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.CheckAccuracy)
+            else if (bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.CheckAccuracy) {
+                base.SetActivateTotorObject(false);
                 this.CreateCheckingAccuracyTutorEvent();
+            }
 		}
 		else {
 			iTween.MoveTo(baseOrderUI_Obj.gameObject, 
@@ -1327,15 +1365,15 @@ public class BakeryShop : Mz_BaseScene {
 	{
         if (MainMenu._HasNewGameEvent)
         {
-            iTween.MoveTo(baseOrderUI_Obj.gameObject,
+			base.SetActivateTotorObject(false);
+            
+			iTween.MoveTo(baseOrderUI_Obj.gameObject,
                       iTween.Hash("position", new Vector3(-0.85f, -2f, 0f), "islocal", true, "time", 0.5f, "easetype", iTween.EaseType.linear));
 
-            base.SetActivateTotorObject(false);
-
-            if(bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.AcceptOrders) {
+            if (bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.AcceptOrders)
+            {
+                this.GenerateGoodOrderTutorEvent();
                 yield return new WaitForSeconds(0.5f);
-
-                darkShadowPlane.active = false;
                 foreach (var item in arr_orderingItems)
                 {
                     iTween.Pause(item.gameObject);
@@ -1385,13 +1423,17 @@ public class BakeryShop : Mz_BaseScene {
 		else {
 			iTween.ScaleTo(greetingMessage_ObjGroup, iTween.Hash("x", 0f, "y", 0f, "time", 0.5f, "easetype", iTween.EaseType.easeInExpo,
 				"oncomplete", "UnActiveGreetingMessage", "oncompletetarget", this.gameObject));
-//			greetingMessage_ObjGroup.transform.localScale = new Vector3(0.3f, 0.3f, 1);
 		}
 	}
 	
 	void UnActiveGreetingMessage() {		
 		greetingMessage_ObjGroup.SetActiveRecursively(false);
-		currentCustomer.GenerateGoodOrder();
+		
+		if(MainMenu._HasNewGameEvent) {
+			currentCustomer.GenerateTutorGoodOrderEvent();
+		}
+		else
+			currentCustomer.GenerateGoodOrder();
 	}
 	
 	IEnumerator PlayApologizeCustomer (AudioClip clip)
@@ -1560,7 +1602,7 @@ public class BakeryShop : Mz_BaseScene {
 		if(MainMenu._HasNewGameEvent) {
 			if(nameInput == "EN_001_textmesh") {
 				StartCoroutine(this.PlayGreetingAudioClip(en_greeting_clip[0]));
-                base.SetActivateTotorObject(false);
+//                base.SetActivateTotorObject(false);
                 bakeryShopTutor.currentTutorState = BakeryShopTutor.TutorStatus.AcceptOrders;
 
                 return;

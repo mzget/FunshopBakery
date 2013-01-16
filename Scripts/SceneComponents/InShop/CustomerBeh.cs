@@ -70,8 +70,14 @@ public class CustomerBeh : MonoBehaviour {
 		}
 	}
 
+	internal void GenerateTutorGoodOrderEvent() {
+		customerOrderRequire.Add(new CustomerOrderRequire() { food = new Food(GoodDataStore.FoodMenuList.Chocolate_cupcake.ToString(), 13), });   // number = 1,	// Random.Range(1, 4),
+		amount = 13;
+		sceneManager.GenerateOrderGUI();
+	}
+
     internal void GenerateGoodOrder()
-    {		
+    {
         int maxGoodsType = 3;
 //        if(BakeryShop.gameLevel == 0)
 //            maxGoodsType = 3;

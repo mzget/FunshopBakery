@@ -35,6 +35,11 @@ public class CakeBeh : GoodsBeh {
 		else {
 			base.OnTouchDown();
 		}
+		
+		if(MainMenu._HasNewGameEvent && this.name == CakeBeh.Cupcake) {
+            Vector3 currentPos = sceneManager.chocolate_cream_Instance.transform.position;
+            sceneManager.chocolate_cream_Instance.transform.position = new Vector3(currentPos.x, currentPos.y, -9f);
+		}
     }
 
     public override void WaitForIngredient(string ingredientName)
@@ -42,6 +47,8 @@ public class CakeBeh : GoodsBeh {
         base.WaitForIngredient(ingredientName);
         if (_isWaitFotIngredient == false)
             return;
+        if (MainMenu._HasNewGameEvent)
+            sceneManager.SetActivateTotorObject(false);
 
         iTween.Stop(this.gameObject);
         this.transform.position = base.originalPosition;
@@ -51,8 +58,19 @@ public class CakeBeh : GoodsBeh {
             base.animatedSprite.Play(CreamBeh.ChocolateCream);
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id)
             {
-                if (this.gameObject.name == Cupcake)
+                if (this.gameObject.name == Cupcake) {
                     this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_cupcake.ToString();
+
+                    if (MainMenu._HasNewGameEvent)
+                    {
+                        Vector3 chocolateCreamPos = sceneManager.chocolate_cream_Instance.transform.position;
+                        sceneManager.chocolate_cream_Instance.transform.position = new Vector3(chocolateCreamPos.x, chocolateCreamPos.y, 0);
+
+                        Vector3 currentPos = this.gameObject.transform.position;
+                        this.gameObject.transform.position = new Vector3(currentPos.x, currentPos.y, -9f);
+                        sceneManager.CreateDragGoodsToTrayTutorEvent();
+                    }
+                }
                 else if (this.gameObject.name == MiniCake)
                     this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_minicake.ToString();
                 else if (this.gameObject.name == Cake)
