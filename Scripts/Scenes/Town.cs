@@ -78,6 +78,7 @@ public class Town : Mz_BaseScene {
 	void Start ()
     {
         Mz_ResizeScale.ResizingScale(town_bg_group.transform);
+		StartCoroutine(ReInitializeAudioClipData());
 		StartCoroutine(this.InitializeAudio());
         StartCoroutine(base.InitializeIdentityGUI());
 
@@ -185,16 +186,33 @@ public class Town : Mz_BaseScene {
 		OnnewGameStartup_Event(EventArgs.Empty);
 	}
 
-	protected new IEnumerator InitializeAudio ()
+	protected IEnumerator InitializeAudio ()
 	{
-    	base.InitializeAudio();
+    	base.CreateAudioObject();
 		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
         audioBackground_Obj.audio.Play();
 
         yield return null;
-	}
+	}	
+
+    private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/GameIntroduce/Town/";
+    private IEnumerator ReInitializeAudioClipData()
+    {
+        description_clips.Clear();
+		if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH) {
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_tutor_01", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_create_newgame", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_create_newshop", typeof(AudioClip)) as AudioClip);
+		}
+		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_tutor_01", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_tutor_02", typeof(AudioClip)) as AudioClip);
+		}		
+		
+        yield return 0;
+    }
 
 	#region <!-- Decoration upgrade bar.
 

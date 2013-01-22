@@ -39,7 +39,8 @@ public class DogBeh : PetBeh {
 		iTween.Stop(this.gameObject);
 		
         animatedSprite.Play(NameAnimationList.WalkRight.ToString());
-		audio.Play();
+        if(Mz_BaseScene.ToggleAudioActive == true)
+            audio.Play();
 		
         this.transform.position = new Vector3(-3f, -1.1f, -5f);
         iTween.MoveTo(this.gameObject, iTween.Hash("position", new Vector3(3f, -1.1f, -5f), "islocal", false, "time", 12f, "easetype", iTween.EaseType.linear, "looptype", iTween.LoopType.none,

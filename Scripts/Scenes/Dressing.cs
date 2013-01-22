@@ -43,7 +43,7 @@ public class Dressing : Mz_BaseScene {
 
     protected new IEnumerator InitializeAudio()
     {
-        base.InitializeAudio();
+        base.CreateAudioObject();
         
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;

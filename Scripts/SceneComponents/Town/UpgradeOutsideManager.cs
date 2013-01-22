@@ -176,7 +176,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 	public void ActiveRoof ()
 	{
 		for (int i = 0; i < 7; i++) {
-			upgrade_sprites[i].spriteId = upgrade_sprites [0].GetSpriteIdByName (roofData.NameSpecify [i]);
+			upgrade_sprites[i].spriteId = upgrade_sprites [0].GetSpriteIdByName(roofData.NameSpecify [i]);
 			
 			if(UpgradeOutsideManager.CanDecorateRoof_list.Contains(i) == false) {
 				itemPrice_textmesh[i].gameObject.SetActiveRecursively(true);

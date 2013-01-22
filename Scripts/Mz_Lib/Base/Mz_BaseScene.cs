@@ -6,19 +6,7 @@ using System.Collections.Generic;
 public class Mz_BaseScene : MonoBehaviour {
     
     public enum SceneNames { none = 0, LoadingScene = 1, MainMenu, WaitForStart, Town, BakeryShop, Sheepbank, Dressing, DisplayReward, };
-	
-    //<!-- Audio Manage.
-    protected static bool ToggleAudioActive = true;
-    public GameEffectManager gameEffectManager;
-    public AudioEffectManager audioEffect;
-	public AudioDescribeManager audioDescribe;
-    public GameObject audioBackground_Obj;
-    public AudioClip background_clip;
-    public List<AudioClip> description_clips = new List<AudioClip>();
-    public List<AudioClip> soundEffect_clips = new List<AudioClip>();
-//  public List<AudioClip> appreciate_Clips = new List<AudioClip>();
-//	public List<AudioClip> warning_Clips = new List<AudioClip>();
-	
+		
 	#region <@-- Detect Touch and Input Data Fields.
 
     public Touch touch;
@@ -105,7 +93,18 @@ public class Mz_BaseScene : MonoBehaviour {
 	// Use this for initialization
 //	void Start () {	}
 	
-	protected void InitializeAudio()
+	//<!-- Audio Manage.
+	internal static bool ToggleAudioActive = true;
+	public GameEffectManager gameEffectManager;
+	public AudioEffectManager audioEffect;
+	public AudioDescribeManager audioDescribe;
+	public GameObject audioBackground_Obj;
+	public AudioClip background_clip;
+	public List<AudioClip> description_clips;
+	public List<AudioClip> soundEffect_clips;
+	//  public List<AudioClip> appreciate_Clips = new List<AudioClip>();
+	//	public List<AudioClip> warning_Clips = new List<AudioClip>();
+	protected void CreateAudioObject()
     {
 		Debug.Log("Scene :: InitializeAudio");
 
@@ -142,6 +141,19 @@ public class Mz_BaseScene : MonoBehaviour {
             audioBackground_Obj.audio.mute = !ToggleAudioActive;
         }
     }
+
+	protected void MuteAudioConfiguration ()
+	{
+		ToggleAudioActive = !ToggleAudioActive;
+		this.SetActivateEnablePlayAudio();
+	}
+
+	void SetActivateEnablePlayAudio ()
+	{		
+		audioEffect.audio.mute = !ToggleAudioActive;
+		audioBackground_Obj.audio.mute = !ToggleAudioActive;
+		audioDescribe.audio.mute = !ToggleAudioActive;
+	}
 
     //<!--- GUI_identity.
     public GameObject identityGUI_obj;

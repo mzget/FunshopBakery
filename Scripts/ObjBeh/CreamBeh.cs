@@ -15,6 +15,7 @@ public class CreamBeh : ObjectsBeh {
 
 	void Awake() {
 		iTween.Init(this.gameObject);
+		this.originalPosition = this.transform.position;
 	}
 
 	// Use this for initialization

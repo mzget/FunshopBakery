@@ -80,7 +80,6 @@ public class SheepBank : Mz_BaseScene {
 	public SheepBankTutor sheepBankTutor;
     public BankOfficer offecer = new BankOfficer();
     public GameObject[] upgradeButtons = new GameObject[8];
-	public AudioClip long_introduce_clip;
 	public AudioClip short_introduce_clip;
 
     public enum GameSceneStatus { none = 0, ShowUpgradeInside = 1, ShowDonationForm, ShowDepositForm, ShowWithdrawalForm, ShowPassbook, };
@@ -93,7 +92,8 @@ public class SheepBank : Mz_BaseScene {
         Mz_ResizeScale.ResizingScale(background_obj.transform);
 		
 		SheepBank.HaveUpgradeOutSide = false;
-
+		
+		StartCoroutine(ReInitializeAudioClipData());
         StartCoroutine(this.InitializeAudio());
         StartCoroutine(base.InitializeIdentityGUI());
         StartCoroutine(this.InitializeBankOfficer());
@@ -119,7 +119,7 @@ public class SheepBank : Mz_BaseScene {
     {
         if (MainMenu._HasNewGameEvent)
         {
-            audioDescribe.PlayOnecWithOutStop(long_introduce_clip);
+            audioDescribe.PlayOnecWithOutStop(description_clips[0]);
             StartCoroutine(PlayWomanOfficerAnimation(string.Empty));
             StartCoroutine(PlayManOfficerAnimation(string.Empty));
         }
@@ -224,9 +224,9 @@ public class SheepBank : Mz_BaseScene {
 
     #endregion
 
-    protected new IEnumerator InitializeAudio()
+    protected IEnumerator InitializeAudio()
     {
-        base.InitializeAudio();
+        base.CreateAudioObject();
 
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
@@ -234,6 +234,23 @@ public class SheepBank : Mz_BaseScene {
 		
 		yield return 0;
     }
+
+    private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/GameIntroduce/SheepBank/";
+    private IEnumerator ReInitializeAudioClipData()
+    {
+        description_clips.Clear();
+		if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH) {
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_introduce", typeof(AudioClip)) as AudioClip);
+			short_introduce_clip = Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_greeting", typeof(AudioClip)) as AudioClip;
+		}
+		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_introduce", typeof(AudioClip)) as AudioClip);
+			short_introduce_clip = Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_greeting", typeof(AudioClip)) as AudioClip;
+		}		
+		
+        yield return 0;
+    }
+	
 	protected override void InitializeGameEffectGenerator ()
 	{
 //		base.InitializeGameEffectGenerator ();

@@ -137,29 +137,34 @@ public class BakeryShop : Mz_BaseScene {
 	internal void SetAnimatedJamInstance(bool activeState) {	
 		if(activeState)	{ 			
 			if(this.strawberryJam_instance) 
-				iTween.PunchPosition(this.strawberryJam_instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+				iTween.PunchPosition(this.strawberryJam_instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.loop));	
 			
 			if(this.blueberryJam_instance)
-				iTween.PunchPosition(this.blueberryJam_instance, iTween.Hash("y", -.1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+				iTween.PunchPosition(this.blueberryJam_instance, iTween.Hash("y", -.1f, "time", 1f, "looptype", iTween.LoopType.loop));	
 
 			if(this.freshButterJam_instance)
-				iTween.PunchPosition(this.freshButterJam_instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+				iTween.PunchPosition(this.freshButterJam_instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.loop));	
 			
 			if(this.custardJam_instance)
-				iTween.PunchPosition(this.custardJam_instance, iTween.Hash("y", -.1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
+				iTween.PunchPosition(this.custardJam_instance, iTween.Hash("y", -.1f, "time", 1f, "looptype", iTween.LoopType.loop));	
 		}
 		else {			
-			if(this.blueberryJam_instance)
+			if(this.blueberryJam_instance) {
 				iTween.Stop(this.blueberryJam_instance);	
-			
-			if(this.custardJam_instance)
+				blueberryJam_instance.transform.position = blueberryJam_instance.GetComponent<JamBeh>().originalPosition;
+			}
+			if(this.custardJam_instance) {
 				iTween.Stop(this.custardJam_instance);	
-			
-			if(this.freshButterJam_instance)
-				iTween.Stop(this.freshButterJam_instance);	
-			
-			if(this.strawberryJam_instance) 
-				iTween.Stop(this.strawberryJam_instance);	
+				custardJam_instance.transform.position = custardJam_instance.GetComponent<JamBeh>().originalPosition;
+			}
+			if(this.freshButterJam_instance) {
+				iTween.Stop(this.freshButterJam_instance);
+				freshButterJam_instance.transform.position = freshButterJam_instance.GetComponent<JamBeh>().originalPosition;	
+			}
+			if(this.strawberryJam_instance) {
+				iTween.Stop(this.strawberryJam_instance);
+				strawberryJam_instance.transform.position = strawberryJam_instance.GetComponent<JamBeh>().originalPosition;	
+			}
 		}
 	}
 
@@ -187,12 +192,18 @@ public class BakeryShop : Mz_BaseScene {
 				iTween.PunchPosition(this.blueberry_cream_Instance, iTween.Hash("y", .1f, "time", 1f, "looptype", iTween.LoopType.pingPong));	
 		}
 		else {			
-			if(this.chocolate_cream_Instance)
+			if(this.chocolate_cream_Instance) {
 				iTween.Stop(this.chocolate_cream_Instance);		
-			if(this.blueberry_cream_Instance)
+				chocolate_cream_Instance.transform.position = chocolate_cream_Instance.GetComponent<CreamBeh>().originalPosition;
+			}
+			if(this.blueberry_cream_Instance) {
 				iTween.Stop(this.blueberry_cream_Instance);	
-			if(this.strawberry_cream_Instance)
+				blueberry_cream_Instance.transform.position = blueberry_cream_Instance.GetComponent<CreamBeh>().originalPosition;
+			}
+			if(this.strawberry_cream_Instance) {
 				iTween.Stop(this.strawberry_cream_Instance);	
+				strawberry_cream_Instance.transform.position = strawberry_cream_Instance.GetComponent<CreamBeh>().originalPosition;
+			}
 		}
 	}
 
@@ -259,8 +270,10 @@ public class BakeryShop : Mz_BaseScene {
 
     private IEnumerator InitailizeSceneObject()
     {
-//		Mz_ResizeScale.ResizingScale(bakeryShop_backgroup_group.transform);]
-
+		foodTrayBeh = new FoodTrayBeh();
+        goodDataStore = new GoodDataStore();
+		
+		StartCoroutine(ReInitializeAudioClipData());
         StartCoroutine(this.SceneInitializeAudio());
 		StartCoroutine(this.ChangeShopLogoIcon());
 		StartCoroutine(this.InitializeObjectAnimation());
@@ -299,9 +312,6 @@ public class BakeryShop : Mz_BaseScene {
 		hotdogCheese.gameObject.active = false;
 
         yield return null;
-
-		foodTrayBeh = new FoodTrayBeh();
-        goodDataStore = new GoodDataStore();
         
         calculator_group_instance.SetActiveRecursively(false);
 
@@ -321,21 +331,15 @@ public class BakeryShop : Mz_BaseScene {
         nullCustomer_event += new EventHandler(BakeryShop_nullCustomer_event);
         OnNullCustomer_event(EventArgs.Empty);
 
-		if(MainMenu._HasNewGameEvent) {
-			darkShadowPlane.active = true;
-            darkShadowPlane.transform.position += Vector3.back * 2f;
-            this.CreateTutorObjectAtRuntime();
-            this.CreateGreetingCustomerTutorEvent();
+		if(MainMenu._HasNewGameEvent == false) {
+			Destroy(bakeryShopTutor.greeting_textmesh);
+			bakeryShopTutor = null;
 		}
-		else {
-			darkShadowPlane.active = false;
-            Destroy(bakeryShopTutor.greeting_textmesh);
-        }
     }
    
 	private IEnumerator SceneInitializeAudio ()
 	{
-        base.InitializeAudio();
+        base.CreateAudioObject();
 		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
@@ -344,6 +348,58 @@ public class BakeryShop : Mz_BaseScene {
 		
 		yield return null;
 	}
+
+    private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/GameIntroduce/Shop/";
+    private const string PATH_OF_MERCHANDISC_CLIP = "AudioClips/AudioDescribe/";
+    private IEnumerator ReInitializeAudioClipData()
+    {
+        description_clips.Clear();
+        if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH)
+        {
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "1.TH_greeting", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "2.TH_ordering", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "3.TH_dragGoodsToTray", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "4.TH_checkingAccuracy", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "5.TH_billing", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "6.TH_calculationPrice", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "7.TH_giveTheChange", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "8.TH_completeTutor", typeof(AudioClip)) as AudioClip);
+		}
+        else if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN)
+        {
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "1.EN_greeting", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "2.EN_ordering", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "3.EN_dragGoodsToTray", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "4.EN_checkingAccuracy", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "5.EN_billing", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "6.EN_calculationPrice", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "7.EN_giveTheChange", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "8.EN_completeTutor", typeof(AudioClip)) as AudioClip);
+		}
+
+        this.ReInitializingMerchandiseNameAudio();
+
+        yield return 0;
+    }
+
+    private void ReInitializingMerchandiseNameAudio()
+    {
+		audioDescriptionData.merchandiseNameDescribes = new AudioClip[30];
+		
+        if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
+            for (int i = 0; i < 30; i++) {
+                audioDescriptionData.merchandiseNameDescribes[i] =
+                    Resources.Load(PATH_OF_MERCHANDISC_CLIP + "EN/" + goodDataStore.FoodDatabase_list[i].name, typeof(AudioClip)) as AudioClip;
+            }
+        }
+        else if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH)
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                audioDescriptionData.merchandiseNameDescribes[i] = Resources.Load(PATH_OF_MERCHANDISC_CLIP + "TH/" + goodDataStore.FoodDatabase_list[i].name, typeof(AudioClip)) as AudioClip;
+            }
+        }
+    }
 
     private IEnumerator InitializeGameEffect()
     {
@@ -409,6 +465,9 @@ public class BakeryShop : Mz_BaseScene {
 	{
 		base.SetActivateTotorObject(true);
 		cupcake.gameObject.transform.position += Vector3.back * 9f;
+		cupcake.originalPosition = cupcake.transform.position;
+
+        audioDescribe.PlayOnecSound(description_clips[2]);
 
         handTutor.transform.localPosition = new Vector3(-0.68f, 0.38f, 3f);
 		
@@ -451,6 +510,8 @@ public class BakeryShop : Mz_BaseScene {
         Vector3 originalFoodTrayPos = foodsTray_obj.transform.position;
         foodsTray_obj.transform.position = new Vector3(originalFoodTrayPos.x, originalFoodTrayPos.y, -2f);
 
+        audioDescribe.PlayOnecSound(description_clips[3]);
+
         handTutor.transform.localPosition = new Vector3(-0.62f, -0.13f, 3f);
 
         tutorDescriptions[0].transform.localPosition = new Vector3(0f, 0f, 3f);
@@ -476,7 +537,7 @@ public class BakeryShop : Mz_BaseScene {
         //<@-- Animated hand with tweening.
         iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
 
-        audioDescribe.PlayOnecSound(description_clips[2]);
+        audioDescribe.PlayOnecSound(description_clips[4]);
     }
 
 	#endregion
@@ -1205,12 +1266,36 @@ public class BakeryShop : Mz_BaseScene {
     }
 
     #endregion
-
-    #region <!-- Customer manage system.
-
+	
+	/// <summary>
+	/// Handle shop_null customer_event.
+	/// </summary>
+	/// <param name='sender'>
+	/// Sender.
+	/// </param>
+	/// <param name='e'>
+	/// E.
+	/// </param>
     private void BakeryShop_nullCustomer_event(object sender, EventArgs e) {
-    	StartCoroutine(CreateCustomer());
+		if(MainMenu._HasNewGameEvent) {
+			StartCoroutine(this.WaitForCreateCustomer());
+			close_button.gameObject.active = false;
+		}
+		else {
+			StartCoroutine(CreateCustomer());
+			darkShadowPlane.active = false;
+			close_button.gameObject.active = true;
+		}
     }
+
+	IEnumerator WaitForCreateCustomer ()
+	{
+		yield return StartCoroutine(this.CreateCustomer());
+		darkShadowPlane.active = true;
+		darkShadowPlane.transform.position += Vector3.back * 2f;
+		this.CreateTutorObjectAtRuntime();
+		this.CreateGreetingCustomerTutorEvent();
+	}
 
     private IEnumerator CreateCustomer() { 
 		yield return new WaitForSeconds(1f);
@@ -1259,8 +1344,6 @@ public class BakeryShop : Mz_BaseScene {
 		OnNullCustomer_event(EventArgs.Empty);
     }
 
-	#endregion
-
     public void Handle_manageGoodsComplete_event(object sender, System.EventArgs eventArgs)
 	{
 		int r = UnityEngine.Random.Range(0, en_appreciate_clip.Length);
@@ -1289,7 +1372,7 @@ public class BakeryShop : Mz_BaseScene {
 		this.ManageCalculationPriceGUI();
 
         if(MainMenu._HasNewGameEvent) {
-            audioDescribe.PlayOnecSound(description_clips[3]);
+            audioDescribe.PlayOnecSound(description_clips[5]);
         }
     }
 
@@ -1337,6 +1420,7 @@ public class BakeryShop : Mz_BaseScene {
 		if(MainMenu._HasNewGameEvent) {
 			iTween.MoveTo(baseOrderUI_Obj.gameObject, 
 			              iTween.Hash("position", new Vector3(-0.85f, .06f, -2.5f), "islocal", true, "time", .5f, "easetype", iTween.EaseType.spring));
+
             if (bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.AcceptOrders)
                 this.CreateAcceptOrdersTutorEvent();
             else if (bakeryShopTutor.currentTutorState == BakeryShopTutor.TutorStatus.CheckAccuracy) {
@@ -1449,7 +1533,7 @@ public class BakeryShop : Mz_BaseScene {
 		this.PlayApologizeAudioClip(clip);
 	}
 
-	#region <@-- Play Audio method.
+	#region <!-- Play Audio method.
 
 	IEnumerator PlayGreetingAudioClip (AudioClip clip)
 	{
@@ -1487,6 +1571,9 @@ public class BakeryShop : Mz_BaseScene {
 	
     private IEnumerator ReceiveMoneyFromCustomer() {
         currentGamePlayState = GamePlayState.receiveMoney;
+
+        if (MainMenu._HasNewGameEvent)
+            audioDescribe.PlayOnecSound(description_clips[6]);
         
 		if (cash_obj == null)
         {
@@ -1516,10 +1603,6 @@ public class BakeryShop : Mz_BaseScene {
 
 		this.ShowGiveTheChangeForm();
 		currentGamePlayState = GamePlayState.giveTheChange;
-
-        if(MainMenu._HasNewGameEvent) {
-            audioDescribe.PlayOnecSound(description_clips[4]);
-        }
     }
 
 	void ShowGiveTheChangeForm ()
@@ -1555,7 +1638,7 @@ public class BakeryShop : Mz_BaseScene {
             bakeryShopTutor = null;
             darkShadowPlane.transform.position += Vector3.forward * 2f;
 
-            audioDescribe.PlayOnecSound(description_clips[5]);
+            audioDescribe.PlayOnecSound(description_clips[7]);
         }
     }
 

@@ -29,7 +29,7 @@ public class DisplayRewards_Scene : Mz_BaseScene {
 	}
 	
 	private new IEnumerator InitializeAudio() {
-		base.InitializeAudio();		
+		base.CreateAudioObject();		
 		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;

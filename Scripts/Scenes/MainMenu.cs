@@ -4,7 +4,6 @@ using System.Collections;
 
 public class MainMenu : Mz_BaseScene {
 
-    public GameObject cloud_Obj;
     public GameObject baseBuilding_Obj;
     public GameObject movingCloud_Objs;
     public GameObject flyingBird_group;
@@ -13,13 +12,14 @@ public class MainMenu : Mz_BaseScene {
     public Transform newgame_Group;
     public Transform initializeNewGame_Group;
 	private InitializeNewShop initializeNewShop;
-        
+	public GUIOptionsManager optionsManager = new GUIOptionsManager();
+
     public Transform loadgame_Group;
     public GameObject back_button;
-    //<!--- Main menu group.
-    public GameObject createNewShop_button;
-    public GameObject loadShop_button;
     private GameObject OK_button_Obj;
+    const string CREATE_NEWSHOP_BUTTON_NAME = "CreateNewShop_button";
+    const string LOADSHOP_BUTTON_NAME = "LoadShop_button";
+
  
     private Hashtable moveDownTransform_Data = new Hashtable();
     private Hashtable moveUpTransform_Data = new Hashtable();
@@ -40,7 +40,6 @@ public class MainMenu : Mz_BaseScene {
     private string player_1;
     private string player_2;
     private string player_3;
-
 	public bool _showSkinLayout;
 	Rect newgame_Textfield_rect;
 	Rect newShopName_rect;
@@ -67,10 +66,10 @@ public class MainMenu : Mz_BaseScene {
 	// Use this for initialization
 	void Start () {
 		this.InitailizeDataFields();
+		StartCoroutine(ReInitializeAudioClipData());
         StartCoroutine(PreparingAudio());
 		this.PlayWelcomeEvent();
 
-        Mz_ResizeScale.ResizingScale(cloud_Obj.transform);
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
 
         iTween.MoveTo(mainmenu_Group.gameObject, moveDownTransform_Data);
@@ -94,7 +93,7 @@ public class MainMenu : Mz_BaseScene {
 	
 	protected IEnumerator PreparingAudio ()
 	{
-		base.InitializeAudio ();
+		base.CreateAudioObject ();
 		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
@@ -102,6 +101,24 @@ public class MainMenu : Mz_BaseScene {
 		
 		yield return 0;
 	}
+
+    private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/GameIntroduce/Mainmenu/";
+    private IEnumerator ReInitializeAudioClipData()
+    {
+		description_clips.Clear();
+		if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH) {
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_game_intro", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_create_newgame", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_create_newshop", typeof(AudioClip)) as AudioClip);
+		}
+		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_game_intro", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_create_newgame", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_create_newshop", typeof(AudioClip)) as AudioClip);
+		}		
+		
+        yield return 0;
+    }
 	
     void InitailizeDataFields()
     {
@@ -471,20 +488,57 @@ public class MainMenu : Mz_BaseScene {
         }
         GUI.EndGroup();
     }
+	
+	void SetActivateGUIOptionsGroup (bool activeState)
+	{
+        if(activeState) {
+			plane_darkShadow.active = true;
+            iTween.MoveTo(optionsManager.selectLanguage_Obj, iTween.Hash("y", 0.1f, "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutBounce));
+        }
+        else {
+			plane_darkShadow.active = false;
+            iTween.MoveTo(optionsManager.selectLanguage_Obj, iTween.Hash("y", 2f, "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutBounce));
+        }
+	}
 
     public override void OnInput(string nameInput)
     {
         base.OnInput(nameInput);
 
+		switch (nameInput) {
+		case "Audio" :
+			base.MuteAudioConfiguration();
+			if(Mz_BaseScene.ToggleAudioActive)
+				optionsManager.audio_ui_sprite.spriteId = GUIOptionsManager.AUDIO_ON_ID;
+			else
+				optionsManager.audio_ui_sprite.spriteId = GUIOptionsManager.AUDIO_OFF_ID;
+			break;
+		case "Flag_UI" : 
+			this.SetActivateGUIOptionsGroup(true);
+			break;
+            case "EN" :
+            Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.EN;
+            StartCoroutine(this.ReInitializeAudioClipData());
+			this.SetActivateGUIOptionsGroup(false);
+			break;
+		case "TH" :
+            Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.TH;
+            StartCoroutine(this.ReInitializeAudioClipData());
+			this.SetActivateGUIOptionsGroup(false);
+			break;
+		default:
+			break;
+		}
+
         if(mainmenu_Group.gameObject.active) {
-            if (nameInput == createNewShop_button.name) {
+            if (nameInput == CREATE_NEWSHOP_BUTTON_NAME) {
                 //<!-- SceneState.showNewShop -->
-                StartCoroutine(ShowCreateNewShop());
+                StartCoroutine(ShowCreateNewGame());
 				this.characterAnimationManager.PlayGoodAnimation();
 				audioDescribe.PlayOnecSound(description_clips[1]);
                 return;
             }
-            else if (nameInput == loadShop_button.name) {
+            else if (nameInput == LOADSHOP_BUTTON_NAME) {
                 //<!-- SceneState.showLoadGame -->
                 StartCoroutine(ShowLoadShop());
                 this.characterAnimationManager.RandomPlayGoodAnimation();
@@ -556,6 +610,7 @@ public class MainMenu : Mz_BaseScene {
     private IEnumerator ShowInitializeNewShop()
     {
         sceneState = SceneState.showNewShop;
+		audioDescribe.PlayOnecSound(description_clips[2]);
 
         initializeNewGame_Group.gameObject.SetActiveRecursively(true);
         OK_button_Obj = initializeNewGame_Group.transform.Find("OK_button").gameObject;        
@@ -597,7 +652,7 @@ public class MainMenu : Mz_BaseScene {
         back_button.gameObject.SetActiveRecursively(false);
     }
 
-    private IEnumerator ShowCreateNewShop()
+    private IEnumerator ShowCreateNewGame()
     {
         iTween.MoveTo(mainmenu_Group.gameObject, moveUpTransform_Data);
         newgame_Group.gameObject.SetActiveRecursively(true);
