@@ -54,12 +54,25 @@ class AccessoriesDatacollecction {
 	};
 };
 
+class PetDataCollection
+{
+	public readonly string[] NameSpecify = new string[7] {
+		"BullDog", "Dog", "Ewe", "Ram", "Nanny", "BillyGoat", "Cow",
+	};
+
+    public readonly int[] upgradePrice = new int[7] {
+		1000, 1500, 2000, 2800, 3200, 3200, 3200, 
+	};
+};
+
 public class UpgradeOutsideManager : MonoBehaviour
 {
+
 	public const string Roof_button = "roof_button";
 	public const string Table_button = "table_button";
 	public const string Awning_button = "awning_button";
 	public const string Accessories_button = "accessories_button";
+    public const string Pet_button = "Pet_button";
 
     public static List<int> CanDecorateRoof_list = new List<int>();
 	public static List<int> CanDecorateAwning_list = new List<int>();
@@ -71,6 +84,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 	private AwningDataCollection awningData = new AwningDataCollection();
 	private TableDataCollection tableData = new TableDataCollection();
 	private AccessoriesDatacollecction accessoriesData = new AccessoriesDatacollecction();
+	private PetDataCollection petData = new PetDataCollection();
 
     public tk2dSprite roofDecoration_Sprite;
     public tk2dSprite awningDecoration_Sprite;
@@ -87,7 +101,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 	public tk2dTextMesh accountBalance_Textmesh;
 
 
-	public enum StateBehavior { activeRoof = 0, activeAwning, activeTable, activeAccessories };
+	public enum StateBehavior { activeRoof = 0, activeAwning, activeTable, activeAccessories, activePet, };
 	public StateBehavior currentStateBehavior;
 	int amountPages;
 	int currentPage;
@@ -256,6 +270,22 @@ public class UpgradeOutsideManager : MonoBehaviour
 		nextButton_Obj.active = true;
 		
 		currentStateBehavior = StateBehavior.activeAccessories;
+		currentPage = 0;
+	}
+	
+	internal void ActivePet() {		
+		for (int i = 0; i < 7; i++) {
+            upgrade_sprites[i].spriteId = upgrade_sprites[0].GetSpriteIdByName(petData.NameSpecify[i]);
+            itemPrice_textmesh[i].gameObject.active = false;
+            if(i >= 2) {
+                upgrade_sprites[i].color = Color.grey;
+            }
+		}
+
+		previousButton_Obj.active = false;
+		nextButton_Obj.active = false;
+
+		currentStateBehavior = StateBehavior.activePet;
 		currentPage = 0;
 	}
 	
@@ -467,6 +497,41 @@ public class UpgradeOutsideManager : MonoBehaviour
             }
 
             #endregion
+        }
+        else if(currentStateBehavior == StateBehavior.activePet) {
+            switch (blockName)
+            {
+                case "Block_00":
+                    Mz_StorageManage.Pet_id = 0;
+                    StartCoroutine(sceneController.CreatePetAtRuntime());
+                    break;
+                case "Block_01":
+                    Mz_StorageManage.Pet_id = 1;
+                    StartCoroutine(sceneController.CreatePetAtRuntime());
+                    break;
+                case "Block_02":
+                    Mz_StorageManage.Pet_id = 2;
+                    StartCoroutine(sceneController.CreatePetAtRuntime());
+                    break;
+                case "Block_03":
+                    Mz_StorageManage.Pet_id = 3;
+                    StartCoroutine(sceneController.CreatePetAtRuntime());
+                    break;
+                case "Block_04":
+                    Mz_StorageManage.Pet_id = 4;
+                    StartCoroutine(sceneController.CreatePetAtRuntime());
+                    break;
+                case "Block_05":
+                    Mz_StorageManage.Pet_id = 5;
+                    StartCoroutine(sceneController.CreatePetAtRuntime());
+                    break;
+                case "Block_06":
+                    Mz_StorageManage.Pet_id = 6;
+                    StartCoroutine(sceneController.CreatePetAtRuntime());
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

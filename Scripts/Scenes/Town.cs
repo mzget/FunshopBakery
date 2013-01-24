@@ -9,6 +9,11 @@ public class TownTutorDataStore {
 
     public GameObject roof_00_button_obj;
 
+	public Transform topRightAnchor_transform;
+	public GameObject decoration_audioTip;
+	public GameObject dress_audioTip;
+	public GameObject trophy_audioTip;
+
     public TownTutorDataStore() { }
 
     public void OnDestroy() { }
@@ -21,6 +26,7 @@ public class Town : Mz_BaseScene {
     const string NO_BUTTON_NAME = "No_button";
 	const string MoveCameraToTutorPointComplete_FUNC = "MoveCameraToTutorPointComplete";
 
+    public Transform midcenter_anchor;
 	public GameObject town_bg_group;
 	public GameObject[] cloudAndFog_Objs = new GameObject[4];
     public GameObject flyingBird_group;
@@ -28,11 +34,12 @@ public class Town : Mz_BaseScene {
     public GameObject SheepbankDoor;
     public tk2dAnimatedSprite bakeryShopDoorOpen_animated;
     public tk2dAnimatedSprite sheepBank_door_animated;
-	public GameObject GUIMidcenter_anchor;
+	public GameObject upgradeOutside_baseAnchor;
 	public UpgradeOutsideManager upgradeOutsideManager;
     public CharacterAnimationManager characterAnimatedManage;
-	public DogBeh bullDog;
-    public TownTutorDataStore townTutorData;
+
+    public TownTutorDataStore townTutorData; 
+    internal GameObject pet;
 
     private bool _updatable = true;
 	public enum OnGUIState { none = 0, DrawEditShopname, };
@@ -74,6 +81,37 @@ public class Town : Mz_BaseScene {
 
 	#endregion
 
+    protected override void Initialization()
+    {
+        base.Initialization();
+
+        StartCoroutine(this.CreatePetAtRuntime());
+    }
+
+    internal IEnumerator CreatePetAtRuntime()
+    {
+        if (pet != null) {
+            Destroy(pet);
+            yield return new WaitForFixedUpdate();
+        }
+
+        switch (Mz_StorageManage.Pet_id)
+        {
+            case 0: 
+                pet = Instantiate(Resources.Load("Pets/Bulldog", typeof(GameObject))) as GameObject;
+                pet.transform.parent = midcenter_anchor;
+                break;
+            case 1:
+                pet = Instantiate(Resources.Load("Pets/Dog", typeof(GameObject))) as GameObject;
+                pet.transform.parent = midcenter_anchor;
+                break;
+            default:
+                break;
+        }
+
+        yield return 0;
+    }
+
 	// Use this for initialization
 	void Start ()
     {
@@ -97,10 +135,15 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
 
         if(MainMenu._HasNewGameEvent == false) {
-         	if(Town.IntroduceGameUI_Event == null)
+         	if(Town.IntroduceGameUI_Event == null) {
 				this.Checking_HasNewStartingTruckEvent();
-			else 
+
+				townTutorData = null;
+			}
+			else  {
 				this.OnIntroduceGameUI_Event(EventArgs.Empty);
+				this.CreateAudioTipObj();
+			}
 		}
         else if(MainMenu._HasNewGameEvent && SheepBank.HaveUpgradeOutSide == false && Town.IntroduceGameUI_Event == null) {
             plane_darkShadow.active = true;
@@ -196,6 +239,30 @@ public class Town : Mz_BaseScene {
 	{
 		IntroduceGameUI_Event -= Handle_IntroduceGameUI_Event;
 	}
+	
+	private void CreateAudioTipObj ()
+	{		
+		GameObject decoration_tip = Instantiate(Resources.Load("Tutor_Objs/TIP/Decoration_audioTip", typeof(GameObject))) as GameObject;
+		decoration_tip.name = "Decoration_audioTip";
+		decoration_tip.transform.parent = townTutorData.topRightAnchor_transform;
+		decoration_tip.transform.localPosition = new Vector3(-.2f, -.25f, 0);
+		townTutorData.decoration_audioTip = decoration_tip;
+		iTween.PunchScale(townTutorData.decoration_audioTip, iTween.Hash("amount", Vector3.one, "time", 0.5f, "looptype", iTween.LoopType.pingPong));
+		
+		GameObject trophy_tip = Instantiate(Resources.Load("Tutor_Objs/TIP/Trophy_audioTip", typeof(GameObject))) as GameObject;
+		trophy_tip.name = "Trophy_audioTip";
+		trophy_tip.transform.parent = townTutorData.topRightAnchor_transform;
+		trophy_tip.transform.localPosition = new Vector3(-.58f, -.25f, 0);
+		townTutorData.trophy_audioTip = trophy_tip;			
+		iTween.PunchScale(townTutorData.trophy_audioTip, iTween.Hash("amount", Vector3.one, "time", 0.5f, "looptype", iTween.LoopType.pingPong));
+		
+		GameObject dress_tip = Instantiate(Resources.Load("Tutor_Objs/TIP/Dress_audioTip", typeof(GameObject))) as GameObject;
+		dress_tip.name = "Dress_audioTip";
+		dress_tip.transform.parent = townTutorData.topRightAnchor_transform;
+		dress_tip.transform.localPosition = new Vector3(-.9f, -.25f, 0);
+		townTutorData.dress_audioTip = dress_tip;			
+		iTween.PunchScale(townTutorData.dress_audioTip, iTween.Hash("amount", Vector3.one, "time", 0.5f, "looptype", iTween.LoopType.pingPong));
+	}
 
     #endregion
 
@@ -222,7 +289,9 @@ public class Town : Mz_BaseScene {
 		if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH) {
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_tutor_01", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_create_newgame", typeof(AudioClip)) as AudioClip);
-        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_create_newshop", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_decoration", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_trophy", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_dress", typeof(AudioClip)) as AudioClip);
 		}
 		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
 			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_tutor_01", typeof(AudioClip)) as AudioClip);
@@ -237,7 +306,8 @@ public class Town : Mz_BaseScene {
 	IEnumerator ActiveDecorationBar ()
 	{
 		yield return StartCoroutine(this.SettingGUIMidcenter(true));
-		iTween.MoveTo(GUIMidcenter_anchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
+		iTween.MoveTo(upgradeOutside_baseAnchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
+
         upgradeOutsideManager.ActiveRoof();
 
         SheepBank.HaveUpgradeOutSide = false;
@@ -245,7 +315,7 @@ public class Town : Mz_BaseScene {
 	IEnumerator UnActiveDecorationBar ()
 	{
 		yield return new WaitForEndOfFrame();
-		iTween.MoveTo(GUIMidcenter_anchor.gameObject,
+		iTween.MoveTo(upgradeOutside_baseAnchor.gameObject,
 			iTween.Hash("position", new Vector3(0, -2, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring,
 			"oncomplete", "TweenDownComplete", "oncompletetarget", this.gameObject));		 
 	}
@@ -255,7 +325,7 @@ public class Town : Mz_BaseScene {
 	IEnumerator SettingGUIMidcenter (bool active)
 	{
 		yield return new WaitForEndOfFrame();
-		GUIMidcenter_anchor.SetActiveRecursively(active);
+		upgradeOutside_baseAnchor.SetActiveRecursively(active);
 	}
 
 	#endregion
@@ -362,7 +432,7 @@ public class Town : Mz_BaseScene {
 
 	public override void OnInput (string nameInput)
 	{
-		if (GUIMidcenter_anchor.active) {
+		if (upgradeOutside_baseAnchor.active) {
 			switch (nameInput) {
 			case "Close_button": StartCoroutine(this.UnActiveDecorationBar());
 				break;
@@ -374,6 +444,8 @@ public class Town : Mz_BaseScene {
 				break;
 			case UpgradeOutsideManager.Accessories_button: upgradeOutsideManager.ActiveAccessories();
 				break;
+            case UpgradeOutsideManager.Pet_button: upgradeOutsideManager.ActivePet();
+                break;
 			case "None_button" : upgradeOutsideManager.HaveNoneCommand();
 				break;
 			case "Previous_button" : upgradeOutsideManager.HavePreviousPageCommand();
@@ -445,6 +517,18 @@ public class Town : Mz_BaseScene {
 	                Mz_LoadingScreen.LoadSceneName = Mz_BaseScene.SceneNames.DisplayReward.ToString();
 	                Application.LoadLevel(Mz_BaseScene.SceneNames.LoadingScene.ToString());
 				}
+				break;
+			case "Decoration_audioTip" : 
+				audioDescribe.PlayOnecSound(description_clips[2]);
+				Destroy(townTutorData.decoration_audioTip);
+				break;
+			case "Trophy_audioTip" :
+				audioDescribe.PlayOnecSound(description_clips[3]);
+				Destroy(townTutorData.trophy_audioTip);
+				break;
+			case "Dress_audioTip" :
+				audioDescribe.PlayOnecSound(description_clips[4]);
+				Destroy(townTutorData.dress_audioTip);
 				break;
 			default:
 				break;

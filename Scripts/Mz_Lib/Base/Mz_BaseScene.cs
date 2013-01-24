@@ -84,14 +84,12 @@ public class Mz_BaseScene : MonoBehaviour {
 
 		this.Initialization();
 	}
-
+	
+	// Use this for initialization
 	protected virtual void Initialization ()
 	{
 		Debug.Log("Mz_BaseScene :: Initialization");
 	}
-
-	// Use this for initialization
-//	void Start () {	}
 	
 	//<!-- Audio Manage.
 	internal static bool ToggleAudioActive = true;

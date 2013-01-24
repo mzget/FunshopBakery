@@ -25,6 +25,8 @@ public class Mz_StorageManage : MonoBehaviour
     public static int TK_clothe_id = 255;
     public static int TK_hat_id = 255;
 
+    public static int Pet_id = 0;
+
 	/// <summary>
 	/// Storage data key.
 	/// </summary>
@@ -42,6 +44,9 @@ public class Mz_StorageManage : MonoBehaviour
 
     public const string KEY_TK_CLOTHE_ID = "CLOTHE_ID";
     public const string KEY_TK_HAT_ID = "HAT_ID";
+
+    public const string KEY_PET_ID = "PET_ID";
+
     /// <summary>
     /// Donation key involve.
     /// </summary>

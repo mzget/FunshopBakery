@@ -53,7 +53,7 @@ public class MainMenu : Mz_BaseScene {
 
 	#region <@-- Events
 
-	internal static bool _HasNewGameEvent = true;
+	internal static bool _HasNewGameEvent = false;
 	public event EventHandler NewGame_event;
 	void OnNewGameEvent (EventArgs e)
 	{
