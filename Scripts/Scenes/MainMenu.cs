@@ -11,6 +11,7 @@ public class MainMenu : Mz_BaseScene {
     public Transform mainmenu_Group;
     public Transform newgame_Group;
     public Transform initializeNewGame_Group;
+	public Transform options_group_transform;
 	private InitializeNewShop initializeNewShop;
 	public GUIOptionsManager optionsManager = new GUIOptionsManager();
 
@@ -73,6 +74,7 @@ public class MainMenu : Mz_BaseScene {
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
 
         iTween.MoveTo(mainmenu_Group.gameObject, moveDownTransform_Data);
+		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 0.9f, "time", 1f, "easetype",  iTween.EaseType.easeOutSine));
 
         newgame_Group.gameObject.SetActiveRecursively(false);
 		initializeNewShop = initializeNewGame_Group.GetComponent<InitializeNewShop>();
@@ -622,6 +624,8 @@ public class MainMenu : Mz_BaseScene {
         if (loadgame_Group.gameObject.active)
             iTween.MoveTo(loadgame_Group.gameObject, moveUpTransform_Data);
 
+		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 2f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
+
         yield return new WaitForSeconds(1);
 
         iTween.MoveTo(initializeNewGame_Group.gameObject, moveDownTransform_Data);
@@ -646,6 +650,8 @@ public class MainMenu : Mz_BaseScene {
         yield return new WaitForSeconds(1);
 
         iTween.MoveTo(mainmenu_Group.gameObject, moveDownTransform_Data);
+		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 0.9f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
+
         newgame_Group.gameObject.SetActiveRecursively(false);
         initializeNewGame_Group.gameObject.SetActiveRecursively(false);
         loadgame_Group.gameObject.SetActiveRecursively(false);
@@ -655,6 +661,8 @@ public class MainMenu : Mz_BaseScene {
     private IEnumerator ShowCreateNewGame()
     {
         iTween.MoveTo(mainmenu_Group.gameObject, moveUpTransform_Data);
+		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 2f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
+
         newgame_Group.gameObject.SetActiveRecursively(true);
         back_button.gameObject.SetActiveRecursively(true);
         OK_button_Obj = newgame_Group.transform.Find("OK_button").gameObject; 
@@ -674,6 +682,8 @@ public class MainMenu : Mz_BaseScene {
             iTween.MoveTo(initializeNewGame_Group.gameObject, moveUpTransform_Data);
         if(mainmenu_Group.gameObject.active)
             iTween.MoveTo(mainmenu_Group.gameObject, moveUpTransform_Data);
+		
+		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 2f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
 
         loadgame_Group.gameObject.SetActiveRecursively(true);
         back_button.gameObject.SetActiveRecursively(true);

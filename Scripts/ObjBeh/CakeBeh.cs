@@ -39,6 +39,8 @@ public class CakeBeh : GoodsBeh {
 		if(MainMenu._HasNewGameEvent && this.name == CakeBeh.Cupcake) {
             Vector3 currentPos = sceneManager.chocolate_cream_Instance.transform.position;
             sceneManager.chocolate_cream_Instance.transform.position = new Vector3(currentPos.x, currentPos.y, -9f);
+			sceneManager.SetActivateTotorObject(false);
+			sceneManager.CreateTabFoodIngredientTutorEvent();
 		}
     }
 

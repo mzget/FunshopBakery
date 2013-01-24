@@ -78,6 +78,7 @@ public class Town : Mz_BaseScene {
 	void Start ()
     {
         Mz_ResizeScale.ResizingScale(town_bg_group.transform);
+
 		StartCoroutine(ReInitializeAudioClipData());
 		StartCoroutine(this.InitializeAudio());
         StartCoroutine(base.InitializeIdentityGUI());
@@ -95,14 +96,18 @@ public class Town : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", -.1f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", -0.85f, "time", 8f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
 
-        if(MainMenu._HasNewGameEvent == false)
-            this.Checking_HasNewStartingTruckEvent();
-        else if(MainMenu._HasNewGameEvent && SheepBank.HaveUpgradeOutSide == false) {
+        if(MainMenu._HasNewGameEvent == false) {
+         	if(Town.IntroduceGameUI_Event == null)
+				this.Checking_HasNewStartingTruckEvent();
+			else 
+				this.OnIntroduceGameUI_Event(EventArgs.Empty);
+		}
+        else if(MainMenu._HasNewGameEvent && SheepBank.HaveUpgradeOutSide == false && Town.IntroduceGameUI_Event == null) {
             plane_darkShadow.active = true;
             SheepbankDoor.transform.position += Vector3.back * 10;
             this.CreateTutorObjectAtRuntime();
         }
-        else if (MainMenu._HasNewGameEvent && SheepBank.HaveUpgradeOutSide) {           
+        else if (MainMenu._HasNewGameEvent && SheepBank.HaveUpgradeOutSide && Town.IntroduceGameUI_Event == null) {           
             plane_darkShadow.active = true;
             plane_darkShadow.transform.position -= Vector3.forward * 2.5f;
             townTutorData.roof_00_button_obj.transform.position -= Vector3.forward * 2;
@@ -178,6 +183,19 @@ public class Town : Mz_BaseScene {
 		audioDescribe.PlayOnecSound(description_clips[1]);
         iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0.1f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
     }
+	
+	public static event EventHandler IntroduceGameUI_Event;
+	private void OnIntroduceGameUI_Event (EventArgs e)
+	{
+		Debug.Log("OnIntroduceGameUI_Event");
+
+		if (IntroduceGameUI_Event != null)
+			IntroduceGameUI_Event (this, e);
+	}	
+	internal static void Handle_IntroduceGameUI_Event (object sender, EventArgs e)
+	{
+		IntroduceGameUI_Event -= Handle_IntroduceGameUI_Event;
+	}
 
     #endregion
 
