@@ -73,11 +73,13 @@ public class UpgradeOutsideManager : MonoBehaviour
 	public const string Awning_button = "awning_button";
 	public const string Accessories_button = "accessories_button";
     public const string Pet_button = "Pet_button";
+	public GameObject pet_button_obj;
 
     public static List<int> CanDecorateRoof_list = new List<int>();
 	public static List<int> CanDecorateAwning_list = new List<int>();
 	public static List<int> CanDecoration_Table_list = new List<int>();
 	public static List<int> CanDecoration_Accessories_list = new List<int>();
+    public static List<int> CanAlimentPet_id_list = new List<int>();
 
     private Town sceneController;
 	private RoofDataCollection roofData = new RoofDataCollection();
@@ -125,9 +127,6 @@ public class UpgradeOutsideManager : MonoBehaviour
 		accountBalance_Textmesh.text = Mz_StorageManage.AccountBalance.ToString();
 		accountBalance_Textmesh.Commit();
 	}
-	
-	// Update is called once per frame
-    void Update() { }
 
     public void InitializeDecorationObjects()
     {
@@ -190,6 +189,8 @@ public class UpgradeOutsideManager : MonoBehaviour
 	public void ActiveRoof ()
 	{
 		for (int i = 0; i < 7; i++) {
+			upgrade_Objs[i].collider.enabled = true;
+			upgrade_sprites[i].color = Color.white;
 			upgrade_sprites[i].spriteId = upgrade_sprites [0].GetSpriteIdByName(roofData.NameSpecify [i]);
 			
 			if(UpgradeOutsideManager.CanDecorateRoof_list.Contains(i) == false) {
@@ -211,6 +212,8 @@ public class UpgradeOutsideManager : MonoBehaviour
 
 	public void ActiveAwning() {		
 		for (int i = 0; i < 7; i++) {
+			upgrade_Objs[i].collider.enabled = true;
+			upgrade_sprites[i].color = Color.white;
 			upgrade_sprites [i].spriteId = upgrade_sprites [0].GetSpriteIdByName (awningData.NameSpecify[i]);
 			if(UpgradeOutsideManager.CanDecorateAwning_list.Contains(i) == false) {
 				itemPrice_textmesh[i].gameObject.SetActiveRecursively(true);
@@ -232,6 +235,8 @@ public class UpgradeOutsideManager : MonoBehaviour
 	public void ActiveTable ()
 	{
 		for (int i = 0; i < 7; i++) {
+			upgrade_Objs[i].collider.enabled = true;
+			upgrade_sprites[i].color = Color.white;
 			upgrade_sprites [i].spriteId = upgrade_sprites [0].GetSpriteIdByName (tableData.NameSpecify[i]);
 
 			if(UpgradeOutsideManager.CanDecoration_Table_list.Contains(i) == false) {
@@ -254,6 +259,8 @@ public class UpgradeOutsideManager : MonoBehaviour
 	public void ActiveAccessories ()
 	{
 		for (int i = 0; i < 7; i++) {
+			upgrade_Objs[i].collider.enabled = true;
+			upgrade_sprites[i].color = Color.white;
 			upgrade_sprites [i].spriteId = upgrade_sprites [0].GetSpriteIdByName (accessoriesData.NameSpeccify[i]);
 
 			if(UpgradeOutsideManager.CanDecoration_Accessories_list.Contains(i) == false) {
@@ -273,12 +280,16 @@ public class UpgradeOutsideManager : MonoBehaviour
 		currentPage = 0;
 	}
 	
-	internal void ActivePet() {		
-		for (int i = 0; i < 7; i++) {
+	internal void ActivePet() {
+        for (int i = 0; i < 7; i++) {
+            upgrade_Objs[i].collider.enabled = true;
+            upgrade_sprites[i].color = Color.white;
             upgrade_sprites[i].spriteId = upgrade_sprites[0].GetSpriteIdByName(petData.NameSpecify[i]);
             itemPrice_textmesh[i].gameObject.active = false;
-            if(i >= 2) {
+
+            if(CanAlimentPet_id_list.Contains(i) == false) {
                 upgrade_sprites[i].color = Color.grey;
+				upgrade_Objs[i].collider.enabled = false;
             }
 		}
 

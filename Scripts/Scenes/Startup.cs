@@ -7,9 +7,18 @@ public class Startup : Mz_BaseScene {
 	// Use this for initialization
 	void Start () {
         Mz_OnGUIManager.CalculateViewportScreen();
+		this.Initialization();
 		//<!-- get name quality.
 //		qualities_list = QualitySettings.names;
 		StartCoroutine(this.AutomaticSetup_QualitySetting());
+	}
+	
+	protected override void Initialization ()
+	{
+		base.Initialization ();
+		
+		Mz_StorageManage.Language_id = PlayerPrefs.GetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, 0);
+		Main.Mz_AppLanguage.appLanguage = (Main.Mz_AppLanguage.SupportLanguage)Mz_StorageManage.Language_id;
 	}
 	
 	private IEnumerator AutomaticSetup_QualitySetting() {

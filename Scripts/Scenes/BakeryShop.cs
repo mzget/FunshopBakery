@@ -247,14 +247,11 @@ public class BakeryShop : Mz_BaseScene {
 	
 	#endregion	
     
-    /// <summary>
     /// Manage goods complete Event handle.
-    /// </summary>
     public event System.EventHandler manageGoodsComplete_event;
     private void OnManageGoodComplete(System.EventArgs e)
     {
-        if (manageGoodsComplete_event != null)
-        {
+        if (manageGoodsComplete_event != null) {
             manageGoodsComplete_event(this, e);
         }
     }
@@ -560,6 +557,16 @@ public class BakeryShop : Mz_BaseScene {
 
         audioDescribe.PlayOnecSound(description_clips[4]);
     }
+
+	void CreateNoticeUpgradeShopEvent ()
+	{
+		GameObject upgradeShop_button = Instantiate(Resources.Load("Tutor_Objs/NoticeUpgradeButton", typeof(GameObject))) as GameObject;
+		upgradeShop_button.transform.position = new Vector3(0.4f, -0.75f, -3f);
+		upgradeShop_button.name = "NoticeUpgradeButton";
+
+		iTween.PunchScale(upgradeShop_button, 
+		       iTween.Hash("amount", Vector3.one * 0.2f, "time", 1f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+	}
 
 	#endregion
 
@@ -1287,16 +1294,8 @@ public class BakeryShop : Mz_BaseScene {
     }
 
     #endregion
-	
-	/// <summary>
+
 	/// Handle shop_null customer_event.
-	/// </summary>
-	/// <param name='sender'>
-	/// Sender.
-	/// </param>
-	/// <param name='e'>
-	/// E.
-	/// </param>
     private void BakeryShop_nullCustomer_event(object sender, EventArgs e) {
 		if(MainMenu._HasNewGameEvent) {
 			StartCoroutine(this.WaitForCreateCustomer());
@@ -1693,6 +1692,12 @@ public class BakeryShop : Mz_BaseScene {
         base.availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
         base.availableMoney.Commit();
 
+		if(Mz_StorageManage._IsNoticeUser == false & Mz_StorageManage.AvailableMoney >= 350) {
+			Mz_StorageManage._IsNoticeUser = true;
+
+			this.CreateNoticeUpgradeShopEvent();
+		}  
+
         //<!-- Clare resource data.
 		Destroy(packaging_Obj);
 		StartCoroutine(ExpelCustomer());
@@ -1710,7 +1715,6 @@ public class BakeryShop : Mz_BaseScene {
 		if(MainMenu._HasNewGameEvent) {
 			if(nameInput == "EN_001_textmesh") {
 				StartCoroutine(this.PlayGreetingAudioClip(en_greeting_clip[0]));
-//                base.SetActivateTotorObject(false);
                 bakeryShopTutor.currentTutorState = BakeryShopTutor.TutorStatus.AcceptOrders;
 
                 return;
@@ -1728,6 +1732,23 @@ public class BakeryShop : Mz_BaseScene {
 				return;
 			}
 		}
+
+        if (nameInput == "NoticeUpgradeButton")
+        {
+            if(Application.isLoadingLevel == false && _onDestroyScene == false) {
+                _onDestroyScene = true;
+
+                base.extendsStorageManager.SaveDataToPermanentMemory();
+                this.PreparingToCloseShop();
+
+                Mz_LoadingScreen.LoadSceneName = SceneNames.Sheepbank.ToString();
+                Application.LoadLevel(SceneNames.LoadingScene.ToString());
+
+                return;
+            }
+            else
+                return;
+        }
 		
 		if (calculator_group_instance.active) 
         {

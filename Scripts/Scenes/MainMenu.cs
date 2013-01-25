@@ -343,8 +343,8 @@ public class MainMenu : Mz_BaseScene {
 
         int[] IdOfCanSellItem = new int[] { 0, 5, 9, 18 };
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CANSELLGOODSLIST, IdOfCanSellItem);
-		string[] availabelCreams = new string[] { CreamBeh.ChocolateCream, string.Empty, string.Empty, };
-		PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AVAILABLE_CREAM, availabelCreams);
+		string[] availableCreams = new string[] { CreamBeh.ChocolateCream, string.Empty, string.Empty, };
+		PlayerPrefsX.SetStringArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AVAILABLE_CREAM, availableCreams);
 
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ROOF_ID, 255);
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_AWNING_ID, 255);
@@ -353,6 +353,11 @@ public class MainMenu : Mz_BaseScene {
 		
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_CLOTHE_ID, 255);
 		PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_HAT_ID, 255);
+
+        // <@-- Initailizing pet data.
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_PET_ID, 0);
+        int[] defaultPetAliment_id = new int[] { 0 };
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + ExtendsStorageManager.KEY_CAN_ALIMENT_PET_LIST, defaultPetAliment_id);
 
         //@!-- Donation data.
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CONSERVATION_ANIMAL_LV, 0);
@@ -365,8 +370,11 @@ public class MainMenu : Mz_BaseScene {
         //<@-- CAN_EQUIP_CLOTHE_LIST
         int[] newPlayerClothes = new int[] { 0, 1, 2 };
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_CLOTHE_LIST, newPlayerClothes);
-		//<@-- Can decoration shop outside.
+        //<@-- Can equip hat-list.
+        int[] defaultHat_id = new int[] { 0, 1, 2 };
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_EQUIP_HAT_LIST, defaultHat_id);
 
+		//<@-- Can decoration shop outside.
 		int[] roof_temp_arr = new int[1] { 255 };
 		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ROOF_LIST, roof_temp_arr); 
 		int[] awning_temp_array = new int[1] { 255};
@@ -374,7 +382,10 @@ public class MainMenu : Mz_BaseScene {
 		int[] table_temp_array = new int[1] {255};
 		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_TABLE_LIST, table_temp_array);
 		int[] accessories_temp_array = new int[1] {255};
-		PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ACCESSORIES_LIST, accessories_temp_array);
+        PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ACCESSORIES_LIST, accessories_temp_array);
+
+        //<!-- Notice user to upgrade them shop.
+        PlayerPrefsX.SetBool(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_NOTICE_USER_TO_UPGRADE, false);
 
         Debug.Log("Store new player data complete.");
 
@@ -382,6 +393,7 @@ public class MainMenu : Mz_BaseScene {
 
         this.LoadSceneTarget();
     }
+
     private void LoadSceneTarget() {
         if(Application.isLoadingLevel == false) {
 			Town.newGameStartup_Event += Town.Handle_NewGameStartupEvent;
@@ -520,11 +532,15 @@ public class MainMenu : Mz_BaseScene {
 			break;
             case "EN" :
             Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.EN;
+			Mz_StorageManage.Language_id = (int)Main.Mz_AppLanguage.SupportLanguage.EN;
+            PlayerPrefs.SetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, Mz_StorageManage.Language_id);
             StartCoroutine(this.ReInitializeAudioClipData());
 			this.SetActivateGUIOptionsGroup(false);
 			break;
 		case "TH" :
             Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.TH;
+			Mz_StorageManage.Language_id = (int)Main.Mz_AppLanguage.SupportLanguage.TH;
+            PlayerPrefs.SetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, Mz_StorageManage.Language_id);
             StartCoroutine(this.ReInitializeAudioClipData());
 			this.SetActivateGUIOptionsGroup(false);
 			break;

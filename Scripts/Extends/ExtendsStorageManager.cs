@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ExtendsStorageManager : Mz_StorageManage
-{	
+{
+    public const String KEY_CAN_ALIMENT_PET_LIST = "KEY_CAN_ALIMENT_PET_LIST";
+
 	#region <@-- Load secsion.
 
 	public void LoadCanSellGoodsListData ()
@@ -136,6 +138,8 @@ public class ExtendsStorageManager : Mz_StorageManage
 		
 		Mz_StorageManage.TK_clothe_id = PlayerPrefs.GetInt(SaveSlot + KEY_TK_CLOTHE_ID);
 		Mz_StorageManage.TK_hat_id = PlayerPrefs.GetInt(SaveSlot + KEY_TK_HAT_ID);
+        // Pet.
+        Mz_StorageManage.Pet_id = PlayerPrefs.GetInt(SaveSlot + KEY_PET_ID);
 		
 		//@!-- Load Donation data.
 		ConservationAnimals.Level = PlayerPrefs.GetInt(SaveSlot + KEY_CONSERVATION_ANIMAL_LV, 0);
@@ -144,11 +148,24 @@ public class ExtendsStorageManager : Mz_StorageManage
 		LoveKidsFoundation.Level = PlayerPrefs.GetInt(SaveSlot + KEY_LOVEKIDFOUNDATION_LV, 0);
 		EcoFoundation.Level = PlayerPrefs.GetInt(SaveSlot + KEY_ECOFOUNDATION_LV, 0);
         GlobalWarmingOranization.Level = PlayerPrefs.GetInt(SaveSlot + KEY_GLOBALWARMING_LV, 0);
+		//<!-- Notice user to upgrade them shop.
+		Mz_StorageManage._IsNoticeUser = PlayerPrefsX.GetBool(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_NOTICE_USER_TO_UPGRADE, false);
 
         this.LoadCanSellGoodsListData();
         this.LoadCostumeData();
         this.LoadDecorationShopOutside();
+        this.LoadCanAlimentPetList();
 	}
+
+    private void LoadCanAlimentPetList()
+    {
+        int[] array_temp = PlayerPrefsX.GetIntArray(SaveSlot + KEY_CAN_ALIMENT_PET_LIST);
+        UpgradeOutsideManager.CanAlimentPet_id_list.Clear();
+        foreach (int item in array_temp)
+        {
+            UpgradeOutsideManager.CanAlimentPet_id_list.Add(item);
+        }
+    }
 
 	#endregion
 
@@ -172,6 +189,8 @@ public class ExtendsStorageManager : Mz_StorageManage
 
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_CLOTHE_ID, Mz_StorageManage.TK_clothe_id);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_TK_HAT_ID, Mz_StorageManage.TK_hat_id);
+        // pet.
+        PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_PET_ID, Mz_StorageManage.Pet_id);
 
         //@!-- Donation data.
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CONSERVATION_ANIMAL_LV, ConservationAnimals.Level);
@@ -180,7 +199,10 @@ public class ExtendsStorageManager : Mz_StorageManage
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_LOVEKIDFOUNDATION_LV, LoveKidsFoundation.Level);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_ECOFOUNDATION_LV, EcoFoundation.Level);
         PlayerPrefs.SetInt(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_GLOBALWARMING_LV, GlobalWarmingOranization.Level);
-
+		
+		//<!-- Notice user to upgrade them shop.
+		PlayerPrefsX.SetBool(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_NOTICE_USER_TO_UPGRADE, Mz_StorageManage._IsNoticeUser);
+		
 		if(BakeryShop.NumberOfCansellItem.Count != 0)
 			this.SaveCanSellGoodListData();
         if (Dressing.CanEquipClothe_list.Count != 0)
@@ -189,8 +211,17 @@ public class ExtendsStorageManager : Mz_StorageManage
 			this.SaveCanEquipHatData();
 
 		this.SaveCanDecorateShopOutside();
+
+		if(UpgradeOutsideManager.CanAlimentPet_id_list.Count != 0)
+			this.SaveCanAlimentPetList();
 		
 		PlayerPrefs.Save();
+    }
+
+    private void SaveCanAlimentPetList()
+    {
+        int[] array_temp = UpgradeOutsideManager.CanAlimentPet_id_list.ToArray();
+        PlayerPrefsX.SetIntArray(SaveSlot + KEY_CAN_ALIMENT_PET_LIST, array_temp);
     }
 
     public void SaveCanSellGoodListData() {

@@ -105,8 +105,28 @@ public class Town : Mz_BaseScene {
                 pet = Instantiate(Resources.Load("Pets/Dog", typeof(GameObject))) as GameObject;
                 pet.transform.parent = midcenter_anchor;
                 break;
-            default:
-                break;
+			case 2: 
+				pet = Instantiate(Resources.Load("Pets/Ewe", typeof(GameObject))) as GameObject;
+				pet.transform.parent = midcenter_anchor;
+				break;
+			case 3: 
+				pet = Instantiate(Resources.Load("Pets/Ram", typeof(GameObject))) as GameObject;
+				pet.transform.parent = midcenter_anchor;
+				break;
+			case 4: 
+				pet = Instantiate(Resources.Load("Pets/Nanny", typeof(GameObject))) as GameObject;
+				pet.transform.parent = midcenter_anchor;
+				break;
+			case 5: 
+				pet = Instantiate(Resources.Load("Pets/BillyGoat", typeof(GameObject))) as GameObject;
+				pet.transform.parent = midcenter_anchor;
+				break;
+			case 6: 
+				pet = Instantiate(Resources.Load("Pets/Cow", typeof(GameObject))) as GameObject;
+				pet.transform.parent = midcenter_anchor;
+				break;
+			default:
+				break;
         }
 
         yield return 0;
@@ -158,7 +178,7 @@ public class Town : Mz_BaseScene {
         }
 	}
 
-    #region <@-- Tutor system.
+    #region <!-- Tutor system.
 
     void CreateTutorObjectAtRuntime ()
 	{
@@ -306,12 +326,19 @@ public class Town : Mz_BaseScene {
 	IEnumerator ActiveDecorationBar ()
 	{
 		yield return StartCoroutine(this.SettingGUIMidcenter(true));
+
+		if(ConservationAnimals.Level >= 1 || LoveDogConsortium.Level >= 1 || LoveKidsFoundation.Level >= 1)
+			upgradeOutsideManager.pet_button_obj.active = true;
+		else 
+			upgradeOutsideManager.pet_button_obj.active = false;
+		
 		iTween.MoveTo(upgradeOutside_baseAnchor.gameObject, iTween.Hash("position", new Vector3(0, 0, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring));
 
         upgradeOutsideManager.ActiveRoof();
 
         SheepBank.HaveUpgradeOutSide = false;
 	}
+
 	IEnumerator UnActiveDecorationBar ()
 	{
 		yield return new WaitForEndOfFrame();
@@ -319,9 +346,11 @@ public class Town : Mz_BaseScene {
 			iTween.Hash("position", new Vector3(0, -2, 8), "islocal", true, "time", 1f, "easetype", iTween.EaseType.spring,
 			"oncomplete", "TweenDownComplete", "oncompletetarget", this.gameObject));		 
 	}
+
 	void TweenDownComplete() {
 		StartCoroutine(this.SettingGUIMidcenter(false));
 	}
+
 	IEnumerator SettingGUIMidcenter (bool active)
 	{
 		yield return new WaitForEndOfFrame();
