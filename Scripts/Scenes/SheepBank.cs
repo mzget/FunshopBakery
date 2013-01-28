@@ -172,8 +172,10 @@ public class SheepBank : Mz_BaseScene {
 
 	IEnumerator CreateUpgradeInsideTutorEvent ()
 	{
+		audioDescribe.PlayOnecSound(description_clips[1]); 
+		
 		yield return new WaitForFixedUpdate();
-
+		
 		SetActivateTotorObject(true);
 
 		shadowPlane_Obj.gameObject.active = true;
@@ -191,6 +193,8 @@ public class SheepBank : Mz_BaseScene {
 
     void CreateBuyUpgradeShopTutorEvent()
     {
+		this.audioDescribe.PlayOnecSound(description_clips[4]);
+		
         this.SetActivateTotorObject(true);
 
         handTutor.transform.localPosition = new Vector3(-65f, 22f, 8f);
@@ -207,6 +211,8 @@ public class SheepBank : Mz_BaseScene {
 
     void CreateUpgradeOutsideTutorEvent()
     {
+		audioDescribe.PlayOnecSound(description_clips[3]);
+		
         SetActivateTotorObject(true);
 
         shadowPlane_Obj.gameObject.active = true;
@@ -241,10 +247,20 @@ public class SheepBank : Mz_BaseScene {
         description_clips.Clear();
 		if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH) {
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_introduce", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_upgradeInside", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_upgradeInsideComplete", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_upgradeOutside", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_SelectionUpgradeItem", typeof(AudioClip)) as AudioClip);
+			
 			short_introduce_clip = Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_greeting", typeof(AudioClip)) as AudioClip;
 		}
 		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
 			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_introduce", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_upgradeInside", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_upgradeInsideComplete", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_upgradeOutside", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_SelectionUpgradeItem", typeof(AudioClip)) as AudioClip);
+			
 			short_introduce_clip = Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_greeting", typeof(AudioClip)) as AudioClip;
 		}		
 		

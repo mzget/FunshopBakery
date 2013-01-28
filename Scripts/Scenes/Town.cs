@@ -40,7 +40,9 @@ public class Town : Mz_BaseScene {
 
     public TownTutorDataStore townTutorData; 
     internal GameObject pet;
-
+	
+    private Vector3[] mainCameraPos = new Vector3[] { new Vector3(0, -.13f, -20), new Vector3(2.66f, -.13f, -20) };
+	private Vector3 currentCameraPos = new Vector3(0, -.13f, -20);
     private bool _updatable = true;
 	public enum OnGUIState { none = 0, DrawEditShopname, };
 	public OnGUIState currentGUIState;
@@ -161,6 +163,7 @@ public class Town : Mz_BaseScene {
 				townTutorData = null;
 			}
 			else  {
+				this.audioDescribe.PlayOnecSound(description_clips[5]);
 				this.OnIntroduceGameUI_Event(EventArgs.Empty);
 				this.CreateAudioTipObj();
 			}
@@ -232,6 +235,8 @@ public class Town : Mz_BaseScene {
 
     private void CreateGoToShopTutorEvent()
     {
+		audioDescribe.PlayOnecSound(description_clips[1]);
+		
         base.SetActivateTotorObject(true);
 
         bakeryShopDoorOpen_animated.gameObject.transform.position += Vector3.back * 13;
@@ -243,7 +248,6 @@ public class Town : Mz_BaseScene {
         tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
 
         this._updatable = false;
-		audioDescribe.PlayOnecSound(description_clips[1]);
         iTween.MoveTo(handTutor.gameObject, iTween.Hash("y", 0.1f, "Time", .5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
     }
 	
@@ -308,10 +312,11 @@ public class Town : Mz_BaseScene {
         description_clips.Clear();
 		if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH) {
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_tutor_01", typeof(AudioClip)) as AudioClip);
-        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_create_newgame", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_Letplay", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_decoration", typeof(AudioClip)) as AudioClip);
 			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_trophy", typeof(AudioClip)) as AudioClip);
 			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_dress", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_touchmove", typeof(AudioClip)) as AudioClip);
 		}
 		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
 			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_tutor_01", typeof(AudioClip)) as AudioClip);
@@ -366,7 +371,7 @@ public class Town : Mz_BaseScene {
 
         if (_updatable)
         {
-            base.ImplementTouchPostion();
+            this.ImplementTouchPostion();
 
             if (Camera.main.transform.position.x > 2.66f)
                 Camera.main.transform.position = new Vector3(2.66f, Camera.main.transform.position.y, Camera.main.transform.position.z); 	//Vector3.left * Time.deltaTime;
@@ -374,7 +379,69 @@ public class Town : Mz_BaseScene {
                 Camera.main.transform.position = new Vector3(0, Camera.main.transform.position.y, Camera.main.transform.position.z);	 //Vector3.right * Time.deltaTime;
         }
 	}
+	
+	protected override void ImplementTouchPostion ()
+	{
+//		base.ImplementTouchPostion ();
+		
+		if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) 
+		{
+            if(Input.touchCount > 0) {				
+            	touch = Input.GetTouch(0);
+				
+	            if(touch.phase == TouchPhase.Began) {			
+					originalPos = touch.position;
+					currentPos = touch.position;
+	            }
 
+	            if(touch.phase == TouchPhase.Moved) {
+					currentPos = touch.position;
+                    this.MovingCameraTransform();   					
+	            }
+				
+	            if(touch.phase == TouchPhase.Ended) {
+					float distance = Vector2.Distance (currentPos, originalPos);
+					float vector = currentPos.x - originalPos.x;
+//					float speed = Time.deltaTime * (distance / touch.deltaTime);
+					if (vector < 0) {
+						if(distance > 200)
+							currentCameraPos = mainCameraPos[1];
+					}
+					else if (vector > 0) {
+						if(distance > 200)
+							currentCameraPos = mainCameraPos[0];
+					}
+						
+					iTween.MoveTo (Camera.main.gameObject, iTween.Hash("position", currentCameraPos, "time", 0.5f, "easetype", iTween.EaseType.linear));
+					
+					currentPos = Vector2.zero;
+					originalPos = Vector2.zero;
+	            }
+            }
+        }
+		else if(Application.isWebPlayer || Application.isEditor) {
+			mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+				
+			if(Input.GetMouseButtonDown(0)) {
+				originalPos = mousePos;
+                //Debug.Log("originalPos == " + originalPos);
+			}
+				
+			if(Input.GetMouseButton(0)) {
+				currentPos = mousePos;
+                _isDragMove = true;
+				this.MovingCameraTransform();
+                //Debug.Log("currentPos == " + currentPos);
+			}
+
+            if (Input.GetMouseButtonUp(0)) {
+                _isDragMove = true;
+                originalPos = Vector3.zero;
+                currentPos = Vector3.zero;
+            }
+		}
+	}
+	
 	protected override void MovingCameraTransform ()
 	{	
 		base.MovingCameraTransform();

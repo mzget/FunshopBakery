@@ -11,6 +11,9 @@ public class GUIOptionsManager {
 	public tk2dSprite flag_ui_sprite;
 	public GameObject selectLanguage_Obj;
 
+	public AudioClip english_clip;
+	public AudioClip thai_clip;
+
 	// Use this for initialization
 	public GUIOptionsManager() {}
 	

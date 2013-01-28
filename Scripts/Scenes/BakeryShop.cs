@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UE = UnityEngine;
 
 [System.Serializable]
 public class BakeryShopTutor {
@@ -29,11 +30,13 @@ public class BakeryShop : Mz_BaseScene {
 	public GoodDataStore goodDataStore;
 	public static List<int> NumberOfCansellItem = new List<int>(30);
 	public List<Food> CanSellGoodLists = new List<Food>();
+	
+	//@-- Audio_clip.
 	public AudioClip[] en_greeting_clip = new AudioClip[6];
 	public AudioClip[] th_greeting_clip = new AudioClip[7];
-    public AudioClip[] en_apologize_clip;
-//	public AudioClip[] th_apologize_clip = new AudioClip[];
-	public AudioClip[] en_appreciate_clip;
+    private AudioClip[] apologize_clip = new AudioClip[5];
+//	private AudioClip[] appreciate_clips = new AudioClip[5];
+	private AudioClip[] thanksCustomer_clips = new AudioClip[2];
 	
 	//<!-- in game button.
 	public GameObject close_button;	
@@ -348,6 +351,9 @@ public class BakeryShop : Mz_BaseScene {
 
     private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/GameIntroduce/Shop/";
     private const string PATH_OF_MERCHANDISC_CLIP = "AudioClips/AudioDescribe/";
+	private const string PATH_OD_APOLOGIZE_CLIP = "AudioClips/ApologizeClips/";
+	private const string PATH_OF_APPRECIATE_CLIP = "AudioClips/AppreciateClips/";
+	private const string PATH_OF_THANKS_CLIP = "AudioClips/ThanksClips/";
     private IEnumerator ReInitializeAudioClipData()
     {
         description_clips.Clear();
@@ -361,6 +367,22 @@ public class BakeryShop : Mz_BaseScene {
             description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "6.TH_calculationPrice", typeof(AudioClip)) as AudioClip);
             description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "7.TH_giveTheChange", typeof(AudioClip)) as AudioClip);
             description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "8.TH_completeTutor", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_noticeUserToUpgrade", typeof(AudioClip)) as AudioClip);
+			
+			apologize_clip[0] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "TH_shortSorry_0001", typeof(AudioClip)) as AudioClip;
+			apologize_clip[1] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "TH_shortSorry_0002", typeof(AudioClip)) as AudioClip;
+			apologize_clip[2] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "TH_longSorry_0001", typeof(AudioClip)) as AudioClip;
+			apologize_clip[3] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "TH_longSorry_0002", typeof(AudioClip)) as AudioClip;
+			apologize_clip[4] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "TH_longSorry_0003", typeof(AudioClip)) as AudioClip;
+			
+			thanksCustomer_clips[0] = Resources.Load(PATH_OF_THANKS_CLIP + "TH_Thank_0001", typeof(AudioClip)) as AudioClip;
+			thanksCustomer_clips[1] = Resources.Load(PATH_OF_THANKS_CLIP + "TH_Thank_0002", typeof(AudioClip)) as AudioClip;
+			
+//			appreciate_clips[0] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_001", typeof(AudioClip)) as AudioClip;
+//			appreciate_clips[1] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_002", typeof(AudioClip)) as AudioClip;
+//			appreciate_clips[2] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_003", typeof(AudioClip)) as AudioClip;
+//			appreciate_clips[3] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_004", typeof(AudioClip)) as AudioClip;
+//			appreciate_clips[4] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_005", typeof(AudioClip)) as AudioClip;
 		}
         else if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN)
         {
@@ -372,6 +394,22 @@ public class BakeryShop : Mz_BaseScene {
             description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "6.EN_calculationPrice", typeof(AudioClip)) as AudioClip);
             description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "7.EN_giveTheChange", typeof(AudioClip)) as AudioClip);
             description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "8.EN_completeTutor", typeof(AudioClip)) as AudioClip);
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_noticeUserToUpgrade", typeof(AudioClip)) as AudioClip);
+			
+			apologize_clip[0] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "EN_shortSorry_0001", typeof(AudioClip)) as AudioClip;
+			apologize_clip[1] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "EN_shortSorry_0002", typeof(AudioClip)) as AudioClip;
+			apologize_clip[2] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "EN_longSorry_0001", typeof(AudioClip)) as AudioClip;
+			apologize_clip[3] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "EN_longSorry_0002", typeof(AudioClip)) as AudioClip;
+			apologize_clip[4] = Resources.Load(PATH_OD_APOLOGIZE_CLIP + "EN_longSorry_0003", typeof(AudioClip)) as AudioClip;
+			
+			thanksCustomer_clips[0] = Resources.Load(PATH_OF_THANKS_CLIP + "EN_Thank_0001", typeof(AudioClip)) as AudioClip;
+			thanksCustomer_clips[1] = Resources.Load(PATH_OF_THANKS_CLIP + "EN_Thank_0002", typeof(AudioClip)) as AudioClip;
+			
+//			appreciate_clips[0] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_001", typeof(AudioClip)) as AudioClip;
+//			appreciate_clips[1] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_002", typeof(AudioClip)) as AudioClip;
+//			appreciate_clips[2] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_003", typeof(AudioClip)) as AudioClip;
+//			appreciate_clips[3] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_004", typeof(AudioClip)) as AudioClip;
+//			appreciate_clips[4] = Resources.Load(PATH_OF_APPRECIATE_CLIP + "EN_appreciate_005", typeof(AudioClip)) as AudioClip;
 		}
 
         this.ReInitializingMerchandiseNameAudio();
@@ -563,6 +601,8 @@ public class BakeryShop : Mz_BaseScene {
 		GameObject upgradeShop_button = Instantiate(Resources.Load("Tutor_Objs/NoticeUpgradeButton", typeof(GameObject))) as GameObject;
 		upgradeShop_button.transform.position = new Vector3(0.4f, -0.75f, -3f);
 		upgradeShop_button.name = "NoticeUpgradeButton";
+		
+		audioDescribe.PlayOnecSound(description_clips[8]);
 
 		iTween.PunchScale(upgradeShop_button, 
 		       iTween.Hash("amount", Vector3.one * 0.2f, "time", 1f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
@@ -1366,8 +1406,10 @@ public class BakeryShop : Mz_BaseScene {
 
     public void Handle_manageGoodsComplete_event(object sender, System.EventArgs eventArgs)
 	{
-		int r = UnityEngine.Random.Range(0, en_appreciate_clip.Length);
-		this.PlayAppreciateAudioClip(en_appreciate_clip[r]);
+//		int r = UE.Random.Range(0, appreciate_clips.Length);
+//		this.PlayAppreciateAudioClip(appreciate_clips[r]);
+		
+		audioEffect.PlayOnecWithOutStop(audioEffect.correctBring_clip);
 		
 		currentGamePlayState = GamePlayState.calculationPrice;
 
@@ -1664,6 +1706,10 @@ public class BakeryShop : Mz_BaseScene {
 
             audioDescribe.PlayOnecSound(description_clips[7]);
         }
+		else {
+			int r = UE.Random.Range(0, thanksCustomer_clips.Length);
+			audioDescribe.PlayOnecSound(thanksCustomer_clips[r]);
+		}
     }
 
     private IEnumerator PackagingGoods()
@@ -1903,6 +1949,10 @@ public class BakeryShop : Mz_BaseScene {
         }
         else {
 			audioEffect.PlayOnecSound(audioEffect.wrong_Clip);
+			
+			int r = UE.Random.Range(2, 5);
+			audioDescribe.PlayOnecSound(apologize_clip[r]);
+			
             calculatorBeh.ClearCalcMechanism();
 			
             Debug.LogWarning("Wrong answer !. Please recalculate");
@@ -1927,6 +1977,9 @@ public class BakeryShop : Mz_BaseScene {
 			audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
 			calculatorBeh.ClearCalcMechanism();
             currentCustomer.PlayRampage_animation();
+			
+			int r = UE.Random.Range(2, 5);
+			audioDescribe.PlayOnecSound(apologize_clip[r]);
 			
             Debug.Log("Wrong answer !. Please recalculate");
         }
@@ -2058,13 +2111,13 @@ public class BakeryShop : Mz_BaseScene {
             {
                 Debug.Log("food on tray is empty.");
 
-                StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
+                StartCoroutine(this.PlayApologizeCustomer(apologize_clip[0]));
             }
             else if (this.foodTrayBeh.goodsOnTray_List.Count != currentCustomer.customerOrderRequire.Count)
             {
                 Debug.Log("food on tray != customer require.");
 
-                StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
+                StartCoroutine(this.PlayApologizeCustomer(apologize_clip[1]));
             }
             else
             {
@@ -2095,7 +2148,7 @@ public class BakeryShop : Mz_BaseScene {
                     else
                     {
                         list_goodsTemp.Add(new CustomerOrderRequire() { food = null });
-                        StartCoroutine(this.PlayApologizeCustomer(en_apologize_clip[0]));
+                        StartCoroutine(this.PlayApologizeCustomer(apologize_clip[1]));
                         return;
                     }
                 }
@@ -2112,6 +2165,7 @@ public class BakeryShop : Mz_BaseScene {
 		audioEffect.PlayOnecWithOutStop(base.soundEffect_clips[0]);
         rollingDoor_Obj.SetActiveRecursively(true);
     }
+
     private void RollingDoor_close() {
         Mz_LoadingScreen.LoadSceneName = SceneNames.Town.ToString();
         Application.LoadLevel(SceneNames.LoadingScene.ToString());	

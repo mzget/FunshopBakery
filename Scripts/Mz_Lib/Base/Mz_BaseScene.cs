@@ -7,23 +7,19 @@ public class Mz_BaseScene : MonoBehaviour {
     
     public enum SceneNames { none = 0, LoadingScene = 1, MainMenu, WaitForStart, Town, BakeryShop, Sheepbank, Dressing, DisplayReward, };
 		
-	#region <@-- Detect Touch and Input Data Fields.
-
+	//<@-- Detect Touch and Input Data Fields.
     public Touch touch;
     public Vector3 mousePos;
     public Vector3 originalPos;
     public Vector3 currentPos;
-    private Vector3[] mainCameraPos = new Vector3[] { new Vector3(0, -.13f, -20), new Vector3(2.66f, -.13f, -20) };
-	private Vector3 currentCameraPos = new Vector3(0, -.13f, -20);
     public bool _isDragMove = false;
 	internal Mz_SmartDeviceInput smartDeviceInput;
+	
+	//<@-- Core game system.
 	public ExtendsStorageManager extendsStorageManager;
 	private HUDFPS hudFPS_Trace;
 
-	#endregion
-
-	#region <@-- Banner.
-
+	//<@-- Banner.
 #if UNITY_IPHONE
 	
 	public static bool _IsShowADBanner = false;
@@ -31,10 +27,8 @@ public class Mz_BaseScene : MonoBehaviour {
 	
 #endif
 
-	#endregion
 
-	#region <@-- tutor.
-
+	//<@-- tutor.
 	public GameObject cameraTutor_Obj;
 	public GameObject plane_darkShadow;
 	protected GameObject handTutor;
@@ -51,8 +45,6 @@ public class Mz_BaseScene : MonoBehaviour {
             item.active = activeState;
         }
     }
-
-	#endregion
 	
 	protected bool _onDestroyScene = false;
     public bool _hasQuitCommand = false;
@@ -100,8 +92,6 @@ public class Mz_BaseScene : MonoBehaviour {
 	public AudioClip background_clip;
 	public List<AudioClip> description_clips;
 	public List<AudioClip> soundEffect_clips;
-	//  public List<AudioClip> appreciate_Clips = new List<AudioClip>();
-	//	public List<AudioClip> warning_Clips = new List<AudioClip>();
 	protected void CreateAudioObject()
     {
 		Debug.Log("Scene :: InitializeAudio");
@@ -216,65 +206,9 @@ public class Mz_BaseScene : MonoBehaviour {
 
 	#endregion
 
-    protected void ImplementTouchPostion ()
+    protected virtual void ImplementTouchPostion()
 	{
 //		Debug.Log ("ImplementTouchPostion");			
-		
-        if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
-            if(Input.touchCount > 0) {				
-            	touch = Input.GetTouch(0);
-				
-	            if(touch.phase == TouchPhase.Began) {			
-					originalPos = touch.position;
-					currentPos = touch.position;
-	            }
-
-	            if(touch.phase == TouchPhase.Moved) {
-					currentPos = touch.position;
-                    this.MovingCameraTransform();   					
-	            }
-				
-	            if(touch.phase == TouchPhase.Ended) {
-					float distance = Vector2.Distance (currentPos, originalPos);
-					float vector = currentPos.x - originalPos.x;
-//					float speed = Time.deltaTime * (distance / touch.deltaTime);
-					if (vector < 0) {
-						if(distance > 200)
-							currentCameraPos = mainCameraPos[1];
-					}
-					else if (vector > 0) {
-						if(distance > 200)
-							currentCameraPos = mainCameraPos[0];
-					}
-						
-					iTween.MoveTo (Camera.main.gameObject, iTween.Hash("position", currentCameraPos, "time", 0.5f, "easetype", iTween.EaseType.linear));
-					
-					currentPos = Vector2.zero;
-					originalPos = Vector2.zero;
-	            }
-            }
-        }
-		else if(Application.isWebPlayer || Application.isEditor) {
-			mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-				
-			if(Input.GetMouseButtonDown(0)) {
-				originalPos = mousePos;
-                //Debug.Log("originalPos == " + originalPos);
-			}
-				
-			if(Input.GetMouseButton(0)) {
-				currentPos = mousePos;
-                _isDragMove = true;
-				this.MovingCameraTransform();
-                //Debug.Log("currentPos == " + currentPos);
-			}
-
-            if (Input.GetMouseButtonUp(0)) {
-                _isDragMove = true;
-                originalPos = Vector3.zero;
-                currentPos = Vector3.zero;
-            }
-		}
     }
 	protected virtual void MovingCameraTransform ()
 	{

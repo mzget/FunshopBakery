@@ -531,6 +531,7 @@ public class MainMenu : Mz_BaseScene {
 			this.SetActivateGUIOptionsGroup(true);
 			break;
             case "EN" :
+			this.audioDescribe.PlayOnecWithOutStop(optionsManager.english_clip);
             Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.EN;
 			Mz_StorageManage.Language_id = (int)Main.Mz_AppLanguage.SupportLanguage.EN;
             PlayerPrefs.SetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, Mz_StorageManage.Language_id);
@@ -538,6 +539,7 @@ public class MainMenu : Mz_BaseScene {
 			this.SetActivateGUIOptionsGroup(false);
 			break;
 		case "TH" :
+			this.audioDescribe.PlayOnecWithOutStop(optionsManager.thai_clip);
             Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.TH;
 			Mz_StorageManage.Language_id = (int)Main.Mz_AppLanguage.SupportLanguage.TH;
             PlayerPrefs.SetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, Mz_StorageManage.Language_id);
