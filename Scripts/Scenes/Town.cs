@@ -332,7 +332,7 @@ public class Town : Mz_BaseScene {
 	{
 		yield return StartCoroutine(this.SettingGUIMidcenter(true));
 
-		if(ConservationAnimals.Level >= 1 || LoveDogConsortium.Level >= 1 || LoveKidsFoundation.Level >= 1)
+		if(ConservationAnimals.Level >= 1 && LoveDogConsortium.Level >= 1)
 			upgradeOutsideManager.pet_button_obj.active = true;
 		else 
 			upgradeOutsideManager.pet_button_obj.active = false;
