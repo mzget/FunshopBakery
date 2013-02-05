@@ -319,7 +319,6 @@ public class BakeryShop : Mz_BaseScene {
 
         // Debug can sell list.
         StartCoroutine(this.InitializeCanSellGoodslist());
-		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count + " :: " + "NumberOfCansellItem.Count : " + NumberOfCansellItem.Count);
 		
 		close_button.active = true;
     }
@@ -542,7 +541,7 @@ public class BakeryShop : Mz_BaseScene {
         hand_sprite.spriteId = hand_sprite.GetSpriteIdByName("HandDrag_tutor");
 
         tutorDescriptions[0].transform.localPosition = new Vector3(0.1f, 0f, 3f);
-        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "DRAG GOOD TO TRAY";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "DRAG TO TRAY";
         tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
         //<@-- Animated hand with tweening.
         iTween.MoveTo(handTutor.gameObject, iTween.Hash("x", -0.18f, "y", -0.75f, "Time", 1f, "delay", 0.5f, "easetype", iTween.EaseType.easeInOutSine, "looptype", iTween.LoopType.loop));
@@ -731,8 +730,6 @@ public class BakeryShop : Mz_BaseScene {
 				cocoaMilkTank_Obj.SetActiveRecursively(true);
 			if(id == 7)
 				freshButterJam_instance.SetActiveRecursively(true);
-//			if(id == 11 || id == 14 || id == 17)
-//				strawberry_cream_Instance.SetActiveRecursively(true);
 			if(id == 22)
 				deepFriedChickenSandwich.gameObject.SetActiveRecursively(true);
 			if(id == 26)
@@ -761,6 +758,11 @@ public class BakeryShop : Mz_BaseScene {
 
 			#endregion
         }
+		
+		Debug.Log("CanSellGoodLists.Count : " + CanSellGoodLists.Count);
+		foreach (var item in CanSellGoodLists) {	
+			Debug.Log(item.name);
+		}
     }
 	
 	#region <!-- Cake && Cream object mechanism section.
@@ -1567,7 +1569,7 @@ public class BakeryShop : Mz_BaseScene {
 			iTween.ScaleTo(greetingMessage_ObjGroup, iTween.Hash("x", 1f, "y", 1f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
 		}
 		else {
-			iTween.ScaleTo(greetingMessage_ObjGroup, iTween.Hash("x", 0f, "y", 0f, "time", 0.5f, "easetype", iTween.EaseType.easeInExpo,
+			iTween.ScaleTo(greetingMessage_ObjGroup, iTween.Hash("x", 0.1f, "y", 0.1f, "time", 0.5f, "easetype", iTween.EaseType.easeInExpo,
 				"oncomplete", "UnActiveGreetingMessage", "oncompletetarget", this.gameObject));
 		}
 	}

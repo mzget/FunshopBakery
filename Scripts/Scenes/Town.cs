@@ -319,8 +319,12 @@ public class Town : Mz_BaseScene {
 			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_touchmove", typeof(AudioClip)) as AudioClip);
 		}
 		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
-			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_tutor_01", typeof(AudioClip)) as AudioClip);
-        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_tutor_02", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_tutor_01", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_Letplay", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_decoration", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_trophy", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_dress", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_touchmove", typeof(AudioClip)) as AudioClip);
 		}		
 		
         yield return 0;
@@ -332,7 +336,7 @@ public class Town : Mz_BaseScene {
 	{
 		yield return StartCoroutine(this.SettingGUIMidcenter(true));
 
-		if(ConservationAnimals.Level >= 1 && LoveDogConsortium.Level >= 1)
+		if(ConservationAnimals.Level >= 1 && LoveDogConsortium.Level >= 1 && ExtendsStorageManager.TK_clothe_id == 6 && ExtendsStorageManager.TK_hat_id == 6)
 			upgradeOutsideManager.pet_button_obj.active = true;
 		else 
 			upgradeOutsideManager.pet_button_obj.active = false;

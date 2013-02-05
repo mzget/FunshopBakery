@@ -44,8 +44,8 @@ public class GlobalWarmingOranization {
 
 public class DonationManager : MonoBehaviour
 {
-    const string NOTICE_levelMoreThanLimit = "Cannot donation!. Your donation level is more than limit";
-    const string NOTICE_accountBalanceLessThanRequire = "Cannot donation !, Your account balance are less than requirement.";
+    public const string NOTICE_levelMoreThanLimit = "Cannot donation!. Your donation level is more than limit";
+    public const string NOTICE_accountBalanceLessThanRequire = "Cannot donation !, Your account balance are less than requirement.";
 
 
     public const string TOP_RED = "Top_red";
@@ -813,5 +813,9 @@ public class DonationManager : MonoBehaviour
 	{
 		sceneController.audioEffect.PlayOnecWithOutStop(sceneController.audioEffect.wrong_Clip);
 		Debug.LogWarning(noticeMessage);
+		
+		if(noticeMessage == DonationManager.NOTICE_accountBalanceLessThanRequire) {
+			sceneController.audioDescribe.PlayOnecSound(sceneController.description_clips[6]);
+		}
 	}
 }

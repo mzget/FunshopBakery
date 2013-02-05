@@ -242,6 +242,7 @@ public class SheepBank : Mz_BaseScene {
     }
 
     private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/GameIntroduce/SheepBank/";
+	private const string PATH_OF_NOTIFICATION_CLIP = "AudioClips/Notifications/";
     private IEnumerator ReInitializeAudioClipData()
     {
         description_clips.Clear();
@@ -251,6 +252,8 @@ public class SheepBank : Mz_BaseScene {
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_upgradeInsideComplete", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_upgradeOutside", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_SelectionUpgradeItem", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_NOTIFICATION_CLIP + "TH_deposit_warning", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_NOTIFICATION_CLIP + "TH_cannot_donation", typeof(AudioClip)) as AudioClip);
 			
 			short_introduce_clip = Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_greeting", typeof(AudioClip)) as AudioClip;
 		}
@@ -260,6 +263,8 @@ public class SheepBank : Mz_BaseScene {
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_upgradeInsideComplete", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_upgradeOutside", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_SelectionUpgradeItem", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_NOTIFICATION_CLIP + "EN_deposit_warning", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_NOTIFICATION_CLIP + "EN_cannot_donation", typeof(AudioClip)) as AudioClip);
 			
 			short_introduce_clip = Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_greeting", typeof(AudioClip)) as AudioClip;
 		}		
@@ -654,12 +659,14 @@ public class SheepBank : Mz_BaseScene {
 				}
 				else {
 					//<@-- warning sound user not enough available money.
-					audioDescribe.PlayOnecWithOutStop(audioEffect.wrong_Clip);
+					audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
+					audioDescribe.PlayOnecSound(description_clips[5]);
 	            	calculatorBeh.ClearCalcMechanism();		
 				}
 	        }
 	        else {
 	            calculatorBeh.ClearCalcMechanism();			
+				audioEffect.PlayOnecWithOutStop(audioEffect.wrong_Clip);
 				audioEffect.PlayOnecWithOutStop(audioEffect.mutter_clip);
 
 				Debug.LogWarning("result value more than available money");

@@ -41,7 +41,7 @@ public class Dressing : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 	}
 
-    protected new IEnumerator InitializeAudio()
+    protected IEnumerator InitializeAudio()
     {
         base.CreateAudioObject();
         

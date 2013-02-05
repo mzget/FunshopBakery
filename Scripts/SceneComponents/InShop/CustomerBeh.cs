@@ -41,7 +41,6 @@ public class CustomerBeh : MonoBehaviour {
         StartCoroutine(RandomCustomerFace());
 
 		list_goodsBag = new List<Food>(sceneManager.CanSellGoodLists);
-//		this.GenerateGoodOrder ();
 	}
 	
 	private IEnumerator RandomCustomerFace() {
