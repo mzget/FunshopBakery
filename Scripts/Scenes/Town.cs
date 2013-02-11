@@ -319,12 +319,12 @@ public class Town : Mz_BaseScene {
 			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_touchmove", typeof(AudioClip)) as AudioClip);
 		}
 		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
-        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_tutor_01", typeof(AudioClip)) as AudioClip);
-        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_Letplay", typeof(AudioClip)) as AudioClip);
-        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_decoration", typeof(AudioClip)) as AudioClip);
-			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_trophy", typeof(AudioClip)) as AudioClip);
-			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_dress", typeof(AudioClip)) as AudioClip);
-			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_touchmove", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_tutor_01", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_Letplay", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_decoration", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_trophy", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_dress", typeof(AudioClip)) as AudioClip);
+			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_touchmove", typeof(AudioClip)) as AudioClip);
 		}		
 		
         yield return 0;

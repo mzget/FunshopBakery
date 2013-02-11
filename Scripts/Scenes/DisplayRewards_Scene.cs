@@ -22,13 +22,16 @@ public class DisplayRewards_Scene : Mz_BaseScene {
 
 	// Use this for initialization
 	void Start () {
+        StartCoroutine(this.ReInitializeAudioClipData());
 		StartCoroutine(this.InitializeAudio());
 		StartCoroutine(base.InitializeIdentityGUI());
 
 		Mz_ResizeScale.ResizingScale(sceneBackground_transform);
+
+        this.audioDescribe.PlayOnecSound(description_clips[0]);
 	}
 	
-	private new IEnumerator InitializeAudio() {
+	private IEnumerator InitializeAudio() {
 		base.CreateAudioObject();		
 		
         audioBackground_Obj.audio.clip = base.background_clip;
@@ -36,12 +39,23 @@ public class DisplayRewards_Scene : Mz_BaseScene {
         audioBackground_Obj.audio.Play();
 
         yield return null;
-	}
-	
-	// Update is called once per frame
-//	void Update () {
-//	
-//	}
+    }
+
+    private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/SceneInfo/";
+    private IEnumerator ReInitializeAudioClipData()
+    {
+        description_clips.Clear();
+        if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH)
+        {
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_reward", typeof(AudioClip)) as AudioClip);
+        }
+        else if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN)
+        {
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_reward", typeof(AudioClip)) as AudioClip);
+        }
+
+        yield return 0;
+    }
 	
 	public override void OnInput (string nameInput)
 	{

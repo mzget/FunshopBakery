@@ -27,7 +27,7 @@ public class MainMenu : Mz_BaseScene {
     
     public GUISkin mainmenu_Skin;
     public GUIStyle saveSlot_buttonStyle;
-    public GUIStyle notification_TextboxStyle;
+    private GUIStyle notification_TextboxStyle;
     public enum SceneState { none = 0, showOption, showNewGame, showNewShop, showLoadGame, };
     private SceneState sceneState;
 
@@ -144,8 +144,8 @@ public class MainMenu : Mz_BaseScene {
         saveSlot_buttonStyle.normal.textColor = Color.white;
         saveSlot_buttonStyle.active.textColor = Color.green;
         notification_TextboxStyle = new GUIStyle(mainmenu_Skin.textArea);
-        notification_TextboxStyle.fontSize = 32;
-        notification_TextboxStyle.fontStyle = FontStyle.Bold;
+        notification_TextboxStyle.fontSize = 16;
+        notification_TextboxStyle.fontStyle = FontStyle.Normal;
         
 		player_1 = PlayerPrefs.GetString(1 + Mz_StorageManage.KEY_USERNAME);
 		player_2 = PlayerPrefs.GetString(2 + Mz_StorageManage.KEY_USERNAME);

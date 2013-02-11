@@ -24,6 +24,6 @@ public class Main {
 			EN = 1,
 			TH = 0,
 		};
-		public static SupportLanguage appLanguage;
+        public static SupportLanguage appLanguage = SupportLanguage.TH;
 	}
 }

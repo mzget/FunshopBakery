@@ -30,6 +30,7 @@ public class Dressing : Mz_BaseScene {
 
     // Use this for initialization
 	void Start () {
+        StartCoroutine(ReInitializeAudioClipData());
         StartCoroutine(InitializeAudio());
 		StartCoroutine(base.InitializeIdentityGUI());
 		
@@ -38,7 +39,9 @@ public class Dressing : Mz_BaseScene {
 		iTween.MoveTo(cloudAndFog_Objs[0].gameObject, iTween.Hash("y", 0.2f, "time", 2f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[1].gameObject, iTween.Hash("y", 0.4f, "time", 3f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
 		iTween.MoveTo(cloudAndFog_Objs[2].gameObject, iTween.Hash("y", 0.6f, "time", 4f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
-		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong)); 
+		iTween.MoveTo(cloudAndFog_Objs[3].gameObject, iTween.Hash("x", .3f, "time", 5f, "easetype", iTween.EaseType.easeInSine, "looptype", iTween.LoopType.pingPong));
+
+        audioDescribe.PlayOnecSound(description_clips[0]);
 	}
 
     protected IEnumerator InitializeAudio()
@@ -49,7 +52,23 @@ public class Dressing : Mz_BaseScene {
         audioBackground_Obj.audio.loop = true;
         audioBackground_Obj.audio.Play();
 		 
-		yield return null; 
+		yield return null;
+    }
+
+    private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/SceneInfo/";
+    private IEnumerator ReInitializeAudioClipData()
+    {
+        description_clips.Clear();
+        if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH)
+        {
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_suit", typeof(AudioClip)) as AudioClip);
+        }
+        else if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN)
+        {
+            description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_suit", typeof(AudioClip)) as AudioClip);
+        }
+
+        yield return 0;
     }
 
 	public override void OnInput (string nameInput)

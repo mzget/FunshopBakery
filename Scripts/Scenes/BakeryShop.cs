@@ -430,7 +430,8 @@ public class BakeryShop : Mz_BaseScene {
         {
             for (int i = 0; i < 30; i++)
             {
-                audioDescriptionData.merchandiseNameDescribes[i] = Resources.Load(PATH_OF_MERCHANDISC_CLIP + "TH/" + goodDataStore.FoodDatabase_list[i].name, typeof(AudioClip)) as AudioClip;
+                audioDescriptionData.merchandiseNameDescribes[i] = 
+                    Resources.Load(PATH_OF_MERCHANDISC_CLIP + "TH/" + goodDataStore.FoodDatabase_list[i].name, typeof(AudioClip)) as AudioClip;
             }
         }
     }

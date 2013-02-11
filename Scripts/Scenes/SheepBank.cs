@@ -249,7 +249,7 @@ public class SheepBank : Mz_BaseScene {
 		if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH) {
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_introduce", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_upgradeInside", typeof(AudioClip)) as AudioClip);
-        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_upgradeInsideComplete", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_upgradeOutside", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "TH_SelectionUpgradeItem", typeof(AudioClip)) as AudioClip);
 			description_clips.Add(Resources.Load(PATH_OF_NOTIFICATION_CLIP + "TH_deposit_warning", typeof(AudioClip)) as AudioClip);
@@ -260,7 +260,7 @@ public class SheepBank : Mz_BaseScene {
 		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
 			description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_introduce", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_upgradeInside", typeof(AudioClip)) as AudioClip);
-        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_upgradeInsideComplete", typeof(AudioClip)) as AudioClip);
+        	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_upgradeOutside", typeof(AudioClip)) as AudioClip);
         	description_clips.Add(Resources.Load(PATH_OF_DYNAMIC_CLIP + "EN_SelectionUpgradeItem", typeof(AudioClip)) as AudioClip);
 			description_clips.Add(Resources.Load(PATH_OF_NOTIFICATION_CLIP + "EN_deposit_warning", typeof(AudioClip)) as AudioClip);
