@@ -58,6 +58,8 @@ public class JuiceTankBeh : ObjectsBeh {
 
     private void Create_PineappleJuiceGlass()
     {
+        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + PineappleJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
         juice_glass_instance.transform.localPosition = new Vector3(0.01f, -0.325f, 0);
@@ -69,6 +71,8 @@ public class JuiceTankBeh : ObjectsBeh {
     }
 	
 	void Create_AppleJuiceTank() {		
+        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + AppleJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
         juice_glass_instance.transform.localPosition = new Vector3(0.01f, -0.325f, 0);
@@ -80,6 +84,8 @@ public class JuiceTankBeh : ObjectsBeh {
 	}
 	
 	void Create_OrangeJuiceGlass() {
+        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + OrangeJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
         juice_glass_instance.transform.localPosition = new Vector3(0.01f, -0.325f, 0);
@@ -92,6 +98,8 @@ public class JuiceTankBeh : ObjectsBeh {
 
 	void Create_CocoaMilkGlass ()
 	{
+        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+
 		juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + CocoaMilk, typeof(GameObject))) as GameObject;
 		juice_glass_instance.transform.parent = this.transform;
 		juice_glass_instance.transform.localPosition = new Vector3(-0.133f, -0.177f, -.1f);
@@ -104,6 +112,8 @@ public class JuiceTankBeh : ObjectsBeh {
 
 	void Create_FreshMilkGlass ()
 	{
+        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+
 		juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + FreshMilk, typeof(GameObject))) as GameObject;
 		juice_glass_instance.transform.parent = this.transform;
 		juice_glass_instance.transform.localPosition = new Vector3(-0.124f, -0.145f, -.1f);

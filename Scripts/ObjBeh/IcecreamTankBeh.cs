@@ -26,8 +26,11 @@ public class IcecreamTankBeh : ObjectsBeh {
     {
         if(icecream_Instance == null) {
 			icecreamValve.Play();
+            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[3]);
+
 			icecreamValve.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
-				if(this.gameObject.name == BakeryShop.icecreamStrawberryTank_name) {
+				if(this.gameObject.name == BakeryShop.icecreamStrawberryTank_name)
+                {
 					icecream_Instance = Instantiate(Resources.Load(ObjectsBeh.Icecream_ResourcePath + "StrawberryIcecream", typeof(GameObject))) as GameObject;
 					icecream_Instance.transform.parent = this.transform;
 					icecream_Instance.transform.localPosition = icecreamPos_0;
@@ -37,7 +40,8 @@ public class IcecreamTankBeh : ObjectsBeh {
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
                     icecreamBeh.destroyObj_Event += new System.EventHandler(icecreamBeh_destroyObj_Event);
 				}
-				else if(this.gameObject.name == BakeryShop.icecreamVanillaTank_name) {
+				else if(this.gameObject.name == BakeryShop.icecreamVanillaTank_name) 
+                {
 					icecream_Instance = Instantiate(Resources.Load(ObjectsBeh.Icecream_ResourcePath + "VanillaIcecream", typeof(GameObject))) as GameObject;
 					icecream_Instance.transform.parent = this.transform;
 					icecream_Instance.transform.localPosition = icecreamPos_1;
@@ -47,7 +51,8 @@ public class IcecreamTankBeh : ObjectsBeh {
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
                     icecreamBeh.destroyObj_Event += new System.EventHandler(icecreamBeh_destroyObj_Event);
 				}
-				else if(this.gameObject.name == BakeryShop.icecreamChocolateTank_name) {
+				else if(this.gameObject.name == BakeryShop.icecreamChocolateTank_name)
+                {
 					icecream_Instance = Instantiate(Resources.Load(ObjectsBeh.Icecream_ResourcePath + "ChocolateIcecream", typeof(GameObject))) as GameObject;
 					icecream_Instance.transform.parent = this.transform;
 					icecream_Instance.transform.localPosition = icecreamPos_2;

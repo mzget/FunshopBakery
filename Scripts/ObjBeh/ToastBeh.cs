@@ -27,6 +27,7 @@ public class ToastBeh : GoodsBeh {
             base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
 
 			sceneManager.SetAnimatedJamInstance(true);
+            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[4]);
         }
 		
 		base.OnTouchDown();

@@ -342,7 +342,7 @@ public class BakeryShop : Mz_BaseScene {
 		
         audioBackground_Obj.audio.clip = base.background_clip;
         audioBackground_Obj.audio.loop = true;
-        audioBackground_Obj.audio.volume = 0.6f;
+        audioBackground_Obj.audio.volume = 0.8f;
         audioBackground_Obj.audio.Play();
 		
 		yield return null;

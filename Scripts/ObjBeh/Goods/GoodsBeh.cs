@@ -25,8 +25,11 @@ public class GoodsBeh : ObjectsBeh {
 	/// Put goods objects intance on food tray.
 	public event System.EventHandler putObjectOnTray_Event;
 	protected void OnPutOnTray_event (System.EventArgs eventArgs) {
-		if (putObjectOnTray_Event != null) {
+		if (putObjectOnTray_Event != null) 
+        {
 			putObjectOnTray_Event (this, eventArgs);
+            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[5]);
+
 			Debug.Log (putObjectOnTray_Event + " : " + this.name);
 
             if(MainMenu._HasNewGameEvent)

@@ -29,6 +29,7 @@ public class CakeBeh : GoodsBeh {
             CakeBeh._IsActive = true;
             base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
 			sceneManager.SetAnimatedCreamInstance(true);
+            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[4]);
 
             base.OnTouchDown();
         }
