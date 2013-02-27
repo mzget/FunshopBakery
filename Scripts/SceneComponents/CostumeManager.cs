@@ -142,9 +142,11 @@ public class CostumeManager : MonoBehaviour {
 
 					if(Dressing.CanEquipClothe_list.Contains(i)) {
 						lockKey_obj[i].SetActiveRecursively(false);
+						costumePrice_textmesh[i].gameObject.active = true;
 					}
 					else {
 						lockKey_obj[i].SetActiveRecursively(true);
+						costumePrice_textmesh[i].gameObject.active = true;
 					}
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
@@ -154,10 +156,14 @@ public class CostumeManager : MonoBehaviour {
 					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j+3].ToString();
 					costumePrice_textmesh[j+3].Commit();
 
-					if(Dressing.CanEquipClothe_list.Contains(j+3)) 
+					if(Dressing.CanEquipClothe_list.Contains(j+3)) { 
 						lockKey_obj[j+3].SetActiveRecursively(false);
-					else
+						costumePrice_textmesh[j+3].gameObject.active = false;
+					}
+					else {
 						lockKey_obj[j+3].SetActiveRecursively(true);
+						costumePrice_textmesh[j+3].gameObject.active = true;
+					}
                 }
             }
             else if (currentPageIndex == 1)
@@ -169,10 +175,14 @@ public class CostumeManager : MonoBehaviour {
 					costumePrice_textmesh[i].text = arr_priceOfClothesData[i+6].ToString();
 					costumePrice_textmesh[i].Commit();
 					
-					if(Dressing.CanEquipClothe_list.Contains(i+6)) 
+					if(Dressing.CanEquipClothe_list.Contains(i+6)) {
 						lockKey_obj[i].SetActiveRecursively(false);
-					else
+						costumePrice_textmesh[i].gameObject.active = false;
+					}
+					else {
 						lockKey_obj[i].SetActiveRecursively(true);
+						costumePrice_textmesh[i].gameObject.active = true;
+					}
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
                 {
@@ -181,10 +191,14 @@ public class CostumeManager : MonoBehaviour {
 					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j+9].ToString();
 					costumePrice_textmesh[j+3].Commit();
 					
-					if(Dressing.CanEquipClothe_list.Contains(j+9)) 
+					if(Dressing.CanEquipClothe_list.Contains(j+9)) {
 						lockKey_obj[j+3].SetActiveRecursively(false);
-					else
+						costumePrice_textmesh[j+3].gameObject.active = false;
+					}
+					else {
 						lockKey_obj[j+3].SetActiveRecursively(true);
+						costumePrice_textmesh[j+3].gameObject.active = true;
+					}
                 }
             }
             else if (currentPageIndex == 2)
@@ -196,15 +210,21 @@ public class CostumeManager : MonoBehaviour {
 					costumePrice_textmesh[i].text = arr_priceOfClothesData[i+12].ToString();
 					costumePrice_textmesh[i].Commit();
 					
-					if(Dressing.CanEquipClothe_list.Contains(i+12)) 
+					if(Dressing.CanEquipClothe_list.Contains(i+12)) {
 						lockKey_obj[i].SetActiveRecursively(false);
-					else
+						costumePrice_textmesh[i].gameObject.active = false;
+					}
+					else {
 						lockKey_obj[i].SetActiveRecursively(true);
+						costumePrice_textmesh[i].gameObject.active = true;
+					}
                 }
                 for (int j = 0; j < low1_Sprite.Length; j++)
                 {
                     low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameClothesSpecify[j + 15]);
-					
+
+					// Active all low 1 textmesh.
+					costumePrice_textmesh[j+3].gameObject.active = true;
 					costumePrice_textmesh[j+3].text = arr_priceOfClothesData[j + 15].ToString();
 					costumePrice_textmesh[j+3].Commit();
 					
@@ -217,119 +237,142 @@ public class CostumeManager : MonoBehaviour {
         }
         else if (currentTabMenuState == TabMenuState.hat) 
 		{
-            switch (currentPageIndex)
-            {
-                case 0:
-                    for (int i = 0; i < low0_Sprite.Length; i++)
-                    {
-                        low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i]);
+            if(currentPageIndex == 0) {   
+            	for (int i = 0; i < low0_Sprite.Length; i++) {
+                	low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i]);
 
-						costumePrice_textmesh[i].text = arr_HatPriceData[i].ToString();
-						costumePrice_textmesh[i].Commit();
-					
-						if(Dressing.CanEquipHat_list.Contains(i))
-							lockKey_obj[i].SetActiveRecursively(false);
-						else 
-							lockKey_obj[i].SetActiveRecursively(true);
-                    }
-                    for (int j = 0; j < low1_Sprite.Length; j++)
-                    {
-                        low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 3]);
+					// Active all low 0 textmesh bacause it's free.
+					costumePrice_textmesh[i].gameObject.active = true;
+					costumePrice_textmesh[i].text = arr_HatPriceData[i].ToString();
+					costumePrice_textmesh[i].Commit();
+				
+					if(Dressing.CanEquipHat_list.Contains(i)) {
+						lockKey_obj[i].SetActiveRecursively(false);
+					}
+					else { 
+						lockKey_obj[i].SetActiveRecursively(true);
+					}
+            	}
+            	for (int j = 0; j < low1_Sprite.Length; j++)
+            	{
+                	low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 3]);
 
-						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+3].ToString();
-						costumePrice_textmesh[j+3].Commit();
+					costumePrice_textmesh[j+3].text = arr_HatPriceData[j+3].ToString();
+					costumePrice_textmesh[j+3].Commit();
+				
+					if(Dressing.CanEquipHat_list.Contains(j+3)) {
+						lockKey_obj[j+3].SetActiveRecursively(false);
+						costumePrice_textmesh[j+3].gameObject.active = false;
+					}
+					else { 
+						lockKey_obj[j+3].SetActiveRecursively(true);
+						costumePrice_textmesh[j+3].gameObject.active = true;
+					}
+           		}
+           	}
+			else if(currentPageIndex == 1) {
+	            for (int i = 0; i < low0_Sprite.Length; i++) {
+	                low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 6]);
+				
+					costumePrice_textmesh[i].text = arr_HatPriceData[i+6].ToString();
+					costumePrice_textmesh[i].Commit();
+				
+					if(Dressing.CanEquipHat_list.Contains(i+6)) {
+						lockKey_obj[i].SetActiveRecursively(false);
+						costumePrice_textmesh[i].gameObject.active = false;
+					}
+					else {
+						lockKey_obj[i].SetActiveRecursively(true);
+						costumePrice_textmesh[i].gameObject.active = true;
+					}
+	            }
+	            for (int j = 0; j < low1_Sprite.Length; j++) {
+	                low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 9]);
+				
+					costumePrice_textmesh[j+3].text = arr_HatPriceData[j+9].ToString();
+					costumePrice_textmesh[j+3].Commit();
+				
+					if(Dressing.CanEquipHat_list.Contains(j+9)) {
+						lockKey_obj[j+3].SetActiveRecursively(false);
+						costumePrice_textmesh[j+3].gameObject.active = false;
+					}
+					else {
+						lockKey_obj[j+3].SetActiveRecursively(true);
+						costumePrice_textmesh[j+3].gameObject.active = true;
+					}
+	            }
+        	}
+	        else if(currentPageIndex == 2) 
+	        {
+	            for (int i = 0; i < low0_Sprite.Length; i++) {
+	                low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 12]);
 					
-						if(Dressing.CanEquipHat_list.Contains(j+3))
+					costumePrice_textmesh[i].text = arr_HatPriceData[i+12].ToString();
+					costumePrice_textmesh[i].Commit();
+				
+					if(Dressing.CanEquipHat_list.Contains(i+12)) {
+						lockKey_obj[i].SetActiveRecursively(false);
+						costumePrice_textmesh[i].gameObject.active = false;
+					}
+					else {
+						lockKey_obj[i].SetActiveRecursively(true);
+						costumePrice_textmesh[i].gameObject.active = true;
+					}
+	            }
+	            for (int j = 0; j < low1_Sprite.Length; j++) {
+	                low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 15]);
+					
+					costumePrice_textmesh[j+3].text = arr_HatPriceData[j+15].ToString();
+					costumePrice_textmesh[j+3].Commit();
+				
+					if(Dressing.CanEquipHat_list.Contains(j+15)) {
+						lockKey_obj[j+3].SetActiveRecursively(false);
+						costumePrice_textmesh[j+3].gameObject.active = false;
+					}
+					else { 
+						lockKey_obj[j+3].SetActiveRecursively(true);
+						costumePrice_textmesh[j+3].gameObject.active = true;
+					}
+	            }
+	        }
+	        else if(currentPageIndex == 3) {
+	            for (int i = 0; i < low0_Sprite.Length; i++) {
+	                low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 18]);
+				
+					costumePrice_textmesh[i].text = arr_HatPriceData[i+18].ToString();
+					costumePrice_textmesh[i].Commit();
+				
+					if(Dressing.CanEquipHat_list.Contains(i+18)) {
+						lockKey_obj[i].SetActiveRecursively(false);
+						costumePrice_textmesh[i].gameObject.active = false;
+					}
+					else {
+						lockKey_obj[i].SetActiveRecursively(true);
+						costumePrice_textmesh[i].gameObject.active = true;
+					}
+	            }
+	            for (int j = 0; j < low1_Sprite.Length; j++) {
+	                low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 21]);
+					
+					costumePrice_textmesh[j+3].text = arr_HatPriceData[j+21].ToString();
+					costumePrice_textmesh[j+3].Commit();
+				
+					if(Dressing.CanEquipHat_list.Contains(j+21)) {
+						lockKey_obj[j+3].SetActiveRecursively(false);
+						costumePrice_textmesh[j+3].gameObject.active = false;
+					}
+					else {
+						if(CharacterCustomization.AvailableHatNumber == j + 21) {
 							lockKey_obj[j+3].SetActiveRecursively(false);
-						else 
-							lockKey_obj[j+3].SetActiveRecursively(true);
-                    }
-                    break;
-                case 1:
-                    for (int i = 0; i < low0_Sprite.Length; i++)
-                    {
-                        low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 6]);
-					
-						costumePrice_textmesh[i].text = arr_HatPriceData[i+6].ToString();
-						costumePrice_textmesh[i].Commit();
-					
-						if(Dressing.CanEquipHat_list.Contains(i+6))
-							lockKey_obj[i].SetActiveRecursively(false);
-						else 
-							lockKey_obj[i].SetActiveRecursively(true);
-                    }
-                    for (int j = 0; j < low1_Sprite.Length; j++)
-                    {
-                        low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 9]);
-					
-						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+9].ToString();
-						costumePrice_textmesh[j+3].Commit();
-					
-						if(Dressing.CanEquipHat_list.Contains(j+9))
-							lockKey_obj[j+3].SetActiveRecursively(false);
-						else 
-							lockKey_obj[j+3].SetActiveRecursively(true);
-                    }
-                    break;
-                case 2:
-                    for (int i = 0; i < low0_Sprite.Length; i++)
-                    {
-                        low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 12]);
-					
-						costumePrice_textmesh[i].text = arr_HatPriceData[i+12].ToString();
-						costumePrice_textmesh[i].Commit();
-					
-						if(Dressing.CanEquipHat_list.Contains(i+12))
-							lockKey_obj[i].SetActiveRecursively(false);
-						else 
-							lockKey_obj[i].SetActiveRecursively(true);
-                    }
-                    for (int j = 0; j < low1_Sprite.Length; j++)
-                    {
-                        low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 15]);
-					
-						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+15].ToString();
-						costumePrice_textmesh[j+3].Commit();
-					
-						if(Dressing.CanEquipHat_list.Contains(j+15))
-							lockKey_obj[j+3].SetActiveRecursively(false);
-						else 
-							lockKey_obj[j+3].SetActiveRecursively(true);
-                    }
-                    break;
-                case 3:
-                    for (int i = 0; i < low0_Sprite.Length; i++)
-                    {
-                        low0_Sprite[i].spriteId = low0_Sprite[i].GetSpriteIdByName(nameHatSpecifyIndex[i + 18]);
-					
-						costumePrice_textmesh[i].text = arr_HatPriceData[i+18].ToString();
-						costumePrice_textmesh[i].Commit();
-					
-						if(Dressing.CanEquipHat_list.Contains(i+18))
-							lockKey_obj[i].SetActiveRecursively(false);
-						else 
-							lockKey_obj[i].SetActiveRecursively(true);
-                    }
-                    for (int j = 0; j < low1_Sprite.Length; j++)
-                    {
-                        low1_Sprite[j].spriteId = low1_Sprite[j].GetSpriteIdByName(nameHatSpecifyIndex[j + 21]);
-					
-						costumePrice_textmesh[j+3].text = arr_HatPriceData[j+21].ToString();
-						costumePrice_textmesh[j+3].Commit();
-					
-						if(Dressing.CanEquipHat_list.Contains(j+21))
-							lockKey_obj[j+3].SetActiveRecursively(false);
+							costumePrice_textmesh[j+3].gameObject.active = true;
+						}
 						else {
-							if(CharacterCustomization.AvailableHatNumber == j + 21)
-								lockKey_obj[j+3].SetActiveRecursively(false);
-							else
-								lockKey_obj[j+3].SetActiveRecursively(true);
-					    }
-                    }
-                    break;
-                default:
-                    break;
-            }
+							lockKey_obj[j+3].SetActiveRecursively(true);
+							costumePrice_textmesh[j+3].gameObject.active = true;
+						}
+				    }
+	            }
+	        }
         }
 
 		int temp_pageID = currentPageIndex + 1;

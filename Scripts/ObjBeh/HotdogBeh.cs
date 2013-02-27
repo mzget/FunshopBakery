@@ -28,7 +28,6 @@ public class HotdogBeh : GoodsBeh {
 		{
 			_IsActive = true;
 			base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
-            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[4]);
 		}
 		
 		base.OnTouchDown();

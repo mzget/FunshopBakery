@@ -244,7 +244,7 @@ public class Town : Mz_BaseScene {
 
         handTutor.transform.localPosition = new Vector3(0.08f, 0f, 5f);
         tutorDescriptions[0].transform.localPosition = new Vector3(0.25f, 0.1f, 5);
-        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "LET PLAY";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "LET'S PLAY";
         tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
 
         this._updatable = false;

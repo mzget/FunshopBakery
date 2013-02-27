@@ -27,7 +27,6 @@ public class ToastBeh : GoodsBeh {
             base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
 
 			sceneManager.SetAnimatedJamInstance(true);
-            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[4]);
         }
 		
 		base.OnTouchDown();
@@ -37,7 +36,8 @@ public class ToastBeh : GoodsBeh {
 	{		
 		if(base._isWaitFotIngredient == false)
 			return;
-		
+
+		sceneManager.audioEffect.PlayOnecSound (sceneManager.soundEffect_clips [7]);
 		if(ingredientName == JamBeh.StrawberryJam) {
 			base.animatedSprite.Play(JamBeh.StrawberryJam);
 			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite anim, int Id)

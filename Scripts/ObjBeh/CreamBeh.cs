@@ -34,7 +34,8 @@ public class CreamBeh : ObjectsBeh {
 
 		animatedSprite.Play(animationName_001);				
 		animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
-		
+		baseScene.audioEffect.PlayOnecSound (baseScene.audioEffect.pop_clip);
+
 		if(sceneManager.cupcake != null) {
 			sceneManager.cupcake.WaitForIngredient(this.gameObject.name);
 		}		

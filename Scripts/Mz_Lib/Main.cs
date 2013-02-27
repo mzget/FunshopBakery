@@ -21,8 +21,8 @@ public class Main {
 
 	public class Mz_AppLanguage {
 		public enum SupportLanguage {
-			EN = 1,
-			TH = 0,
+			EN = 0,
+			TH = 1,
 		};
         public static SupportLanguage appLanguage = SupportLanguage.TH;
 	}

@@ -33,7 +33,8 @@ public class ObjectsBeh : Base_ObjectBeh {
     protected void OnDestroyObject_event(System.EventArgs e) {
         if (destroyObj_Event != null)
         {
-            destroyObj_Event(this, e);
+			destroyObj_Event(this, e);
+			baseScene.audioEffect.PlayOnecWithOutStop(baseScene.soundEffect_clips[1]);
             Debug.Log(destroyObj_Event + ": destroyObj_Event : " + this.name);
         }
     }

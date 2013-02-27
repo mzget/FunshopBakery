@@ -102,7 +102,15 @@ public class GoodsBeh : ObjectsBeh {
 		}
     }
 	
-	/// <!-- OnInput Events.
+	// <!-- OnInput Events.
+	
+	protected override void OnTouchBegan()
+	{
+		base.OnTouchBegan();
+		
+		this.transform.localScale = new Vector3(1.2f, 1.2f, 1);
+		baseScene.audioEffect.PlayOnecWithOutStop(baseScene.audioEffect.pop_clip);
+	}
 
 	protected override void OnTouchDown ()
 	{
@@ -119,10 +127,13 @@ public class GoodsBeh : ObjectsBeh {
 
 		base.OnTouchDown();
 	}
+
 	protected override void OnTouchEnded ()
 	{
-        base.OnTouchEnded();
-
+		base.OnTouchEnded();
+		
+		this.transform.localScale = new Vector3(1f, 1f, 1);
+		
 		if(base._isDraggable)
 			_isDropObject = true;
 	}

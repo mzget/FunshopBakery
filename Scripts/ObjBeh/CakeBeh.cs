@@ -29,7 +29,6 @@ public class CakeBeh : GoodsBeh {
             CakeBeh._IsActive = true;
             base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
 			sceneManager.SetAnimatedCreamInstance(true);
-            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[4]);
 
             base.OnTouchDown();
         }
@@ -54,7 +53,8 @@ public class CakeBeh : GoodsBeh {
             sceneManager.SetActivateTotorObject(false);
 
         iTween.Stop(this.gameObject);
-        this.transform.position = base.originalPosition;
+		this.transform.position = base.originalPosition;
+		baseScene.audioEffect.PlayOnecSound (baseScene.soundEffect_clips [3]);
 
         if (ingredientName == CreamBeh.ChocolateCream)
         {

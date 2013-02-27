@@ -13,7 +13,18 @@ public class MainMenu : Mz_BaseScene {
     public Transform initializeNewGame_Group;
 	public Transform options_group_transform;
 	private InitializeNewShop initializeNewShop;
-	public GUIOptionsManager optionsManager = new GUIOptionsManager();
+	public GUIOptionsManager optionsManager = new GUIOptionsManager();	
+	private void SetActivateGUIOptionsGroup (bool activeState)
+	{
+        if(activeState) {
+			plane_darkShadow.active = true;
+            iTween.MoveTo(optionsManager.selectLanguage_Obj, iTween.Hash("y", 0.1f, "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutBounce));
+        }
+        else {
+			plane_darkShadow.active = false;
+            iTween.MoveTo(optionsManager.selectLanguage_Obj, iTween.Hash("y", 2f, "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutBounce));
+        }
+	}
 
     public Transform loadgame_Group;
     public GameObject back_button;
@@ -74,7 +85,7 @@ public class MainMenu : Mz_BaseScene {
         Mz_ResizeScale.ResizingScale(baseBuilding_Obj.transform);
 
         iTween.MoveTo(mainmenu_Group.gameObject, moveDownTransform_Data);
-		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 0.9f, "time", 1f, "easetype",  iTween.EaseType.easeOutSine));
+		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 0.85f, "time", 1f, "easetype",  iTween.EaseType.easeOutSine));
 
         newgame_Group.gameObject.SetActiveRecursively(false);
 		initializeNewShop = initializeNewGame_Group.GetComponent<InitializeNewShop>();
@@ -124,7 +135,7 @@ public class MainMenu : Mz_BaseScene {
 	
     void InitailizeDataFields()
     {
-		moveDownTransform_Data.Add("position", new Vector3(0.2f, 0, -2));
+		moveDownTransform_Data.Add("position", new Vector3(0.2f, 0f, -2));
 		moveDownTransform_Data.Add("time", 1f);
 		moveDownTransform_Data.Add("easetype", iTween.EaseType.spring);
 		
@@ -502,18 +513,6 @@ public class MainMenu : Mz_BaseScene {
         }
         GUI.EndGroup();
     }
-	
-	void SetActivateGUIOptionsGroup (bool activeState)
-	{
-        if(activeState) {
-			plane_darkShadow.active = true;
-            iTween.MoveTo(optionsManager.selectLanguage_Obj, iTween.Hash("y", 0.1f, "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutBounce));
-        }
-        else {
-			plane_darkShadow.active = false;
-            iTween.MoveTo(optionsManager.selectLanguage_Obj, iTween.Hash("y", 2f, "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutBounce));
-        }
-	}
 
     public override void OnInput(string nameInput)
     {
@@ -668,7 +667,7 @@ public class MainMenu : Mz_BaseScene {
         yield return new WaitForSeconds(1);
 
         iTween.MoveTo(mainmenu_Group.gameObject, moveDownTransform_Data);
-		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 0.9f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
+		iTween.MoveTo(options_group_transform.gameObject, iTween.Hash("y", 0.85f, "time", 0.5f, "easetype", iTween.EaseType.easeInSine));
 
         newgame_Group.gameObject.SetActiveRecursively(false);
         initializeNewGame_Group.gameObject.SetActiveRecursively(false);

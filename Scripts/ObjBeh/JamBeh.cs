@@ -47,7 +47,8 @@ public class JamBeh : ObjectsBeh {
 
         if(base.animationName_001 != "") {
             base.animatedSprite.Play(base.animationName_001);
-            base.animatedSprite.animationCompleteDelegate = AnimationComplete;
+			base.animatedSprite.animationCompleteDelegate = AnimationComplete;
+			baseScene.audioEffect.PlayOnecSound (baseScene.audioEffect.pop_clip);
         }
 		
 		for (int i = 0; i < sceneManager.toasts.Length; i++) {

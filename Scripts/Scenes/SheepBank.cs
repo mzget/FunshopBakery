@@ -47,6 +47,7 @@ public class SheepBank : Mz_BaseScene {
 	public GameObject shadowPlane_Obj;
 	public tk2dTextMesh availableMoney_Textmesh;
 	public tk2dTextMesh accountBalance_Textmesh;
+	public tk2dTextMesh passbookAccountName_textmesh;
 	public tk2dTextMesh passbookAccountBalance_textmesh;
     public Mz_CalculatorBeh calculatorBeh;
 	public GameObject availabelMoneyBillboard_Obj;
@@ -724,6 +725,8 @@ public class SheepBank : Mz_BaseScene {
 
 		currentGameStatus = GameSceneStatus.ShowPassbook;
 
+		passbookAccountName_textmesh.text = Mz_StorageManage.Username;
+		passbookAccountName_textmesh.Commit ();
 		passbookAccountBalance_textmesh.text = Mz_StorageManage.AccountBalance.ToString();
 		passbookAccountBalance_textmesh.Commit();
 	}
