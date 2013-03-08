@@ -30,7 +30,7 @@ public class JuiceTankBeh : ObjectsBeh {
     {
         base.Start();
 		
-		sceneManager = base.baseScene.GetComponent<BakeryShop>();			
+		stageManager = base.baseScene.GetComponent<BakeryShop>();			
     }
 
     #region <!-- OnInput.
@@ -58,7 +58,7 @@ public class JuiceTankBeh : ObjectsBeh {
 
     private void Create_PineappleJuiceGlass()
     {
-        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+        stageManager.audioEffect.PlayOnecWithOutStop(stageManager.soundEffect_clips[2]);
 
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + PineappleJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
@@ -66,12 +66,14 @@ public class JuiceTankBeh : ObjectsBeh {
 		juice_glass_instance.gameObject.name = GoodDataStore.FoodMenuList.Pineapple_juice.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
+		juiceGlassBeh.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Pineapple_juice].costs;
+
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
 		juiceGlassBeh.destroyObj_Event += Handle_JuiceGlassBeh_destroyObj_Event;
     }
 	
 	void Create_AppleJuiceTank() {		
-        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+        stageManager.audioEffect.PlayOnecWithOutStop(stageManager.soundEffect_clips[2]);
 
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + AppleJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
@@ -79,12 +81,14 @@ public class JuiceTankBeh : ObjectsBeh {
 		juice_glass_instance.gameObject.name = GoodDataStore.FoodMenuList.Apple_juice.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
+		juiceGlassBeh.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Apple_juice].costs;
+
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
 		juiceGlassBeh.destroyObj_Event += Handle_JuiceGlassBeh_destroyObj_Event;
 	}
 	
 	void Create_OrangeJuiceGlass() {
-        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+        stageManager.audioEffect.PlayOnecWithOutStop(stageManager.soundEffect_clips[2]);
 
         juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + OrangeJuice, typeof(GameObject))) as GameObject;
         juice_glass_instance.transform.parent = this.transform;
@@ -92,13 +96,15 @@ public class JuiceTankBeh : ObjectsBeh {
 		juice_glass_instance.gameObject.name = GoodDataStore.FoodMenuList.Orange_juice.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
+		juiceGlassBeh.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Orange_juice].costs;
+
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
 		juiceGlassBeh.destroyObj_Event += Handle_JuiceGlassBeh_destroyObj_Event;
 	}
 
 	void Create_CocoaMilkGlass ()
 	{
-        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+        stageManager.audioEffect.PlayOnecWithOutStop(stageManager.soundEffect_clips[2]);
 
 		juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + CocoaMilk, typeof(GameObject))) as GameObject;
 		juice_glass_instance.transform.parent = this.transform;
@@ -106,13 +112,15 @@ public class JuiceTankBeh : ObjectsBeh {
 		juice_glass_instance.gameObject.name = GoodDataStore.FoodMenuList.Cocoa_milk.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
+		juiceGlassBeh.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Cocoa_milk].costs;
+
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
 		juiceGlassBeh.destroyObj_Event += Handle_JuiceGlassBeh_destroyObj_Event;
 	}
 
 	void Create_FreshMilkGlass ()
 	{
-        sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[2]);
+        stageManager.audioEffect.PlayOnecWithOutStop(stageManager.soundEffect_clips[2]);
 
 		juice_glass_instance = Instantiate(Resources.Load(ObjectsBeh.SouseMachine_ResourcePath + FreshMilk, typeof(GameObject))) as GameObject;
 		juice_glass_instance.transform.parent = this.transform;
@@ -120,6 +128,8 @@ public class JuiceTankBeh : ObjectsBeh {
 		juice_glass_instance.gameObject.name = GoodDataStore.FoodMenuList.Freshmilk.ToString();
 		
 		juiceGlassBeh = juice_glass_instance.GetComponent<GlassBeh>();
+		juiceGlassBeh.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Freshmilk].costs;
+
 		juiceGlassBeh.putObjectOnTray_Event += new System.EventHandler(PutGlassOnFoodTray);
 		juiceGlassBeh.destroyObj_Event += Handle_JuiceGlassBeh_destroyObj_Event;
 	}
@@ -127,9 +137,9 @@ public class JuiceTankBeh : ObjectsBeh {
 	
 	private void PutGlassOnFoodTray(object sender, System.EventArgs e) {		
 		GoodsBeh obj = sender as GoodsBeh;
-		if (sceneManager.foodTrayBeh.goodsOnTray_List.Contains (obj) == false && sceneManager.foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
-			sceneManager.foodTrayBeh.goodsOnTray_List.Add (obj);
-			sceneManager.foodTrayBeh.ReCalculatatePositionOfGoods();
+		if (stageManager.foodTrayBeh.goodsOnTray_List.Contains (obj) == false && stageManager.foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			stageManager.foodTrayBeh.goodsOnTray_List.Add (obj);
+			stageManager.foodTrayBeh.ReCalculatatePositionOfGoods();
 
 			//<!-- Setting original position.
 			obj.originalPosition = obj.transform.position;
@@ -143,8 +153,12 @@ public class JuiceTankBeh : ObjectsBeh {
 		}
 	}
     private void Handle_JuiceGlassBeh_destroyObj_Event (object sender, System.EventArgs e)
-    {
-    	sceneManager.foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        sceneManager.foodTrayBeh.ReCalculatatePositionOfGoods();
+	{
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		stageManager.CreateDeductionsCoin (goods.costs);
+		stageManager.ReFreshAvailableMoney();		
+		stageManager.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		stageManager.foodTrayBeh.ReCalculatatePositionOfGoods();
     }
 }

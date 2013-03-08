@@ -4,8 +4,8 @@ using System.Collections;
 
 public class GoodsBeh : ObjectsBeh {    
     public const string ClassName = "GoodsBeh";
-    
-    public Vector3 offsetPos;	
+	internal Vector3 offsetPos;	
+	internal int costs;
 
 	//@-- WaitForIngredientEvent.
 	protected bool _isWaitFotIngredient = false;	
@@ -28,12 +28,12 @@ public class GoodsBeh : ObjectsBeh {
 		if (putObjectOnTray_Event != null) 
         {
 			putObjectOnTray_Event (this, eventArgs);
-            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[5]);
+            stageManager.audioEffect.PlayOnecWithOutStop(stageManager.soundEffect_clips[5]);
 
 			Debug.Log (putObjectOnTray_Event + " : " + this.name);
 
             if(MainMenu._HasNewGameEvent)
-                sceneManager.CheckingGoodsObjInTray("newgame_event");
+                stageManager.CheckingGoodsObjInTray("newgame_event");
 		}
 	}
     
@@ -47,14 +47,14 @@ public class GoodsBeh : ObjectsBeh {
 		
 		if(Physics.Raycast(cursorRay, out hit)) 
         {
-			if(hit.collider.name == sceneManager.bin_behavior_obj.name) {			
+			if(hit.collider.name == stageManager.binBeh.name) {			
 				if(this._isDropObject == true) {
-					sceneManager.bin_behavior_obj.PlayOpenAnimation();
+					stageManager.binBeh.PlayOpenAnimation();
                     this.OnDispose();
                     OnDestroyObject_event(System.EventArgs.Empty);
 				}
 			}
-			else if(hit.collider.name == sceneManager.foodsTray_obj.name) {
+			else if(hit.collider.name == stageManager.foodsTray_obj.name) {
                 if(this._isDropObject) {
 					this._isDropObject = false;
 	                base._isDraggable = false;
@@ -64,11 +64,11 @@ public class GoodsBeh : ObjectsBeh {
 
                     OnPutOnTray_event(System.EventArgs.Empty);
 					
-					if(sceneManager.toasts[0] == this) {
-						sceneManager.toasts[0] = null;
+					if(stageManager.toasts[0] == this) {
+						stageManager.toasts[0] = null;
 					}
-					else if(sceneManager.toasts[1] == this) {
-						sceneManager.toasts[1] = null;
+					else if(stageManager.toasts[1] == this) {
+						stageManager.toasts[1] = null;
 					}
                 }
             }

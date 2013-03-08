@@ -620,6 +620,7 @@ public class SheepBank : Mz_BaseScene {
 			this.CreateDepositMoneyTutorEvent();			
 		}
     }
+
 	private void CompleteDepositSession ()
 	{
 		resultValue = calculatorBeh.GetDisplayResultTextToInt();

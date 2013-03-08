@@ -28,7 +28,7 @@ public class CakeBeh : GoodsBeh {
         {
             CakeBeh._IsActive = true;
             base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
-			sceneManager.SetAnimatedCreamInstance(true);
+			stageManager.SetAnimatedCreamInstance(true);
 
             base.OnTouchDown();
         }
@@ -37,10 +37,10 @@ public class CakeBeh : GoodsBeh {
 		}
 		
 		if(MainMenu._HasNewGameEvent && this.name == CakeBeh.Cupcake) {
-            Vector3 currentPos = sceneManager.chocolate_cream_Instance.transform.position;
-            sceneManager.chocolate_cream_Instance.transform.position = new Vector3(currentPos.x, currentPos.y, -9f);
-			sceneManager.SetActivateTotorObject(false);
-			sceneManager.CreateTabFoodIngredientTutorEvent();
+            Vector3 currentPos = stageManager.chocolate_cream_Instance.transform.position;
+            stageManager.chocolate_cream_Instance.transform.position = new Vector3(currentPos.x, currentPos.y, -9f);
+			stageManager.SetActivateTotorObject(false);
+			stageManager.CreateTabFoodIngredientTutorEvent();
 		}
     }
 
@@ -50,7 +50,7 @@ public class CakeBeh : GoodsBeh {
         if (_isWaitFotIngredient == false)
             return;
         if (MainMenu._HasNewGameEvent)
-            sceneManager.SetActivateTotorObject(false);
+            stageManager.SetActivateTotorObject(false);
 
         iTween.Stop(this.gameObject);
 		this.transform.position = base.originalPosition;
@@ -63,21 +63,26 @@ public class CakeBeh : GoodsBeh {
             {
                 if (this.gameObject.name == Cupcake) {
                     this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_cupcake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Chocolate_cupcake].costs;
 
                     if (MainMenu._HasNewGameEvent)
                     {
-                        Vector3 chocolateCreamPos = sceneManager.chocolate_cream_Instance.transform.position;
-                        sceneManager.chocolate_cream_Instance.transform.position = new Vector3(chocolateCreamPos.x, chocolateCreamPos.y, 0);
+                        Vector3 chocolateCreamPos = stageManager.chocolate_cream_Instance.transform.position;
+                        stageManager.chocolate_cream_Instance.transform.position = new Vector3(chocolateCreamPos.x, chocolateCreamPos.y, 0);
 
                         Vector3 currentPos = this.gameObject.transform.position;
                         this.gameObject.transform.position = new Vector3(currentPos.x, currentPos.y, -9f);
-                        sceneManager.CreateDragGoodsToTrayTutorEvent();
+                        stageManager.CreateDragGoodsToTrayTutorEvent();
                     }
                 }
-                else if (this.gameObject.name == MiniCake)
-                    this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_minicake.ToString();
-                else if (this.gameObject.name == Cake)
-                    this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_cake.ToString();
+                else if (this.gameObject.name == MiniCake) {
+					this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_minicake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Chocolate_minicake].costs;
+				}
+				else if (this.gameObject.name == Cake) {
+					this.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_cake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Chocolate_cake].costs;
+				}
 
                 base._canDragaable = true;
                 CakeBeh._IsActive = false;
@@ -90,12 +95,18 @@ public class CakeBeh : GoodsBeh {
             base.animatedSprite.Play(CreamBeh.BlueberryCream);
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
             {
-                if (this.gameObject.name == Cupcake)
+                if (this.gameObject.name == Cupcake) {
                     this.gameObject.name = GoodDataStore.FoodMenuList.Blueberry_cupcake.ToString();
-                else if (this.gameObject.name == MiniCake)
-                    this.gameObject.name = GoodDataStore.FoodMenuList.Blueberry_minicake.ToString();
-                else if (this.gameObject.name == Cake)
-                    this.gameObject.name = GoodDataStore.FoodMenuList.Blueberry_cake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Blueberry_cupcake].costs;
+				}
+                else if (this.gameObject.name == MiniCake) {
+					this.gameObject.name = GoodDataStore.FoodMenuList.Blueberry_minicake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Blueberry_minicake].costs;
+				}
+                else if (this.gameObject.name == Cake) {
+					this.gameObject.name = GoodDataStore.FoodMenuList.Blueberry_cake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Blueberry_cake].costs;
+				}
 
                 base._canDragaable = true;
                 CakeBeh._IsActive = false;
@@ -108,12 +119,18 @@ public class CakeBeh : GoodsBeh {
             base.animatedSprite.Play(CreamBeh.StrawberryCream);
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId)
             {
-                if (this.gameObject.name == Cupcake)
+                if (this.gameObject.name == Cupcake) {
                     this.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_cupcake.ToString();
-                else if (this.gameObject.name == MiniCake)
-                    this.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_minicake.ToString();
-                else if (this.gameObject.name == Cake)
-                    this.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_cake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Strawberry_cupcake].costs;
+				}
+                else if (this.gameObject.name == MiniCake) {
+					this.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_minicake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Strawberry_minicake].costs;
+				}
+                else if (this.gameObject.name == Cake) {
+					this.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_cake.ToString();
+					base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Strawberry_cake].costs;
+				}
 
                 base._canDragaable = true;
                 CakeBeh._IsActive = false;

@@ -23,27 +23,27 @@ public class CreamBeh : ObjectsBeh {
 	{
 		base.Start ();
 		
-		this.sceneManager = base.baseScene.GetComponent<BakeryShop>();
+		this.stageManager = base.baseScene.GetComponent<BakeryShop>();
 		
 		base._canDragaable = false;
 	}
 
 	protected override void OnTouchDown ()
 	{
-		sceneManager.SetAnimatedCreamInstance(false);
+		stageManager.SetAnimatedCreamInstance(false);
 
 		animatedSprite.Play(animationName_001);				
 		animatedSprite.animationCompleteDelegate = animationCompleteDelegate;
 		baseScene.audioEffect.PlayOnecSound (baseScene.audioEffect.pop_clip);
 
-		if(sceneManager.cupcake != null) {
-			sceneManager.cupcake.WaitForIngredient(this.gameObject.name);
+		if(stageManager.cupcake != null) {
+			stageManager.cupcake.WaitForIngredient(this.gameObject.name);
 		}		
-		if(sceneManager.miniCake != null) {
-			sceneManager.miniCake.WaitForIngredient(this.gameObject.name);
+		if(stageManager.miniCake != null) {
+			stageManager.miniCake.WaitForIngredient(this.gameObject.name);
 		}		
-		if(sceneManager.cake != null) {
-			sceneManager.cake.WaitForIngredient(this.gameObject.name);
+		if(stageManager.cake != null) {
+			stageManager.cake.WaitForIngredient(this.gameObject.name);
 		}
 
 		base.OnTouchDown ();

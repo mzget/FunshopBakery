@@ -19,7 +19,7 @@ public class JamBeh : ObjectsBeh {
     {
         base.Start();
 		
-		sceneManager = base.baseScene.GetComponent<BakeryShop>();
+		stageManager = base.baseScene.GetComponent<BakeryShop>();
 		
 		if(this.gameObject.name == StrawberryJam) {
 			base.animationName_001 = "strawberry_open";
@@ -43,7 +43,7 @@ public class JamBeh : ObjectsBeh {
 
 	protected override void OnTouchDown()
     {
-		sceneManager.SetAnimatedJamInstance(false);
+		stageManager.SetAnimatedJamInstance(false);
 
         if(base.animationName_001 != "") {
             base.animatedSprite.Play(base.animationName_001);
@@ -51,8 +51,8 @@ public class JamBeh : ObjectsBeh {
 			baseScene.audioEffect.PlayOnecSound (baseScene.audioEffect.pop_clip);
         }
 		
-		for (int i = 0; i < sceneManager.toasts.Length; i++) {
-			sceneManager.toasts[i].WaitForIngredient(this.gameObject.name);
+		for (int i = 0; i < stageManager.toasts.Length; i++) {
+			stageManager.toasts[i].WaitForIngredient(this.gameObject.name);
 		}
 
         base.OnTouchDown();

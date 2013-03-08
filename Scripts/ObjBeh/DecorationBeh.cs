@@ -13,10 +13,10 @@ public class DecorationBeh : ObjectsBeh {
 		baseScene.audioEffect.PlayOnecSound (baseScene.soundEffect_clips [6]);
 
 		if (this.name == DecorationBeh.Sauce) {
-			sceneManager.hotdog.WaitForIngredient (HotdogBeh.HotdogWithSauce);
+			stageManager.hotdog.WaitForIngredient (HotdogBeh.HotdogWithSauce);
 		}
 		if (this.name == DecorationBeh.Cheese) {
-			sceneManager.hotdog.WaitForIngredient (HotdogBeh.HotdogWithCheese);
+			stageManager.hotdog.WaitForIngredient (HotdogBeh.HotdogWithCheese);
 		}
 
 		base.OnTouchDown ();

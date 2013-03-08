@@ -4,10 +4,11 @@ using System.Collections;
 
 public class Food {
 
-    public BakeryShop sceneManager;
+    private BakeryShop sceneManager;
     private Food instance;
-	public string name;
-	public int price;
+	internal string name;
+	internal int price;
+	internal int costs;
 	
 	public Food ()
 	{
@@ -33,5 +34,12 @@ public class Food {
 		this.instance = this;
 		this.instance.name = Init_name;
 		this.instance.price = p_price;
+	}
+
+	public Food(string Init_name, int p_price, int p_costs) {
+		this.instance = this;
+		this.instance.name = Init_name;
+		this.instance.price = p_price;
+		this.instance.costs = p_costs;
 	}
 }

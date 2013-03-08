@@ -113,7 +113,7 @@ public class Mz_BaseScene : MonoBehaviour {
 				audioDescribe.audio.mute = !ToggleAudioActive;
         }
         
-        /// <! Manage audio background.
+        // <! Manage audio background.
 		audioBackground_Obj = GameObject.FindGameObjectWithTag("AudioBackground");
         if (audioBackground_Obj == null)
         {
@@ -163,7 +163,14 @@ public class Mz_BaseScene : MonoBehaviour {
         }
 
         yield return null;
-    }
+	}
+	
+	internal void ReFreshAvailableMoney()
+	{
+		this.availableMoney.text = Mz_StorageManage.AvailableMoney.ToString();
+		this.availableMoney.Commit();
+	}
+
     
     /// <summary>
     /// Virtual method. Used to generate game effect at runtime.

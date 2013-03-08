@@ -58,7 +58,7 @@ public class BakeryShop : Mz_BaseScene {
 	private const string EN_007 = "EN_007";
 	
 	//<!-- Miscellaneous game objects.	
-	public BinBeh bin_behavior_obj;
+	public BinBeh binBeh;
 	public GameObject foodsTray_obj;
 	public FoodTrayBeh foodTrayBeh;
     public GameObject calculator_group_instance;
@@ -278,7 +278,7 @@ public class BakeryShop : Mz_BaseScene {
 		StartCoroutine(this.ChangeShopLogoIcon());
 		StartCoroutine(this.InitializeObjectAnimation());
 
-		///<!-- Unactive Souse Tanks. 
+		//<!-- Unactive Souse Tanks. 
 		appleTank_Obj.SetActiveRecursively(false);
 		orangeTank_Obj.SetActiveRecursively(false);
 		cocoaMilkTank_Obj.SetActiveRecursively(false);
@@ -286,7 +286,7 @@ public class BakeryShop : Mz_BaseScene {
         //<@-- Unactive Icecream tanks.
 		icecreamVanillaTank_obj.SetActiveRecursively(false);
 		icecreamChocolateTank_obj.SetActiveRecursively(false);
-		///<!-- Manage Jam Instance.
+		//<!-- Manage Jam Instance.
 		blueberryJam_instance.SetActiveRecursively(false);
 		freshButterJam_instance.SetActiveRecursively(false);
 		custardJam_instance.SetActiveRecursively(false);
@@ -797,9 +797,13 @@ public class BakeryShop : Mz_BaseScene {
 			cupcake.putObjectOnTray_Event += Handle_CupcakeputObjectOnTray_Event;
 		}
 	}
-    void Handle_CupcakedestroyObj_Event (object sender, System.EventArgs e) {
-		foodTrayBeh.goodsOnTray_List.Remove((GoodsBeh)sender);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+	void Handle_CupcakedestroyObj_Event (object sender, System.EventArgs e) {
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
 		StartCoroutine(CreateCupcakeInstance());
 	}
@@ -815,8 +819,8 @@ public class BakeryShop : Mz_BaseScene {
 			
 			cupcake = null;			
 			StartCoroutine(CreateCupcakeInstance());
-
-		} else {
+		} 
+		else {
 			Debug.LogWarning("Goods on tray have to max capacity.");
 			
 			obj.transform.position = obj.originalPosition;
@@ -839,10 +843,14 @@ public class BakeryShop : Mz_BaseScene {
 		}
     }
     void miniCake_destroyObj_Event(object sender, EventArgs e) {
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
-
-        StartCoroutine(CreateMiniCakeInstance());
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
+		
+		StartCoroutine(CreateMiniCakeInstance());
     }
     void miniCake_putObjectOnTray_Event(object sender, EventArgs e) {
 		GoodsBeh obj = sender as GoodsBeh;
@@ -877,10 +885,14 @@ public class BakeryShop : Mz_BaseScene {
 		}
     }
     void Cake_destroyObj_Event(object sender, EventArgs e) {
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
-
-        StartCoroutine(CreateCakeInstance());
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
+		
+		StartCoroutine(CreateCakeInstance());
     }
     void Cake_putObjectOnTray_Event(object sender, EventArgs e) {
 		GoodsBeh obj = sender as GoodsBeh;
@@ -929,17 +941,17 @@ public class BakeryShop : Mz_BaseScene {
     }
 	
 	public void DestroyToastEvent(object sender, System.EventArgs e) {
-        Debug.Log("DestroyToastEvent");
-		
-		foodTrayBeh.goodsOnTray_List.Remove((GoodsBeh)sender);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
 		StartCoroutine(CreateToastInstance());
 	}
 
     public void PutToastOnTrayEvent(object sender, System.EventArgs e) {
-        Debug.Log("PutToastOnTrayEvent");
-
 		GoodsBeh obj = sender as GoodsBeh;
 		if (foodTrayBeh.goodsOnTray_List.Contains (obj) == false && foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
 			foodTrayBeh.goodsOnTray_List.Add (obj);
@@ -997,6 +1009,8 @@ public class BakeryShop : Mz_BaseScene {
             sandwich.gameObject.name = GoodDataStore.FoodMenuList.Tuna_sandwich.ToString();
 
             tunaSandwich = sandwich.GetComponent<SandwichBeh>();
+			tunaSandwich.costs = this.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Tuna_sandwich].costs;
+
             tunaSandwich.putObjectOnTray_Event += new EventHandler(tunaSandwich_putObjectOnTray_Event);
             tunaSandwich.destroyObj_Event += new EventHandler(tunaSandwich_destroyObj_Event);
 		}
@@ -1019,9 +1033,13 @@ public class BakeryShop : Mz_BaseScene {
 			obj.transform.position = obj.originalPosition;
 		}
     }
-    void tunaSandwich_destroyObj_Event(object sender, EventArgs e) {
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+    void tunaSandwich_destroyObj_Event(object sender, EventArgs e) {		
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateTunaSandwich());
     }
@@ -1039,6 +1057,8 @@ public class BakeryShop : Mz_BaseScene {
             sandwich.gameObject.name = GoodDataStore.FoodMenuList.DeepFriedChicken_sandwich.ToString();
 			
 			deepFriedChickenSandwich = sandwich.GetComponent<SandwichBeh>();
+			deepFriedChickenSandwich.costs = this.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.DeepFriedChicken_sandwich].costs;
+
 			deepFriedChickenSandwich.putObjectOnTray_Event += Handle_DeepFriedChickenSandwich_putObjectOnTray_Event;
 			deepFriedChickenSandwich.destroyObj_Event += Handle_DeepFriedChickenSandwich_destroyObj_Event;
 		}
@@ -1063,8 +1083,12 @@ public class BakeryShop : Mz_BaseScene {
 	}
 	void Handle_DeepFriedChickenSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateDeepFriedChickenSandwich());
 	}
@@ -1081,7 +1105,9 @@ public class BakeryShop : Mz_BaseScene {
             sandwich.transform.localPosition = new Vector3(-.015f, -.17f, -.3f);
             sandwich.gameObject.name = GoodDataStore.FoodMenuList.Ham_sandwich.ToString();
 
-            hamSandwich = sandwich.GetComponent<SandwichBeh>();
+			hamSandwich = sandwich.GetComponent<SandwichBeh>();
+			hamSandwich.costs = this.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Ham_sandwich].costs;
+
             hamSandwich.putObjectOnTray_Event += Handle_HamSandwich_putObjectOnTray_Event;
             hamSandwich.destroyObj_Event += Handle_HamSandwich_destroyObj_Event;
 		}
@@ -1106,8 +1132,12 @@ public class BakeryShop : Mz_BaseScene {
 	}
 	void Handle_HamSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateHamSanwich());
 	}
@@ -1124,7 +1154,9 @@ public class BakeryShop : Mz_BaseScene {
             sandwich.transform.localPosition = new Vector3(-.14f, -.17f, -.4f);
             sandwich.gameObject.name = GoodDataStore.FoodMenuList.Egg_sandwich.ToString();
 
-            eggSandwich = sandwich.GetComponent<SandwichBeh>();
+			eggSandwich = sandwich.GetComponent<SandwichBeh>();
+			eggSandwich.costs = this.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Egg_sandwich].costs;
+
             eggSandwich.putObjectOnTray_Event += Handle_EggSandwich_putObjectOnTray_Event;
             eggSandwich.destroyObj_Event += Handle_EggSandwich_destroyObj_Event;
 		}
@@ -1149,8 +1181,12 @@ public class BakeryShop : Mz_BaseScene {
 	}
 	void Handle_EggSandwich_destroyObj_Event (object sender, EventArgs e)
 	{
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateEggSandwich());
 	}
@@ -1175,6 +1211,8 @@ public class BakeryShop : Mz_BaseScene {
             cookie.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_cookie.ToString();
 
             chocolateChip_cookie = cookie.GetComponent<CookieBeh>();
+			chocolateChip_cookie.costs = this.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Chocolate_cookie].costs;
+
             chocolateChip_cookie.putObjectOnTray_Event += new EventHandler(chocolateChip_cookie_putObjectOnTray_Event);
             chocolateChip_cookie.destroyObj_Event += new EventHandler(chocolateChip_cookie_destroyObj_Event);
         }
@@ -1196,9 +1234,13 @@ public class BakeryShop : Mz_BaseScene {
 			obj.transform.position = obj.originalPosition;
 		}
     }
-    void chocolateChip_cookie_destroyObj_Event(object sender, EventArgs e) {    
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+	void chocolateChip_cookie_destroyObj_Event(object sender, EventArgs e) {    
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateChocolateChip_Cookie());
     }
@@ -1219,6 +1261,8 @@ public class BakeryShop : Mz_BaseScene {
             cookie.gameObject.name = GoodDataStore.FoodMenuList.Fruit_cookie.ToString();
 
             fruit_cookie = cookie.GetComponent<CookieBeh>();
+			fruit_cookie.costs = this.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Fruit_cookie].costs;
+
             fruit_cookie.putObjectOnTray_Event += new EventHandler(Handle_FruitCookie_putObjectOnTray_Event);
             fruit_cookie.destroyObj_Event += new EventHandler(Handle_FruitCookie_DestroyObj_Event);
 		}
@@ -1241,8 +1285,12 @@ public class BakeryShop : Mz_BaseScene {
 		}
 	}
 	void Handle_FruitCookie_DestroyObj_Event(object sender, EventArgs e) {
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateFruitCookie());
 	}
@@ -1264,6 +1312,8 @@ public class BakeryShop : Mz_BaseScene {
             cookie.gameObject.name = GoodDataStore.FoodMenuList.Butter_cookie.ToString();
 
             butter_cookie = cookie.GetComponent<CookieBeh>();
+			butter_cookie.costs = this.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Butter_cookie].costs;
+
             butter_cookie.putObjectOnTray_Event += new EventHandler(butter_cookie_putObjectOnTray_Event);
             butter_cookie.destroyObj_Event += new EventHandler(butter_cookie_destroyObj_Event);
         }
@@ -1286,9 +1336,13 @@ public class BakeryShop : Mz_BaseScene {
 			obj.transform.position = obj.originalPosition;
 		}
     }
-    void butter_cookie_destroyObj_Event(object sender, EventArgs e) {
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
+	void butter_cookie_destroyObj_Event(object sender, EventArgs e) {
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
 
         StartCoroutine(this.CreateButterCookie());
     }
@@ -1329,10 +1383,14 @@ public class BakeryShop : Mz_BaseScene {
 			obj.transform.position = obj.originalPosition;
 		}
     }
-    void hotdog_destroyObj_Event(object sender, EventArgs e) {
-        foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-        foodTrayBeh.ReCalculatatePositionOfGoods();
-
+	void hotdog_destroyObj_Event(object sender, EventArgs e) {
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		this.CreateDeductionsCoin (goods.costs);
+		this.ReFreshAvailableMoney();		
+		this.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		this.foodTrayBeh.ReCalculatatePositionOfGoods();
+		
         StartCoroutine(this.CreateHotdog());
     }
 
@@ -1729,7 +1787,7 @@ public class BakeryShop : Mz_BaseScene {
         
         StartCoroutine(this.CreateGameEffect());
 		audioEffect.PlayOnecSound(audioEffect.longBring_clip);
-
+		this.CreateEarnTKCoin(currentCustomer.amount);        		
 		TK_animationManager.RandomPlayGoodAnimation();
 
         billingAnimatedSprite.Play("Thanks");
@@ -2199,5 +2257,40 @@ public class BakeryShop : Mz_BaseScene {
         Destroy(strawberryJam_instance);
 
         Destroy(hotdog.gameObject);
-    }
+	}
+
+	internal void CreateDeductionsCoin (int p_value)
+	{
+		GameObject tk_coin = Instantiate (Resources.Load ("Money/Coin", typeof(GameObject))) as GameObject;
+		tk_coin.transform.parent = binBeh.transform;
+		tk_coin.transform.localPosition = Vector3.up * 0.4f;
+		Transform animatedCoin = tk_coin.transform.Find("TK_Coin");
+		Transform value_transform = animatedCoin.transform.Find ("TextMesh");
+		tk2dTextMesh value_textmesh = value_transform.GetComponent<tk2dTextMesh>();
+		value_textmesh.text = "-" + p_value.ToString();
+		value_textmesh.Commit ();
+		
+		animatedCoin.animation.Play ();
+		StartCoroutine_Auto(CheckingUnityAnimationComplete.ICheckAnimationComplete (animatedCoin.animation, "CoinAnim", null, string.Empty));
+		CheckingUnityAnimationComplete.TargetAnimationComplete_event += (object sender, EventArgs e) => { 
+			Destroy(tk_coin);
+		};
+	}
+	
+	private void CreateEarnTKCoin(int p_value)
+	{
+		GameObject tk_coin = Instantiate (Resources.Load ("Money/Coin", typeof(GameObject))) as GameObject;
+		tk_coin.transform.position = new Vector3(.8f, .5f, -3);
+		Transform animatedCoin = tk_coin.transform.Find("TK_Coin");
+		Transform value_transform = animatedCoin.transform.Find ("TextMesh");
+		tk2dTextMesh value_textmesh = value_transform.GetComponent<tk2dTextMesh>();
+		value_textmesh.text = "+" + p_value.ToString();
+		value_textmesh.Commit ();
+		
+		animatedCoin.animation.Play ();
+		StartCoroutine_Auto(CheckingUnityAnimationComplete.ICheckAnimationComplete (animatedCoin.animation, "CoinAnim", null, string.Empty));
+		CheckingUnityAnimationComplete.TargetAnimationComplete_event += (object sender, EventArgs e) => { 
+			Destroy(tk_coin);
+		};
+	}
 }

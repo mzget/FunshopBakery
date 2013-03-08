@@ -48,8 +48,8 @@ public class HotdogBeh : GoodsBeh {
 			base.animatedSprite.Play(HotdogBeh.HotdogWithSauce);
 			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {	
 				this.gameObject.name = GoodDataStore.FoodMenuList.Hotdog.ToString();
-				
-				_canDragaable = true;
+				base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Hotdog].costs;
+				base._canDragaable = true;
                 base._canActive = false;
                 HotdogBeh._IsActive = false;
                 base._isWaitFotIngredient = false;
@@ -62,8 +62,8 @@ public class HotdogBeh : GoodsBeh {
 			base.animatedSprite.Play(HotdogBeh.HotdogWithCheese);
 			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {		
 				this.gameObject.name = GoodDataStore.FoodMenuList.HotdogWithCheese.ToString();
-				
-				_canDragaable = true;
+				base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.HotdogWithCheese].costs;
+				base._canDragaable = true;
                 base._canActive = false;
 				HotdogBeh._IsActive = false;
                 base._isWaitFotIngredient = false;

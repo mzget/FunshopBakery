@@ -17,7 +17,7 @@ public class IcecreamTankBeh : ObjectsBeh {
 		
 		base.Start();
 		
-		sceneManager = base.baseScene.GetComponent<BakeryShop>();
+		stageManager = base.baseScene.GetComponent<BakeryShop>();
 		
 		base._canDragaable = false;
 	}
@@ -26,7 +26,7 @@ public class IcecreamTankBeh : ObjectsBeh {
     {
         if(icecream_Instance == null) {
 			icecreamValve.Play();
-            sceneManager.audioEffect.PlayOnecWithOutStop(sceneManager.soundEffect_clips[3]);
+            stageManager.audioEffect.PlayOnecWithOutStop(stageManager.soundEffect_clips[3]);
 
 			icecreamValve.animationCompleteDelegate = delegate(tk2dAnimatedSprite sprite, int clipId) {
 				if(this.gameObject.name == BakeryShop.icecreamStrawberryTank_name)
@@ -37,6 +37,8 @@ public class IcecreamTankBeh : ObjectsBeh {
 					icecream_Instance.gameObject.name = GoodDataStore.FoodMenuList.Strawberry_icecream.ToString();
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
+					icecreamBeh.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Strawberry_icecream].costs;
+
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
                     icecreamBeh.destroyObj_Event += new System.EventHandler(icecreamBeh_destroyObj_Event);
 				}
@@ -48,6 +50,8 @@ public class IcecreamTankBeh : ObjectsBeh {
 					icecream_Instance.gameObject.name = GoodDataStore.FoodMenuList.Vanilla_icecream.ToString();
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
+					icecreamBeh.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Vanilla_icecream].costs;
+
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
                     icecreamBeh.destroyObj_Event += new System.EventHandler(icecreamBeh_destroyObj_Event);
 				}
@@ -59,6 +63,8 @@ public class IcecreamTankBeh : ObjectsBeh {
 					icecream_Instance.gameObject.name = GoodDataStore.FoodMenuList.Chocolate_icecream.ToString();
 					
 					icecreamBeh = icecream_Instance.GetComponent<IcecreamBeh>();
+					icecreamBeh.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.Chocolate_icecream].costs;
+
 					icecreamBeh.putObjectOnTray_Event += new System.EventHandler(icecreamBeh_putObjectOnTray_Event);
                     icecreamBeh.destroyObj_Event += new System.EventHandler(icecreamBeh_destroyObj_Event);
 				}
@@ -71,9 +77,9 @@ public class IcecreamTankBeh : ObjectsBeh {
 	void icecreamBeh_putObjectOnTray_Event (object sender, System.EventArgs e)
 	{		
 		GoodsBeh obj = sender as GoodsBeh;
-		if (sceneManager.foodTrayBeh.goodsOnTray_List.Contains (obj) == false && sceneManager.foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
-			sceneManager.foodTrayBeh.goodsOnTray_List.Add (obj);			
-			sceneManager.foodTrayBeh.ReCalculatatePositionOfGoods();
+		if (stageManager.foodTrayBeh.goodsOnTray_List.Contains (obj) == false && stageManager.foodTrayBeh.goodsOnTray_List.Count < FoodTrayBeh.MaxGoodsCapacity) {
+			stageManager.foodTrayBeh.goodsOnTray_List.Add (obj);			
+			stageManager.foodTrayBeh.ReCalculatatePositionOfGoods();
 
 			//<!-- Setting original position.
 			obj.originalPosition = obj.transform.position;
@@ -87,7 +93,11 @@ public class IcecreamTankBeh : ObjectsBeh {
 		}
 	}
     private void icecreamBeh_destroyObj_Event(object sender, System.EventArgs e) {
-        sceneManager.foodTrayBeh.goodsOnTray_List.Remove(sender as GoodsBeh);
-		sceneManager.foodTrayBeh.ReCalculatatePositionOfGoods();
+		GoodsBeh goods = sender as GoodsBeh;
+		Mz_StorageManage.AvailableMoney -= goods.costs;
+		stageManager.CreateDeductionsCoin (goods.costs);
+		stageManager.ReFreshAvailableMoney();		
+		stageManager.foodTrayBeh.goodsOnTray_List.Remove(goods);
+		stageManager.foodTrayBeh.ReCalculatatePositionOfGoods();
     }
 }

@@ -15,7 +15,7 @@ public class ObjectsBeh : Base_ObjectBeh {
 
 
 	protected Mz_BaseScene baseScene;    
-	protected BakeryShop sceneManager;
+	protected BakeryShop stageManager;
     protected tk2dAnimatedSprite animatedSprite;
 	
 	public string animationName_001;
@@ -45,7 +45,7 @@ public class ObjectsBeh : Base_ObjectBeh {
 		this.originalPosition = this.transform.position;
 		
         baseScene = GameObject.FindGameObjectWithTag("GameController").GetComponent<Mz_BaseScene>();
-        sceneManager = baseScene as BakeryShop;
+        stageManager = baseScene as BakeryShop;
 		
         try {
             animatedSprite = this.gameObject.GetComponent<tk2dAnimatedSprite>();
@@ -82,7 +82,7 @@ public class ObjectsBeh : Base_ObjectBeh {
 			this.ImplementDraggableObject();
 		}
 		
-		if(sceneManager.touch.phase == TouchPhase.Ended || sceneManager.touch.phase == TouchPhase.Canceled) {			
+		if(stageManager.touch.phase == TouchPhase.Ended || stageManager.touch.phase == TouchPhase.Canceled) {			
 			if(this._isDraggable)
 				_isDropObject = true;
 		}

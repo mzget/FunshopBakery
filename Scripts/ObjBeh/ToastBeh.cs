@@ -26,7 +26,7 @@ public class ToastBeh : GoodsBeh {
             ToastBeh._IsActive = true;
             base.CheckingDelegationOfWaitFotIngredientEvent(this, EventArgs.Empty);
 
-			sceneManager.SetAnimatedJamInstance(true);
+			stageManager.SetAnimatedJamInstance(true);
         }
 		
 		base.OnTouchDown();
@@ -37,13 +37,13 @@ public class ToastBeh : GoodsBeh {
 		if(base._isWaitFotIngredient == false)
 			return;
 
-		sceneManager.audioEffect.PlayOnecSound (sceneManager.soundEffect_clips [7]);
+		stageManager.audioEffect.PlayOnecSound (stageManager.soundEffect_clips [7]);
 		if(ingredientName == JamBeh.StrawberryJam) {
 			base.animatedSprite.Play(JamBeh.StrawberryJam);
 			base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite anim, int Id)
 			{				
 				this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithStrawberryJam.ToString();
-				
+				base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.ToastWithStrawberryJam].costs;
 				base._canDragaable = true;
 				ToastBeh._IsActive = false;
 				base._canActive = false;
@@ -55,7 +55,7 @@ public class ToastBeh : GoodsBeh {
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id)
 			{
                 this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithBlueberryJam.ToString();
-				
+				base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.ToastWithBlueberryJam].costs;
 				base._canDragaable = true;
 				ToastBeh._IsActive = false;
 				base._canActive = false;
@@ -67,7 +67,7 @@ public class ToastBeh : GoodsBeh {
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id)
 			{
                 this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithButterJam.ToString();
-                				
+				base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.ToastWithButterJam].costs;
 				base._canDragaable = true;
 				ToastBeh._IsActive = false;
 				base._canActive = false;
@@ -78,8 +78,8 @@ public class ToastBeh : GoodsBeh {
 			base.animatedSprite.Play(JamBeh.CustardJam);
             base.animatedSprite.animationCompleteDelegate = delegate(tk2dAnimatedSprite animSprite, int id)
 			{ 
-				this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithCustardJam.ToString();
-                				
+				this.gameObject.name = GoodDataStore.FoodMenuList.ToastWithCustardJam.ToString();	
+				base.costs = stageManager.goodDataStore.FoodDatabase_list[(int)GoodDataStore.FoodMenuList.ToastWithCustardJam].costs;                				
 				base._canDragaable = true;
 				ToastBeh._IsActive = false;
 				base._canActive = false;
