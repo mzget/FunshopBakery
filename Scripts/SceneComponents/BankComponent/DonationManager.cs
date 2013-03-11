@@ -815,7 +815,7 @@ public class DonationManager : MonoBehaviour
 		Debug.LogWarning(noticeMessage);
 		
 		if(noticeMessage == DonationManager.NOTICE_accountBalanceLessThanRequire) {
-			sceneController.audioDescribe.PlayOnecSound(sceneController.description_clips[6]);
+			sceneController.audioDescribe.PlayOnecSound(sceneController.description_clips[10]);
 		}
 	}
 }
