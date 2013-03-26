@@ -84,7 +84,10 @@ public class Mz_BaseScene : MonoBehaviour {
 	}
 	
 	//<!-- Audio Manage.
+	public const string PATH_OF_APPRECIATE_CLIP = "AudioClips/AppreciateClips/";
+
 	internal static bool ToggleAudioActive = true;
+	public Base_AudioManager audioManager ;
 	public GameEffectManager gameEffectManager;
 	public AudioEffectManager audioEffect;
 	public AudioDescribeManager audioDescribe;

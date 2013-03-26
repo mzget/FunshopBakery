@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UE = UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -179,6 +180,21 @@ public class Town : Mz_BaseScene {
             townTutorData.roof_00_button_obj.transform.position -= Vector3.forward * 2;
             this.CreateBuyDecoratuionTutorEvent();
         }
+		
+//		this.CheckAdminPermission();
+		
+//		if(Application.platform == RuntimePlatform.IPhonePlayer) {
+//			NativeAppirate.SetDebug(true);
+//			NativeAppirate.AppLaunched(true);
+//		}
+	}
+
+	void CheckAdminPermission ()
+	{
+		if(Mz_StorageManage.Username == "Tk 2013" && Mz_StorageManage.ShopName == "Tk Shop") {
+            Mz_StorageManage.AvailableMoney = 100000;
+            StartCoroutine(base.InitializeIdentityGUI());
+		}
 	}
 
     #region <!-- Tutor system.
@@ -303,10 +319,36 @@ public class Town : Mz_BaseScene {
         audioBackground_Obj.audio.loop = true;
         audioBackground_Obj.audio.Play();
 
+		base.audioManager = ScriptableObject.CreateInstance<Base_AudioManager> ();
+		if (Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.EN) {
+            for (int i = 0; i < arr_EN_AppreciateClipName.Length; i++)
+			{
+                base.audioManager.appreciate_Clips.Add(Resources.Load(PATH_OF_APPRECIATE_CLIP + arr_EN_AppreciateClipName[i], typeof(AudioClip)) as AudioClip);
+            }
+		}
+		else if(Main.Mz_AppLanguage.appLanguage == Main.Mz_AppLanguage.SupportLanguage.TH) {
+            for (int i = 0; i < arr_TH_AppreciateClipName.Length; i++)
+            {
+                base.audioManager.appreciate_Clips.Add(Resources.Load(PATH_OF_APPRECIATE_CLIP + arr_TH_AppreciateClipName[i], typeof(AudioClip)) as AudioClip);
+            }
+		}
+
         yield return null;
 	}	
 
     private const string PATH_OF_DYNAMIC_CLIP = "AudioClips/GameIntroduce/Town/";
+	private readonly string[] arr_TH_AppreciateClipName = new string[] {
+        "TH_appreciate_01", 
+        "TH_appreciate_02",
+        "TH_appreciate_03",
+        "TH_appreciate_04",
+	};
+    private readonly string[] arr_EN_AppreciateClipName = new string[] {
+        "EN_appreciate_001", 
+        "EN_appreciate_002",
+        "EN_appreciate_003",
+        "EN_appreciate_004",
+    };
     private IEnumerator ReInitializeAudioClipData()
     {
         description_clips.Clear();
@@ -468,23 +510,6 @@ public class Town : Mz_BaseScene {
 			}
 		}
 	}
-
-    /// <summary>
-    /// <!-- Gui region.
-    /// </summary>
-    private new void OnGUI() {
-        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));    
-		
-		/// OnGUIState.DrawEditShopname.
-		if(currentGUIState == OnGUIState.DrawEditShopname)
-			this.DrawEditShopnameWindow();
-
-        if (GUI.Button(new Rect(0, Main.FixedGameHeight / 2 - 25, 150 * Mz_OnGUIManager.Extend_heightScale, 50), "Swindle"))
-        {
-            Mz_StorageManage.AvailableMoney = 100000;
-            StartCoroutine(base.InitializeIdentityGUI());
-        }
-    }
 
 	void DrawEditShopnameWindow ()
 	{
@@ -664,6 +689,15 @@ public class Town : Mz_BaseScene {
 		audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
 		characterAnimatedManage.RandomPlayGoodAnimation();
 	}
+	
+	internal void PlayAppreciateAudioClip(bool p_random)
+	{
+		if (p_random) {
+			int r = UE.Random.Range(0, audioManager.appreciate_Clips.Count);
+			
+			audioDescribe.PlayOnecSound(audioManager.appreciate_Clips[r]);
+		}
+	}
 
     public override void OnDispose()
     {
@@ -675,4 +709,18 @@ public class Town : Mz_BaseScene {
 		UpgradeOutsideManager.CanDecoration_Table_list.Clear();
 		UpgradeOutsideManager.CanDecoration_Accessories_list.Clear();
     }
+		
+//    private new void OnGUI() {
+//        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, Screen.height / Main.GAMEHEIGHT, 1));    
+//		
+//		/// OnGUIState.DrawEditShopname.
+//		if(currentGUIState == OnGUIState.DrawEditShopname)
+//			this.DrawEditShopnameWindow();
+//
+//        if (GUI.Button(new Rect(0, Main.FixedGameHeight / 2 - 25, 150 * Mz_OnGUIManager.Extend_heightScale, 50), "Swindle"))
+//        {
+//            Mz_StorageManage.AvailableMoney = 100000;
+//            StartCoroutine(base.InitializeIdentityGUI());
+//        }
+//    }
 }

@@ -694,6 +694,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 		Mz_StorageManage.Roof_id = active_id;
 
 		sceneController.PlaySoundRejoice();
+		sceneController.PlayAppreciateAudioClip(true);
 	}
 
 	void DisplayAwning (int active_id)
@@ -703,6 +704,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 		Mz_StorageManage.Awning_id = active_id;
 
 		sceneController.PlaySoundRejoice();
+		sceneController.PlayAppreciateAudioClip(true);
 	}
 
 	void DisplayTable (int active_id)
@@ -712,6 +714,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 		Mz_StorageManage.Table_id = active_id;
 
 		sceneController.PlaySoundRejoice();
+		sceneController.PlayAppreciateAudioClip(true);
 	}
 
 	void DisplayAccessories (int targetItem_id)
@@ -721,6 +724,7 @@ public class UpgradeOutsideManager : MonoBehaviour
 		Mz_StorageManage.Accessory_id = targetItem_id;
 
 		sceneController.PlaySoundRejoice();
+		sceneController.PlayAppreciateAudioClip(true);
 	}
 
 }

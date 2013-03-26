@@ -13,6 +13,7 @@ public class MainMenu : Mz_BaseScene {
     public Transform initializeNewGame_Group;
 	public Transform options_group_transform;
 	private InitializeNewShop initializeNewShop;
+
 	public GUIOptionsManager optionsManager = new GUIOptionsManager();	
 	private void SetActivateGUIOptionsGroup (bool activeState)
 	{
@@ -25,6 +26,20 @@ public class MainMenu : Mz_BaseScene {
             iTween.MoveTo(optionsManager.selectLanguage_Obj, iTween.Hash("y", 2f, "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutBounce));
         }
 	}
+
+	public TK_news tknewsManager;
+	private void SetActivateTKNews(bool activeState) {
+		if(activeState) {
+			plane_darkShadow.active = true;
+            iTween.MoveTo(tknewsManager.gameObject, iTween.Hash("y", 0f, "islocal", true, "time", 1f, "oncomplete", "ShakeFacebookButton", "oncompletetarget", tknewsManager.gameObject, "easetype", iTween.EaseType.easeOutBounce));
+		}
+		else {
+			plane_darkShadow.active = false;
+            tknewsManager.StopShakeFacebookButton();
+			iTween.MoveTo(tknewsManager.gameObject, iTween.Hash("y", 2f, "islocal", true, "time", 1f, "easetype", iTween.EaseType.easeOutBounce));
+		}
+	}
+
 
     public Transform loadgame_Group;
     public GameObject back_button;
@@ -39,8 +54,15 @@ public class MainMenu : Mz_BaseScene {
     public GUISkin mainmenu_Skin;
     public GUIStyle saveSlot_buttonStyle;
     private GUIStyle notification_TextboxStyle;
-    public enum SceneState { none = 0, showOption, showNewGame, showNewShop, showLoadGame, };
-    private SceneState sceneState;
+	public enum SceneState { 
+		none = 0, 
+        //showOption, 
+        //ShowTKNews, 
+		showNewGame, 
+		showNewShop, 
+		showLoadGame, 
+	};
+    private SceneState currentSceneState;
 
     private string username = string.Empty;
 	private string shopName = string.Empty;
@@ -74,7 +96,7 @@ public class MainMenu : Mz_BaseScene {
 	}
 
 	#endregion
-	
+		
 	// Use this for initialization
 	void Start () {
 		this.InitailizeDataFields();
@@ -183,7 +205,7 @@ public class MainMenu : Mz_BaseScene {
         if(OK_button_Obj != null && OK_button_Obj.active)
             iTween.ScaleTo(OK_button_Obj, iTween.Hash("scale", new Vector3(1.2f, 1.2f, 1f), "time", .6f, "looptype", iTween.LoopType.pingPong));
 	}
-
+	
 	protected override void OnGUI() {
         base.OnGUI();
 
@@ -195,17 +217,17 @@ public class MainMenu : Mz_BaseScene {
 				GUI.Box(new Rect(0, 0, Mz_OnGUIManager.viewPort_rect.width, Mz_OnGUIManager.viewPort_rect.height), "Skin layout", GUI.skin.box);
             }
 
-            if(sceneState == SceneState.showNewGame) {
+            if(currentSceneState == SceneState.showNewGame) {
                 this.DrawNewGameTextField();                
             }
-            else if(sceneState == SceneState.showNewShop) {
+            else if(currentSceneState == SceneState.showNewShop) {
                 this.DrawNewShopGUI();
             }
-            else if(sceneState == SceneState.showLoadGame) {                
+            else if(currentSceneState == SceneState.showLoadGame) {                
                 // Call ShowSaveGameSlot Method.
                 this.ShowSaveGameSlot(_isFullSaveGameSlot);
             }
-            else if(sceneState == SceneState.none) {
+            else if(currentSceneState == SceneState.none) {
                 _isDuplicateUsername = false;
                 _isNullUsernameNotification = false;
                 _isFullSaveGameSlot = false;
@@ -518,36 +540,52 @@ public class MainMenu : Mz_BaseScene {
     {
         base.OnInput(nameInput);
 
-		switch (nameInput) {
-		case "Audio" :
-			base.MuteAudioConfiguration();
-			if(Mz_BaseScene.ToggleAudioActive)
-				optionsManager.audio_ui_sprite.spriteId = GUIOptionsManager.AUDIO_ON_ID;
-			else
-				optionsManager.audio_ui_sprite.spriteId = GUIOptionsManager.AUDIO_OFF_ID;
-			break;
-		case "Flag_UI" : 
-			this.SetActivateGUIOptionsGroup(true);
-			break;
-            case "EN" :
-			this.audioDescribe.PlayOnecWithOutStop(optionsManager.english_clip);
-            Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.EN;
-			Mz_StorageManage.Language_id = (int)Main.Mz_AppLanguage.SupportLanguage.EN;
-            PlayerPrefs.SetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, Mz_StorageManage.Language_id);
-            StartCoroutine(this.ReInitializeAudioClipData());
-			this.SetActivateGUIOptionsGroup(false);
-			break;
-		case "TH" :
-			this.audioDescribe.PlayOnecWithOutStop(optionsManager.thai_clip);
-            Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.TH;
-			Mz_StorageManage.Language_id = (int)Main.Mz_AppLanguage.SupportLanguage.TH;
-            PlayerPrefs.SetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, Mz_StorageManage.Language_id);
-            StartCoroutine(this.ReInitializeAudioClipData());
-			this.SetActivateGUIOptionsGroup(false);
-			break;
-		default:
-			break;
-		}
+        switch (nameInput)
+        {
+            case "Audio":
+                base.MuteAudioConfiguration();
+                if (Mz_BaseScene.ToggleAudioActive)
+                    optionsManager.audio_ui_sprite.spriteId = GUIOptionsManager.AUDIO_ON_ID;
+                else
+                    optionsManager.audio_ui_sprite.spriteId = GUIOptionsManager.AUDIO_OFF_ID;
+                break;
+            case "Flag_UI":
+                this.SetActivateGUIOptionsGroup(true);
+                break;
+            case "EN":
+                this.audioDescribe.PlayOnecWithOutStop(optionsManager.english_clip);
+                Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.EN;
+                Mz_StorageManage.Language_id = (int)Main.Mz_AppLanguage.SupportLanguage.EN;
+                PlayerPrefs.SetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, Mz_StorageManage.Language_id);
+                StartCoroutine(this.ReInitializeAudioClipData());
+                this.SetActivateGUIOptionsGroup(false);
+                break;
+            case "TH":
+                this.audioDescribe.PlayOnecWithOutStop(optionsManager.thai_clip);
+                Main.Mz_AppLanguage.appLanguage = Main.Mz_AppLanguage.SupportLanguage.TH;
+                Mz_StorageManage.Language_id = (int)Main.Mz_AppLanguage.SupportLanguage.TH;
+                PlayerPrefs.SetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, Mz_StorageManage.Language_id);
+                StartCoroutine(this.ReInitializeAudioClipData());
+                this.SetActivateGUIOptionsGroup(false);
+                break;
+            case "TKNews_button":
+                this.SetActivateTKNews(true);
+                break;
+            case "Close_button":
+                this.SetActivateTKNews(false);
+                break;
+            case "FacebookLike_button":
+                Application.OpenURL("https://www.facebook.com/Taokaenoi.game");
+                break;
+            case "Up_button":
+                tknewsManager.MoveUpPage();
+                break;
+            case "Down_button":
+                tknewsManager.MoveDownPage();
+                break;
+            default:
+                break;
+        }
 
         if(mainmenu_Group.gameObject.active) {
             if (nameInput == CREATE_NEWSHOP_BUTTON_NAME) {
@@ -628,7 +666,7 @@ public class MainMenu : Mz_BaseScene {
 
     private IEnumerator ShowInitializeNewShop()
     {
-        sceneState = SceneState.showNewShop;
+        currentSceneState = SceneState.showNewShop;
 		audioDescribe.PlayOnecSound(description_clips[2]);
 
         initializeNewGame_Group.gameObject.SetActiveRecursively(true);
@@ -653,7 +691,7 @@ public class MainMenu : Mz_BaseScene {
 
     private IEnumerator ShowMainMenu()
     {
-        sceneState = SceneState.none;
+        currentSceneState = SceneState.none;
 
         mainmenu_Group.gameObject.SetActiveRecursively(true);
 
@@ -689,7 +727,7 @@ public class MainMenu : Mz_BaseScene {
         iTween.MoveTo(newgame_Group.gameObject, moveDownTransform_Data);
         mainmenu_Group.gameObject.SetActiveRecursively(false);
 
-        sceneState = SceneState.showNewGame;
+        currentSceneState = SceneState.showNewGame;
     }
 
     private IEnumerator ShowLoadShop() {        
@@ -711,6 +749,6 @@ public class MainMenu : Mz_BaseScene {
         mainmenu_Group.gameObject.SetActiveRecursively(false);
         newgame_Group.gameObject.SetActiveRecursively(false);
 
-        sceneState = SceneState.showLoadGame;
+        currentSceneState = SceneState.showLoadGame;
     }
 }

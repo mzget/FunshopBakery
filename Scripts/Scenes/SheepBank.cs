@@ -44,6 +44,7 @@ public class SheepBank : Mz_BaseScene {
 	public GameObject transactionForm_Obj;
     public GameObject donationForm_group;
 	public GameObject passbook_group;
+	public GameObject depositIcon;
 	public GameObject shadowPlane_Obj;
 	public tk2dTextMesh availableMoney_Textmesh;
 	public tk2dTextMesh accountBalance_Textmesh;
@@ -55,6 +56,8 @@ public class SheepBank : Mz_BaseScene {
 	int resultValue = 0;
 
     //<!-- Constance Button Name.
+	public const string Warning_CannotBuyItem = "Connot upgrade this item because availabel money is not enough.";
+
 	const string WITHDRAWAL_BUTTON_NAME = "Withdrawal_button";
 	const string DEPOSIT_BUTTON_NAME = "Deposit_button";
 	const string UpgradeInside_BUTTON_NAME = "UpgradeInside_button";
@@ -256,6 +259,7 @@ public class SheepBank : Mz_BaseScene {
 		{8, "TH_exterior_upgrade"},
 		{9, "TH_deposit_warning"},
 		{10, "TH_cannot_donation"},
+		{11, "TH_CannotBuyItem"},
 	};
 	public Dictionary<int, string> EN_DescriptionDict = new Dictionary<int, string>() {
 		{0, "EN_introduce"},
@@ -269,6 +273,7 @@ public class SheepBank : Mz_BaseScene {
 		{8, "EN_exterior_upgrade"},
 		{9, "EN_deposit_warning"},
 		{10, "EN_cannot_donation"},
+		{11, "EN_CannotBuyItem"},
 	};
     private IEnumerator ReInitializeAudioClipData()
     {
@@ -521,6 +526,8 @@ public class SheepBank : Mz_BaseScene {
             if (upgradeInside_window_Obj.active)
             {
                 iTween.MoveTo(upgradeInside_window_Obj.gameObject, moveUp_hashdata);
+				iTween.StopByName(depositIcon.gameObject, "ShakeDepositIcon");
+				depositIcon.active = false;
                 return;
             }
             if (depositForm_Obj.gameObject.active)
@@ -581,6 +588,13 @@ public class SheepBank : Mz_BaseScene {
 						this.audioEffect.PlayOnecWithOutStop(this.audioEffect.wrong_Clip);
 					else 
 						upgradeInsideManager.UnActiveComfirmationWindow(); 
+				}
+				else if(nameInput == depositIcon.name) {
+					iTween.MoveTo(upgradeInside_window_Obj.gameObject, moveUp_hashdata);
+					iTween.StopByName(depositIcon.gameObject, "ShakeDepositIcon");
+					depositIcon.active = false;
+					
+					StartCoroutine_Auto(this.WaitForHookUPDepositFunction());
 				}
                 else
                 {
@@ -766,6 +780,18 @@ public class SheepBank : Mz_BaseScene {
 		passbookAccountName_textmesh.Commit ();
 		passbookAccountBalance_textmesh.text = Mz_StorageManage.AccountBalance.ToString();
 		passbookAccountBalance_textmesh.Commit();
+	}
+
+	internal void CreateDepositIcon ()
+	{
+		depositIcon.active = true;
+		iTween.ShakePosition(depositIcon.gameObject, iTween.Hash("name", "ShakeDepositIcon", "amount", new Vector3(1.5f, 1.5f, 0f), "time", 1f, "looptype", iTween.LoopType.pingPong));
+	}
+
+	IEnumerator WaitForHookUPDepositFunction ()
+	{
+		yield return new WaitForSeconds(0.8f);
+		this.OnInput(DEPOSIT_BUTTON_NAME);
 	}
 }
 

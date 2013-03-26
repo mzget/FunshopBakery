@@ -473,7 +473,7 @@ public class BakeryShop : Mz_BaseScene {
 		bakeryShopTutor.greeting_textSprite.active = false;
         bakeryShopTutor.greeting_textmesh.active = true;
 
-        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "GREETING";
+        tutorDescriptions[0].GetComponent<tk2dTextMesh>().text = "GREETINGS";
         tutorDescriptions[0].GetComponent<tk2dTextMesh>().Commit();
 
         audioDescribe.PlayOnecSound(description_clips[0]);

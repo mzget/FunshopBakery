@@ -7,6 +7,14 @@ public class Startup : Mz_BaseScene {
 	// Use this for initialization
 	void Start () {
 		this.Initialization();
+	
+//		if(Application.platform == RuntimePlatform.IPhonePlayer) {
+//			NativeAppirate.SetAppId("624454424");
+//			NativeAppirate.SetDaysUntilPrompt(5);
+//			NativeAppirate.SetUsesUntilPrompt(3);
+//			NativeAppirate.SetTimeBeforeReminding(2);
+//		}
+
 		//<!-- get name quality.
 //		qualities_list = QualitySettings.names;
 		this.AutomaticSetup_QualitySetting();
@@ -19,7 +27,7 @@ public class Startup : Mz_BaseScene {
 	
 	protected override void Initialization ()
 	{
-		base.Initialization ();
+		base.Initialization ();	
 		
         Mz_OnGUIManager.CalculateViewportScreen();
 		Mz_StorageManage.Language_id = PlayerPrefs.GetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, 0);
