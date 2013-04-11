@@ -5,20 +5,10 @@ public class Startup : Mz_BaseScene {
 	
 	
 	// Use this for initialization
-	void Start () {
+	void Start () {		
 		this.Initialization();
-	
-//		if(Application.platform == RuntimePlatform.IPhonePlayer) {
-//			NativeAppirate.SetAppId("624454424");
-//			NativeAppirate.SetDaysUntilPrompt(5);
-//			NativeAppirate.SetUsesUntilPrompt(3);
-//			NativeAppirate.SetTimeBeforeReminding(2);
-//		}
 
-		//<!-- get name quality.
-//		qualities_list = QualitySettings.names;
-		this.AutomaticSetup_QualitySetting();
-        Handheld.PlayFullScreenMovie("Movies/LogoVista3D.mp4", Color.white, FullScreenMovieControlMode.Hidden, FullScreenMovieScalingMode.AspectFit);
+        Handheld.PlayFullScreenMovie("Movies/LogoVista.mp4", Color.white, FullScreenMovieControlMode.Hidden, FullScreenMovieScalingMode.AspectFit);
 		
         if(Application.isLoadingLevel == false) {
             Application.LoadLevelAsync(Mz_BaseScene.SceneNames.WaitForStart.ToString());
@@ -27,7 +17,11 @@ public class Startup : Mz_BaseScene {
 	
 	protected override void Initialization ()
 	{
-		base.Initialization ();	
+		base.Initialization ();
+
+		//<!-- get name quality.
+		//		qualities_list = QualitySettings.names;
+		//		this.AutomaticSetup_QualitySetting();	
 		
         Mz_OnGUIManager.CalculateViewportScreen();
 		Mz_StorageManage.Language_id = PlayerPrefs.GetInt(Mz_StorageManage.KEY_SYSTEM_LANGUAGE, 0);
@@ -35,7 +29,7 @@ public class Startup : Mz_BaseScene {
 	}
 	
 	private void AutomaticSetup_QualitySetting() {
-#if UNITY_IPHONE
+#if UNITY_IOS
 		if(iPhone.generation == iPhoneGeneration.iPad1Gen ||
 			iPhone.generation == iPhoneGeneration.iPhone3G || iPhone.generation == iPhoneGeneration.iPhone3GS) {
 			QualitySettings.SetQualityLevel(0);	
@@ -58,11 +52,5 @@ public class Startup : Mz_BaseScene {
 		QualitySettings.SetQualityLevel(3);
 		Application.targetFrameRate = 60;
 #endif
-	}
-	
-	// Update is called once per frame
-	protected override void Update ()
-	{
-		base.Update ();
 	}
 }

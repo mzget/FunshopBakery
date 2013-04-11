@@ -83,19 +83,8 @@ public class MainMenu : Mz_BaseScene {
 	Rect slot_1Rect;
 	Rect slot_2Rect;
 	Rect slot_3Rect;
-
-	#region <@-- Events
-
+	
 	internal static bool _HasNewGameEvent = false;
-	public event EventHandler NewGame_event;
-	void OnNewGameEvent (EventArgs e)
-	{
-		if(NewGame_event != null) {
-			NewGame_event(this, e);
-		}
-	}
-
-	#endregion
 		
 	// Use this for initialization
 	void Start () {
@@ -123,7 +112,6 @@ public class MainMenu : Mz_BaseScene {
 
 		//<@-- Add new game eventhandle. 
 		_HasNewGameEvent = false;
-		this.NewGame_event += Handle_NewGame_event;
 	}
 	
 	protected IEnumerator PreparingAudio ()
@@ -418,13 +406,11 @@ public class MainMenu : Mz_BaseScene {
         PlayerPrefsX.SetIntArray(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_CAN_DECORATE_ACCESSORIES_LIST, accessories_temp_array);
 
         //<!-- Notice user to upgrade them shop.
-        PlayerPrefsX.SetBool(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_NOTICE_USER_TO_UPGRADE, false);
+		PlayerPrefsX.SetBool(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_NOTICE_USER_TO_UPGRADE, false);
+		//<!-- Force User to play tutor before.
+		PlayerPrefsX.SetBool(Mz_StorageManage.SaveSlot + Mz_StorageManage.KEY_IS_USER_PLAY_TUTOR, true);
 
         Debug.Log("Store new player data complete.");
-
-        base.extendsStorageManager.LoadSaveDataToGameStorage();
-
-        this.LoadSceneTarget();
     }
 
     private void LoadSceneTarget() {
@@ -576,7 +562,10 @@ public class MainMenu : Mz_BaseScene {
                 break;
             case "FacebookLike_button":
                 Application.OpenURL("https://www.facebook.com/Taokaenoi.game");
-                break;
+			break;
+			case "Bakery Shop" :
+			TK_news.GoToiTunes_UserReview();
+			break;
             case "Up_button":
                 tknewsManager.MoveUpPage();
                 break;
@@ -625,8 +614,9 @@ public class MainMenu : Mz_BaseScene {
 				if(shopName != "") {
                     this.characterAnimationManager.RandomPlayGoodAnimation();
                     audioEffect.PlayOnecWithOutStop(audioEffect.correct_Clip);
-					OnNewGameEvent(EventArgs.Empty);
-                	this.SaveNewPlayer();
+					this.SaveNewPlayer();					
+					base.extendsStorageManager.LoadSaveDataToGameStorage();
+					this.LoadSceneTarget();
 				}
                 else{
                     this.characterAnimationManager.PlayEyeAnimation(CharacterAnimationManager.NameAnimationsList.agape);

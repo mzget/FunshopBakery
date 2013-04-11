@@ -15,8 +15,7 @@ public class Main {
 	public class Mz_AppVersion {
 		
 		public enum AppVersion {Free = 0, Pro = 1};
-		public AppVersion appVersion;
-		public static AppVersion getAppVersion;
+		public static AppVersion GetAppVersion = AppVersion.Pro;
 	}
 
 	public class Mz_AppLanguage {

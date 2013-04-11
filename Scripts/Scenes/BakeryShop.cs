@@ -580,11 +580,10 @@ public class BakeryShop : Mz_BaseScene {
     private void CreateBillingTutorEvent()
     {
         bakeryShopTutor.currentTutorState = BakeryShopTutor.TutorStatus.Billing;
-
-        base.SetActivateTotorObject(true);
-		darkShadowPlane.active = true;
+		
         billingMachine.transform.position += Vector3.back * 5f;
-
+		darkShadowPlane.active = true;
+        base.SetActivateTotorObject(true);
         handTutor.transform.localPosition = new Vector3(-0.25f, -0.1f, 3f);
 
         tutorDescriptions[0].transform.localPosition = new Vector3(0.1f, 0f, 3f);
